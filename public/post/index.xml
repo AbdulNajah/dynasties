@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Political families of Uttar Pradesh</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Political families of Uttar Pradesh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Jun 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Master file Analyis</title>
+      <link>/post/master-file-analysis/</link>
+      <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/master-file-analysis/</guid>
+      <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral Electionslocal body electionsUrban local bodiesPanchayat Raj institutionsAnalyis at different levelsAll electionsMembers in the other levels and the probabiltyLand distributionFamiliesPolitical ExperienceCasteIndustries: EducationFamiliesPolitical ExperiencecasteIndustries : OthersFamiliesPolitical experiencecastePolitical experienceFamilyExperienceAE - GELand distributionFamiliesPolitical ExperienceCasteIndustries: EducationFamiliesPolitical ExperiencecasteIndustries : OthersFamiliesPolitical experienceCastePolitical experienceFamilyExperienceLocal bodiesMid levelLow levelPRI’sLandFamiliesULB’sLandFamiliesFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
+    </item>
+    
+    <item>
+      <title>ADR  Analysis</title>
+      <link>/post/adr-analysis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/adr-analysis/</guid>
+      <description>ADR AnalysisAssetsTotal AssetsAllMovable and Immovable assetsAll electionsCrimeFamilyPolitcal experienceSerious crimeNon serious crimeAttendanceFamilyDebatesFamilybillsFamilyPolitcal experiencequestionsFamilyPolitcal experienceADR AnalysisAssetsTotal AssetsAll% filter(year == 2009) --% group_by(family_id) %% distinct(family_id, .keep_all = TRUE) --% filter(year == 2014) --% group_by(family_id) %% distinct(family_id, .</description>
+    </item>
+    
+  </channel>
+</rss>

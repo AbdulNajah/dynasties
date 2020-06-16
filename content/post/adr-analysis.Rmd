@@ -1,0 +1,747 @@
+---
+title: 'ADR  Analysis'
+author: |
+  | Rahul Verma (Fellow, CPR)
+  |
+  | Abdul Najah
+  |
+  | Centre for Policy Research
+date: |
+  | `r gsub("^0", "", format(Sys.time(), "%d %B, %Y"))`
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 6
+    
+---
+
+
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+
+`%!in%` = Negate(`%in%`)
+```
+
+
+```{r read main file}
+
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+
+```
+
+```{r adr}
+
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
+
+names(adr)[1] <- "position"
+
+names(adr) <- tolower(names(adr))
+
+adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
+ month,-              poll_no,-           
+ delimid,-            position,-          
+candidate,-          sex,-               
+party,-              votes,-             
+ candidate_type,-     valid_votes,-       
+ electors,-           constituency_name,- 
+ constituency_type,-  sub_region,-        
+ n_cand,-             turnout_percentage,-
+ vote_share_percentage,-     deposit_lost,-      
+margin,-             margin_percentage,- 
+
+enop,-              
+ pid,-                max_poll_no,-       
+ last_poll,-          contested,-         
+ last_party,-         last_constituency_name,-                     
+same_constituency,-  same_party,-        
+ no_terms,-           turncoat,-          
+incumbent,-          recontest   )
+
+adr <- adr %>% filter(position_tcpd %in% c(1,2))
+
+adr <- adr %>% rename( position = position_tcpd)
+
+#uniqueN(adr$position)
+
+
+
+# dim(adr)
+# 
+# adr %>% glimpse()
+# 
+# unique(adr$year)
+# 
+# summary(adr)
+# names(adr)
+
+
+```
+
+```{r merging it with dyn -adr}
+
+
+dyn_adr <- merge(dyn,adr, by = c("year", "constituency_no", "position"))
+
+
+names(dyn_adr) <- make.unique(names(dyn_adr))
+
+dyn_adr$total_assets <- as.numeric(dyn_adr$total_assets)
+
+
+
+```
+
+
+```{r setting the uniq ones}
+
+dyn_adr_uniq <- dyn_adr %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+
+```
+
+
+
+
+
+# ADR Analysis
+
+## Assets
+
+### Total Assets
+
+#### All
+
+```{r all assets}
+
+
+ylim1 = boxplot.stats(dyn_adr$total_assets)$stats[c(1, 5)]
+
+ggplot(dyn_adr, aes(factor(dyn_cum),total_assets))+
+  geom_boxplot(outlier.shape = NA)+
+  facet_grid(~ year)+
+  coord_cartesian(ylim = ylim1*2)+
+   scale_x_discrete(labels=(c("Non Family","Family")))+
+  scale_y_continuous(label = label_number_si())+
+  theme_minimal()+
+  labs(title = "Total assets wrt family type ",subtitle = " Elections from 2009 to 2019", x = "", y = "Assets" )+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        axis.text.x = element_text(angle = 90, 
+                                   hjust = 1, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 15),        
+        axis.ticks = element_blank()
+  ) 
+
+```
+
+<!-- #### GE -->
+
+<!-- ##### 2009 -->
+
+<!-- ```{r  assets 2009} -->
+
+
+
+<!-- dyn_adr_09 <- dyn_adr %>% filter(year == 2009) -->
+
+<!-- dyn_adr_09_uniq <-  dyn_adr_09 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+
+
+<!-- #str(dyn_adr$total_assets) -->
+
+
+
+
+<!-- ylim1 = boxplot.stats(dyn_adr_09$total_assets)$stats[c(1, 5)] -->
+
+<!-- ggplot(dyn_adr_09, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2009 GE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+
+<!-- #table(dyn_adr_09$dyn_cum) -->
+
+
+
+
+<!-- ``` -->
+
+
+<!-- ##### 2014 -->
+
+<!-- ```{r GE 2014} -->
+<!-- dyn_adr_14 <- dyn_adr %>% filter(year == 2014) -->
+
+<!-- dyn_adr_14_uniq <-  dyn_adr_14 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+
+
+<!-- #str(dyn_adr$total_assets) -->
+
+
+
+
+<!-- ylim1 = boxplot.stats(dyn_adr_14$total_assets)$stats[c(1, 5)] -->
+
+<!-- ggplot(dyn_adr_14, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2014 GE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   ) -->
+<!-- ``` -->
+
+
+<!-- ##### 2019 -->
+
+<!-- ```{r GE 2019} -->
+<!-- dyn_adr_19 <- dyn_adr %>% filter(year == 2019) -->
+
+<!-- dyn_adr_19_uniq <-  dyn_adr_19 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+
+
+<!-- #str(dyn_adr$total_assets) -->
+
+
+
+
+<!-- ylim1 = boxplot.stats(dyn_adr_19$total_assets)$stats[c(1, 5)] -->
+
+<!-- ggplot(dyn_adr_19, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2019 GE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- ``` -->
+
+<!-- #### AE -->
+
+
+<!-- ##### 2012 -->
+
+<!-- ```{r AE 2012} -->
+<!-- dyn_adr_12 <- dyn_adr %>% filter(year == 2012) -->
+
+<!-- dyn_adr_12_uniq <-  dyn_adr_12 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+
+
+<!-- #str(dyn_adr$total_assets) -->
+
+
+
+
+<!-- ylim1 = boxplot.stats(dyn_adr_12$total_assets)$stats[c(1, 5)] -->
+
+<!-- ggplot(dyn_adr_12, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2012 AE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- ``` -->
+
+
+<!-- ##### 2017 -->
+
+
+<!-- ```{r AE 2017} -->
+<!-- dyn_adr_17 <- dyn_adr %>% filter(year == 2017) -->
+
+<!-- dyn_adr_17_uniq <-  dyn_adr_17 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+
+
+<!-- #str(dyn_adr$total_assets) -->
+
+
+
+
+<!-- ylim1 = boxplot.stats(dyn_adr_17$total_assets)$stats[c(1, 5)] -->
+
+<!-- ggplot(dyn_adr_17, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2017 AE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- ``` -->
+
+### Movable and Immovable assets
+
+#### All elections
+
+
+
+```{r stacked chart mov/immov}
+
+mov_immov <- dyn_adr %>% group_by(year,dyn_cum) %>% summarise(mov_sum = sum(total_movable_assets_totals), immov_sum = sum(total_immovable_assets_totals), sum_mov_immov = sum(mov_sum + immov_sum), mov_prop = mov_sum/sum_mov_immov, immov_prop = immov_sum /sum_mov_immov) %>% select(year, dyn_cum, mov_prop, immov_prop)
+
+mov_immov_m <- mov_immov %>% melt(id = 1:2, measure = 3:4)
+                                                              
+
+
+ggplot(mov_immov_m , aes(x =factor(dyn_cum) , y=  value, fill = variable))+
+  geom_bar(  position="stack", stat="identity")+
+  facet_grid( ~ year)+
+   theme_minimal()+
+  
+  scale_x_discrete(labels=(c( "Non - Family", "Family")))+
+  scale_fill_manual (
+    labels = c("Movable", "Immovable"),
+    values = c("#468189", "#9DBEBB"))+
+  labs(title = "Break-up of assets among families and non-families", subtitle = "2019 GE election", x = "", y = "Proportion") +
+  
+  theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.text.x = element_text(angle = 90, 
+                                   hjust = 1, vjust = 0),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_text(vjust = 2, size =15),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  )
+
+
+
+```
+
+## Crime
+
+
+
+```{r uniq}
+dyn_adr_uniq_ind <- dyn_adr%>% group_by(rel_id_uniq) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+
+
+dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
+dyn_adr_uniq_ind <- dyn_adr %>% group_by(fam_rel_id_uniq ) %>% filter(year == max(year)) %>% 
+  distinct(fam_rel_id_uniq, .keep_all = T)
+```
+
+
+#### Family
+
+```{r serious crime}
+
+
+dyn_crime<- dyn_adr_uniq_ind %>% group_by(dyn_cum) %>% summarise(mean_sc = mean(serious_crime,trim =.1),mean_nsc = mean(non_serious_crime, trim=.1)) 
+
+
+dyn_crime_m <- melt(dyn_crime, measure = 2:3, id ="dyn_cum")
+
+
+  ggplot(dyn_crime_m, aes(factor(variable), value, fill = factor(dyn_cum)))+
+  geom_bar(stat= "identity", position = "dodge")+
+    theme_minimal()+
+    scale_fill_manual (labels = c("Non - Family", "Family"),
+    values = c("#468189", "#9DBEBB"))+
+    scale_x_discrete(labels=(c("Serious crime", "Non-serious crime")))+
+    labs(title = "Break-up of crime among families and non-families",  x = "", y = "Proportion") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  
+    theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 10),
+        axis.text = element_text(face = "italic", size = 13),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        axis.title.x = element_text(vjust = -1, size = 14),
+        axis.title.y = element_text(vjust = 2, size =14),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  )
+
+  
+
+
+
+```
+
+
+#### Politcal experience
+
+
+
+##### Serious crime
+
+
+```{r serious}
+
+
+dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_ser_d = if_else(serious_crime == 0,0,1))
+
+
+dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+
+
+facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+")
+
+
+dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>% 
+  ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_ser_d)))+
+  geom_bar(stat= "identity", position ="stack")+
+  facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+
+  theme_minimal()+
+  scale_fill_manual (labels = c("Serious crime ", "No serious crime"),
+    values = c("#468189", "#9DBEBB"))+
+  scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  labs(title = "Break-up of serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") +
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  
+  theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.text.x = element_text( angle = 90,
+                                   hjust = 1, vjust = 0),
+        axis.title.x = element_text(vjust = -1, size = 14),
+        axis.title.y = element_text(vjust = 2, size =14),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  )
+
+
+```
+
+##### Non serious crime
+
+
+```{r non serious}
+
+
+dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1))
+
+
+dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+
+
+facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+")
+
+
+dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>% 
+  ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_non_ser_d)))+
+  geom_bar(stat= "identity", position ="stack")+
+  facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+
+  theme_minimal()+
+  scale_fill_manual (labels = c("Non-Serious crime ", "No non-serious crime"),
+    values = c("#468189", "#9DBEBB"))+
+  scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  labs(title = "Break-up of non-serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Trimmed mean") +
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  
+  theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.text.x = element_text( angle = 90,
+                                   hjust = 1, vjust = 0),
+        axis.title.x = element_text(vjust = -1, size = 14),
+        axis.title.y = element_text(vjust = 2, size =14),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  )
+
+```
+## Perfromance
+
+
+#### Attendance
+
+##### Family
+
+```{r}
+
+dyn_adr_ge_w <- dyn_adr %>% filter(year %in% c(2009,2014,2019) & position ==1)
+
+#dyn_adr_ge_w$attendance <- as.numeric(dyn_adr_ge_w$attendance)
+
+#mean(dyn_adr_ge_w$attendance, na.rm = TRUE)
+
+
+#dyn_adr_ge_w %>% group_by(dyn_cum) %>% summarise(mean = median(attendance, trim = .1, na.rm = TRUE))
+
+
+#dyn_adr_ge_w_att <- dyn_adr_ge_w %>% filter(attendance > .0)
+ylim1 = boxplot.stats(dyn_adr_ge_w$attendance)$stats[c(1, 5)]
+
+ggplot(dyn_adr_ge_w, aes(factor(dyn_cum), attendance, group = factor(dyn_cum)))+
+  geom_boxplot( outlier.shape = NA)+
+  coord_cartesian(ylim = ylim1)+
+  facet_grid(~ year)+
+  scale_x_discrete(labels=(c("Non Family","Family")))+
+  scale_y_continuous(labels = scales:: percent_format(accuracy = 1))+
+  theme_minimal()+
+  labs(title = "Parliament attendance wrt family type  ",subtitle = " General elections: 2009 - 2019", x = "", y = "Attendance" )+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 1),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 13),        
+        axis.ticks = element_blank(),
+        panel.grid.major.x = element_blank(),
+        
+  ) 
+
+  
+
+```
+##### Politcal experience
+
+
+#### Debates
+
+##### Family
+
+```{r}
+
+
+ylim1 = boxplot.stats(dyn_adr_ge_w$debates)$stats[c(1, 5)]
+
+ggplot(dyn_adr_ge_w, aes(factor(dyn_cum), debates, group = factor(dyn_cum)))+
+  geom_boxplot( outlier.shape = NA)+
+  coord_cartesian(ylim = ylim1*1.05)+
+  facet_grid(~ year)+
+  scale_x_discrete(labels=(c("Non Family","Family")))+
+  theme_minimal()+
+  labs(title = "Parliament: debate partcipation wrt family type  ",subtitle = " General elections: 2009 - 2019", x = "", y = "Number of debates" )+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 1),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 13),        
+        axis.ticks = element_blank(),
+        panel.grid.major.x = element_blank(),
+        
+  )
+
+
+
+```
+
+
+
+
+#### bills
+
+
+##### Family
+
+```{r}
+ge_bill<- dyn_adr_ge_w%>% group_by(dyn_cum,year) %>% summarise(mean = mean(bills, na.rm = TRUE)) 
+
+
+
+ggplot(ge_bill, aes(x = factor(dyn_cum), y= mean))+
+  geom_bar(stat = "identity")+
+  facet_grid(~year)+
+  theme_minimal()+
+    scale_x_discrete(labels=(c("Non - Family", "Family")))+
+    labs(title = "Parliament: bill introductions wrt family type",subtitle = " General elections: 2009 - 2019",  x = "", y = "Number of bills \n (mean)") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  
+    theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 10),
+        axis.text = element_text(face = "italic", size = 13),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        axis.title.x = element_text(vjust = -1, size = 14),
+        axis.title.y = element_text(vjust = 2, size =14),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  )
+
+
+```
+
+
+
+
+
+##### Politcal experience
+
+#### questions
+
+
+##### Family
+
+```{r}
+
+ylim1 = boxplot.stats(dyn_adr_ge_w$questions_asked)$stats[c(1, 5)]
+
+
+ggplot(dyn_adr_ge_w %>% filter( questions_asked != "NA"), aes(factor(dyn_cum), questions_asked, group = factor(dyn_cum)))+
+  geom_boxplot( outlier.shape = NA)+
+  coord_cartesian(ylim = ylim1*1.05)+
+  facet_grid(~ year)+
+  scale_x_discrete(labels=(c("Non Family","Family")))+
+  theme_minimal()+
+  labs(title = "Parliament: questions asked wrt family type  ",subtitle = " General elections: 2009 - 2019", x = "", y = "Number of questions" )+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 1),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 13),        
+        axis.ticks = element_blank(),
+        panel.grid.major.x = element_blank(),
+        
+  )
+
+
+```
+
+##### Politcal experience
+
+
+
+

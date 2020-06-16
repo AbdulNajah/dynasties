@@ -1,0 +1,931 @@
+---
+title: 'Master file Analyis'
+author: |
+  | Rahul Verma (Fellow, CPR)
+  |
+  | Abdul Najah
+  |
+  | Centre for Policy Research
+date: "2020-06-10"
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 6
+    
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#political-families">Political Families</a></li>
+<li><a href="#analysis-goals">Analysis goals</a></li>
+<li><a href="#summary-statistics">Summary statistics</a><ul>
+<li><a href="#elections-covered">Elections covered</a></li>
+<li><a href="#basic-eda">Basic eda</a><ul>
+<li><a href="#assembly-elections">Assembly Elections</a></li>
+<li><a href="#general-elections">General Elections</a></li>
+<li><a href="#local-body-elections">local body elections</a><ul>
+<li><a href="#urban-local-bodies">Urban local bodies</a></li>
+<li><a href="#panchayat-raj-institutions">Panchayat Raj institutions</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="#analyis-at-different-levels">Analyis at different levels</a><ul>
+<li><a href="#all-elections">All elections</a><ul>
+<li><a href="#members-in-the-other-levels-and-the-probabilty">Members in the other levels and the probabilty</a></li>
+<li><a href="#land-distribution">Land distribution</a><ul>
+<li><a href="#families">Families</a></li>
+<li><a href="#political-experience">Political Experience</a></li>
+<li><a href="#caste">Caste</a></li>
+</ul></li>
+<li><a href="#industries-education">Industries: Education</a><ul>
+<li><a href="#families-1">Families</a></li>
+<li><a href="#political-experience-1">Political Experience</a></li>
+<li><a href="#caste-1">caste</a></li>
+</ul></li>
+<li><a href="#industries-others">Industries : Others</a><ul>
+<li><a href="#families-2">Families</a></li>
+<li><a href="#political-experience-2">Political experience</a></li>
+</ul></li>
+<li><a href="#caste-2">caste</a><ul>
+<li><a href="#political-experience-3">Political experience</a></li>
+<li><a href="#family">Family</a></li>
+</ul></li>
+<li><a href="#experience">Experience</a></li>
+</ul></li>
+<li><a href="#ae---ge">AE - GE</a><ul>
+<li><a href="#land-distribution-1">Land distribution</a><ul>
+<li><a href="#families-3">Families</a></li>
+<li><a href="#political-experience-4">Political Experience</a></li>
+<li><a href="#caste-3">Caste</a></li>
+</ul></li>
+<li><a href="#industries-education-1">Industries: Education</a><ul>
+<li><a href="#families-4">Families</a></li>
+<li><a href="#political-experience-5">Political Experience</a></li>
+<li><a href="#caste-4">caste</a></li>
+</ul></li>
+<li><a href="#industries-others-1">Industries : Others</a><ul>
+<li><a href="#families-5">Families</a></li>
+<li><a href="#political-experience-6">Political experience</a></li>
+</ul></li>
+<li><a href="#caste-5">Caste</a><ul>
+<li><a href="#political-experience-7">Political experience</a></li>
+<li><a href="#family-1">Family</a></li>
+</ul></li>
+<li><a href="#experience-1">Experience</a></li>
+</ul></li>
+<li><a href="#local-bodies">Local bodies</a><ul>
+<li><a href="#mid-level">Mid level</a></li>
+<li><a href="#low-level">Low level</a></li>
+<li><a href="#pris">PRI’s</a><ul>
+<li><a href="#land">Land</a><ul>
+<li><a href="#families-6">Families</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#ulbs">ULB’s</a><ul>
+<li><a href="#land-1">Land</a><ul>
+<li><a href="#families-7">Families</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#fig-1">Fig 1</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="political-families" class="section level1">
+<h1>Political Families</h1>
+<p>This data set knits the families of contestants in the elections held in Uttar Pradesh. This includes Loksabha, Vidhnsabha, Panchayat Raj institutions and Urban local body elections.</p>
+</div>
+<div id="analysis-goals" class="section level1">
+<h1>Analysis goals</h1>
+<ul>
+<li>Exploration within the political families dataset</li>
+<li>Exploring how political families are associated with relevant variables in the other datas ets</li>
+</ul>
+</div>
+<div id="summary-statistics" class="section level1">
+<h1>Summary statistics</h1>
+<div id="elections-covered" class="section level2">
+<h2>Elections covered</h2>
+<ul>
+<li><p>Assembly elections</p></li>
+<li><p>General elections</p></li>
+<li><p>Local body elections</p>
+<ul>
+<li><p>Urban local bodies</p></li>
+<li><p>Panchayat raj instituions</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="basic-eda" class="section level2">
+<h2>Basic eda</h2>
+<div id="assembly-elections" class="section level3">
+<h3>Assembly Elections</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1974
+</td>
+<td style="text-align:right;">
+804
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+794
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+800
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+804
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2002
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="general-elections" class="section level3">
+<h3>General Elections</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+156
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+160
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+160
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+160
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="local-body-elections" class="section level3">
+<h3>local body elections</h3>
+<div id="urban-local-bodies" class="section level4">
+<h4>Urban local bodies</h4>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Nagar Nigam
+</th>
+<th style="text-align:right;">
+Nagar Panchayat
+</th>
+<th style="text-align:right;">
+Nagar Nigam Parishad
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1995
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+406
+</td>
+<td style="text-align:right;">
+190
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2001
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+414
+</td>
+<td style="text-align:right;">
+193
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2006
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+423
+</td>
+<td style="text-align:right;">
+190
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+426
+</td>
+<td style="text-align:right;">
+194
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+436
+</td>
+<td style="text-align:right;">
+203
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="panchayat-raj-institutions" class="section level4">
+<h4>Panchayat Raj institutions</h4>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Block Panchayat
+</th>
+<th style="text-align:right;">
+Zilla Panchayt
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1995
+</td>
+<td style="text-align:right;">
+770
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2000
+</td>
+<td style="text-align:right;">
+617
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2005
+</td>
+<td style="text-align:right;">
+634
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:right;">
+640
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:right;">
+643
+</td>
+<td style="text-align:right;">
+71
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="analyis-at-different-levels" class="section level1">
+<h1>Analyis at different levels</h1>
+<div id="all-elections" class="section level2">
+<h2>All elections</h2>
+<p>This universe includes winners and runner-ups from the general and assembly elections from the year 1977 to 2019 and the winners from the local body elections held from 1995 to 2015 in the state of Uttar Pradesh. This contains 18340 observations and the number unique individuals is 10915 and the families is 1083. It has to be noted that 88% of this winners are just patriarchs.</p>
+<p>In this universe of families 2308 winners are part of some family and 783 winners out of this is just patriarchs while the rest is other family members.</p>
+<div id="members-in-the-other-levels-and-the-probabilty" class="section level3">
+<h3>Members in the other levels and the probabilty</h3>
+</div>
+<div id="land-distribution" class="section level3">
+<h3>Land distribution</h3>
+<div id="families" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/all%20families%20land-1.png" width="672" /></p>
+</div>
+<div id="political-experience" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/all%20political%20experience%20land-1.png" width="672" /></p>
+</div>
+<div id="caste" class="section level4">
+<h4>Caste</h4>
+</div>
+</div>
+<div id="industries-education" class="section level3">
+<h3>Industries: Education</h3>
+<div id="families-1" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/all%20education%20family-1.png" width="672" /></p>
+</div>
+<div id="political-experience-1" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/all%20education%20pol%20experience-1.png" width="672" /></p>
+</div>
+<div id="caste-1" class="section level4">
+<h4>caste</h4>
+</div>
+</div>
+<div id="industries-others" class="section level3">
+<h3>Industries : Others</h3>
+<div id="families-2" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="political-experience-2" class="section level4">
+<h4>Political experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/all%20ind%20political%20experience-1.png" width="672" /></p>
+</div>
+</div>
+<div id="caste-2" class="section level3">
+<h3>caste</h3>
+<div id="political-experience-3" class="section level4">
+<h4>Political experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
+</div>
+<div id="family" class="section level4">
+<h4>Family</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+<div id="experience" class="section level3">
+<h3>Experience</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience Categories
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+6720
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1-5
+</td>
+<td style="text-align:right;">
+1562
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6-10
+</td>
+<td style="text-align:right;">
+610
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11-20
+</td>
+<td style="text-align:right;">
+447
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+21+
+</td>
+<td style="text-align:right;">
+119
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience Categories
+</th>
+<th style="text-align:right;">
+Non-Families
+</th>
+<th style="text-align:right;">
+Families
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+5962
+</td>
+<td style="text-align:right;">
+758
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1-5
+</td>
+<td style="text-align:right;">
+1502
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6-10
+</td>
+<td style="text-align:right;">
+550
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11-20
+</td>
+<td style="text-align:right;">
+322
+</td>
+<td style="text-align:right;">
+125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+21+
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+80
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="ae---ge" class="section level2">
+<h2>AE - GE</h2>
+<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5285 and the families is 304. It has to be noted that 93% of this winners are just patriarchs.</p>
+<p>In this universe of families 1086 winners and runner-ups are part of some family and 382 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
+<div id="land-distribution-1" class="section level3">
+<h3>Land distribution</h3>
+<div id="families-3" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
+</div>
+<div id="political-experience-4" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
+</div>
+<div id="caste-3" class="section level4">
+<h4>Caste</h4>
+</div>
+</div>
+<div id="industries-education-1" class="section level3">
+<h3>Industries: Education</h3>
+<div id="families-4" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
+</div>
+<div id="political-experience-5" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
+</div>
+<div id="caste-4" class="section level4">
+<h4>caste</h4>
+</div>
+</div>
+<div id="industries-others-1" class="section level3">
+<h3>Industries : Others</h3>
+<div id="families-5" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
+</div>
+<div id="political-experience-6" class="section level4">
+<h4>Political experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="672" /></p>
+</div>
+</div>
+<div id="caste-5" class="section level3">
+<h3>Caste</h3>
+<div id="political-experience-7" class="section level4">
+<h4>Political experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="672" />
+<!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
+</div>
+<div id="family-1" class="section level4">
+<h4>Family</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20families%20caste-1.png" width="672" /></p>
+</div>
+</div>
+<div id="experience-1" class="section level3">
+<h3>Experience</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience Categories
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2163
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1-5
+</td>
+<td style="text-align:right;">
+1562
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6-15
+</td>
+<td style="text-align:right;">
+932
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16+
+</td>
+<td style="text-align:right;">
+244
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience Categories
+</th>
+<th style="text-align:right;">
+Non-Families
+</th>
+<th style="text-align:right;">
+Families
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2121
+</td>
+<td style="text-align:right;">
+42
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1-5
+</td>
+<td style="text-align:right;">
+1502
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6-15
+</td>
+<td style="text-align:right;">
+798
+</td>
+<td style="text-align:right;">
+134
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16+
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+131
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="local-bodies" class="section level2">
+<h2>Local bodies</h2>
+<p><img src="/post/master-file-analysis_files/figure-html/lb%20fam%20land-1.png" width="672" /></p>
+<p>This universe include the winners from the local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
+This contains 6790 observations and the number unique individuals is 5690 and the families is 769. It has to be noted that 80% of this winners are just patriarchs.</p>
+<p>In this universe of families 2120 winners and runner-ups are part of some family and 964 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<div id="mid-level" class="section level3">
+<h3>Mid level</h3>
+<p>This universe include the winners from the mid level local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
+This contains 1381 observations and the number unique individuals is 1144 and the families is 130. It has to be noted that 83% of this winners are just patriarchs.</p>
+<p>In this universe of families 348 winners and runner-ups are part of some family and 178 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+</div>
+<div id="low-level" class="section level3">
+<h3>Low level</h3>
+<p>This universe include the winners from the low level local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
+This contains 3364 observations and the number unique individuals is 2808 and the families is 340. It has to be noted that 78% of this winners are just patriarchs.</p>
+<p>In this universe of families 1080 winners and runner-ups are part of some family and 451 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+</div>
+<div id="pris" class="section level3">
+<h3>PRI’s</h3>
+<div id="land" class="section level4">
+<h4>Land</h4>
+<div id="families-6" class="section level5">
+<h5>Families</h5>
+<p><img src="/post/master-file-analysis_files/figure-html/pri%20land%20fam/nonfam-1.png" width="672" /></p>
+<p>This universe include the winners from the Panachayt raj institutions local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
+This contains 3655 observations and the number unique individuals is 3076 and the families is 386. It has to be noted that 78% of this winners are just patriarchs.</p>
+<p>In this universe of families 1127 winners and runner-ups are part of some family and 464 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="ulbs" class="section level3">
+<h3>ULB’s</h3>
+<div id="land-1" class="section level4">
+<h4>Land</h4>
+<div id="families-7" class="section level5">
+<h5>Families</h5>
+<p><img src="/post/master-file-analysis_files/figure-html/fam,%20non%20fam%20land-1.png" width="672" /></p>
+<p>This universe include the winners from urban local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
+This contains 3135 observations and the number unique individuals is 2615 and the families is 383. It has to be noted that 83% of this winners are just patriarchs.</p>
+<p>In this universe of families 992 winners and runner-ups are part of some family and 500 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ulb%20dyn%20proportion%20over%20time-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="fig-1" class="section level3">
+<h3>Fig 1</h3>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20distribution%20of%20family%20and%20candidates%20wrt%20caste-1.png" width="672" /></p>
+</div>
+</div>
+</div>

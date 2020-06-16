@@ -1,0 +1,4 @@
+theme = "contrast-hugo"
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "Political families of Uttar Pradesh"

@@ -1,0 +1,266 @@
+---
+title: 'ADR  Analysis'
+author: |
+  | Rahul Verma (Fellow, CPR)
+  |
+  | Abdul Najah
+  |
+  | Centre for Policy Research
+date: |
+  | 16 June, 2020
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 6
+    
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#adr-analysis">ADR Analysis</a><ul>
+<li><a href="#assets">Assets</a><ul>
+<li><a href="#total-assets">Total Assets</a><ul>
+<li><a href="#all">All</a></li>
+</ul></li>
+<li><a href="#movable-and-immovable-assets">Movable and Immovable assets</a><ul>
+<li><a href="#all-elections">All elections</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#crime">Crime</a><ul>
+<li><a href="#family">Family</a></li>
+<li><a href="#politcal-experience">Politcal experience</a><ul>
+<li><a href="#serious-crime">Serious crime</a></li>
+<li><a href="#non-serious-crime">Non serious crime</a></li>
+</ul></li>
+<li><a href="#attendance">Attendance</a><ul>
+<li><a href="#family-1">Family</a></li>
+</ul></li>
+<li><a href="#debates">Debates</a><ul>
+<li><a href="#family-2">Family</a></li>
+</ul></li>
+<li><a href="#bills">bills</a><ul>
+<li><a href="#family-3">Family</a></li>
+<li><a href="#politcal-experience-1">Politcal experience</a></li>
+</ul></li>
+<li><a href="#questions">questions</a><ul>
+<li><a href="#family-4">Family</a></li>
+<li><a href="#politcal-experience-2">Politcal experience</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="adr-analysis" class="section level1">
+<h1>ADR Analysis</h1>
+<div id="assets" class="section level2">
+<h2>Assets</h2>
+<div id="total-assets" class="section level3">
+<h3>Total Assets</h3>
+<div id="all" class="section level4">
+<h4>All</h4>
+<p><img src="/post/adr-analysis_files/figure-html/all%20assets-1.png" width="672" /></p>
+<!-- #### GE -->
+<!-- ##### 2009 -->
+<!-- ```{r  assets 2009} -->
+<!-- dyn_adr_09 <- dyn_adr %>% filter(year == 2009) -->
+<!-- dyn_adr_09_uniq <-  dyn_adr_09 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- #str(dyn_adr$total_assets) -->
+<!-- ylim1 = boxplot.stats(dyn_adr_09$total_assets)$stats[c(1, 5)] -->
+<!-- ggplot(dyn_adr_09, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2009 GE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- #table(dyn_adr_09$dyn_cum) -->
+<!-- ``` -->
+<!-- ##### 2014 -->
+<!-- ```{r GE 2014} -->
+<!-- dyn_adr_14 <- dyn_adr %>% filter(year == 2014) -->
+<!-- dyn_adr_14_uniq <-  dyn_adr_14 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- #str(dyn_adr$total_assets) -->
+<!-- ylim1 = boxplot.stats(dyn_adr_14$total_assets)$stats[c(1, 5)] -->
+<!-- ggplot(dyn_adr_14, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2014 GE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   ) -->
+<!-- ``` -->
+<!-- ##### 2019 -->
+<!-- ```{r GE 2019} -->
+<!-- dyn_adr_19 <- dyn_adr %>% filter(year == 2019) -->
+<!-- dyn_adr_19_uniq <-  dyn_adr_19 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- #str(dyn_adr$total_assets) -->
+<!-- ylim1 = boxplot.stats(dyn_adr_19$total_assets)$stats[c(1, 5)] -->
+<!-- ggplot(dyn_adr_19, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2019 GE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- ``` -->
+<!-- #### AE -->
+<!-- ##### 2012 -->
+<!-- ```{r AE 2012} -->
+<!-- dyn_adr_12 <- dyn_adr %>% filter(year == 2012) -->
+<!-- dyn_adr_12_uniq <-  dyn_adr_12 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- #str(dyn_adr$total_assets) -->
+<!-- ylim1 = boxplot.stats(dyn_adr_12$total_assets)$stats[c(1, 5)] -->
+<!-- ggplot(dyn_adr_12, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2012 AE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- ``` -->
+<!-- ##### 2017 -->
+<!-- ```{r AE 2017} -->
+<!-- dyn_adr_17 <- dyn_adr %>% filter(year == 2017) -->
+<!-- dyn_adr_17_uniq <-  dyn_adr_17 %>% group_by(family_id) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- #str(dyn_adr$total_assets) -->
+<!-- ylim1 = boxplot.stats(dyn_adr_17$total_assets)$stats[c(1, 5)] -->
+<!-- ggplot(dyn_adr_17, aes(factor(dyn_cum),total_assets))+ -->
+<!--   geom_boxplot(outlier.shape = NA)+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   scale_y_continuous(labels = comma)+ -->
+<!--    scale_x_discrete(labels=(c("Non Family","Family")))+ -->
+<!--   scale_y_continuous(label = label_number_si())+ -->
+<!--   coord_cartesian(ylim = ylim1*1.05)+ -->
+<!--   theme_minimal()+ -->
+<!--   labs(title = "Total assets  wrt family type ",subtitle = "2017 AE elections", x = "", y = "Assets" )+ -->
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20),  -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+<!-- ``` -->
+</div>
+</div>
+<div id="movable-and-immovable-assets" class="section level3">
+<h3>Movable and Immovable assets</h3>
+<div id="all-elections" class="section level4">
+<h4>All elections</h4>
+<p><img src="/post/adr-analysis_files/figure-html/stacked%20chart%20mov/immov-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="crime" class="section level2">
+<h2>Crime</h2>
+<div id="family" class="section level4">
+<h4>Family</h4>
+<p><img src="/post/adr-analysis_files/figure-html/serious%20crime-1.png" width="672" /></p>
+</div>
+<div id="politcal-experience" class="section level4">
+<h4>Politcal experience</h4>
+<div id="serious-crime" class="section level5">
+<h5>Serious crime</h5>
+<p><img src="/post/adr-analysis_files/figure-html/serious-1.png" width="672" /></p>
+</div>
+<div id="non-serious-crime" class="section level5">
+<h5>Non serious crime</h5>
+<p><img src="/post/adr-analysis_files/figure-html/non%20serious-1.png" width="672" />
+## Perfromance</p>
+</div>
+</div>
+<div id="attendance" class="section level4">
+<h4>Attendance</h4>
+<div id="family-1" class="section level5">
+<h5>Family</h5>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+##### Politcal experience</p>
+</div>
+</div>
+<div id="debates" class="section level4">
+<h4>Debates</h4>
+<div id="family-2" class="section level5">
+<h5>Family</h5>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+</div>
+<div id="bills" class="section level4">
+<h4>bills</h4>
+<div id="family-3" class="section level5">
+<h5>Family</h5>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="politcal-experience-1" class="section level5">
+<h5>Politcal experience</h5>
+</div>
+</div>
+<div id="questions" class="section level4">
+<h4>questions</h4>
+<div id="family-4" class="section level5">
+<h5>Family</h5>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="politcal-experience-2" class="section level5">
+<h5>Politcal experience</h5>
+</div>
+</div>
+</div>
+</div>
