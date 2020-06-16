@@ -1,4 +1,4 @@
 theme = "contrast-hugo"
-baseURL = "http://example.org/"
+baseURL = "https://dynasties.netlify.app/"
 languageCode = "en-us"
 title = "Political families of Uttar Pradesh"
