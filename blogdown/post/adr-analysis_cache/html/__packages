@@ -12,3 +12,4 @@ data.table
 knitr
 kableExtra
 scales
+gridExtra
