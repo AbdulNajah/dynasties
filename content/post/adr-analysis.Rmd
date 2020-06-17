@@ -100,8 +100,18 @@ names(dyn_adr) <- make.unique(names(dyn_adr))
 
 dyn_adr$total_assets <- as.numeric(dyn_adr$total_assets)
 
+dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
 
 
+#dyn_adr$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019"))
+
+dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
+
+dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family")
+
+dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
+
+dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
 ```
 
 
@@ -125,10 +135,11 @@ dyn_adr_uniq <- dyn_adr %>% group_by(family_id) %>% filter(year == max(year)) %>
 
 
 ```{r uniq}
+
 ##dyn_adr_uniq_ind <- dyn_adr%>% group_by(fam_rel_id_uniq) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
 
 
-dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
+
 
 dyn_adr_uniq_ind <- dyn_adr %>% group_by(fam_rel_id_uniq ) %>% filter(year == max(year)) %>% 
   distinct(fam_rel_id_uniq, .keep_all = T)
@@ -168,6 +179,182 @@ ggplot(dyn_adr_uniq_ind_el, aes(factor(dyn_cum),total_assets))+
 ```
 
 
+
+#### Asset with experience
+
+
+
+```{r}
+# library(extrafont)
+# font_import()
+# loadfonts(device = "win")
+
+
+
+exp_ass <- dyn_adr %>% group_by(dyn_cum_text,election_type,fam_exp_cum_cat ) %>% summarise(mean_assets = mean(total_assets, trim = .1, na.rm = TRUE))
+                                                                                      
+  ggplot(exp_ass,aes(factor(fam_exp_cum_cat), mean_assets, color =dyn_cum_text , group = dyn_cum_text)) +
+  geom_line()+
+  geom_point()+
+  facet_grid(rows = vars(election_type) )+
+    theme_minimal()+
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+    theme(
+      strip.text.y = element_text(size = 10, colour = "orange", angle = 0))+
+    scale_x_discrete(labels = c("0","1-5","6-10","11-20", "21+"))+
+    scale_y_continuous(label = label_number_si())+
+    labs(title = "Average assets distribution wrt politcal experience ", x = "Politcal Experience \n (in years) ", y = "Assets" )+
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     ),
+        text = element_text(color = "gray20", family = "serif"),
+        axis.text.x = element_text(
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = -.5,hjust = .5, size = 14,
+                                  margin = unit(c(3, 0, 0, 0), "mm")),
+        axis.title.y = element_text(vjust = -.5,hjust = .5, size = 14,
+                                  margin = unit(c(0, 3, 0, 0), "mm")),
+        axis.ticks = element_blank(),
+        ) 
+  
+
+```
+```{r}
+
+
+ggplot(dyn_adr %>% filter(dyn_cum == 1), aes(fam_exp_cum,total_assets,))+
+  geom_point()+
+  scale_y_continuous(label = label_number_si(), limits = c(0,800000000))+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
+    labs(title = "Assets of individuals from families \n wrt politcal experience ", x = "Politcal Experience \n (in years) ", y = "Assets" )+
+  
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        axis.text.x = element_text(
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 15),        
+        axis.ticks = element_blank(),
+        panel.grid.major.x = element_blank(),
+  ) 
+
+  
+
+
+
+```
+
+#### Asset growth over time
+
+
+```{r GE Asset growth}
+
+#dyn_adr_ge$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019"))
+
+dyn_adr_ge_r <- dyn_adr_ge %>% group_by(fam_rel_id_uniq) %>% mutate(count_pid = n())  %>% filter(count_pid > 2)
+
+ge_gr <- dyn_adr_ge_r %>% group_by(dyn_cum_text,year) %>% summarise(mean_assets = mean(total_assets) )
+
+ggplot(ge_gr,aes(factor(year, levels = c("2009", "2014","2019")), mean_assets,color = factor(dyn_cum_text), group = factor(dyn_cum_text)))+
+  geom_line()+
+  geom_point()+
+    theme_minimal()+
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+    scale_y_continuous(label = label_number_si())+
+    labs(title = "Average asset growth over years", subtitle = "General election", x = "Year", y = "Assets" )+
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     ),
+        text = element_text(color = "gray20", family = "serif"),
+        axis.text.x = element_text(
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = -.5,hjust = .5, size = 14,
+                                  margin = unit(c(3, 0, 0, 0), "mm")),
+        axis.title.y = element_text(vjust = -.5,hjust = .5, size = 14,
+                                  margin = unit(c(0, 3, 0, 0), "mm")),
+        axis.ticks = element_blank(),
+        )
+
+
+
+```
+
+```{r AE Asset growth}
+
+dyn_adr_ae_r <- dyn_adr_ae %>% group_by(fam_rel_id_uniq) %>% mutate(count_pid = n())  %>% filter(count_pid > 1)
+
+ae_gr <- dyn_adr_ae_r %>% group_by(dyn_cum_text,year) %>% summarise(mean_assets = mean(total_assets)) 
+
+ggplot(ae_gr,aes(factor(year, levels = c( "2012","2017")), mean_assets,color = factor(dyn_cum_text), group = factor(dyn_cum_text)))+
+  geom_line()+
+  geom_point()+
+    theme_minimal()+
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+    scale_y_continuous(label = label_number_si())+
+    labs(title = "Average asset growth over years", subtitle = "Assembly election", x = "Year", y = "Assets" )+
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     ),
+        text = element_text(color = "gray20", family = "serif"),
+        axis.text.x = element_text(
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = -.5,hjust = .5, size = 14,
+                                  margin = unit(c(3, 0, 0, 0), "mm")),
+        axis.title.y = element_text(vjust = -.5,hjust = .5, size = 14,
+                                  margin = unit(c(0, 3, 0, 0), "mm")),
+        axis.ticks = element_blank(),
+        )
+
+
+
+```
+
+```{r}
+
+ggplot(dyn_adr %>% filter(dyn_cum == 0), aes(fam_exp_cum,total_assets,))+
+  geom_point()+
+  scale_y_continuous(label = label_number_si(),, limits = c(0,2000000000))+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
+      labs(title = "Assets of individuals from non-families \n wrt politcal experience ", x = "Politcal Experience \n (in years) ", y = "Assets" )+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20"),
+        axis.text.x = element_text(
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 15),        
+        axis.ticks = element_blank(),
+        panel.grid.major.x = element_blank(),
+  ) 
+
+```
+
 ### Movable and Immovable assets
 
 #### All elections
@@ -201,8 +388,8 @@ ggplot(mov_immov_m , aes(x =factor(dyn_cum) , y=  value, fill = variable))+
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         axis.text = element_text(face = "italic", size = 10),
-        axis.text.x = element_text(angle = 90, 
-                                   hjust = 1, vjust = 0),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
         axis.title.x = element_text(vjust = -1, size = 16),
         axis.title.y = element_text(vjust = 2, size =15),
         axis.ticks.y = element_blank(),
@@ -220,60 +407,7 @@ ggplot(mov_immov_m , aes(x =factor(dyn_cum) , y=  value, fill = variable))+
 
 ### Experience v/s assets
 
-```{r}
 
-
-ggplot(dyn_adr %>% filter(dyn_cum == 1), aes(fam_exp_cum,total_assets,))+
-  geom_point()+
-  scale_y_continuous(label = label_number_si(), limits = c(0,800000000))+
-  geom_smooth(method = "lm")+
-  theme_minimal()+
-    labs(title = "Assets of individuals from families \n wrt politcal experience ", x = "Politcal Experience \n (in years) ", y = "Assets" )+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
-        plot.subtitle = element_text(hjust = 0.5, size = 15,
-                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
-        text = element_text(color = "gray20"),
-        axis.text.x = element_text(
-                                   hjust = .5, vjust = 0),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 10),
-        axis.title = element_text(vjust = -1, size = 15),        
-        axis.ticks = element_blank(),
-        panel.grid.major.x = element_blank(),
-  ) 
-
-  
-
-
-
-```
-
-```{r}
-
-ggplot(dyn_adr %>% filter(dyn_cum == 0), aes(fam_exp_cum,total_assets,))+
-  geom_point()+
-  scale_y_continuous(label = label_number_si(),, limits = c(0,2000000000))+
-  geom_smooth(method = "lm")+
-  theme_minimal()+
-      labs(title = "Assets of individuals from non-families \n wrt politcal experience ", x = "Politcal Experience \n (in years) ", y = "Assets" )+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20), 
-        plot.subtitle = element_text(hjust = 0.5, size = 15,
-                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
-        text = element_text(color = "gray20"),
-        axis.text.x = element_text(
-                                   hjust = .5, vjust = 0),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 10),
-        axis.title = element_text(vjust = -1, size = 15),        
-        axis.ticks = element_blank(),
-        panel.grid.major.x = element_blank(),
-  ) 
-
-```
 
 
 ## Crime
@@ -281,7 +415,19 @@ ggplot(dyn_adr %>% filter(dyn_cum == 0), aes(fam_exp_cum,total_assets,))+
 ```{r expereince}
 
 
-#ggplot(dyn_adr_ge_w, aes())
+# #ggplot(dyn_adr_ge_w, aes())
+# hist(dyn_adr$serious_crime)
+# 
+# ggplot(dyn_adr , aes(factor(dyn_cum), serious_crime))+
+#   geom_violin()+
+#   geom_smooth(method = "lm")+
+#   xlim()
+#   scale_y_continuous(label = label_number_si(),, limits = c(0,2000000000))+
+#   geom_smooth(method = "lm")+
+#   theme_minimal()
+
+
+
 
 
 ```
