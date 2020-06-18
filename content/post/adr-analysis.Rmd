@@ -660,35 +660,35 @@ dyn_adr %>% group_by(caste_groups, dyn_cum_text) %>% summarise(mean_assets =mean
         panel.grid.major.x = element_blank()
   ) 
 
-
-dyn_adr %>%  group_by( dyn_cum_text,fam_exp_cum_cat)%>% summarise(mean_sc= mean(serious_crime), mean_nsc=mean(non_serious_crime)) %>% filter (fam_exp_cum_cat != "[0,1)")%>% melt(id = 1:2, measure = 3:4) %>% 
-  ggplot(aes(fam_exp_cum_cat, value, fill = variable))+
-  geom_bar(stat= "identity", position ="dodge")+
-  facet_grid(~dyn_cum_text)+
-  theme_minimal()+
-   scale_fill_manual (labels = c("Serious crime", "Non-Serious Crime"),
-    values = c("#468189", "#9DBEBB"))+
-    scale_x_discrete(labels = c("1-5","6-10","11-20", "21+"))+
-    labs(title = "Average criminality wrt politcal experience",  x = "Politial experience \n (years)", y = "Number of criminal cases \n (mean)") +
-    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
-  
-    theme(legend.position = "top",
-        plot.background = element_blank(),
-        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
-        plot.subtitle = element_text(hjust = 0.5, size = 15,
-                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
-        text = element_text(color = "gray20",family = "serif"),
-        axis.text.x = element_text( 
-                                   hjust = .5, vjust = 0),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 10),
-        axis.title = element_text(vjust = -1, size = 15),        
-        axis.ticks = element_blank(),
-        panel.grid.major = element_line(color = "gray50", size = .5),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank()
-  ) 
+# 
+# dyn_adr %>%  group_by( dyn_cum_text,fam_exp_cum_cat)%>% summarise(mean_sc= mean(serious_crime), mean_nsc=mean(non_serious_crime)) %>% filter (fam_exp_cum_cat != "[0,1)")%>% melt(id = 1:2, measure = 3:4) %>% 
+#   ggplot(aes(fam_exp_cum_cat, value, fill = variable))+
+#   geom_bar(stat= "identity", position ="dodge")+
+#   facet_grid(~dyn_cum_text)+
+#   theme_minimal()+
+#    scale_fill_manual (labels = c("Serious crime", "Non-Serious Crime"),
+#     values = c("#468189", "#9DBEBB"))+
+#     scale_x_discrete(labels = c("1-5","6-10","11-20", "21+"))+
+#     labs(title = "Average criminality wrt politcal experience",  x = "Politial experience \n (years)", y = "Number of criminal cases \n (mean)") +
+#     theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+#   
+#     theme(legend.position = "top",
+#         plot.background = element_blank(),
+#         plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+#         plot.subtitle = element_text(hjust = 0.5, size = 15,
+#                                      margin = margin(t = 0, r = 0, b = 20, l = 0)),
+#         text = element_text(color = "gray20",family = "serif"),
+#         axis.text.x = element_text( 
+#                                    hjust = .5, vjust = 0),
+#         legend.title = element_blank(),
+#         legend.text = element_text(size = 15),
+#         axis.text = element_text(face = "italic", size = 10),
+#         axis.title = element_text(vjust = -1, size = 15),        
+#         axis.ticks = element_blank(),
+#         panel.grid.major = element_line(color = "gray50", size = .5),
+#         panel.grid.minor = element_blank(),
+#         panel.grid.major.x = element_blank()
+#   ) 
 
 
 ```
@@ -832,7 +832,7 @@ ggplot(mov_immov_m , aes(x =factor(dyn_cum_text) , y=  value, fill = variable))+
 
 ## Crime
 
-using the serious and non serious crime
+### Political expereince
 
 ```{r}
 
@@ -946,108 +946,152 @@ dyn_crime_m <- melt(dyn_crime, measure = 2:3, id ="dyn_cum")
 ```
 
 
-#### Politcal experience
 
 
+#### caste v/s crime
 
-##### Serious crime
+
+```{r}
 
 
-```{r serious}
-
-# 
-# dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_ser_d = if_else(serious_crime == 0,0,1))
-# 
-# 
-# dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
-# 
-# 
-# facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+")
-# 
-# 
-# dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>% 
-#   ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_ser_d)))+
-#   geom_bar(stat= "identity", position ="stack")+
-#   facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+
-#   theme_minimal()+
-#   scale_fill_manual (labels = c( "No serious crime","Serious crime"),
-#     values = c("#468189", "#9DBEBB"))+
-#   scale_x_discrete(labels=(c("Non - Family", "Family")))+
-#   labs(title = "Break-up of serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") +
-#   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
-#   
-#   theme(legend.position = "top",
-#         plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
-#         plot.subtitle = element_text(hjust = 0.5, size = 15,
-#                                      margin = margin(t = 0, r = 0, b = 20, l = 0)),
-#         text = element_text(color = "gray20"),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 12),
-#         axis.text = element_text(face = "italic", size = 10),
-#         axis.text.x = element_text( angle = 90,
-#                                    hjust = 1, vjust = 0),
-#         axis.title.x = element_text(vjust = -1, size = 14),
-#         axis.title.y = element_text(vjust = 2, size =14),
-#         axis.ticks.y = element_blank(),
-#         axis.line= element_line(color = "gray40", size = .5),
-#         axis.line.y = element_blank(),
-#         panel.grid.major = element_line(color = "gray50", size = .5),
-#         panel.grid.minor = element_blank(),
-#         panel.grid.major.x = element_blank()
-#           
-#   )
+dyn_adr %>%  group_by(caste_groups)%>% summarise(mean_sc= mean(serious_crime), mean_nsc=mean(non_serious_crime)) %>%  melt(id = "caste_groups", measure = 2:3) %>% 
+  ggplot(aes(reorder(caste_groups,-value), value, fill = variable))+
+  geom_bar(stat= "identity", position ="dodge")+
+  theme_minimal()+
+   scale_fill_manual (labels = c("Serious crime", "Non-Serious Crime"),
+    values = c("#468189", "#9DBEBB"))+
+    labs(title = "Average criminality wrt caste groups",  x = "", y = "Number of criminal cases \n (mean)") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  
+    theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title = element_text(vjust = -1, size = 15),        
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+  
 
 
 ```
 
-##### Non serious crime
 
 
-```{r non serious}
 
 
-# dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1))
-# 
-# 
-# dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
-# 
-# 
-# facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+")
-# 
-# 
-# dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>% 
-#   ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_non_ser_d)))+
-#   geom_bar(stat= "identity", position ="stack")+
-#   facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+
-#   theme_minimal()+
-#   scale_fill_manual (labels = c("No non-serious crime","Non-Serious crime "),
-#     values = c("#468189", "#9DBEBB"))+
-#   scale_x_discrete(labels=(c("Non - Family", "Family")))+
-#   labs(title = "Break-up of non-serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") +
-#   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
-#   
-#   theme(legend.position = "top",
-#         plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
-#         plot.subtitle = element_text(hjust = 0.5, size = 15,
-#                                      margin = margin(t = 0, r = 0, b = 20, l = 0)),
-#         text = element_text(color = "gray20"),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 12),
-#         axis.text = element_text(face = "italic", size = 10),
-#         axis.text.x = element_text( angle = 90,
-#                                    hjust = 1, vjust = 0),
-#         axis.title.x = element_text(vjust = -1, size = 14),
-#         axis.title.y = element_text(vjust = 2, size =14),
-#         axis.ticks.y = element_blank(),
-#         axis.line= element_line(color = "gray40", size = .5),
-#         axis.line.y = element_blank(),
-#         panel.grid.major = element_line(color = "gray50", size = .5),
-#         panel.grid.minor = element_blank(),
-#         panel.grid.major.x = element_blank()
-#           
-#   )
 
-```
+<!-- #### Politcal experience -->
+
+
+
+<!-- ##### Serious crime -->
+
+
+<!-- ```{r serious} -->
+
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_ser_d = if_else(serious_crime == 0,0,1)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+") -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>%  -->
+<!-- #   ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_ser_d)))+ -->
+<!-- #   geom_bar(stat= "identity", position ="stack")+ -->
+<!-- #   facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+ -->
+<!-- #   theme_minimal()+ -->
+<!-- #   scale_fill_manual (labels = c( "No serious crime","Serious crime"), -->
+<!-- #     values = c("#468189", "#9DBEBB"))+ -->
+<!-- #   scale_x_discrete(labels=(c("Non - Family", "Family")))+ -->
+<!-- #   labs(title = "Break-up of serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") + -->
+<!-- #   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+ -->
+<!-- #    -->
+<!-- #   theme(legend.position = "top", -->
+<!-- #         plot.title = element_text(hjust = 0.5, size = 18, family = "sans"),  -->
+<!-- #         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!-- #                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!-- #         text = element_text(color = "gray20"), -->
+<!-- #         legend.title = element_blank(), -->
+<!-- #         legend.text = element_text(size = 12), -->
+<!-- #         axis.text = element_text(face = "italic", size = 10), -->
+<!-- #         axis.text.x = element_text( angle = 90, -->
+<!-- #                                    hjust = 1, vjust = 0), -->
+<!-- #         axis.title.x = element_text(vjust = -1, size = 14), -->
+<!-- #         axis.title.y = element_text(vjust = 2, size =14), -->
+<!-- #         axis.ticks.y = element_blank(), -->
+<!-- #         axis.line= element_line(color = "gray40", size = .5), -->
+<!-- #         axis.line.y = element_blank(), -->
+<!-- #         panel.grid.major = element_line(color = "gray50", size = .5), -->
+<!-- #         panel.grid.minor = element_blank(), -->
+<!-- #         panel.grid.major.x = element_blank() -->
+<!-- #            -->
+<!-- #   ) -->
+
+
+<!-- ``` -->
+
+<!-- ##### Non serious crime -->
+
+
+<!-- ```{r non serious} -->
+
+
+<!-- # dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+") -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>%  -->
+<!-- #   ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_non_ser_d)))+ -->
+<!-- #   geom_bar(stat= "identity", position ="stack")+ -->
+<!-- #   facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+ -->
+<!-- #   theme_minimal()+ -->
+<!-- #   scale_fill_manual (labels = c("No non-serious crime","Non-Serious crime "), -->
+<!-- #     values = c("#468189", "#9DBEBB"))+ -->
+<!-- #   scale_x_discrete(labels=(c("Non - Family", "Family")))+ -->
+<!-- #   labs(title = "Break-up of non-serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") + -->
+<!-- #   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+ -->
+<!-- #    -->
+<!-- #   theme(legend.position = "top", -->
+<!-- #         plot.title = element_text(hjust = 0.5, size = 18, family = "sans"),  -->
+<!-- #         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!-- #                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!-- #         text = element_text(color = "gray20"), -->
+<!-- #         legend.title = element_blank(), -->
+<!-- #         legend.text = element_text(size = 12), -->
+<!-- #         axis.text = element_text(face = "italic", size = 10), -->
+<!-- #         axis.text.x = element_text( angle = 90, -->
+<!-- #                                    hjust = 1, vjust = 0), -->
+<!-- #         axis.title.x = element_text(vjust = -1, size = 14), -->
+<!-- #         axis.title.y = element_text(vjust = 2, size =14), -->
+<!-- #         axis.ticks.y = element_blank(), -->
+<!-- #         axis.line= element_line(color = "gray40", size = .5), -->
+<!-- #         axis.line.y = element_blank(), -->
+<!-- #         panel.grid.major = element_line(color = "gray50", size = .5), -->
+<!-- #         panel.grid.minor = element_blank(), -->
+<!-- #         panel.grid.major.x = element_blank() -->
+<!-- #            -->
+<!-- #   ) -->
+
+<!-- ``` -->
 
 
 ## Perfromance

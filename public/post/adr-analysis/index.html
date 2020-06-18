@@ -36,7 +36,9 @@
 <li><a href="#asset-growth-over-time">Asset growth over time</a></li>
 <li><a href="#assets-vs-caste">Assets v/s caste</a></li>
 </ul></li>
-<li><a href="#crime">Crime</a></li>
+<li><a href="#crime">Crime</a><ul>
+<li><a href="#political-expereince">Political expereince</a></li>
+</ul></li>
 <li><a href="#perfromance">Perfromance</a></li>
 </ul></li>
 </ul>
@@ -104,7 +106,7 @@
 </div>
 <div id="assets-vs-caste" class="section level3">
 <h3>Assets v/s caste</h3>
-<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <!-- ### Movable and Immovable assets -->
 <!-- #### All elections -->
@@ -114,19 +116,104 @@
 </div>
 <div id="crime" class="section level2">
 <h2>Crime</h2>
-<p>using the serious and non serious crime</p>
+<div id="political-expereince" class="section level3">
+<h3>Political expereince</h3>
 <p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <div id="family" class="section level4">
 <h4>Family</h4>
 <p><img src="/post/adr-analysis_files/figure-html/serious%20crime-1.png" width="672" /></p>
 </div>
-<div id="politcal-experience" class="section level4">
-<h4>Politcal experience</h4>
-<div id="serious-crime" class="section level5">
-<h5>Serious crime</h5>
-</div>
-<div id="non-serious-crime" class="section level5">
-<h5>Non serious crime</h5>
+<div id="caste-vs-crime" class="section level4">
+<h4>caste v/s crime</h4>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<!-- #### Politcal experience -->
+<!-- ##### Serious crime -->
+<!-- ```{r serious} -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_ser_d = if_else(serious_crime == 0,0,1)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+") -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>%  -->
+<!-- #   ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_ser_d)))+ -->
+<!-- #   geom_bar(stat= "identity", position ="stack")+ -->
+<!-- #   facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+ -->
+<!-- #   theme_minimal()+ -->
+<!-- #   scale_fill_manual (labels = c( "No serious crime","Serious crime"), -->
+<!-- #     values = c("#468189", "#9DBEBB"))+ -->
+<!-- #   scale_x_discrete(labels=(c("Non - Family", "Family")))+ -->
+<!-- #   labs(title = "Break-up of serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") + -->
+<!-- #   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+ -->
+<!-- #    -->
+<!-- #   theme(legend.position = "top", -->
+<!-- #         plot.title = element_text(hjust = 0.5, size = 18, family = "sans"),  -->
+<!-- #         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!-- #                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!-- #         text = element_text(color = "gray20"), -->
+<!-- #         legend.title = element_blank(), -->
+<!-- #         legend.text = element_text(size = 12), -->
+<!-- #         axis.text = element_text(face = "italic", size = 10), -->
+<!-- #         axis.text.x = element_text( angle = 90, -->
+<!-- #                                    hjust = 1, vjust = 0), -->
+<!-- #         axis.title.x = element_text(vjust = -1, size = 14), -->
+<!-- #         axis.title.y = element_text(vjust = 2, size =14), -->
+<!-- #         axis.ticks.y = element_blank(), -->
+<!-- #         axis.line= element_line(color = "gray40", size = .5), -->
+<!-- #         axis.line.y = element_blank(), -->
+<!-- #         panel.grid.major = element_line(color = "gray50", size = .5), -->
+<!-- #         panel.grid.minor = element_blank(), -->
+<!-- #         panel.grid.major.x = element_blank() -->
+<!-- #            -->
+<!-- #   ) -->
+<!-- ``` -->
+<!-- ##### Non serious crime -->
+<!-- ```{r non serious} -->
+<!-- # dyn_adr_uniq_ind <- dyn_adr_uniq_ind %>% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind$fam_exp_cum_cat <- factor(dyn_adr_uniq_ind$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # facet_names <- c(`[0,1)`="0",`[1,6)` ="1-5",`[11,21)`="6-10",`[6,11)`="11-20", `[21,Inf]`=  "21+") -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_adr_uniq_ind %>% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %>% summarise(count = n()) %>% group_by(dyn_cum,fam_exp_cum_cat) %>% mutate(sum= sum(count)) %>% ungroup() %>% mutate(prop= count/sum) %>%  -->
+<!-- #   ggplot(aes(factor(dyn_cum), prop, fill = factor(crime_non_ser_d)))+ -->
+<!-- #   geom_bar(stat= "identity", position ="stack")+ -->
+<!-- #   facet_grid(~fam_exp_cum_cat, labeller= as_labeller(facet_names))+ -->
+<!-- #   theme_minimal()+ -->
+<!-- #   scale_fill_manual (labels = c("No non-serious crime","Non-Serious crime "), -->
+<!-- #     values = c("#468189", "#9DBEBB"))+ -->
+<!-- #   scale_x_discrete(labels=(c("Non - Family", "Family")))+ -->
+<!-- #   labs(title = "Break-up of non-serious crime wrt political experience", subtitle = "Families and non-families", x = "", y = "Proportion") + -->
+<!-- #   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+ -->
+<!-- #    -->
+<!-- #   theme(legend.position = "top", -->
+<!-- #         plot.title = element_text(hjust = 0.5, size = 18, family = "sans"),  -->
+<!-- #         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
+<!-- #                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
+<!-- #         text = element_text(color = "gray20"), -->
+<!-- #         legend.title = element_blank(), -->
+<!-- #         legend.text = element_text(size = 12), -->
+<!-- #         axis.text = element_text(face = "italic", size = 10), -->
+<!-- #         axis.text.x = element_text( angle = 90, -->
+<!-- #                                    hjust = 1, vjust = 0), -->
+<!-- #         axis.title.x = element_text(vjust = -1, size = 14), -->
+<!-- #         axis.title.y = element_text(vjust = 2, size =14), -->
+<!-- #         axis.ticks.y = element_blank(), -->
+<!-- #         axis.line= element_line(color = "gray40", size = .5), -->
+<!-- #         axis.line.y = element_blank(), -->
+<!-- #         panel.grid.major = element_line(color = "gray50", size = .5), -->
+<!-- #         panel.grid.minor = element_blank(), -->
+<!-- #         panel.grid.major.x = element_blank() -->
+<!-- #            -->
+<!-- #   ) -->
+<!-- ``` -->
 </div>
 </div>
 </div>
@@ -136,7 +223,7 @@
 <h5>All elections</h5>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-10">Table 1: </span>Average performance of MPs in the Parliament
+<span id="tab:unnamed-chunk-11">Table 1: </span>Average performance of MPs in the Parliament
 (trimmed mean)
 </caption>
 <thead>
@@ -192,9 +279,9 @@ Family
 <h4>Attendance</h4>
 <div id="family-1" class="section level5">
 <h5>Family</h5>
-<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
-<div id="politcal-experience-1" class="section level5">
+<div id="politcal-experience" class="section level5">
 <h5>Politcal experience</h5>
 </div>
 </div>
@@ -202,9 +289,9 @@ Family
 <h4>Debates</h4>
 <div id="family-2" class="section level5">
 <h5>Family</h5>
-<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
-<div id="politcal-experience-2" class="section level5">
+<div id="politcal-experience-1" class="section level5">
 <h5>Politcal experience</h5>
 </div>
 </div>
@@ -212,9 +299,9 @@ Family
 <h4>Questions</h4>
 <div id="family-3" class="section level5">
 <h5>Family</h5>
-<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="/post/adr-analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
-<div id="politcal-experience-3" class="section level5">
+<div id="politcal-experience-2" class="section level5">
 <h5>Politcal experience</h5>
 </div>
 </div>

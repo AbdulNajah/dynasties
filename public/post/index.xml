@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>MPLADS Analysis</title>
+      <title>MPLADS Analyis</title>
       <link>/post/mplads-analysis/</link>
       <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/mplads-analysis/</guid>
-      <description></description>
+      <description>MPLADSFamil v/s Non-familyDaysNumber of ProjectsExpenditureExperience categoriesType of work v/s projectsType of work v/s costMPLADSFamil v/s Non-familyTable 1: MPLADS prjects and spendingType of constiuencyAverage number of contractsAvergae expenditure per projectNon-family321348678Family433318665The difference in the mean of both project count and the expenditure is statistically significant.</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/adr-analysis/</guid>
-      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimeusing the serious and non serious crime</description>
+      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePolitical expereincePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimePolitical expereinceFamilycaste v/s crime% mutate(crime_ser_d = if_else(serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --PerfromanceAll electionsTable 1: Average performance of MPs in the Parliament(trimmed mean)EntityDebates partcipatedProprtion of the sessionsattendedQuestions askedNon-family35.</description>
     </item>
     
     <item>
