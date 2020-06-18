@@ -6,10 +6,28 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>MPLADS Analysis</title>
+      <link>/post/mplads-analysis/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/mplads-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ADR  Analysis</title>
+      <link>/post/adr-analysis/</link>
+      <pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/adr-analysis/</guid>
+      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimeusing the serious and non serious crime</description>
+    </item>
     
     <item>
       <title>Master file Analyis</title>
@@ -18,15 +36,6 @@
       
       <guid>/post/master-file-analysis/</guid>
       <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral Electionslocal body electionsAnalyis at different levelsAll electionsMembers in the other levels and the probabiltyLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
-    </item>
-    
-    <item>
-      <title>ADR  Analysis</title>
-      <link>/post/adr-analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/post/adr-analysis/</guid>
-      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimeFamilyPolitcal experienceSerious crimeNon serious crimePerfromanceAll electionsAttendanceFamilyPolitcal experienceDebatesFamilyPolitcal experienceQuestionsFamilyPolitcal experienceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimeFamilyPolitcal experienceSerious crimeNon serious crimePerfromanceAll electionsTable 1: Average performance of MPs in the Parliament(trimmed mean)EntityDebates partcipatedProprtion of the sessionsattendedQuestions askedNon-family35.</description>
     </item>
     
   </channel>
