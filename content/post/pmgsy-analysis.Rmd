@@ -94,7 +94,7 @@ I think the expenditure/sanction everything is given by the contractors based on
 
 ## Sanctioned v/s completed
 
-There is not any significant difference in the `sanctioned kms of road` and the `completed kms of road`  among families and non-families
+Couldn't find any significant difference in the `sanctioned kms of road` and the `completed kms of road`  among families and non-families
 
 ```{r sanctioned v/s completed}
 
@@ -117,11 +117,58 @@ There is not any significant difference in the `sanctioned kms of road` and the 
 #   geom_bar(stat= "identity")#+
 #   #facet_grid(~dyn_cum)
 
+
+
+
+# ggplot(dyn_pmgsy, aes(factor(fam_exp_cum_cat,levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")),ac_proj_no ))+
+# geom_boxplot()+
+# facet_grid(~factor(dyn_cum))
 ```
- Did not see any trends when I tested experience categories  within and without type of constituency against the variables sucha as `sanctioned cost`, `expenditure to the data` and `number of projects`
+ Did not see any trends when I tested experience categories  within and without type of constituency against the variables sucha as `sanctioned cost`, `expenditure to the data` and `number of projects`. I tried bar plot and box plot, but bimodal distribution emerges. I have been seeing the same in most of other data set I've been working on.
  
- 
- 
- 
+
  
 ## Caste
+
+
+```{r}
+
+
+dyn_pmgsy  %>% group_by(caste_groups) %>% summarise(mean_proj = mean(ac_proj_no), mean_cost = mean(sanc_cost_rup ), mean_rd_len = mean(`road length (kms)`)) %>%
+  ggplot(aes(reorder(factor(caste_groups) ,mean_proj ),mean_proj  ))+
+  geom_bar(stat= "identity", color = "#9DBEBB", fill ="#468189" , width = .6)+
+  theme_minimal()+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average number of projects wrt caste group",  x = "", y = "Number of projects \n (mean)") +
+  theme(
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_blank(),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray40", size = .3),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+
+
+
+
+
+```
+
+
+`mean cost` and `mean length` of the roads are similar among all the caste except for the Yadav caste group which has a higher `mean cost` and `mean length` of the road. Tried all important variables within and without the constiuency type, but no trends or significant difference.
+
+
+
+
+
