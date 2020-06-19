@@ -1,0 +1,127 @@
+---
+title: "PMGSY Analysis"
+author: ""
+date: "2020-06-19"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+`%!in%` = Negate(`%in%`)
+```
+
+
+```{r file config}
+
+
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+pmgsy<- fread("D:/cpr/up-dynasties/dyn_other_data/pmgsy.csv", stringsAsFactors = FALSE)
+
+#glimpse(pmgsy)
+
+
+names(pmgsy) <- tolower(names(pmgsy))
+
+pmgsy <- pmgsy %>% select(year, everything())%>%  select(- c(2:78)) %>% rename(constituency_no = `pc no`) %>% filter(year != 2014)
+
+dyn_ge_w <- dyn %>% filter(election_type == "GE" & position==1)
+
+
+dyn_pmgsy <- merge(dyn_ge_w,pmgsy, by = c("year", "constituency_no"))
+
+
+names(dyn_pmgsy) <- make.unique(names(dyn_pmgsy))
+
+
+
+```
+
+## Summary stats
+
+```{r}
+
+
+dyn_pmgsy %>% group_by(year) %>% summarise(count = n()) %>% kable(caption = "PMGSY project across years" ,col.names = c ("Loksabha Term", "Number of projects"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+
+```{r}
+
+
+dyn_pmgsy$sanc_cost_rup <-(dyn_pmgsy$sanctionedcostnew)*100000
+
+dyn_pmgsy <- dyn_pmgsy %>% group_by(year,constituency_no) %>% mutate(ac_proj_no = n())
+
+
+ 
+
+dyn_pmgsy_mean <- dyn_pmgsy  %>% group_by(dyn_cum) %>% summarise(mean_proj = mean(ac_proj_no), mean_cost = mean(sanc_cost_rup ), mean_rd_len = mean(`road length (kms)`))#,sum_rd = sum(`road length (kms)`),sum_cost = sum(`sanction cost`), cost_p_km = (sum_rd/sum_cost)*100000) 
+
+
+Entity <- c("Non-family", "Family")
+ 
+ cbind(Entity,dyn_pmgsy_mean) %>% select(-dyn_cum) %>%  kable(caption = "PMGSY summary wrt constituency type", col.names = c ("Type of constiuency", "Average number of projects","Avergae expenditure per project", "Average road length (km)"),digits = 1)%>% kable_styling(bootstrap_options = "striped")
+
+ #summary(pmgsy)
+
+
+
+
+
+```
+
+
+I think the expenditure/sanction everything is given by the contractors based on per km rate. I find that  `sanctioned cost`/km, `expenditure till date`/km and `maintenance cost`/km almost as same when compared along the lines type of constituencies
+
+
+
+## Sanctioned v/s completed
+
+There is not any significant difference in the `sanctioned kms of road` and the `completed kms of road`  among families and non-families
+
+```{r sanctioned v/s completed}
+
+# dyn_pmgsy %>% group_by(dyn_cum) %>% summarise(mean_san = mean(`road length (kms)`), mean_com = mean(`road length completed till date`))
+
+
+
+```
+
+
+
+## Experience categories
+
+```{r}
+
+
+
+# dyn_pmgsy  %>% group_by( fam_exp_cum_cat) %>% summarise(mean_proj = mean(ac_proj_no), mean_cost = mean(sanc_cost_rup ), mean_rd_len = mean(`road length (kms)`)) %>% 
+#   ggplot(aes(factor(fam_exp_cum_cat,levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")),mean_proj))+
+#   geom_bar(stat= "identity")#+
+#   #facet_grid(~dyn_cum)
+
+```
+ Did not see any trends when I tested experience categories  within and without type of constituency against the variables sucha as `sanctioned cost`, `expenditure to the data` and `number of projects`
+ 
+ 
+ 
+ 
+ 
+## Caste

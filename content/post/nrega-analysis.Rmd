@@ -1,0 +1,51 @@
+---
+title: "NREGA Analysis"
+author: ""
+date: "2020-06-19"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+`%!in%` = Negate(`%in%`)
+```
+
+
+```{r file config}
+
+
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+nrega <- fread("D:/cpr/up-dynasties/dyn_other_data/nrega.csv", stringsAsFactors = FALSE)
+
+#glimpse(nrega)
+
+# 
+# names(nrega) <- tolower(names(nrega))
+# 
+# nrega <- nrega %>% select(constituency_no,year, everything()) %>% select(- c(30:102))
+# 
+# dyn_ge_w <- dyn %>% filter(election_type == "GE" & position==1)
+# 
+# 
+# dyn_nrega <- merge(dyn_ge_w,nrega, by = c("year", "constituency_no"))
+# 
+# 
+# names(dyn_nrega) <- make.unique(names(dyn_nrega))
+
+
+
+```
