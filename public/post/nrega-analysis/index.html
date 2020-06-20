@@ -26,8 +26,165 @@
   </header>
   
 
+<div id="TOC">
+<ul>
+<li><a href="#workdays">Workdays</a><ul>
+<li><a href="#experience">experience</a></li>
+<li><a href="#caste">caste</a></li>
+</ul></li>
+<li><a href="#worked">Worked</a><ul>
+<li><a href="#experience-1">experience</a></li>
+<li><a href="#caste-1">caste</a></li>
+</ul></li>
+<li><a href="#deposits">Deposits</a><ul>
+<li><a href="#experience-2">experience</a></li>
+<li><a href="#caste-2">caste</a></li>
+</ul></li>
+<li><a href="#ratio">Ratio</a><ul>
+<li><a href="#experience-3">experience</a></li>
+<li><a href="#caste-3">caste</a></li>
+</ul></li>
+</ul>
+</div>
 
-
+<div id="workdays" class="section level2">
+<h2>Workdays</h2>
+<ul>
+<li>total days worked under NREGS
+– Coded as: log(Workdays + 1)</li>
+</ul>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(workdays)`
+##     &lt;int&gt;            &lt;dbl&gt;
+## 1       0             7.81
+## 2       1             7.85</code></pre>
+<div id="experience" class="section level3">
+<h3>experience</h3>
+<pre><code>## # A tibble: 5 x 2
+##   fam_exp_cum_cat `mean(workdays)`
+##   &lt;fct&gt;                      &lt;dbl&gt;
+## 1 [0,1)                       7.85
+## 2 [1,6)                       7.85
+## 3 [6,11)                      7.77
+## 4 [11,21)                     7.80
+## 5 [21,Inf]                    7.84</code></pre>
+</div>
+<div id="caste" class="section level3">
+<h3>caste</h3>
+<pre><code>## # A tibble: 6 x 2
+##   caste_groups  `mean(workdays)`
+##   &lt;chr&gt;                    &lt;dbl&gt;
+## 1 Dalit                     7.86
+## 2 Muslim                    7.94
+## 3 Non-Yadav OBC             7.70
+## 4 Others                    7.86
+## 5 Upper Caste               7.83
+## 6 Yadav                     7.78</code></pre>
+</div>
+</div>
+<div id="worked" class="section level2">
+<h2>Worked</h2>
+<ul>
+<li>number of individuals who worked under NREGS
+– Coded as: log(W orked + 1)</li>
+</ul>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(worked)`
+##     &lt;int&gt;          &lt;dbl&gt;
+## 1       0           4.59
+## 2       1           4.56</code></pre>
+<div id="experience-1" class="section level3">
+<h3>experience</h3>
+<pre><code>## # A tibble: 5 x 2
+##   fam_exp_cum_cat `mean(worked)`
+##   &lt;fct&gt;                    &lt;dbl&gt;
+## 1 [0,1)                     4.58
+## 2 [1,6)                     4.73
+## 3 [6,11)                    4.54
+## 4 [11,21)                   4.56
+## 5 [21,Inf]                  4.54</code></pre>
+</div>
+<div id="caste-1" class="section level3">
+<h3>caste</h3>
+<pre><code>## # A tibble: 6 x 2
+##   caste_groups  `mean(worked)`
+##   &lt;chr&gt;                  &lt;dbl&gt;
+## 1 Dalit                   4.62
+## 2 Muslim                  4.67
+## 3 Non-Yadav OBC           4.45
+## 4 Others                  4.58
+## 5 Upper Caste             4.59
+## 6 Yadav                   4.47</code></pre>
+</div>
+</div>
+<div id="deposits" class="section level2">
+<h2>Deposits</h2>
+<ul>
+<li>sum of disbursements to laborers’ bank and post officece accounts
+– Coded as: log(Bank Deposits + P ost Deposits + 1)</li>
+</ul>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(disbursed_all)`
+##     &lt;int&gt;                 &lt;dbl&gt;
+## 1       0                  12.5
+## 2       1                  12.5</code></pre>
+<div id="experience-2" class="section level3">
+<h3>experience</h3>
+<pre><code>## # A tibble: 5 x 2
+##   fam_exp_cum_cat `mean(disbursed_all)`
+##   &lt;fct&gt;                           &lt;dbl&gt;
+## 1 [0,1)                            12.5
+## 2 [1,6)                            12.6
+## 3 [6,11)                           12.5
+## 4 [11,21)                          12.4
+## 5 [21,Inf]                         12.5</code></pre>
+</div>
+<div id="caste-2" class="section level3">
+<h3>caste</h3>
+<pre><code>## # A tibble: 6 x 2
+##   caste_groups  `mean(disbursed_all)`
+##   &lt;chr&gt;                         &lt;dbl&gt;
+## 1 Dalit                          12.6
+## 2 Muslim                         12.5
+## 3 Non-Yadav OBC                  12.3
+## 4 Others                         12.6
+## 5 Upper Caste                    12.5
+## 6 Yadav                          12.5</code></pre>
+</div>
+</div>
+<div id="ratio" class="section level2">
+<h2>Ratio</h2>
+<p>Ratio of Workdays to Deposits
+– Coded as: Ratio = (W orkdays / (Bank Deposits + P ost Deposits + 1))</p>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(ratio, na.rm = TRUE)`
+##     &lt;int&gt;                       &lt;dbl&gt;
+## 1       0                       0.828
+## 2       1                       0.864</code></pre>
+<div id="experience-3" class="section level3">
+<h3>experience</h3>
+<pre><code>## # A tibble: 5 x 2
+##   fam_exp_cum_cat `mean(ratio, na.rm = TRUE)`
+##   &lt;fct&gt;                                 &lt;dbl&gt;
+## 1 [0,1)                                 0.850
+## 2 [1,6)                                 0.799
+## 3 [6,11)                                0.822
+## 4 [11,21)                               0.863
+## 5 [21,Inf]                              0.858</code></pre>
+</div>
+<div id="caste-3" class="section level3">
+<h3>caste</h3>
+<pre><code>## # A tibble: 6 x 2
+##   caste_groups  `mean(ratio, na.rm = TRUE)`
+##   &lt;chr&gt;                               &lt;dbl&gt;
+## 1 Dalit                               0.813
+## 2 Muslim                              0.820
+## 3 Non-Yadav OBC                       0.858
+## 4 Others                              0.869
+## 5 Upper Caste                         0.849
+## 6 Yadav                               0.862</code></pre>
+</div>
+</div>
 
 </article>
 

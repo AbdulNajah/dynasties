@@ -29,13 +29,28 @@
 
 <div id="TOC">
 <ul>
+<li><a href="#pmgsy-roads">PMGSY roads</a><ul>
 <li><a href="#summary-stats">Summary stats</a></li>
 <li><a href="#sanctioned-vs-completed">Sanctioned v/s completed</a></li>
 <li><a href="#experience-categories">Experience categories</a></li>
 <li><a href="#caste">Caste</a></li>
+</ul></li>
+<li><a href="#pwd-roads">PWD roads</a><ul>
+<li><a href="#summary-stats-1">summary stats</a></li>
+<li><a href="#road-length">road length</a><ul>
+<li><a href="#experience">experience</a></li>
+<li><a href="#caste-2">caste</a></li>
+</ul></li>
+<li><a href="#numbe-of-projects">Numbe of projects</a><ul>
+<li><a href="#experience-1">experience</a></li>
+<li><a href="#caste-3">caste</a></li>
+</ul></li>
+</ul></li>
 </ul>
 </div>
 
+<div id="pmgsy-roads" class="section level1">
+<h1>PMGSY roads</h1>
 <div id="summary-stats" class="section level2">
 <h2>Summary stats</h2>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
@@ -78,7 +93,7 @@ Number of projects
 <thead>
 <tr>
 <th style="text-align:left;">
-Type of constiuency
+Type of constituency
 </th>
 <th style="text-align:right;">
 Average number of projects
@@ -130,12 +145,333 @@ Family
 </div>
 <div id="experience-categories" class="section level2">
 <h2>Experience categories</h2>
-<p>Did not see any trends when I tested experience categories within and without type of constituency against the variables sucha as <code>sanctioned cost</code>, <code>expenditure to the data</code> and <code>number of projects</code>. I tried bar plot and box plot, but bimodal distribution emerges. I have been seeing the same in most of other data set I’ve been working on.</p>
+<p>Did not see any trends when I tested experience categories within and without type of constituency against the variables sucha as <code>sanctioned cost</code>, <code>expenditure to the data</code> and <code>number of projects</code>. I tried bar plot and box plot, but bimodal distribution emerges. I have been seeing the same in most of other data sets I’ve been working on.</p>
 </div>
 <div id="caste" class="section level2">
 <h2>Caste</h2>
 <p><img src="/post/pmgsy-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p><code>mean cost</code> and <code>mean length</code> of the roads are similar among all the caste except for the Yadav caste group which has a higher <code>mean cost</code> and <code>mean length</code> of the road. Tried all important variables within and without the constiuency type, but no trends or significant difference.</p>
+<p><code>mean cost</code> and <code>mean length</code> of the roads are similar among all the caste except for the Yadav caste group which has a higher <code>mean cost</code> and <code>mean length</code> of the road. Tried all important variables within and without the constituency type, but no trends or significant difference.</p>
+<p>##Contractors</p>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `n()`
+##     &lt;int&gt; &lt;int&gt;
+## 1       0   650
+## 2       1   398</code></pre>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-5">Table 3: </span>PMGSY average number of contracters wrt constituency type
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Type of constituency
+</th>
+<th style="text-align:right;">
+Average number of contractors
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+21
+</td>
+</tr>
+</tbody>
+</table>
+<pre><code>## # A tibble: 2 x 4
+##   dyn_cum count  uniq  prop
+##     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+## 1       0  2143   650 0.303
+## 2       1  1486   398 0.268</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(cont_cost)`
+##     &lt;int&gt;             &lt;dbl&gt;
+## 1       0             1500.
+## 2       1             1481.</code></pre>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   dyn_cum [2]
+##    dyn_cum fam_exp_cum_cat `mean(ac_cont_no)`
+##      &lt;int&gt; &lt;chr&gt;                        &lt;dbl&gt;
+##  1       0 [0,1)                         23.1
+##  2       0 [1,6)                         24.8
+##  3       0 [11,21)                       21.4
+##  4       0 [21,Inf]                      13.6
+##  5       0 [6,11)                        16.6
+##  6       1 [0,1)                         14  
+##  7       1 [1,6)                         26.3
+##  8       1 [11,21)                       21.9
+##  9       1 [21,Inf]                      17.6
+## 10       1 [6,11)                        18.8</code></pre>
+<div id="caste-1" class="section level4">
+<h4>Caste</h4>
+<p><img src="/post/pmgsy-analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="pwd-roads" class="section level1">
+<h1>PWD roads</h1>
+<div id="summary-stats-1" class="section level2">
+<h2>summary stats</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:summary stats)Departments and the size of the roads
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Department
+</th>
+<th style="text-align:right;">
+Number of projects
+</th>
+<th style="text-align:right;">
+Total length
+</th>
+<th style="text-align:right;">
+Average road length (km)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+National Road (Take Free V)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+43
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NHAI
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+1560
+</td>
+<td style="text-align:right;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Irrigation and Water Resources
+</td>
+<td style="text-align:right;">
+945
+</td>
+<td style="text-align:right;">
+5517
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rural Development Department
+</td>
+<td style="text-align:right;">
+3960
+</td>
+<td style="text-align:right;">
+17950
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Housing and Urban Planning Department
+</td>
+<td style="text-align:right;">
+285
+</td>
+<td style="text-align:right;">
+1253
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Public Works Department
+</td>
+<td style="text-align:right;">
+98640
+</td>
+<td style="text-align:right;">
+218051
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Market Council
+</td>
+<td style="text-align:right;">
+11131
+</td>
+<td style="text-align:right;">
+18165
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+municipal Corporation
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sugarcane Department
+</td>
+<td style="text-align:right;">
+6588
+</td>
+<td style="text-align:right;">
+7238
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Panchayati Raj
+</td>
+<td style="text-align:right;">
+36089
+</td>
+<td style="text-align:right;">
+21189
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="road-length" class="section level2">
+<h2>road length</h2>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(\`road length\`)`
+##     &lt;int&gt;                   &lt;dbl&gt;
+## 1       0                    1.89
+## 2       1                    1.68</code></pre>
+<pre><code>## # A tibble: 19 x 3
+## # Groups:   department [10]
+##    department                            dyn_cum `mean(\`road length\`)`
+##    &lt;chr&gt;                                   &lt;int&gt;                   &lt;dbl&gt;
+##  1 Housing and Urban Planning Department       0                   4.47 
+##  2 Housing and Urban Planning Department       1                   4.16 
+##  3 Irrigation and Water Resources              0                   5.91 
+##  4 Irrigation and Water Resources              1                   5.51 
+##  5 Market Council                              0                   1.64 
+##  6 Market Council                              1                   1.59 
+##  7 municipal Corporation                       0                   0.897
+##  8 municipal Corporation                       1                   5.8  
+##  9 National Road (Take Free V)                 0                  43.4  
+## 10 NHAI                                        0                  30.9  
+## 11 NHAI                                        1                  26.4  
+## 12 Panchayati Raj                              0                   0.616
+## 13 Panchayati Raj                              1                   0.504
+## 14 Public Works Department                     0                   2.24 
+## 15 Public Works Department                     1                   2.10 
+## 16 Rural Development Department                0                   4.63 
+## 17 Rural Development Department                1                   4.17 
+## 18 Sugarcane Department                        0                   1.11 
+## 19 Sugarcane Department                        1                   1.00</code></pre>
+<div id="experience" class="section level3">
+<h3>experience</h3>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   dyn_cum [2]
+##    dyn_cum fam_exp_cum_cat `mean(\`road length\`)`
+##      &lt;int&gt; &lt;fct&gt;                             &lt;dbl&gt;
+##  1       0 [0,1)                              1.91
+##  2       0 [1,6)                              1.85
+##  3       0 [6,11)                             1.87
+##  4       0 [11,21)                            1.90
+##  5       0 [21,Inf]                           1.58
+##  6       1 [0,1)                              1.62
+##  7       1 [1,6)                              1.53
+##  8       1 [6,11)                             1.67
+##  9       1 [11,21)                            1.77
+## 10       1 [21,Inf]                           1.73</code></pre>
+</div>
+<div id="caste-2" class="section level3">
+<h3>caste</h3>
+<pre><code>## # A tibble: 6 x 2
+##   caste_groups  `mean(\`road length\`)`
+##   &lt;chr&gt;                           &lt;dbl&gt;
+## 1 Dalit                            1.81
+## 2 Muslim                           1.69
+## 3 Non-Yadav OBC                    2.01
+## 4 Others                           2.09
+## 5 Upper Caste                      1.80
+## 6 Yadav                            1.62</code></pre>
+</div>
+</div>
+<div id="numbe-of-projects" class="section level2">
+<h2>Numbe of projects</h2>
+<pre><code>## # A tibble: 2 x 2
+##   dyn_cum `mean(ac_proj_no)`
+##     &lt;int&gt;              &lt;dbl&gt;
+## 1       0               535.
+## 2       1               581.</code></pre>
+<div id="experience-1" class="section level3">
+<h3>experience</h3>
+<pre><code>## # A tibble: 5 x 2
+##   fam_exp_cum_cat `mean(ac_proj_no)`
+##   &lt;fct&gt;                        &lt;dbl&gt;
+## 1 [0,1)                         555.
+## 2 [1,6)                         540.
+## 3 [6,11)                        513.
+## 4 [11,21)                       518.
+## 5 [21,Inf]                      560.</code></pre>
+</div>
+<div id="caste-3" class="section level3">
+<h3>caste</h3>
+<p><img src="/post/pmgsy-analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="/post/pmgsy-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+</div>
 </div>
 
 </article>

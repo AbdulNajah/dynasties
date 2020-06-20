@@ -31,21 +31,147 @@ library(gridExtra)
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 nrega <- fread("D:/cpr/up-dynasties/dyn_other_data/nrega.csv", stringsAsFactors = FALSE)
 
+dyn_ge_w_09 <- dyn %>% filter(year == 2009 &position == 1)
+
+
 #glimpse(nrega)
 
 # 
-# names(nrega) <- tolower(names(nrega))
+names(nrega) <- tolower(names(nrega))
 # 
-# nrega <- nrega %>% select(constituency_no,year, everything()) %>% select(- c(30:102))
+nrega <- nrega %>% select(- c(343:417)) %>%   rename(constituency_no = `pc no`) %>%select(constituency_no,worked, workdays,workdays_jc,disbursed_all,ratio) 
+
 # 
 # dyn_ge_w <- dyn %>% filter(election_type == "GE" & position==1)
 # 
 # 
-# dyn_nrega <- merge(dyn_ge_w,nrega, by = c("year", "constituency_no"))
+dyn_nrega <- merge(dyn_ge_w_09,nrega, by = c("constituency_no"))
 # 
 # 
-# names(dyn_nrega) <- make.unique(names(dyn_nrega))
+names(dyn_nrega) <- make.unique(names(dyn_nrega))
 
+
+#summary(nrega)
+
+
+dyn_nrega$fam_exp_cum_cat <- factor(dyn_nrega$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+```
+
+## Workdays
+- total days worked under NREGS
+– Coded as: log(Workdays + 1)
+
+
+
+```{r}
+
+dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(workdays))
+
+```
+
+### experience
+
+```{r}
+dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(workdays))
+```
+
+### caste
+
+```{r}
+dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(workdays))
+```
+
+
+## Worked 
+- number of individuals who worked under NREGS
+– Coded as: log(W orked + 1)
+
+
+
+```{r}
+dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(worked))
+```
+### experience
+
+```{r}
+dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(worked))
+```
+
+### caste
+
+```{r}
+
+
+dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(worked))
+
+```
+
+
+## Deposits
+
+- sum of disbursements to laborers’ bank and post officece accounts
+– Coded as: log(Bank Deposits + P ost Deposits + 1)
+
+```{r}
+
+dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(disbursed_all))
+
+```
+
+
+### experience
+
+```{r}
+dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(disbursed_all))
+```
+
+### caste
+
+
+```{r}
+dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(disbursed_all))
+```
+
+
+
+## Ratio 
+
+ Ratio of Workdays to Deposits
+– Coded as: Ratio = (W orkdays / (Bank Deposits + P ost Deposits + 1))
+
+
+```{r}
+
+dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(ratio, na.rm = TRUE))
 
 
 ```
+
+
+### experience
+
+
+
+```{r}
+dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(ratio, na.rm = TRUE))
+```
+
+### caste
+
+```{r}
+
+dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(ratio, na.rm = TRUE))
+
+
+```
+
+
+
+
+
+
+
+
+
+
+

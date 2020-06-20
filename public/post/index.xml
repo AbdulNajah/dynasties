@@ -17,7 +17,7 @@
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/nrega-analysis/</guid>
-      <description></description>
+      <description>WorkdaysexperiencecasteWorkedexperiencecasteDepositsexperiencecasteRatioexperiencecasteWorkdaystotal days worked under NREGS– Coded as: log(Workdays + 1)## # A tibble: 2 x 2## dyn_cum `mean(workdays)`## &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt;## 1 0 7.81## 2 1 7.85experience## # A tibble: 5 x 2## fam_exp_cum_cat `mean(workdays)`## &amp;lt;fct&amp;gt; &amp;lt;dbl&amp;gt;## 1 [0,1) 7.</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/pmgsy-analysis/</guid>
-      <description>Summary statsSanctioned v/s completedExperience categoriesCasteSummary statsTable 1: PMGSY project across yearsLoksabha TermNumber of projects2004120320092426Table 2: PMGSY summary wrt constituency typeType of constiuencyAverage number of projectsAvergae expenditure per projectAverage road length (km)Non-family37.</description>
+      <description>PMGSY roadsSummary statsSanctioned v/s completedExperience categoriesCastePWD roadssummary statsroad lengthexperiencecasteNumbe of projectsexperiencecastePMGSY roadsSummary statsTable 1: PMGSY project across yearsLoksabha TermNumber of projects2004120320092426Table 2: PMGSY summary wrt constituency typeType of constituencyAverage number of projectsAvergae expenditure per projectAverage road length (km)Non-family37.</description>
     </item>
     
     <item>

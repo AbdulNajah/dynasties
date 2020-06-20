@@ -25,6 +25,8 @@ library(gridExtra)
 ```
 
 
+# PMGSY roads
+
 ```{r file config}
 
 
@@ -77,7 +79,7 @@ dyn_pmgsy_mean <- dyn_pmgsy  %>% group_by(dyn_cum) %>% summarise(mean_proj = mea
 
 Entity <- c("Non-family", "Family")
  
- cbind(Entity,dyn_pmgsy_mean) %>% select(-dyn_cum) %>%  kable(caption = "PMGSY summary wrt constituency type", col.names = c ("Type of constiuency", "Average number of projects","Avergae expenditure per project", "Average road length (km)"),digits = 1)%>% kable_styling(bootstrap_options = "striped")
+ cbind(Entity,dyn_pmgsy_mean) %>% select(-dyn_cum) %>%  kable(caption = "PMGSY summary wrt constituency type", col.names = c ("Type of constituency", "Average number of projects","Avergae expenditure per project", "Average road length (km)"),digits = 1)%>% kable_styling(bootstrap_options = "striped")
 
  #summary(pmgsy)
 
@@ -124,7 +126,7 @@ Couldn't find any significant difference in the `sanctioned kms of road` and the
 # geom_boxplot()+
 # facet_grid(~factor(dyn_cum))
 ```
- Did not see any trends when I tested experience categories  within and without type of constituency against the variables sucha as `sanctioned cost`, `expenditure to the data` and `number of projects`. I tried bar plot and box plot, but bimodal distribution emerges. I have been seeing the same in most of other data set I've been working on.
+ Did not see any trends when I tested experience categories  within and without type of constituency against the variables sucha as `sanctioned cost`, `expenditure to the data` and `number of projects`. I tried bar plot and box plot, but bimodal distribution emerges. I have been seeing the same in most of other data sets I've been working on.
  
 
  
@@ -166,9 +168,246 @@ dyn_pmgsy  %>% group_by(caste_groups) %>% summarise(mean_proj = mean(ac_proj_no)
 ```
 
 
-`mean cost` and `mean length` of the roads are similar among all the caste except for the Yadav caste group which has a higher `mean cost` and `mean length` of the road. Tried all important variables within and without the constiuency type, but no trends or significant difference.
+`mean cost` and `mean length` of the roads are similar among all the caste except for the Yadav caste group which has a higher `mean cost` and `mean length` of the road. Tried all important variables within and without the constituency type, but no trends or significant difference.
+
+##Contractors
+
+
+
+```{r}
+
+cont_count <- dyn_pmgsy %>% group_by(`contractor name`) %>% summarise(count = n()) %>% arrange(-count)
+
+#barplot(cont_count$count)
 
 
 
 
+dyn_pmgsy %>% group_by(dyn_cum, `contractor name`) %>% summarise(count_cont =n()) %>% group_by(dyn_cum) %>% summarise(n())
+
+dyn_pmgsy <- dyn_pmgsy %>% group_by(constituency_no) %>% mutate(ac_cont_no = n_distinct(`contractor name`))
+
+
+
+
+dyn_pmgsy_cont <- dyn_pmgsy %>% group_by(dyn_cum) %>% summarise(mean_cont=mean(ac_cont_no))
+
+Entity <- c("Non-family", "Family")
+ 
+ cbind(Entity,dyn_pmgsy_cont) %>% select(-dyn_cum) %>%  kable(caption = "PMGSY average number of contracters wrt constituency type", col.names = c ("Type of constituency", "Average number of contractors"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+
+ #summary(pmgsy)
+
+
+#t.test(data= dyn_pmgsy, ac_cont_no ~dyn_cum)
+
+
+
+```
+
+
+```{r}
+dyn_pmgsy %>% group_by(dyn_cum) %>% summarise(count = n(),uniq =n_distinct(`contractor name`), prop = uniq/count)
+
+```
+```{r}
+
+dyn_pmgsy <- dyn_pmgsy %>% group_by(`contractor name`) %>% mutate(cont_cost = sum(sanctionedcostnew))
+
+dyn_pmgsy  %>% group_by(dyn_cum) %>% summarise(mean(cont_cost))
+```
+
+```{r}
+dyn_pmgsy %>% group_by(dyn_cum,fam_exp_cum_cat) %>% summarise(mean(ac_cont_no))
+```
+
+
+#### Caste
+
+```{r}
+con_caste_1 <- dyn_pmgsy %>% group_by(dyn_cum,caste_groups) %>% summarise(mean(ac_cont_no))
+
+con_caste_2 <- dyn_pmgsy %>% group_by(caste_groups) %>% summarise(mean(ac_cont_no)) %>% mutate(dyn_cum = -1)
+
+con_caste_3 <- rbind(con_caste_1,con_caste_2)
+ ggplot(con_caste_3 %>% filter(caste_groups!= "Others") ,aes(factor(reorder(caste_groups,`mean(ac_cont_no)` )), `mean(ac_cont_no)`, fill = factor(dyn_cum)))+
+      geom_bar(stat = "identity", position = "dodge")+
+  theme_minimal()+
+  scale_fill_manual (labels = c("All","Non-family", "Family"),
+    values = c("cornflowerblue","skyblue4","skyblue2"))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average number of contractors wrt caste group",  x = "Caste group", y = "Number of contractors \n (mean)") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+
+```
+
+# PWD roads
+
+
+```{r}
+pwd<- fread("D:/cpr/up-dynasties/dyn_other_data/roads-uppwd.csv", stringsAsFactors = FALSE)
+
+#dyn_cum fam_exp_cum_cat mean(\road length`)`glimpse(pwd)
+
+
+names(pwd) <- tolower(names(pwd))
+
+names(pwd) <- make.unique(names(pwd))
+
+pwd <- pwd %>% select(`ac no`, everything())%>% select(c(1:11)) %>% rename(constituency_no = `ac no`)
+
+dyn_ae_w <- dyn %>% filter(year == 2017 & election_type == "AE" & position==1)
+
+#dyn_ae_w %>% group_by(constituency_no)
+
+
+dyn_pwd <- merge(dyn_ae_w,pwd, by = c( "constituency_no"))
+
+
+names(dyn_pwd) <- make.unique(names(dyn_pwd))
+
+#summary(pwd)
+
+dyn_pwd$fam_exp_cum_cat <- factor(dyn_pwd$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+```
+
+## summary stats
+
+```{r summary stats}
+
+#unique(dyn_pwd$department)
+
+dyn_pwd %>% group_by(department) %>% summarise(count = n(),total_road_len =sum(`road length`), mean_len = total_road_len/count) %>% arrange(-mean_len) %>% kable(caption = "Departments and the size of the roads", col.names = c ("Department", "Number of projects","Total length", "Average road length (km)"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## road length
+
+
+
+```{r}
+
+dyn_pwd %>% group_by(dyn_cum) %>% summarise(mean(`road length`))
+
+```
+
+
+
+```{r}
+
+dyn_pwd %>% group_by( department,dyn_cum) %>% summarise(mean(`road length`))
+
+```
+
+
+
+### experience
+
+
+```{r}
+dyn_pwd %>% group_by(dyn_cum,fam_exp_cum_cat)  %>% summarise(mean(`road length`))
+```
+
+### caste
+
+```{r}
+dyn_pwd %>% group_by(caste_groups) %>% summarise(mean(`road length`))
+```
+
+## Numbe of projects
+
+```{r}
+
+dyn_pwd  <- dyn_pwd  %>% group_by(constituency_no) %>% mutate(ac_proj_no = n())
+
+
+dyn_pwd %>% group_by(dyn_cum) %>% summarise(mean(ac_proj_no ))
+
+```
+
+### experience
+
+```{r}
+dyn_pwd %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(ac_proj_no ))
+```
+
+### caste
+
+```{r}
+ dyn_pwd %>% group_by(caste_groups) %>% summarise(proj =mean(ac_proj_no ), len = mean(`road length`)) %>% 
+  ggplot(aes(reorder(caste_groups, proj), proj)) +
+  geom_bar(stat= "identity", color = "#9DBEBB", fill ="#468189" , width = .6)+
+  theme_minimal()+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average number of projects wrt caste group",  x = "", y = "Number of projects \n (mean)") +
+ 
+  theme(
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_blank(),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray40", size = .3),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+
+
+```
+```{r}
+dyn_pwd %>% group_by(caste_groups) %>% summarise(proj =mean(ac_proj_no ), len = mean(`road length`)) %>% 
+  ggplot(aes(reorder(caste_groups, len), len)) +
+  geom_bar(stat= "identity", color = "#9DBEBB", fill ="#468189" , width = .6)+
+  theme_minimal()+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+   labs(title = "Average road length wrt caste group",  x = "", y = "Length \n (km)") +
+  
+  theme(
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_blank(),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray40", size = .3),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+
+```
 
