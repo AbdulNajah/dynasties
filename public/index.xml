@@ -6,7 +6,7 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,10 +14,17 @@
     <item>
       <title>NREGA Analysis</title>
       <link>/post/nrega-analysis/</link>
-      <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/nrega-analysis/</guid>
-      <description>WorkdaysexperiencecasteWorkedexperiencecasteDepositsexperiencecasteRatioexperiencecasteWorkdaystotal days worked under NREGS– Coded as: log(Workdays + 1)## # A tibble: 2 x 2## dyn_cum `mean(workdays)`## &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt;## 1 0 7.81## 2 1 7.85experience## # A tibble: 5 x 2## fam_exp_cum_cat `mean(workdays)`## &amp;lt;fct&amp;gt; &amp;lt;dbl&amp;gt;## 1 [0,1) 7.</description>
+      <description>Constituency typeexperiencecasteVariable summary
+Workdays - total days worked under NREGS
+– Coded as: log(Workdays + 1)
+Worked - number of individuals who worked under NREGS
+– Coded as: log(Worked + 1)
+Deposits - sum of disbursements to laborers’ bank and post office accounts
+– Coded as: log(Bank Deposits + Post office Deposits + 1)
+Table 1: Summary of NREGAYearTotal number of projectsTotal daysAverage days per projectAverage number of projects per constituencyAverage days per constituency200985333667898.</description>
     </item>
     
     <item>
@@ -26,7 +33,7 @@
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/pmgsy-analysis/</guid>
-      <description>PMGSY roadsSummary statsSanctioned v/s completedExperience categoriesCastePWD roadssummary statsroad lengthexperiencecasteNumbe of projectsexperiencecastePMGSY roadsSummary statsTable 1: PMGSY project across yearsLoksabha TermNumber of projects2004120320092426Table 2: PMGSY summary wrt constituency typeType of constituencyAverage number of projectsAvergae expenditure per projectAverage road length (km)Non-family37.</description>
+      <description>PMGSY roadsSummary statsConstituency typeExperience categoriesCasteConstituency typeExperience categoriesCastePWD roadssummary statsFamily typeExperiencecastePMGSY roadsSummary statsTable 1: PMGSY across yearsLoksabha TermNumber of projectsLength coverd (Kms)Total sanctioned amount (Lakhs)200412037539256034200924269261354112Constituency typeTable 2: PMGSY summary stats wrt constituency typeConstituency TypeAverage number of projectsAverage length per projectAverage length over allFamily33.</description>
     </item>
     
     <item>

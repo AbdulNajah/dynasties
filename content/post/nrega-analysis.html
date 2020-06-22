@@ -1,7 +1,7 @@
 ---
 title: "NREGA Analysis"
 author: ""
-date: "2020-06-19"
+date: "2020-06-20"
 output:
   blogdown::html_page:
     toc: true
@@ -9,163 +9,419 @@ editor_options:
   chunk_output_type: inline
 ---
 
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 <div id="TOC">
 <ul>
-<li><a href="#workdays">Workdays</a><ul>
+<li><a href="#constituency-type">Constituency type</a></li>
 <li><a href="#experience">experience</a></li>
 <li><a href="#caste">caste</a></li>
-</ul></li>
-<li><a href="#worked">Worked</a><ul>
-<li><a href="#experience-1">experience</a></li>
-<li><a href="#caste-1">caste</a></li>
-</ul></li>
-<li><a href="#deposits">Deposits</a><ul>
-<li><a href="#experience-2">experience</a></li>
-<li><a href="#caste-2">caste</a></li>
-</ul></li>
-<li><a href="#ratio">Ratio</a><ul>
-<li><a href="#experience-3">experience</a></li>
-<li><a href="#caste-3">caste</a></li>
-</ul></li>
 </ul>
 </div>
 
-<div id="workdays" class="section level2">
-<h2>Workdays</h2>
-<ul>
-<li>total days worked under NREGS
-– Coded as: log(Workdays + 1)</li>
-</ul>
-<pre><code>## # A tibble: 2 x 2
-##   dyn_cum `mean(workdays)`
-##     &lt;int&gt;            &lt;dbl&gt;
-## 1       0             7.81
-## 2       1             7.85</code></pre>
+<p>Variable summary</p>
+<p>Workdays - total days worked under NREGS</p>
+<p>– Coded as: log(Workdays + 1)</p>
+<p>Worked - number of individuals who worked under NREGS</p>
+<p>– Coded as: log(Worked + 1)</p>
+<p>Deposits - sum of disbursements to laborers’ bank and post office accounts</p>
+<p>– Coded as: log(Bank Deposits + Post office Deposits + 1)</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-1">Table 1: </span>Summary of NREGA
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Total number of projects
+</th>
+<th style="text-align:right;">
+Total days
+</th>
+<th style="text-align:right;">
+Average days per project
+</th>
+<th style="text-align:right;">
+Average number of projects per constituency
+</th>
+<th style="text-align:right;">
+Average days per constituency
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+85333
+</td>
+<td style="text-align:right;">
+667898.9
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+1094
+</td>
+<td style="text-align:right;">
+8562.8
+</td>
+</tr>
+</tbody>
+</table>
+<div id="constituency-type" class="section level3">
+<h3>Constituency type</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 2: </span>NREGA summary stats wrt constituency type
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Caste group
+</th>
+<th style="text-align:right;">
+Average number of projects
+</th>
+<th style="text-align:right;">
+Average days
+</th>
+<th style="text-align:right;">
+Average number of poeple
+</th>
+<th style="text-align:right;">
+Average money disbursed
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+1078.6
+</td>
+<td style="text-align:right;">
+8464.3
+</td>
+<td style="text-align:right;">
+4913.6
+</td>
+<td style="text-align:right;">
+13470.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+1104.8
+</td>
+<td style="text-align:right;">
+8631.3
+</td>
+<td style="text-align:right;">
+5070.1
+</td>
+<td style="text-align:right;">
+13836.2
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div id="experience" class="section level3">
 <h3>experience</h3>
-<pre><code>## # A tibble: 5 x 2
-##   fam_exp_cum_cat `mean(workdays)`
-##   &lt;fct&gt;                      &lt;dbl&gt;
-## 1 [0,1)                       7.85
-## 2 [1,6)                       7.85
-## 3 [6,11)                      7.77
-## 4 [11,21)                     7.80
-## 5 [21,Inf]                    7.84</code></pre>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 3: </span>NREGA road stats wrt to experience categories
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience category
+</th>
+<th style="text-align:right;">
+Average number of projects
+</th>
+<th style="text-align:right;">
+Average days
+</th>
+<th style="text-align:right;">
+Average number of poeple
+</th>
+<th style="text-align:right;">
+Average money disbursed
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+[0,1)
+</td>
+<td style="text-align:right;">
+1392
+</td>
+<td style="text-align:right;">
+9011
+</td>
+<td style="text-align:right;">
+5255
+</td>
+<td style="text-align:right;">
+14387
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[1,6)
+</td>
+<td style="text-align:right;">
+1087
+</td>
+<td style="text-align:right;">
+7338
+</td>
+<td style="text-align:right;">
+4423
+</td>
+<td style="text-align:right;">
+11727
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[6,11)
+</td>
+<td style="text-align:right;">
+1315
+</td>
+<td style="text-align:right;">
+9130
+</td>
+<td style="text-align:right;">
+5327
+</td>
+<td style="text-align:right;">
+14695
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[11,21)
+</td>
+<td style="text-align:right;">
+1204
+</td>
+<td style="text-align:right;">
+8489
+</td>
+<td style="text-align:right;">
+4956
+</td>
+<td style="text-align:right;">
+13513
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[21,Inf]
+</td>
+<td style="text-align:right;">
+1334
+</td>
+<td style="text-align:right;">
+8689
+</td>
+<td style="text-align:right;">
+5025
+</td>
+<td style="text-align:right;">
+13873
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="caste" class="section level3">
 <h3>caste</h3>
-<pre><code>## # A tibble: 6 x 2
-##   caste_groups  `mean(workdays)`
-##   &lt;chr&gt;                    &lt;dbl&gt;
-## 1 Dalit                     7.86
-## 2 Muslim                    7.94
-## 3 Non-Yadav OBC             7.70
-## 4 Others                    7.86
-## 5 Upper Caste               7.83
-## 6 Yadav                     7.78</code></pre>
-</div>
-</div>
-<div id="worked" class="section level2">
-<h2>Worked</h2>
-<ul>
-<li>number of individuals who worked under NREGS
-– Coded as: log(W orked + 1)</li>
-</ul>
-<pre><code>## # A tibble: 2 x 2
-##   dyn_cum `mean(worked)`
-##     &lt;int&gt;          &lt;dbl&gt;
-## 1       0           4.59
-## 2       1           4.56</code></pre>
-<div id="experience-1" class="section level3">
-<h3>experience</h3>
-<pre><code>## # A tibble: 5 x 2
-##   fam_exp_cum_cat `mean(worked)`
-##   &lt;fct&gt;                    &lt;dbl&gt;
-## 1 [0,1)                     4.58
-## 2 [1,6)                     4.73
-## 3 [6,11)                    4.54
-## 4 [11,21)                   4.56
-## 5 [21,Inf]                  4.54</code></pre>
-</div>
-<div id="caste-1" class="section level3">
-<h3>caste</h3>
-<pre><code>## # A tibble: 6 x 2
-##   caste_groups  `mean(worked)`
-##   &lt;chr&gt;                  &lt;dbl&gt;
-## 1 Dalit                   4.62
-## 2 Muslim                  4.67
-## 3 Non-Yadav OBC           4.45
-## 4 Others                  4.58
-## 5 Upper Caste             4.59
-## 6 Yadav                   4.47</code></pre>
-</div>
-</div>
-<div id="deposits" class="section level2">
-<h2>Deposits</h2>
-<ul>
-<li>sum of disbursements to laborers’ bank and post officece accounts
-– Coded as: log(Bank Deposits + P ost Deposits + 1)</li>
-</ul>
-<pre><code>## # A tibble: 2 x 2
-##   dyn_cum `mean(disbursed_all)`
-##     &lt;int&gt;                 &lt;dbl&gt;
-## 1       0                  12.5
-## 2       1                  12.5</code></pre>
-<div id="experience-2" class="section level3">
-<h3>experience</h3>
-<pre><code>## # A tibble: 5 x 2
-##   fam_exp_cum_cat `mean(disbursed_all)`
-##   &lt;fct&gt;                           &lt;dbl&gt;
-## 1 [0,1)                            12.5
-## 2 [1,6)                            12.6
-## 3 [6,11)                           12.5
-## 4 [11,21)                          12.4
-## 5 [21,Inf]                         12.5</code></pre>
-</div>
-<div id="caste-2" class="section level3">
-<h3>caste</h3>
-<pre><code>## # A tibble: 6 x 2
-##   caste_groups  `mean(disbursed_all)`
-##   &lt;chr&gt;                         &lt;dbl&gt;
-## 1 Dalit                          12.6
-## 2 Muslim                         12.5
-## 3 Non-Yadav OBC                  12.3
-## 4 Others                         12.6
-## 5 Upper Caste                    12.5
-## 6 Yadav                          12.5</code></pre>
-</div>
-</div>
-<div id="ratio" class="section level2">
-<h2>Ratio</h2>
-<p>Ratio of Workdays to Deposits
-– Coded as: Ratio = (W orkdays / (Bank Deposits + P ost Deposits + 1))</p>
-<pre><code>## # A tibble: 2 x 2
-##   dyn_cum `mean(ratio, na.rm = TRUE)`
-##     &lt;int&gt;                       &lt;dbl&gt;
-## 1       0                       0.828
-## 2       1                       0.864</code></pre>
-<div id="experience-3" class="section level3">
-<h3>experience</h3>
-<pre><code>## # A tibble: 5 x 2
-##   fam_exp_cum_cat `mean(ratio, na.rm = TRUE)`
-##   &lt;fct&gt;                                 &lt;dbl&gt;
-## 1 [0,1)                                 0.850
-## 2 [1,6)                                 0.799
-## 3 [6,11)                                0.822
-## 4 [11,21)                               0.863
-## 5 [21,Inf]                              0.858</code></pre>
-</div>
-<div id="caste-3" class="section level3">
-<h3>caste</h3>
-<pre><code>## # A tibble: 6 x 2
-##   caste_groups  `mean(ratio, na.rm = TRUE)`
-##   &lt;chr&gt;                               &lt;dbl&gt;
-## 1 Dalit                               0.813
-## 2 Muslim                              0.820
-## 3 Non-Yadav OBC                       0.858
-## 4 Others                              0.869
-## 5 Upper Caste                         0.849
-## 6 Yadav                               0.862</code></pre>
-</div>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-4">Table 4: </span>NREGA road stats wrt to caste groups
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Caste group
+</th>
+<th style="text-align:right;">
+Average number of projects
+</th>
+<th style="text-align:right;">
+Average days
+</th>
+<th style="text-align:right;">
+Average number of poeple
+</th>
+<th style="text-align:right;">
+Average money disbursed
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Others
+</td>
+<td style="text-align:right;">
+1947
+</td>
+<td style="text-align:right;">
+13692
+</td>
+<td style="text-align:right;">
+7969
+</td>
+<td style="text-align:right;">
+21859
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yadav
+</td>
+<td style="text-align:right;">
+1371
+</td>
+<td style="text-align:right;">
+10287
+</td>
+<td style="text-align:right;">
+5920
+</td>
+<td style="text-align:right;">
+16502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Non-Yadav OBC
+</td>
+<td style="text-align:right;">
+1307
+</td>
+<td style="text-align:right;">
+7725
+</td>
+<td style="text-align:right;">
+4469
+</td>
+<td style="text-align:right;">
+12303
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dalit
+</td>
+<td style="text-align:right;">
+1304
+</td>
+<td style="text-align:right;">
+9564
+</td>
+<td style="text-align:right;">
+5614
+</td>
+<td style="text-align:right;">
+15368
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Upper Caste
+</td>
+<td style="text-align:right;">
+1222
+</td>
+<td style="text-align:right;">
+8128
+</td>
+<td style="text-align:right;">
+4766
+</td>
+<td style="text-align:right;">
+12991
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Muslim
+</td>
+<td style="text-align:right;">
+1028
+</td>
+<td style="text-align:right;">
+6852
+</td>
+<td style="text-align:right;">
+4029
+</td>
+<td style="text-align:right;">
+10808
+</td>
+</tr>
+</tbody>
+</table>
+<!-- ## Worked  -->
+<!-- - number of individuals who worked under NREGS -->
+<!-- – Coded as: log(W orked + 1) -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(worked)) -->
+<!-- ``` -->
+<!-- ### experience -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(worked)) -->
+<!-- ``` -->
+<!-- ### caste -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(worked)) -->
+<!-- ``` -->
+<!-- ## Deposits -->
+<!-- - sum of disbursements to laborers’ bank and post officece accounts -->
+<!-- – Coded as: log(Bank Deposits + P ost Deposits + 1) -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(disbursed_all)) -->
+<!-- ``` -->
+<!-- ### experience -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(disbursed_all)) -->
+<!-- ``` -->
+<!-- ### caste -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(disbursed_all)) -->
+<!-- ``` -->
+<!-- ## Ratio  -->
+<!--  Ratio of Workdays to Deposits -->
+<!-- – Coded as: Ratio = (W orkdays / (Bank Deposits + P ost Deposits + 1)) -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(dyn_cum) %>% summarise(mean(ratio, na.rm = TRUE)) -->
+<!-- ``` -->
+<!-- ### experience -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(fam_exp_cum_cat)  %>% summarise(mean(ratio, na.rm = TRUE)) -->
+<!-- ``` -->
+<!-- ### caste -->
+<!-- ```{r} -->
+<!-- dyn_nrega %>% group_by(caste_groups) %>% summarise(mean(ratio, na.rm = TRUE)) -->
+<!-- ``` -->
 </div>
