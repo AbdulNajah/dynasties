@@ -1,0 +1,200 @@
+---
+title: "Political Characteristics Analysis"
+author: ""
+date: "2020-06-23"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+`%!in%` = Negate(`%in%`)
+```
+
+
+
+```{r file config}
+
+
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+
+dyn <- dyn %>%  filter(year %!in% c(1974, 1977))
+
+#summary(nrega)
+
+dyn$dyn_cum_text <- ifelse(dyn$dyn_cum ==0, "Non-family","Family")
+
+dyn$fam_rel_id_uniq <-  paste(dyn$family_id, dyn$rel_id_uniq,sep = "")
+
+
+dyn$fam_exp_cum_cat <- factor(dyn$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+
+
+dyn_ae <- dyn %>% filter(election_type =="AE")
+
+
+dyn_ge <- dyn %>% filter(election_type =="GE")
+
+
+```
+
+## Summary
+
+
+```{r}
+
+dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text)  %>% summarise(count = n()) %>% group_by(election_type) %>% mutate(sum = sum(count), prop = (count/sum)) %>% select(election_type,dyn_cum_text, prop) %>% kable(caption = "Summary of the data", col.names = c("Election Type", "Politician's Identity", "Proportion"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+## Margin of Victory
+
+
+```{r}
+
+dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text) %>% summarise(mean(margin_percentage))  %>% kable(caption = "Margin of victory wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Average MOV percentage"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+
+## Turnout
+
+```{r}
+
+dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(turnout_percentage))%>% kable(caption = "Turnout percentage wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Average turnout percentage"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Effective number of parties
+
+
+```{r}
+dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(enop)) %>% 
+  kable(caption = "Effective  number of parties wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Average enop"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+## Number of candidates
+
+
+```{r}
+dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(n_cand)) %>% 
+  kable(caption = "Number of candidates wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Average n_candidates"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+## Turncoat
+
+```{r}
+
+dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(turncoat)) %>% 
+  kable(caption = "Turncoats proportion wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Turncoat proportion"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Same party
+
+```{r}
+
+dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(same_party, na.rm = TRUE)) %>% kable(caption = "Party retention wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Retention proportion"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+<!-- ##  Party -->
+
+<!-- ```{r} -->
+<!-- dyn %>% filter(position==1) %>% group_by(election_type,dyn_cum_text, party) %>% summarise(count = n()) %>% filter(count >10) -->
+<!-- ``` -->
+
+
+## Incumbent
+
+```{r}
+
+dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(incumbent, na.rm = TRUE)) %>% kable(caption = "Proportion of incumbents wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Proportion of incumbents"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Recontest
+
+
+```{r}
+
+dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text) %>% summarise(mean(recontest)) %>% 
+  kable(caption = "Proportion of recontestants wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Proportion of recontestants"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+## Number of terms
+
+
+```{r}
+
+dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text) %>% summarise(mean(no_terms)) %>% 
+  kable(caption = "Number of terms wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Average numer of terms"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Constituency type
+
+
+```{r}
+
+dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text,constituency_type) %>% filter(constituency_type != "ST") %>% summarise(count = n()) %>% group_by(election_type,dyn_cum_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(election_type,dyn_cum_text,constituency_type, prop) %>% kable(caption = "Constituency type wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Constituency Type","Proportion"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+<!-- ## constituency type -->
+
+
+<!-- ```{r} -->
+
+<!-- dyn %>% group_by(election_type,dyn_cum_text)  %>% summarise(count = n()) %>% group_by(election_type,dyn_cum_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(election_type,dyn_cum_text,constituency_type, prop) -->
+
+<!-- ``` -->
+
+
+<!-- ## sub region -->
+
+
+<!-- ```{r} -->
+
+<!-- dyn_ge %>% filter(position==1)%>% group_by(election_type,dyn_cum_text, sub_region) %>% summarise(n()) -->
+
+<!-- ``` -->
+
+
+
+
+

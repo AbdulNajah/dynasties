@@ -1,0 +1,849 @@
+---
+title: "Political Characteristics Analysis"
+author: ""
+date: "2020-06-23"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#margin-of-victory">Margin of Victory</a></li>
+<li><a href="#turnout">Turnout</a></li>
+<li><a href="#effective-number-of-parties">Effective number of parties</a></li>
+<li><a href="#number-of-candidates">Number of candidates</a></li>
+<li><a href="#turncoat">Turncoat</a></li>
+<li><a href="#same-party">Same party</a></li>
+<li><a href="#incumbent">Incumbent</a></li>
+<li><a href="#recontest">Recontest</a></li>
+<li><a href="#number-of-terms">Number of terms</a></li>
+<li><a href="#constituency-type">Constituency type</a></li>
+</ul>
+</div>
+
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-1">Table 1: </span>Summary of the data
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.80
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="margin-of-victory" class="section level2">
+<h2>Margin of Victory</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 2: </span>Margin of victory wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Average MOV percentage
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+11.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+10.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+16.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+11.6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="turnout" class="section level2">
+<h2>Turnout</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 3: </span>Turnout percentage wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Average turnout percentage
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+55.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+51.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+52.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+51.6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="effective-number-of-parties" class="section level2">
+<h2>Effective number of parties</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-4">Table 4: </span>Effective number of parties wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Average enop
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+3.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+3.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="number-of-candidates" class="section level2">
+<h2>Number of candidates</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-5">Table 5: </span>Number of candidates wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Average n_candidates
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+14.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+15.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+17.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+16.6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="turncoat" class="section level2">
+<h2>Turncoat</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-6">Table 6: </span>Turncoats proportion wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Turncoat proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="same-party" class="section level2">
+<h2>Same party</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-7">Table 7: </span>Party retention wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Retention proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.64
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.51
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.68
+</td>
+</tr>
+</tbody>
+</table>
+<!-- ##  Party -->
+<!-- ```{r} -->
+<!-- dyn %>% filter(position==1) %>% group_by(election_type,dyn_cum_text, party) %>% summarise(count = n()) %>% filter(count >10) -->
+<!-- ``` -->
+</div>
+<div id="incumbent" class="section level2">
+<h2>Incumbent</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-8">Table 8: </span>Proportion of incumbents wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Proportion of incumbents
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="recontest" class="section level2">
+<h2>Recontest</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-9">Table 9: </span>Proportion of recontestants wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Proportion of recontestants
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.67
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="number-of-terms" class="section level2">
+<h2>Number of terms</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-10">Table 10: </span>Number of terms wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Average numer of terms
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="constituency-type" class="section level2">
+<h2>Constituency type</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-11">Table 11: </span>Constituency type wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election Type
+</th>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:left;">
+Constituency Type
+</th>
+<th style="text-align:right;">
+Proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
+GEN
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
+SC
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:left;">
+GEN
+</td>
+<td style="text-align:right;">
+0.77
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:left;">
+SC
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
+GEN
+</td>
+<td style="text-align:right;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
+SC
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:left;">
+GEN
+</td>
+<td style="text-align:right;">
+0.77
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:left;">
+SC
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+</tr>
+</tbody>
+</table>
+<!-- ## constituency type -->
+<!-- ```{r} -->
+<!-- dyn %>% group_by(election_type,dyn_cum_text)  %>% summarise(count = n()) %>% group_by(election_type,dyn_cum_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(election_type,dyn_cum_text,constituency_type, prop) -->
+<!-- ``` -->
+<!-- ## sub region -->
+<!-- ```{r} -->
+<!-- dyn_ge %>% filter(position==1)%>% group_by(election_type,dyn_cum_text, sub_region) %>% summarise(n()) -->
+<!-- ``` -->
+</div>
