@@ -42,6 +42,22 @@ dyn$fam_rel_id_uniq <-  paste(dyn$family_id, dyn$rel_id_uniq,sep = "")
 
 dyn$fam_exp_cum_cat <- factor(dyn$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
 
+###four way elections
+
+
+dyn_test <- dyn %>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1,
+                                                                                                                        position ==2 &dyn_cum ==0 ~2,
+                                                                                                                        position ==1 &dyn_cum ==1 ~3,
+                                                                                                                        position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA")))))
+
+
+# dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n())
+
+#table(dyn_test$contest_type)
+
+dyn$contest_type <- dyn_test$contest_type
+
+
 
 dyn_ae <- dyn %>% filter(election_type =="AE")
 
@@ -73,12 +89,45 @@ dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text) %>% summaris
 
 
 
+### 4 way tables
+
+```{r 4 way table config}
+
+
+
+dyn_test <- dyn %>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1,
+                                                                                                                        position ==2 &dyn_cum ==0 ~2,
+                                                                                                                        position ==1 &dyn_cum ==1 ~3,
+                                                                                                                        position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA")))))
+
+
+# dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n())
+
+#table(dyn_test$contest_type)
+
+dyn$contest_type <- dyn_test$contest_type
+
+
+```
+
+```{r}
+
+dyn %>% filter(position==1)%>% group_by(election_type,contest_type) %>% summarise(mean(margin_percentage))  %>% kable(caption = "Margin of victory wrt contest type", col.names = c("Election Type", "contest type", "Average MOV percentage"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
 ## Turnout
 
 ```{r}
 
 dyn%>% filter(position==1) %>% group_by(election_type,dyn_cum_text) %>% summarise(mean(turnout_percentage))%>% kable(caption = "Turnout percentage wrt Politicians identity", col.names = c("Election Type", "Politician's Identity", "Average turnout percentage"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
 
+
+```
+
+```{r}
+dyn %>% filter(position==1)%>% group_by(election_type,contest_type) %>% summarise(mean(turnout_percentage))  %>% kable(caption = "Turnout percentage wrt contest type", col.names = c("Election Type", "contest type", "Average turnout percentage"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
 
 ```
 
@@ -192,6 +241,143 @@ dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text,constituency_
 
 <!-- dyn_ge %>% filter(position==1)%>% group_by(election_type,dyn_cum_text, sub_region) %>% summarise(n()) -->
 
+<!-- ``` -->
+
+#Raphael
+
+# Vote dispersion
+
+
+```{r}
+rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
+
+# dim(rafael)
+# 
+# names(rafael)
+# 
+# unique(rafael$year)
+# 
+# unique(rafael$position)
+
+rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent)
+
+# summary(rafael_up)
+
+dyn_rafael <- merge(dyn_ae, rafael_up, by = c("year", "constituency_no", "position"), allow.cartesian = TRUE)
+
+```
+
+
+
+```{r}
+dyn_rafael %>% filter(position==1 & partypercent <100&  partypercent >10) %>% group_by(constituency_no) %>% mutate(var = var(partypercent) ) %>% group_by(dyn_cum_text) %>% summarise(var_mean = mean(var)) %>% 
+  kable(caption = "Vote dispersion at booth level wrt Politicians identity", col.names = c("Politician's Identity", "Variance"), digit = 0) %>% kable_styling(bootstrap_options = "striped")
+```
+
+```{r}
+dyn_rafael %>% filter(position==1 & partypercent <100&  partypercent >10) %>% group_by(constituency_no) %>% mutate(sd = sd(partypercent) ) %>% group_by(dyn_cum_text) %>% summarise(sd_mean = mean(sd)) %>% 
+  kable(caption = "Vote dispersion at booth level wrt Politicians identity", col.names = c("Politician's Identity", "SD"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+<!-- ```{r} -->
+<!-- ggplot(dyn_rafael %>% filter(position==1 & partypercent <100) , aes(dyn_cum_text, partypercent))+ -->
+<!--   geom_boxplot() -->
+<!-- ``` -->
+
+```{r}
+ggplot(dyn_rafael %>% filter(position==1  & year == 2017) , aes(partypercent, color =dyn_cum_text))+
+  geom_density(size = 1)+
+  xlim(10, 90)+
+  #facet_grid(~dyn_cum_text )+
+  theme_minimal()+
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Distribution of booth level votes",  x = "Percentage of votes", y = "Density") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+
+```
+
+## Mobilisation
+
+
+```{r}
+
+
+dyn$mob <- dyn$vote_share_percentage * dyn$turnout_percentage
+
+# mean(dyn_ae_ge$vote_share_percentage)
+# 
+# hist(mob)
+
+dyn %>% group_by( election_type,dyn_cum_text) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt Politicians identity", col.names = c("Election Type", "Politician's identity", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+                                                            
+                                                            
+dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+```
+
+## Cabinet ministers
+
+```{r}
+
+dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+
+dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>% 
+  kable(caption = "Cabinet minsters wrt Politicians identity", col.names = c("Politician's Identity", "Average number of cabinet minsters"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+
+<!-- ## cab reg -->
+
+<!-- ```{r} -->
+<!-- dyn_uniq_ind_ae$n_sc_minster_d <- ifelse(dyn_uniq_ind_ae$n_sc_minster>0,1,0) -->
+
+<!-- fit <- lm(data = dyn_uniq_ind_ae , dyn_tot ~  n_sc_minster_d) -->
+
+<!-- summary(fit)  -->
+<!-- ``` -->
+
+
+
+
+## Cabinet ministers
+
+```{r}
+
+dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+
+dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>% 
+  kable(caption = "Cabinet minsters wrt Politicians identity", col.names = c("Politician's Identity", "Average number of cabinet minsters"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+
+<!-- ## cab reg -->
+
+<!-- ```{r} -->
+<!-- dyn_uniq_ind_ae$n_sc_minster_d <- ifelse(dyn_uniq_ind_ae$n_sc_minster>0,1,0) -->
+
+<!-- fit <- lm(data = dyn_uniq_ind_ae , dyn_tot ~  n_sc_minster_d) -->
+
+<!-- summary(fit)  -->
 <!-- ``` -->
 
 
