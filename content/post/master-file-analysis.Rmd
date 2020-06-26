@@ -169,11 +169,58 @@ dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
 # 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 # 
+
+
 # write.csv(dyn_ae_ge, "dyn_other_data/dyn_ae_ge.csv")
 
 
+## adding cabinet info to this
+
+cabinet <- read.csv("D:/cpr/up-dynasties/dyn_up_cabinet.csv")
+
+cabinet <- cabinet %>% rename(year = Election_Year_1)
+
+cabinet$term_duration <- NA
+
+cabinet$term_duration[cabinet$year == 1996] <- 6
+
+cabinet$term_duration[cabinet$year %in% c(1977,1980,2002, 2007, 2012, 2017)]<- 5
+
+cabinet$term_duration[cabinet$year == 1985]<- 4
+
+cabinet$term_duration[cabinet$year %in% c(1993,1977, 1974)]<- 3
+
+cabinet$term_duration[cabinet$year %in% c(1989,1991)]<- 2
+
+
+dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >1 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_duration, na.rm = TRUE)) 
+dyn_ae_ge <- merge(dyn_ae_ge ,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE )
+
+
+#dyn_ae_ge$n_sc_minster <-ifelse(!is.na(dyn_ae_ge$n_sc_minster),dyn_ae_ge$n_sc_minster,0)
+
+
+
+inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv")
+
+inv <- inv %>% filter (election_type == "AE") %>% select(election_type,year, family_id, constituency_no, position,pid,association_inv, poitical_inv,org_inv,any_oth_rem) %>% rename(pol_inv =poitical_inv) 
+
+dyn_ae_ge <- merge(dyn_ae_ge ,inv, by = c("election_type","year", "family_id", "constituency_no", "position","pid"),  all.x =TRUE )
+
+
+#dyn_ae_ge <- dyn_ae_ge %>% mutate(if_else(n_sc_minster >0,n_sc_minster,0))
+#table(dyn_ae_ge$n_sc_minster)
+
+
+#write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 ```
+
+```{r break of contest types}
+
+```
+
+
 ```{r to send for rahul}
 
 # csds <- read.csv("csds.csv")
@@ -263,6 +310,29 @@ dyn %>% filter(election_type =="AE" ) %>% count(year) %>%  kable(col.names = c (
 ```{r GE summary}
 dyn %>% filter(election_type == "GE") %>% count(year) %>% kable(col.names = c ("Year", "Count"))%>% kable_styling(bootstrap_options = "striped")
 ```
+
+### AE GE election contest
+
+```{r break up of contest types}
+
+dyn_test <- dyn_ae_ge%>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1,
+                                                                                                                        position ==2 &dyn_cum ==0 ~2,
+                                                                                                                        position ==1 &dyn_cum ==1 ~3,
+                                                                                                                        position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA")))))
+
+
+# dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n())
+
+#table(dyn_test$contest_type)
+
+dyn_ae_ge$contest_type <- dyn_test$contest_type
+
+dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type) %>% summarise(count = n())  %>% select(year, contest_type, count) %>% spread(contest_type, count) %>% kable(digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
+dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type) %>% summarise(count = n()) %>% group_by(year) %>% mutate(sum = sum(count), prop = count/sum) %>% select(year, contest_type, prop) %>% spread(contest_type, prop) %>% kable(digits = 2)%>% kable_styling(bootstrap_options = "striped")
+```
+
+
 
 
 ### local body elections

@@ -10,7 +10,7 @@ output:
 
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 # Do not edit this code block/chunk
-knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
 
@@ -37,6 +37,8 @@ names(mplads) <- tolower(names(mplads))
 
 mplads <- mplads %>% select(constituency_no,year, everything()) %>% select(- c(30:102))
 
+mplads$cost_cat <- cut(mplads$costnew, breaks = c(0,200000,500000,Inf), labels = c("Low", "Medium", "High"))
+
 dyn_ge_w <- dyn %>% filter(election_type == "GE" & position==1)
 
 
@@ -44,6 +46,8 @@ dyn_mplads <- merge(dyn_ge_w,mplads, by = c("year", "constituency_no"))
 
 
 names(dyn_mplads) <- make.unique(names(dyn_mplads))
+
+dyn_mplads$dyn_cum_text <- ifelse(dyn_mplads$dyn_cum ==0, "Non-family","Family")
 
 
 
@@ -83,6 +87,13 @@ Entity <- c("Non-family", "Family")
 
 
 
+
+```
+
+
+```{r}
+
+ dyn_mplads %>% group_by( year,dyn_cum_text) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending",col.names = c ("Year","Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
 
 ```
 
@@ -153,6 +164,39 @@ No significant difference. In both the cases of family v/s non family categories
 ```
 
 
+```{r 2004 & 2009 1}
+
+dyn_mplads %>% group_by(dyn_cum,year, category_work) %>% summarise( count = n()) %>% group_by(year,dyn_cum) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_cum, category_work, prop, year) %>% 
+   ggplot(aes(factor(dyn_cum), prop, fill = category_work,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+  facet_grid(~year)+
+    scale_x_discrete(labels = c("Non-Families","Families"))+
+    labs(title = " MPLADS projects composition \n among non-families and families ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+
+```
+
+
+
 ### Expenditure
 
 ```{r spending composition}
@@ -162,6 +206,35 @@ No significant difference. In both the cases of family v/s non family categories
    geom_bar(stat="identity", position = "stack")+
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
+    scale_x_discrete(labels = c("Non-Families","Families"))+
+    labs(title = " MPLADS spending composition \n among non-families and families ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+```
+```{r 2004& 2009 2 }
+
+ dyn_mplads %>% group_by(year,dyn_cum, category_work) %>% summarise(sum_cat = sum(costnew)) %>% group_by(year,dyn_cum) %>% mutate(sum_tot = sum(sum_cat), prop = sum_cat/sum_tot) %>% select(dyn_cum, category_work, prop) %>% 
+   ggplot(aes(factor(dyn_cum), prop, fill = category_work,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+  facet_grid(~year)+
     scale_x_discrete(labels = c("Non-Families","Families"))+
     labs(title = " MPLADS spending composition \n among non-families and families ",x = "", y = "Proportion", fill = "Type of work") +
     theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
@@ -237,6 +310,42 @@ dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_projects = m
 
 ```
 
+```{r}
+
+dyn_mplads %>% group_by(year,dyn_cum, category_work ) %>% summarise(mean_projects = mean(ac_contr_n, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(dyn_cum)))+
+  geom_bar(stat = "identity", position = "dodge")+
+    theme_minimal()+
+  facet_grid(~year)+
+  scale_y_continuous(label = label_number_si())+
+  scale_fill_manual (labels = c("Non-family", "Family"),
+    values = c("#468189", "#9DBEBB"))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average count of projects",  x = "Type of project", y = "Average count") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( angle = 90,
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+
+```
+
+
+
 ### Type of work v/s cost
 
 
@@ -271,7 +380,90 @@ dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_cost = mean(
   ) 
 ```
 
+```{r 2004 & 2009 3}
+
+dyn_mplads %>% group_by(year,dyn_cum, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(dyn_cum)))+
+  geom_bar(stat = "identity", position = "dodge")+
+  theme_minimal()+
+  facet_grid(~year)+
+  scale_y_continuous(label = label_number_si())+
+  scale_fill_manual (labels = c("Non-family", "Family"),
+    values = c("#468189", "#9DBEBB"))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average cost per project",  x = "Type of project", y = "Average cost") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( angle = 90,
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+```
+
+### cost categories
 
 
+Categories:
+
+Low - 0-.2 mn
+
+Medium - 2.2 mn - 5 mn
+
+High - 5 mn+
+
+```{r}
+
+
+# names(mplads)
+# 
+# summary(mplads$costnew)
+# 
+# hist(mplads$costnew) %>% scale_x_continuous(label = label_number_si())
+
+ggplot(dyn_mplads, aes(costnew, color = dyn_cum_text))+
+  geom_density()+ 
+  theme_minimal()+ scale_y_continuous(label = label_number())+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Project cost distribution wrt politician's identity",  x = "Cost", y = "Density") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        
+  )
+
+
+
+```
+
+```{r}
+
+dyn_mplads %>% group_by(dyn_cum_text,cost_cat) %>% summarise(count = n()) %>% group_by(dyn_cum_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% kable(caption = "Project cost categories wrt politician's identity", col.names = c("Politicians Identity", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+```
 
 
