@@ -1,0 +1,169 @@
+---
+title: "Election Finance Analysis"
+author: ""
+date: "2020-06-26"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+`%!in%` = Negate(`%in%`)
+```
+
+
+# Election finance
+
+```{r file config}
+
+
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+
+el_fin <- read.csv("D:/cpr/up-dynasties/dyn_other_data/UP_expenditure.csv", stringsAsFactors = FALSE)
+
+#glimpse(el_fin)
+
+
+names(el_fin) <- tolower(names(el_fin))
+
+
+el_fin <- el_fin %>% rename(constituency_name = constituency, year = election.year)
+
+#pmgsy <- pmgsy %>% select(year, everything())%>%  select(- c(2:78)) %>% rename(constituency_no = `pc no`) %>% filter(year != 2014)
+
+dyn_ae_12_17_w<- dyn %>% filter(election_type == "AE" & position==1 & year %in% c(2012,2017))
+
+dyn_ae_12_17_w$dyn_cum_text <- ifelse(dyn_ae_12_17_w$dyn_cum ==0, "Non-family","Family")
+
+# library(fuzzyjoin)
+# 
+# stringdist_right_join(dyn_ae_12_17_w, el_fin, by =c("year", "constituency_name"), distance_col = NULL)
+
+
+dyn_el_fin <- merge(el_fin,dyn_ae_12_17_w, by = c("year", "constituency_no"))
+
+dyn_el_fin$dyn_cum_text <- ifelse(dyn_el_fin$dyn_cum ==0, "Non-family","Family")
+
+#summary(pwd)
+
+dyn_el_fin$fam_exp_cum_cat <- factor(dyn_el_fin$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))#names(dyn_pmgsy) <- make.unique(names(dyn_pmgsy))
+
+dyn_el_fin$fam_rel_id_uniq <-  paste(dyn_el_fin$family_id, dyn_el_fin$rel_id_uniq,sep = "")
+
+#dyn_pmgsy  <- dyn_pmgsy %>% group_by(fam_rel_id_uniq) %>% mutate(n_proj_ind = n())
+
+```
+
+
+
+
+
+```{r summary}
+#
+
+# dyn_ae_12_17_w %>% group_by(year,dyn_cum_text) %>% summarise(count_actual = n()) %>% kable(caption = "Actual distribution of families and non-families", col.names = c("Year", "Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
+# 
+# dyn_el_fin %>% group_by(year, dyn_cum_text) %>% summarise(count_submitted = n()) %>% 
+#   kable(caption = "Candidates who has submitted election finance affidavit", col.names = c("Year", "Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+cbind(dyn_ae_12_17_w %>% group_by(year,dyn_cum_text) %>% summarise(count_actual = n()),dyn_el_fin %>% group_by(year, dyn_cum_text) %>% summarise(count_submitted = n())) %>% select(year, dyn_cum_text, count_actual, count_submitted) %>% mutate(prop = count_submitted/count_actual) %>% kable(caption = "Summary table of  election finance affidavit submission", col.names = c("Year", "Politician's identity","Count true", "Count submitted", "Proportion")) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+## Funding
+
+
+```{r}
+
+
+dyn_el_fin %>% group_by(dyn_cum_text) %>% summarise(Total_funds= mean(tot_fund), Candidate = mean(own), Party = mean(party_office), donations = mean(donations)) %>%  kable(caption = "Election Funding - Averages", col.names = c( "Politician's identity", "Total fund", "Candidate", "Party", "Donations"), digits = 0) %>% kable_styling(bootstrap_options = "striped")
+
+
+
+```
+
+```{r}
+
+dyn_el_fin %>% group_by(dyn_cum_text) %>% summarise( Candidate = mean(own), Party = mean(party_office), Donations = mean(donations)) %>% melt(id = 1:1, measure = 2:4) %>% group_by(dyn_cum_text) %>% mutate(sum = sum(value), prop = value/sum) %>% select(dyn_cum_text, variable, prop) %>% 
+  ggplot(aes(factor(dyn_cum_text), prop, fill = variable,label = round(prop,1)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = " Election funding composition \n among families and non-families ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+
+
+```
+
+
+
+## Expenditure
+
+```{r}
+
+dyn_el_fin %>% group_by(dyn_cum_text) %>% summarise( Total_expenditure = mean(toal_expense), Media = mean(ex_media), Vehicles = mean(ex_vehicles), Materials = mean(ex_materials), Meetings = mean(ex_meetings), Campaigns = mean(ex_campaign), Misc = mean(ex_misc)) %>% kable(caption = "Election Expenditure - Averages", col.names = c( "Politician's identity", "Total Expenditure",  "Media","Vehicles","Materials", "Meetings","Campaigns", "Miscellanious"), digits = 0) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+```{r}
+dyn_el_fin %>% group_by(dyn_cum_text) %>% summarise( Media = mean(ex_media), Vehicles = mean(ex_vehicles), Materials = mean(ex_materials), Meetings = mean(ex_meetings), Campaigns = mean(ex_campaign), Misc = mean(ex_misc)) %>% melt(id = 1:1, measure = 2:7) %>% group_by(dyn_cum_text) %>% mutate(sum = sum(value), prop = value/sum) %>% select(dyn_cum_text, variable, prop) %>% 
+     ggplot(aes(factor(dyn_cum_text), prop, fill = variable,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = " Election expenditure composition \n among families and non-families ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+```
+
+
+
+
