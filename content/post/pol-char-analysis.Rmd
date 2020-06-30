@@ -10,7 +10,7 @@ editor_options:
 ---
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 # Do not edit this code block/chunk
-knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
 
@@ -28,10 +28,10 @@ library(gridExtra)
 ```{r file config}
 
 
-dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+dyn<- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 
-dyn <- dyn %>%  filter(year %!in% c(1974, 1977))
+dyn <- dyn %>%  filter(year %!in% c(1974))
 
 #summary(nrega)
 
@@ -67,6 +67,8 @@ dyn_ge <- dyn %>% filter(election_type =="GE")
 
 ```
 
+
+
 ## Summary
 
 
@@ -89,7 +91,6 @@ dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text) %>% summaris
 
 
 
-### 4 way tables
 
 ```{r 4 way table config}
 
@@ -99,6 +100,7 @@ dyn_test <- dyn %>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~
                                                                                                                         position ==2 &dyn_cum ==0 ~2,
                                                                                                                         position ==1 &dyn_cum ==1 ~3,
                                                                                                                         position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA")))))
+
 
 
 # dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n())
@@ -112,8 +114,7 @@ dyn$contest_type <- dyn_test$contest_type
 
 ```{r}
 
-dyn %>% filter(position==1)%>% group_by(election_type,contest_type) %>% summarise(mean(margin_percentage))  %>% kable(caption = "Margin of victory wrt contest type", col.names = c("Election Type", "contest type", "Average MOV percentage"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
-
+# dyn %>% filter(position==1)%>% group_by(election_type,contest_type) %>% summarise(mean(margin_percentage))  %>% 
 ```
 
 
@@ -315,33 +316,79 @@ ggplot(dyn_rafael %>% filter(position==1  & year == 2017) , aes(partypercent, co
 
 ```
 
-## Mobilisation
+<!-- ## Mobilisation -->
 
 
-```{r}
+<!-- ```{r} -->
 
 
-dyn$mob <- dyn$vote_share_percentage * dyn$turnout_percentage
+<!-- dyn$mob <- dyn$vote_share_percentage * dyn$turnout_percentage -->
 
-# mean(dyn_ae_ge$vote_share_percentage)
-# 
-# hist(mob)
+<!-- # mean(dyn_ae_ge$vote_share_percentage) -->
+<!-- #  -->
+<!-- # hist(mob) -->
 
-dyn %>% group_by( election_type,dyn_cum_text) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt Politicians identity", col.names = c("Election Type", "Politician's identity", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
-                                                            
-                                                            
-dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
-```
+<!-- dyn %>% group_by( election_type,dyn_cum_text) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt Politicians identity", col.names = c("Election Type", "Politician's identity", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 
-## Cabinet ministers
 
-```{r}
+<!-- dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
 
-dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+<!-- ## Cabinet ministers -->
 
-dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>% 
-  kable(caption = "Cabinet minsters wrt Politicians identity", col.names = c("Politician's Identity", "Average number of cabinet minsters"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
-```
+
+
+
+<!-- ```{r summary} -->
+
+
+<!-- cabinet <- read.csv("D:/cpr/up-dynasties/dyn_other_data/up_cabinet.csv") -->
+
+<!-- #glimpse(cabinet) -->
+
+<!-- names(cabinet) <- tolower(names(cabinet)) -->
+
+<!-- names(cabinet) <- make.unique(names(cabinet)) -->
+
+<!-- cabinet <- cabinet %>% rename(year = election_year_1) -->
+
+<!-- cabinet$rel_id_unique <- as.numeric(cabinet$rel_id_unique) -->
+
+<!-- cabinet <- cabinet %>% filter(rel_id_unique >0 ) -->
+
+<!-- cabinet$term_duration <- NA -->
+
+<!-- cabinet$term_duration[cabinet$year == 1996] <- 6 -->
+
+<!-- cabinet$term_duration[cabinet$year %in% c(1977,1980,2002, 2007, 2012, 2017)]<- 5 -->
+
+<!-- cabinet$term_duration[cabinet$year == 1985]<- 4 -->
+
+<!-- cabinet$term_duration[cabinet$year %in% c(1993,1977, 1974)]<- 3 -->
+
+<!-- cabinet$term_duration[cabinet$year %in% c(1989,1991)]<- 2 -->
+
+
+<!-- dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >1 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_duration, na.rm = TRUE))  -->
+<!-- dyn_ae_ge <- merge(dyn_ae_ge ,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE ) -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- cabinet %>% group_by(year) %>%  summarise(count = n()) %>% kable() -->
+
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+
+<!-- dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE) -->
+
+<!-- dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>%  -->
+<!--   kable(caption = "Cabinet minsters wrt Politicians identity", col.names = c("Politician's Identity", "Average number of cabinet minsters"), digit = 2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
 
 
 
@@ -360,13 +407,13 @@ dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summ
 
 ## Cabinet ministers
 
-```{r}
+<!-- ```{r} -->
 
-dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+<!-- dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE) -->
 
-dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>% 
-  kable(caption = "Cabinet minsters wrt Politicians identity", col.names = c("Politician's Identity", "Average number of cabinet minsters"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
-```
+<!-- dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>%  -->
+<!--   kable(caption = "Cabinet minsters wrt Politicians identity", col.names = c("Politician's Identity", "Average number of cabinet minsters"), digit = 2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
 
 
 
@@ -379,6 +426,136 @@ dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summ
 
 <!-- summary(fit)  -->
 <!-- ``` -->
+
+<!-- ## regression -->
+
+<!-- ```{r} -->
+<!-- #names(dyn_uniq_ind_ae) -->
+
+<!-- #dim(dyn_uniq_ind_ae) -->
+
+<!-- dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" & position==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE) -->
+
+<!-- dyn_uniq_ind_ae$n_sc_minster_d <- ifelse(dyn_uniq_ind_ae$n_sc_minster>0,1,0)  -->
+
+
+<!-- dyn_uniq_ind_ae$minister <- ifelse(dyn_uniq_ind_ae$n_sc_minster>0,1,0) %>% replace_na(0) -->
+
+<!-- minister_duration <- ifelse(dyn_uniq_ind_ae$minister_dur>0,dyn_uniq_ind_ae$minister_dur,0) %>% replace_na(0) -->
+
+<!-- dyn_uniq_ind_ae$association <- ifelse(dyn_uniq_ind_ae$association_inv >0,1,0) %>% replace_na(0) -->
+
+<!-- dyn_uniq_ind_ae$organisation <- ifelse(dyn_uniq_ind_ae$org_inv > 0,1,0) %>% replace_na(0) -->
+
+<!-- dyn_uniq_ind_ae$politics <- ifelse(dyn_uniq_ind_ae$pol_inv >0,1,0) %>% replace_na(0) -->
+
+
+
+<!-- dynast <- dyn_uniq_ind_ae$dyn_tot -->
+
+<!-- position <- dyn_uniq_ind_ae$position -->
+
+<!-- family_size <- dyn_uniq_ind_ae$fam_size_tot -->
+
+<!-- family_experience <-  dyn_uniq_ind_ae$fam_exp_tot -->
+
+
+
+
+
+<!-- tab <- cbind(data.frame(table(association)),data.frame(table(organisation)),data.frame(table(politics)))  -->
+<!-- #tab %>%  make.unique(names(tab))%>% select(1:2, 3:3, 5:5) -->
+
+<!-- names(tab) <- make.unique(names(tab)) -->
+
+<!-- tab %>% select(association,Freq, Freq.1, Freq.2) %>% kable(col.names = c("involvement","Association", "Organisation", "Politics" )) -->
+
+<!-- data.frame(table(organisation)) -->
+
+<!-- data.frame(table(politics)) -->
+
+<!-- fit <- lm(dynast ~  minister +minister_duration + association + organisation + politics+ minister *minister_duration) -->
+
+
+<!-- summary(fit) -->
+
+
+<!-- involve -->
+
+
+<!-- ``` -->
+
+<!-- ## Mobility -->
+
+<!-- ```{r } -->
+
+<!-- dyn <- dyn %>% group_by(family_id) %>% mutate(el_n_uniq = n_distinct(election_type)) -->
+
+<!-- dyn$first_el <- NA -->
+
+<!-- first_election <- dyn %>% group_by(family_id) %>% filter(year == min(year)) %>% select(election_type) %>% rename(first_election = election_type) -->
+
+<!-- # dyn$first_election <- NULL -->
+<!-- #  -->
+<!-- # first_elction <- dyn %>% group_by(family_id) %>% mutate(first_election = election_type[ first_year== year]) %>% select(election_type) -->
+
+<!-- dyn <- merge(dyn,first_election, by = "family_id", all.x = TRUE, allow.cartesian = TRUE) -->
+
+<!-- dyn_uniq_ind <- dyn %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE) -->
+
+<!--   dyn_uniq_ind %>% filter(el_n_uniq>1 &dyn_tot ==1) %>% group_by(first_election) %>% summarise(n= n(), prop = n/284)                                           -->
+
+<!-- first_el = if_else(election_type == "GE"[year==min(year)], "GE", "AE"))  -->
+
+
+
+
+
+
+<!-- dyn_uniq_ind_ae %>% group_by(dyn_tot) %>% count(association) %>% group_by(dyn_tot) %>% mutate(sum = sum(n), prop = n/sum) %>% select( prop) %>% rename(association= prop) , -->
+
+<!-- dyn_uniq_ind_ae %>% group_by(dyn_tot) %>% count(organisation) %>% group_by(dyn_tot) %>% mutate(sum = sum(n), prop = n/sum) %>% select( prop) %>% rename(organisation= prop)) %>% select(-dyn_tot, -dyn_tot1, -dyn_tot2) -->
+
+
+<!-- ``` -->
+
+
+
+
+<!-- ```{r} -->
+<!-- dyn %>%  distinct(family_id, .keep_all = TRUE) %>% filter(dyn_tot == 1 & el_n_uniq >1) %>% group_by (first_el) %>% summarise(count = n()) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- mobilty, talk to jatin - within ge/ae - what makes -  -->
+<!-- ``` -->
+
+
+
+<!-- ```{r} -->
+<!-- mob_tab <-  dyn %>% group_by(family_id)  %>% distinct(family_id, .keep_all = TRUE) %>% group_by(dyn_tot,el_n_uniq) %>% summarise(count = n()) %>% group_by(dyn_tot) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(dyn_tot == 1) %>% select(dyn_tot, prop) -->
+
+<!-- mob_text <- data.frame(c("No", "Yes")) -->
+
+<!-- cbind(mob_text, mob_tab) %>% select(1:1, 3:3) %>% kable(caption = "Mobility among families", col.names = c("Mobility", "Proportion")) -->
+
+<!-- inv_tab <- cbind(dyn_uniq_ind_ae %>% group_by(dyn_tot) %>% count(politics) %>% group_by(dyn_tot) %>% mutate(sum = sum(n), prop = n/sum) %>% select( prop) %>% rename(politics= prop) -->
+
+<!-- inv_tab_text <- data.frame(c("Non-family_No", "Non-family_Yes", "Family_No", "Family_Yes")) -->
+
+
+<!-- cbind(inv_tab_text,inv_tab ) %>% select(-dyn_tot) %>% kable(col.names = c("Involvement", "Politics", "Association", "Organisation"), digits = 2) -->
+
+
+<!-- ``` -->
+
+
+
+
+
+
+
+
+
 
 
 

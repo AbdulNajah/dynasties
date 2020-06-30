@@ -40,9 +40,9 @@
 <li><a href="#local-body-elections">local body elections</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#linkages">Linkages</a></li>
 <li><a href="#analyis-at-different-levels">Analyis at different levels</a><ul>
 <li><a href="#all-elections">All elections</a><ul>
-<li><a href="#members-in-the-other-levels-and-the-probabilty">Members in the other levels and the probabilty</a></li>
 <li><a href="#land-distribution">Land distribution</a></li>
 <li><a href="#industries-education">Industries: Education</a></li>
 <li><a href="#industries-others">Industries : Others</a></li>
@@ -1150,9 +1150,155 @@ Zilla Panchayt
 </tr>
 </tbody>
 </table>
+<!-- ```{r } -->
+<!-- # ## Distribution of caste among candidates and the families -->
+<!-- #  -->
+<!-- # ```{r} -->
+<!-- # caste_groups_ind <- as.data.frame(table(dyn_1$caste_groups)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_1_uniq <- dyn_1 %>%  -->
+<!-- #   filter(relative_id ==1) %>%  -->
+<!-- #   distinct( family_id, .keep_all = T) -->
+<!-- #  -->
+<!-- # caste_groups_fam<- as.data.frame(table(dyn_1_uniq$caste_groups)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # caste_dist <- merge(caste_groups_fam,caste_groups_ind, by = "Var1") -->
+<!-- #  -->
+<!-- # names(caste_dist) <- c("caste_group","Families" , "Candidates" ) -->
+<!-- #  -->
+<!-- # caste_dist %>% arrange(desc(Freq.x)) %>% kable(col.names = c ("Caste group","Families" , "Candidates"))%>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+<!-- # Linkages -->
+<!-- ```{r} -->
+<!-- dyn <- dyn %>% group_by(family_id) %>% mutate(n_el_lvl = n_distinct(election_level )) -->
+<!-- dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", -->
+<!--                          election_type == "GE" ~ "GE", -->
+<!--                          TRUE ~ "LB")) -->
+<!-- dyn <- dyn %>% group_by(family_id) %>% mutate( -->
+<!--   fam_lvl = -->
+<!--     case_when( -->
+<!--       (grepl("AE", election_level)&grepl("GE", election_level)) ~ "AE-GE-LB", -->
+<!--       # election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
+<!--       # election_level == "GE" ~ "GE", -->
+<!--       # election_level == "AE" ~ "AE", -->
+<!--       # election_level == "LB" ~ "LB", -->
+<!--       # election_level == "AE" & election_level == "LB" ~ "AE-LB", -->
+<!--       # election_level == "GE" & election_level == "LB" ~ "GE-LB", -->
+<!--       TRUE ~ "NA" -->
+<!--     ) -->
+<!-- ) -->
+<!-- patterns <- c("AE", "GE", "LB") -->
+<!-- dyn <- dyn %>% group_by(family_id) %>% mutate( -->
+<!--   fam_lvl = -->
+<!--     #if_else(grepl("AE.*GE|GE.*AE", election_level ) ==TRUE, "AE-GE-LB", -->
+<!--              ifelse((grepl("AE", election_level) & grepl("GE", election_level)), "AE-GE", -->
+<!--             #        if_else(election_level %in% c("AE",  "LB") , "AE-LB", -->
+<!--             #               if_else(election_level %in% c("GE", "LB")  ,"GE-LB", -->
+<!--             #                      if_else(election_level == "GE" , "GE", -->
+<!--             #                             if_else(election_level == "AE" , "AE", -->
+<!--             #                                    if_else(election_level == "LB" , "LB", -->
+<!--                                                       "NA")#)#))))) -->
+<!-- ) -->
+<!-- dyn %>% group_by(family_id) %>% mutate(fam_lvl =ifelse(grepl("AE", election_level)& grepl("GE", election_level) , "AE-GE","NA")) %>% select(fam_lvl) -->
+<!-- table(grepl("AE", dyn$election_level )& grepl("GE", dyn$election_level )&grepl("LB", dyn$election_level )) -->
+<!-- table(grepl("AE", dyn$election_level )) -->
+<!--  dyn <- dyn %>% group_by(family_id) %>% mutate( -->
+<!--   fam_lvl = -->
+<!--     ifelse( -->
+<!--       grep( c("AE","GE", "LB"),election_level), "AE-GE-LB", -->
+<!--       # election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
+<!--       # election_level == "GE" ~ "GE", -->
+<!--       # election_level == "AE" ~ "AE", -->
+<!--       # election_level == "LB" ~ "LB", -->
+<!--       # election_level == "AE" & election_level == "LB" ~ "AE-LB", -->
+<!--       # election_level == "GE" & election_level == "LB" ~ "GE-LB", -->
+<!--        "NA" -->
+<!--     ) -->
+<!-- ) -->
+<!-- `dyn %>% group_by(family_id) %>% mutate(fam_lvl= -->
+<!--                                          if_else(election_level == "AE" & election_level ==  "GE" & election_level ==  "LB", "AE-GE-LB", -->
+<!--                                                  ifelse(election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
+<!--                                                         ifelse())) -->
+<!-- dyn_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- ``` -->
 </div>
 </div>
 </div>
+</div>
+<div id="linkages" class="section level1">
+<h1>Linkages</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+level
+</th>
+<th style="text-align:right;">
+count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+LB
+</td>
+<td style="text-align:right;">
+716
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:right;">
+156
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE-AE
+</td>
+<td style="text-align:right;">
+97
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE-LB
+</td>
+<td style="text-align:right;">
+72
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE-AE-LB
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE-LB
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="analyis-at-different-levels" class="section level1">
 <h1>Analyis at different levels</h1>
@@ -1160,9 +1306,7 @@ Zilla Panchayt
 <h2>All elections</h2>
 <p>This universe includes winners and runner-ups from the general and assembly elections from the year 1977 to 2019 and the winners from the local body elections held from 1995 to 2015 in the state of Uttar Pradesh. This contains 18340 observations and the number unique individuals is 10915 and the families is 1083. It has to be noted that 88% of this winners are just patriarchs.</p>
 <p>In this universe of families 2308 winners are part of some family and 783 winners out of this is just patriarchs while the rest is other family members.</p>
-<div id="members-in-the-other-levels-and-the-probabilty" class="section level3">
-<h3>Members in the other levels and the probabilty</h3>
-</div>
+<!-- ### Members in the other levels and the probabilty  -->
 <div id="land-distribution" class="section level3">
 <h3>Land distribution</h3>
 <div id="families" class="section level4">
@@ -1346,7 +1490,7 @@ Families
 </div>
 <div id="ae---ge" class="section level2">
 <h2>AE - GE</h2>
-<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5285 and the families is 304. It has to be noted that 93% of this winners are just patriarchs.</p>
+<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5285 and the families is 305. It has to be noted that 93% of this winners are just patriarchs.</p>
 <p>In this universe of families 1086 winners and runner-ups are part of some family and 382 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
 <p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
 <div id="land-distribution-1" class="section level3">

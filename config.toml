@@ -3,3 +3,4 @@ languageCode = "en-us"
 title = "Political families of Uttar Pradesh"
 theme = "contrast-hugo"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+

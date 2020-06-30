@@ -6,10 +6,19 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 26 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 27 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Development (ft. Francesca)</title>
+      <link>/post/development-francesca/</link>
+      <pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/development-francesca/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Election Finance Analysis</title>
@@ -26,7 +35,7 @@
       <pubDate>Tue, 23 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/pol-char-analysis/</guid>
-      <description>SummaryMargin of Victory4 way tablesTurnoutEffective number of partiesNumber of candidatesTurncoatSame partyIncumbentRecontestNumber of termsConstituency typeVote dispersionMobilisationCabinet ministersCabinet ministersSummaryTable 1: Summary of the dataElection TypePolitician’s IdentityProportionAEFamily0.11AENon-family0.</description>
+      <description>SummaryMargin of VictoryTurnoutEffective number of partiesNumber of candidatesTurncoatSame partyIncumbentRecontestNumber of termsConstituency typeVote dispersionCabinet ministersSummaryTable 1: Summary of the dataElection TypePolitician’s IdentityProportionAEFamily0.10AENon-family0.90GEFamily0.</description>
     </item>
     
     <item>
@@ -78,7 +87,7 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/master-file-analysis/</guid>
-      <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral ElectionsAE GE election contestlocal body electionsAnalyis at different levelsAll electionsMembers in the other levels and the probabiltyLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
+      <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral ElectionsAE GE election contestlocal body electionsLinkagesAnalyis at different levelsAll electionsLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
     </item>
     
   </channel>
