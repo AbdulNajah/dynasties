@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>Development (ft. Francesca)</title>
+      <title>General elections 2019</title>
       <link>/post/development-francesca/</link>
       <pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/development-francesca/</guid>
-      <description></description>
+      <description>GE 2019 summaryRegressions% filter(year %!in% c(1974)) --% mutate(contest_type_1 =case_when(position ==1 &amp;dyn_cum ==0 ~1, --% group_by( election_type,year,constituency_no) %% mutate(sum_cont_type = sum(contest_type_1)) %% mutate(contest_type =ifelse(sum_cont_type ==3, &#34;non-fam v/s non-fam&#34;,ifelse(sum_cont_type ==5, &#34;fam v/s non-fam&#34;, ifelse(sum_cont_type ==6, &#34;non-fam v/s fam&#34;, ifelse(sum_cont_type ==8, &#34;fam v/s fam&#34;, &#34;NA&#34;))))) --% group_by( year,constituency_no) %% summarise(sum = sum(contest_type)) %%group_by(sum) %% summarise(n()) --% filter(election_type ==&#34;AE&#34;) --% filter(election_type ==&#34;GE&#34;) --% select(State_Name, Constituency_No, Position,Poll_No, Turncoat) %% rename(turncoat_true = Turncoat) --% filter(Vote_Share_Percentage 5) --% filter(Vote_Share_Percentage 2) --% filter(Vote_Share_Percentage 10) --% filter(Vote_Share_Percentage 1) --% replace_na(&#34;</description>
     </item>
     
     <item>

@@ -1057,24 +1057,118 @@ Non-family
 <!-- dyn %>% group_by( election_type,dyn_cum_text) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt Politicians identity", col.names = c("Election Type", "Politician's identity", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
-<!-- ## Cabinet ministers -->
-<!-- ```{r summary} -->
-<!-- cabinet <- read.csv("D:/cpr/up-dynasties/dyn_other_data/up_cabinet.csv") -->
-<!-- #glimpse(cabinet) -->
-<!-- names(cabinet) <- tolower(names(cabinet)) -->
-<!-- names(cabinet) <- make.unique(names(cabinet)) -->
-<!-- cabinet <- cabinet %>% rename(year = election_year_1) -->
-<!-- cabinet$rel_id_unique <- as.numeric(cabinet$rel_id_unique) -->
-<!-- cabinet <- cabinet %>% filter(rel_id_unique >0 ) -->
-<!-- cabinet$term_duration <- NA -->
-<!-- cabinet$term_duration[cabinet$year == 1996] <- 6 -->
-<!-- cabinet$term_duration[cabinet$year %in% c(1977,1980,2002, 2007, 2012, 2017)]<- 5 -->
-<!-- cabinet$term_duration[cabinet$year == 1985]<- 4 -->
-<!-- cabinet$term_duration[cabinet$year %in% c(1993,1977, 1974)]<- 3 -->
-<!-- cabinet$term_duration[cabinet$year %in% c(1989,1991)]<- 2 -->
-<!-- dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >1 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_duration, na.rm = TRUE))  -->
-<!-- dyn_ae_ge <- merge(dyn_ae_ge ,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE ) -->
-<!-- ``` -->
+<div id="cabinet-ministers" class="section level2">
+<h2>Cabinet ministers</h2>
+<table style="text-align:center">
+<caption>
+<strong>Regression Results</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Dynast - 1/0
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+N_minister
+</td>
+<td>
+0.410<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.087)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+minister_duration
+</td>
+<td>
+0.045
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.029)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+-1.542<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.030)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+4,632
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+2,400.171
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
 <!-- ```{r} -->
 <!-- cabinet %>% group_by(year) %>%  summarise(count = n()) %>% kable() -->
 <!-- ``` -->
@@ -1089,8 +1183,6 @@ Non-family
 <!-- fit <- lm(data = dyn_uniq_ind_ae , dyn_tot ~  n_sc_minster_d) -->
 <!-- summary(fit)  -->
 <!-- ``` -->
-<div id="cabinet-ministers" class="section level2">
-<h2>Cabinet ministers</h2>
 <!-- ```{r} -->
 <!-- dyn_uniq_ind_ae <- dyn%>% filter(election_type =="AE" &position ==1 ) %>% group_by(fam_rel_id_uniq) %>% filter( year == max(year)) %>% distinct(family_id, .keep_all = TRUE) -->
 <!-- dyn_uniq_ind_ae %>% filter( n_sc_minster >0) %>% group_by(dyn_cum_text) %>% summarise(mean(n_sc_minster)) %>%  -->

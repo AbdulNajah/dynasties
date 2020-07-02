@@ -20,6 +20,7 @@ library(knitr)
 library(kableExtra)
 library(scales)
 library(gridExtra)
+library(stargazer)
 `%!in%` = Negate(`%in%`)
 ```
 
@@ -29,6 +30,9 @@ library(gridExtra)
 
 
 dyn<- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+dyn$n_sc_minster <- NULL
+dyn$minister_dur <- NULL
 
 
 dyn <- dyn %>%  filter(year %!in% c(1974))
@@ -334,46 +338,84 @@ ggplot(dyn_rafael %>% filter(position==1  & year == 2017) , aes(partypercent, co
 <!-- dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
 
-<!-- ## Cabinet ministers -->
+## Cabinet ministers
 
 
 
 
-<!-- ```{r summary} -->
+```{r summary}
 
 
-<!-- cabinet <- read.csv("D:/cpr/up-dynasties/dyn_other_data/up_cabinet.csv") -->
+cabinet <- read.csv("D:/cpr/up-dynasties/dyn_other_data/up_cabinet_01.07.20.csv")
 
-<!-- #glimpse(cabinet) -->
+#glimpse(cabinet)
 
-<!-- names(cabinet) <- tolower(names(cabinet)) -->
+names(cabinet) <- tolower(names(cabinet))
 
-<!-- names(cabinet) <- make.unique(names(cabinet)) -->
+names(cabinet) <- make.unique(names(cabinet))
 
-<!-- cabinet <- cabinet %>% rename(year = election_year_1) -->
-
-<!-- cabinet$rel_id_unique <- as.numeric(cabinet$rel_id_unique) -->
-
-<!-- cabinet <- cabinet %>% filter(rel_id_unique >0 ) -->
-
-<!-- cabinet$term_duration <- NA -->
-
-<!-- cabinet$term_duration[cabinet$year == 1996] <- 6 -->
-
-<!-- cabinet$term_duration[cabinet$year %in% c(1977,1980,2002, 2007, 2012, 2017)]<- 5 -->
-
-<!-- cabinet$term_duration[cabinet$year == 1985]<- 4 -->
-
-<!-- cabinet$term_duration[cabinet$year %in% c(1993,1977, 1974)]<- 3 -->
-
-<!-- cabinet$term_duration[cabinet$year %in% c(1989,1991)]<- 2 -->
+cabinet <- cabinet %>% rename(year = election_year_1)
 
 
-<!-- dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >1 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_duration, na.rm = TRUE))  -->
-<!-- dyn_ae_ge <- merge(dyn_ae_ge ,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE ) -->
 
 
-<!-- ``` -->
+
+cabinet$rel_id_unique <- as.numeric(cabinet$rel_id_unique)
+
+cabinet <- cabinet %>% filter(rel_id_unique >0 )
+
+# cabinet$term_duration <- NA
+# 
+# cabinet$term_duration[cabinet$year == 1996] <- 6
+# 
+# cabinet$term_duration[cabinet$year %in% c(1977,1980,2002, 2007, 2012, 2017)]<- 5
+# 
+# cabinet$term_duration[cabinet$year == 1985]<- 4
+# 
+# cabinet$term_duration[cabinet$year %in% c(1993,1977, 1974)]<- 3
+# 
+# cabinet$term_duration[cabinet$year %in% c(1989,1991)]<- 2
+
+
+
+
+dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >0 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_months, na.rm = TRUE))
+
+dyn_cabinet$min_dur_yr <- round(dyn_cabinet$minister_dur/12,2)
+
+
+
+dyn_ae_ge_cabinet <- merge(dyn ,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE )
+
+
+
+dyn_uniq_last_ind <- dyn_ae_ge_cabinet %>%  group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE) 
+
+
+
+
+
+```
+
+
+```{r regression, results= "asis"}
+
+N_minister <- dyn_uniq_last_ind$n_sc_minster%>% replace_na(0)
+
+minister_duration <- dyn_uniq_last_ind$min_dur_yr %>% replace_na(0)
+
+dynast <- dyn_uniq_last_ind$dyn_tot
+
+
+fit <- glm(dynast ~ N_minister+minister_duration, family =  binomial(link = "probit"))
+
+#summary(fit)
+
+stargazer(fit,title="Regression Results",type = "html",
+ dep.var.labels=c("Dynast - 1/0"),
+omit.stat=c("LL","ser","f"), no.space=TRUE)
+
+```
 
 
 <!-- ```{r} -->
@@ -405,7 +447,7 @@ ggplot(dyn_rafael %>% filter(position==1  & year == 2017) , aes(partypercent, co
 
 
 
-## Cabinet ministers
+
 
 <!-- ```{r} -->
 

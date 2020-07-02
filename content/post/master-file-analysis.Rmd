@@ -45,7 +45,7 @@ This data set knits  the families of contestants in the elections held in Uttar 
 
 
 ```{r reading files, echo = FALSE}
-dyn <- read.csv("D:/cpr/up-dynasties/dyn_13.06.20.csv")
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
 
 dyn <- dyn %>% filter(status != "ADD")
 ```

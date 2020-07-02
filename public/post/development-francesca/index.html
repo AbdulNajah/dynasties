@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<title>Development (ft. Francesca) | Political families of Uttar Pradesh</title>
+<title>General elections 2019 | Political families of Uttar Pradesh</title>
 <meta charset="utf-8">
 <meta name="generator" content="Hugo 0.72.0" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,13 +21,785 @@
 
 <article>
   <header>
-    <h1>Development (ft. Francesca)</h1>
+    <h1>General elections 2019</h1>
     <time datetime="2020-06-27T00:00:00Z">June 27, 2020</time>
   </header>
   
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
+<div id="TOC">
+<ul>
+<li><a href="#ge-2019-summary">GE 2019 summary</a></li>
+<li><a href="#regressions">Regressions</a></li>
+</ul>
+</div>
 
-
+<!-- ```{r file config} -->
+<!-- dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv") -->
+<!-- dyn <- dyn %>%  filter(year %!in% c(1974)) -->
+<!-- #summary(nrega) -->
+<!-- dyn$dyn_cum_text <- ifelse(dyn$dyn_cum ==0, "Non-family","Family") -->
+<!-- dyn$fam_rel_id_uniq <-  paste(dyn$family_id, dyn$rel_id_uniq,sep = "") -->
+<!-- dyn$fam_exp_cum_cat <- factor(dyn$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
+<!-- ###four way elections -->
+<!-- dyn_test <- dyn %>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1, -->
+<!--                                                                                                                         position ==2 &dyn_cum ==0 ~2, -->
+<!--                                                                                                                         position ==1 &dyn_cum ==1 ~3, -->
+<!--                                                                                                                         position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA"))))) -->
+<!-- # dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n()) -->
+<!-- #table(dyn_test$contest_type) -->
+<!-- dyn$contest_type <- dyn_test$contest_type -->
+<!-- dyn_ae <- dyn %>% filter(election_type =="AE") -->
+<!-- dyn_ge <- dyn %>% filter(election_type =="GE") -->
+<!-- ``` -->
+<!-- # Dasgupta -->
+<!-- ```{r} -->
+<!-- dasgupta <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dasguptatablepaper.csv") -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- tcpd <- read.csv("D:/cpr/up-dynasties/dyn_other_data/TCPD_2019_all_candidates_with_caste_and_political_family.csv") -->
+<!-- tcpd <- read.csv("") -->
+<!-- ge_all <- fread("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_2019_all.csv") -->
+<!-- ge_tc <- ge_all %>% select(State_Name, Constituency_No, Position,Poll_No, Turncoat) %>% rename(turncoat_true = Turncoat) -->
+<!-- tcpd <- merge(tcpd, ge_tc, by = c("State_Name", "Constituency_No", "Position", "Poll_No"), all.x = TRUE) -->
+<!-- tcpd_5 <- tcpd %>% filter(Vote_Share_Percentage >5) -->
+<!-- tcpd_2 <- tcpd %>% filter(Vote_Share_Percentage >2) -->
+<!-- tcpd_10 <- tcpd %>% filter(Vote_Share_Percentage >10) -->
+<!-- tcpd_1 <- tcpd %>% filter(Vote_Share_Percentage >1) -->
+<!-- tcpd_5 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_19_VS_corrected.csv") -->
+<!-- dynast  <- replace_na(tcpd_5$dynast,0) -->
+<!-- incumbent <- tcpd_5$Incumbent -->
+<!-- recontest <- tcpd_5$Recontest -->
+<!-- bjp <- ifelse(tcpd_5$Party == "BJP",1,0) -->
+<!-- sex <- tcpd_5$Sex -->
+<!-- turncoat <- ifelse(tcpd_5$turncoat_true == "TRUE", "TRUE", "FALSE") %>% replace_na("FALSE") -->
+<!-- serious_case <- tcpd_5$MyNeta_serious_criminal_cases -->
+<!-- education <- case_when(str_detect(tcpd_5$MyNeta_education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "Basic", -->
+<!--                        TRUE ~ "Higher") -->
+<!-- caste <- case_when(str_detect(tcpd_5$Caste_Rec, "(CHRISTIAN)|(SIKH)|(BUDDHIST)") ~"Other religious", -->
+<!--                    str_detect(tcpd_5$Caste_Rec, "(UC)|(IC)|(OBC)|(SC)|(ST)|(Muslim)") ~"XMain", -->
+<!--                    TRUE ~"Others") -->
+<!-- enop <- tcpd_5$ENOP -->
+<!-- vote_share_pc <- tcpd_5$Vote_Share_Percentage -->
+<!-- contest <- tcpd_5$Contested -->
+<!-- terms <- tcpd_5$No_Terms -->
+<!-- assets <- tcpd_5$MyNeta_assets -->
+<!-- winner <- ifelse(tcpd_5$Position ==1, 1,0) -->
+<!-- age <- tcpd_5$MyNeta_age -->
+<!-- #  -->
+<!-- # UC, IC, OBC, SC, ST, Muslim (all), Other Religious (all Sikh, all Christian, all Buddhist), Others -->
+<!-- #  -->
+<!-- ``` -->
+<div id="ge-2019-summary" class="section level1">
+<h1>GE 2019 summary</h1>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+dynast
+</th>
+<th style="text-align:right;">
+Vote_Share
+</th>
+<th style="text-align:right;">
+Margin_
+</th>
+<th style="text-align:right;">
+N_cand
+</th>
+<th style="text-align:right;">
+enop
+</th>
+<th style="text-align:right;">
+Turnout
+</th>
+<th style="text-align:right;">
+Incumbent
+</th>
+<th style="text-align:right;">
+Recontest
+</th>
+<th style="text-align:right;">
+Contests
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+35.53
+</td>
+<td style="text-align:right;">
+19.19
+</td>
+<td style="text-align:right;">
+15.53
+</td>
+<td style="text-align:right;">
+2.53
+</td>
+<td style="text-align:right;">
+69.05
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+<td style="text-align:right;">
+2.13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+41.12
+</td>
+<td style="text-align:right;">
+22.00
+</td>
+<td style="text-align:right;">
+16.85
+</td>
+<td style="text-align:right;">
+2.48
+</td>
+<td style="text-align:right;">
+66.42
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+<td style="text-align:right;">
+2.46
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+No_terms
+</th>
+<th style="text-align:right;">
+Turncoat
+</th>
+<th style="text-align:right;">
+Assets
+</th>
+<th style="text-align:right;">
+criminal_cases
+</th>
+<th style="text-align:right;">
+criminal_cases_no
+</th>
+<th style="text-align:right;">
+age
+</th>
+<th style="text-align:right;">
+bjp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.98
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+116085202
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+<td style="text-align:right;">
+2.04
+</td>
+<td style="text-align:right;">
+55.09
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.44
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+342617723
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+<td style="text-align:right;">
+1.50
+</td>
+<td style="text-align:right;">
+51.82
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+</tbody>
+</table>
+<!-- # Vote share linear model -->
+<!-- # Winner probit model -->
+<!-- # Turnout linear model -->
+</div>
+<div id="regressions" class="section level1">
+<h1>Regressions</h1>
+<table style="text-align:center">
+<caption>
+<strong>Regression Results</strong>
+</caption>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="3">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Vote share percentage
+</td>
+<td>
+Winner
+</td>
+<td>
+Turnout percentage
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>OLS</em>
+</td>
+<td>
+<em>probit</em>
+</td>
+<td>
+<em>OLS</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+<td>
+(3)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+incumbent
+</td>
+<td>
+3.838<sup>***</sup>
+</td>
+<td>
+-0.138
+</td>
+<td>
+-0.626
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.031)
+</td>
+<td>
+(0.118)
+</td>
+<td>
+(0.847)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+turncoat
+</td>
+<td>
+-3.482<sup>*</sup>
+</td>
+<td>
+-1.037<sup>***</sup>
+</td>
+<td>
+-0.835
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.910)
+</td>
+<td>
+(0.264)
+</td>
+<td>
+(1.569)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+casteUC+IC
+</td>
+<td>
+1.394<sup>*</sup>
+</td>
+<td>
+0.079
+</td>
+<td>
+0.265
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.833)
+</td>
+<td>
+(0.098)
+</td>
+<td>
+(0.684)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sexM
+</td>
+<td>
+0.446
+</td>
+<td>
+-0.099
+</td>
+<td>
+-1.045
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.074)
+</td>
+<td>
+(0.123)
+</td>
+<td>
+(0.882)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+terms
+</td>
+<td>
+3.180<sup>***</sup>
+</td>
+<td>
+0.597<sup>***</sup>
+</td>
+<td>
+0.219
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.325)
+</td>
+<td>
+(0.047)
+</td>
+<td>
+(0.267)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+dynast
+</td>
+<td>
+3.310<sup>***</sup>
+</td>
+<td>
+-0.152
+</td>
+<td>
+-1.698<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.000)
+</td>
+<td>
+(0.118)
+</td>
+<td>
+(0.821)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+assets
+</td>
+<td>
+0.000<sup>**</sup>
+</td>
+<td>
+0.000<sup>**</sup>
+</td>
+<td>
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.000)
+</td>
+<td>
+(0.000)
+</td>
+<td>
+(0.000)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+serious_case
+</td>
+<td>
+-0.429
+</td>
+<td>
+-0.245<sup>**</sup>
+</td>
+<td>
+0.121
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.897)
+</td>
+<td>
+(0.110)
+</td>
+<td>
+(0.737)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+educationHigher
+</td>
+<td>
+-0.343
+</td>
+<td>
+-0.072
+</td>
+<td>
+0.687
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.827)
+</td>
+<td>
+(0.099)
+</td>
+<td>
+(0.679)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age
+</td>
+<td>
+-0.022
+</td>
+<td>
+-0.022<sup>***</sup>
+</td>
+<td>
+-0.049<sup>*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.033)
+</td>
+<td>
+(0.004)
+</td>
+<td>
+(0.027)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+enop
+</td>
+<td>
+-9.266<sup>***</sup>
+</td>
+<td>
+0.076
+</td>
+<td>
+-0.054
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.847)
+</td>
+<td>
+(0.101)
+</td>
+<td>
+(0.695)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+reservationSC/ST
+</td>
+<td>
+1.395
+</td>
+<td>
+0.001
+</td>
+<td>
+2.740<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.931)
+</td>
+<td>
+(0.112)
+</td>
+<td>
+(0.765)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+dynast:serious_case
+</td>
+<td>
+0.358
+</td>
+<td>
+0.410<sup>**</sup>
+</td>
+<td>
+-4.302<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.703)
+</td>
+<td>
+(0.200)
+</td>
+<td>
+(1.398)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+51.814<sup>***</sup>
+</td>
+<td>
+-0.149
+</td>
+<td>
+71.732<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(3.079)
+</td>
+<td>
+(0.361)
+</td>
+<td>
+(2.529)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+1,348
+</td>
+<td>
+1,348
+</td>
+<td>
+1,348
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.417
+</td>
+<td>
+</td>
+<td>
+0.041
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.410
+</td>
+<td>
+</td>
+<td>
+0.031
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+</td>
+<td>
+1,211.076
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="3" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<!-- ```{r} -->
+<!-- tcpd_5$dynast  <- replace_na(tcpd_5$dynast,0) -->
+<!-- tcpd_5$incumbent <- tcpd_5$Incumbent -->
+<!-- recontest <- tcpd_5$Recontest -->
+<!-- tcpd_5$bjp <- ifelse(tcpd_5$Party == "BJP",1,0) -->
+<!-- tcpd_5$sex <- tcpd_5$Sex -->
+<!-- tcpd_5$turncoat <- ifelse(tcpd_5$turncoat_true == "TRUE", "TRUE", "FALSE") %>% replace_na("FALSE") -->
+<!-- tcpd_5$serious_case <- tcpd_5$MyNeta_serious_criminal_cases -->
+<!-- tcpd_5$education <- case_when(str_detect(tcpd_5$MyNeta_education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "Basic", -->
+<!--                        TRUE ~ "Higher") -->
+<!-- tcpd_5$caste <- case_when(str_detect(tcpd_5$Caste_Rec, "(CHRISTIAN)|(SIKH)|(BUDDHIST)") ~"Other religious", -->
+<!--                    str_detect(tcpd_5$Caste_Rec, "(UC)|(IC)|(OBC)|(SC)|(ST)|(Muslim)") ~"XMain", -->
+<!--                    TRUE ~"Others") -->
+<!-- enop <- tcpd_5$ENOP -->
+<!-- tcpd_5$vote_share_pc <- tcpd_5$Vote_Share_Percentage -->
+<!-- contest <- tcpd_5$Contested -->
+<!-- tcpd_5$terms <- tcpd_5$No_Terms -->
+<!-- tcpd_5$assets <- tcpd_5$MyNeta_assets -->
+<!-- tcpd_5$winner <- ifelse(tcpd_5$Position ==1, 1,0) -->
+<!-- tcpd_5$age <- tcpd_5$MyNeta_age -->
+<!-- write.csv(tcpd_5, "D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_19_VS_5PC.csv") -->
+<!-- ``` -->
+</div>
 
 </article>
 

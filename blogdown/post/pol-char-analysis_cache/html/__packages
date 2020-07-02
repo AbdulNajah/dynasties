@@ -13,3 +13,4 @@ knitr
 kableExtra
 scales
 gridExtra
+stargazer
