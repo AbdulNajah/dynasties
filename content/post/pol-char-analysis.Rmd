@@ -35,6 +35,8 @@ dyn$n_sc_minster <- NULL
 dyn$minister_dur <- NULL
 
 
+
+
 dyn <- dyn %>%  filter(year %!in% c(1974))
 
 #summary(nrega)
@@ -378,10 +380,32 @@ cabinet <- cabinet %>% filter(rel_id_unique >0 )
 
 
 
+## Linkages
 
-dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >0 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_months, na.rm = TRUE))
+
+
+
+# dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
+# 
+# 
+# dyn  <- dyn %>% filter(election_type %in% c("AE", "GE"))
+#dyn_19 <- dyn %>% filter(year == 2019) 
+
+
+
+####
+
+cabinet <- cabinet %>% mutate(pre_90 = case_when(dplyr::between(year, 1977,1990)~ 1,
+                             TRUE ~0), post_90 =case_when(dplyr::between(year, 1990,2017)~ 1,
+                             TRUE ~0) )
+#table(cabinet$post_90)
+
+
+dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >0 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_months, na.rm = TRUE), pre_90_n = sum(pre_90), post_90_n = sum(post_90))
 
 dyn_cabinet$min_dur_yr <- round(dyn_cabinet$minister_dur/12,2)
+
+
 
 
 
@@ -398,21 +422,34 @@ dyn_uniq_last_ind <- dyn_ae_ge_cabinet %>%  group_by(family_id) %>% arrange(-yea
 ```
 
 
-```{r regression, results= "asis"}
 
+```{r regression variables, results= "asis"}
 N_minister <- dyn_uniq_last_ind$n_sc_minster%>% replace_na(0)
 
 minister_duration <- dyn_uniq_last_ind$min_dur_yr %>% replace_na(0)
 
 dynast <- dyn_uniq_last_ind$dyn_tot
 
+pre_90 <- ifelse(dyn_uniq_last_ind$pre_90_n >0,1,0) %>% replace_na(0)
 
-fit <- glm(dynast ~ N_minister+minister_duration, family =  binomial(link = "probit"))
+post_90 <- ifelse(dyn_uniq_last_ind$post_90_n >0,1,0) %>% replace_na(0)
 
+link <- ifelse(dyn_uniq_last_ind$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+```
+
+
+
+
+
+```{r regression, results= "asis"}
+fit.1 <- glm(dynast ~ N_minister+minister_duration+pre_90+post_90 +link, family =  binomial(link = "probit"))
+
+
+fit.2 <- glm(dynast ~ N_minister+pre_90+post_90 +link, family =  binomial(link = "probit"))
 #summary(fit)
 
-stargazer(fit,title="Regression Results",type = "html",
- dep.var.labels=c("Dynast - 1/0"),
+stargazer(fit.1, fit.2,title="Regression Results",type = "html",
+align=TRUE,dep.var.labels=c("Dynast - 1/0"),
 omit.stat=c("LL","ser","f"), no.space=TRUE)
 
 ```

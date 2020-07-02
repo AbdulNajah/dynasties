@@ -1,5 +1,5 @@
 ---
-title: "General elections 2019"
+title: "General Elections 2019"
 author: ""
 date: "2020-06-27"
 output:
@@ -206,6 +206,15 @@ turnout <- tcpd_5$Turnout_Percentage
 
 ```
 
+
+
+```{r linkages}
+
+
+
+```
+
+
 # GE 2019 summary
 
 ```{r}
@@ -239,7 +248,7 @@ kable(table[,10:16], digits = 2) %>%  kable_styling(bootstrap_options = "striped
 <!-- # Vote share linear model -->
 
 ```{r linear}
-fit <- lm(vote_share_pc ~ bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious_case+ education+age+enop +reservation+ dynast*serious_case)
+fit <- lm(vote_share_pc ~ bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious_case+ education+age+ dynast*serious_case)
 
 #ummary(fit)
 
@@ -256,7 +265,7 @@ fit <- lm(vote_share_pc ~ bjp +  incumbent+  turncoat +caste+ sex + terms + dyna
 
 
 
-fit_logit <- glm(winner ~bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious_case+ education+age+enop +reservation+ dynast*serious_case,family =  binomial(link = "probit"))
+fit_logit <- glm(winner ~bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious_case+ education+age+ dynast*serious_case,family =  binomial(link = "probit"))
 
 
 #summary(fit_logit)

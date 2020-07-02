@@ -1,0 +1,171 @@
+---
+title: "Local Body Analysis"
+author: ""
+date: "2020-07-02"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+`%!in%` = Negate(`%in%`)
+```
+
+
+
+```{r file config}
+
+
+
+
+
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
+
+dyn$rel_id_uniq <- as.numeric(paste(dyn$relative_id, dyn$rel_id_rep, sep = ""))
+
+
+
+
+## fam_size
+
+dyn <- dyn %>% group_by (family_id) %>% mutate(fam_size_tot = n_distinct(rel_id_uniq))
+
+##term duration
+
+#
+
+dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP", "ZP", "BP")]  <- ""
+
+dyn$term_duration <- as.numeric(dyn$term_duration)
+
+
+##
+
+
+## family_expericne
+
+
+
+dyn <- dyn%>%
+  group_by(family_id) %>%
+  mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>%
+  ungroup()
+
+year_group <- dyn %>%
+  group_by(family_id, year) %>%
+  summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>%
+  mutate(cum_exp = cumsum(year_sum)) %>%
+  mutate(fam_exp_cum = cum_exp - year_sum) %>%
+  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
+
+year_group <- year_group %>%
+  select(family_id, year, fam_exp_cum)
+
+dyn<- merge(dyn, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
+
+dyn$fam_exp_tot <-   as.numeric(dyn$fam_exp_tot)
+
+dyn$fam_exp_cum <-   as.numeric(dyn$fam_exp_cum)
+
+###
+
+##fam expereince categoreis
+
+
+dyn<- dyn %>%  mutate(fam_exp_tot_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
+
+dyn<- dyn %>%  mutate(fam_exp_cum_cat = cut(fam_exp_cum,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
+
+
+
+##caste_category
+
+####
+
+caste_names <- tribble(
+  ~caste_id, ~ caste_name,
+  0 , "unspecified",
+  1 , "Brahmin",
+  2 , "Thakur/ Rajput",
+  3 , "Baniya",
+  4 , "Other upper caste",
+  5  ,"Jat",
+  6 , "Gujjar",
+  7 , "Yadav",
+  8 , "Kurmi" ,
+  9 , "Lodh",
+  10 , "Other OBC",
+  11 , "Dalit",
+  12 , "Muslim",
+  13  , "Others"
+)
+
+dyn<- merge(dyn, caste_names, by = "caste_id", all.x =TRUE)
+
+##caste distribution
+
+dyn$caste_groups <- NA
+
+
+dyn$caste_groups <- ifelse(dyn$caste_id %in% c(7,12,11),dyn$caste_name,dyn$caste_groups)
+
+dyn$caste_groups <- ifelse(dyn$caste_id %in% c(1,2,4,3),"Upper Caste",dyn$caste_groups)
+
+
+dyn$caste_groups <- ifelse(dyn$caste_id %in% c(5,6,9,8,10),"Non-Yadav OBC",dyn$caste_groups)
+
+
+dyn$caste_groups <- ifelse(dyn$caste_id %in% c(0,13),"Others",dyn$caste_groups)
+
+
+## dyn classification
+
+dyn$dyn_cum  <-ifelse(dyn$fam_size_cum>1,1,0)
+
+dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
+# 
+# ##caste_group dist
+# 
+dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
+
+dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+                         election_type == "GE" ~ "GE",
+                        TRUE ~ "LB")) 
+
+dyn_lb <- dyn %>% filter(election_level== "LB")
+
+dyn_lb_fam <- dyn_lb %>% filter(dyn_tot == 1)
+
+
+
+```
+
+
+## Members distribution among families
+
+```{r}
+
+
+
+total_count <-dyn_lb_fam %>% filter(relative_id !="NA") %>% count() %>% as.integer()
+
+dyn_lb_fam %>% filter(relative_id !="NA") %>% group_by(relative_id) %>% summarise(count = n(), prop = count/total_count) %>% kable(Caption = "Members distribution among families",col.names = c("Relative ID", "Count", "Proportion"), digits =2) %>% kable_styling(bootstrap_options = "striped")
+
+
+
+
+```
+
