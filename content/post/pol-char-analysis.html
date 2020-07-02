@@ -24,9 +24,8 @@ editor_options:
 <li><a href="#recontest">Recontest</a></li>
 <li><a href="#number-of-terms">Number of terms</a></li>
 <li><a href="#constituency-type">Constituency type</a></li>
-<li><a href="#vote-dispersion">Vote dispersion</a><ul>
+<li><a href="#vote-dispersion">Vote dispersion</a></li>
 <li><a href="#cabinet-ministers">Cabinet ministers</a></li>
-</ul></li>
 </ul>
 </div>
 
@@ -1041,33 +1040,34 @@ Non-family
 <!-- dyn %>% group_by( election_type,dyn_cum_text) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt Politicians identity", col.names = c("Election Type", "Politician's identity", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
-<div id="cabinet-ministers" class="section level2">
-<h2>Cabinet ministers</h2>
+</div>
+<div id="cabinet-ministers" class="section level1">
+<h1>Cabinet ministers</h1>
 <table style="text-align:center">
 <caption>
 <strong>Regression Results</strong>
 </caption>
 <tr>
-<td colspan="3" style="border-bottom: 1px solid black">
+<td colspan="4" style="border-bottom: 1px solid black">
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
-<td colspan="2">
+<td colspan="3">
 <em>Dependent variable:</em>
 </td>
 </tr>
 <tr>
 <td>
 </td>
-<td colspan="2" style="border-bottom: 1px solid black">
+<td colspan="3" style="border-bottom: 1px solid black">
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
-<td colspan="2">
+<td colspan="3">
 Dynast - 1/0
 </td>
 </tr>
@@ -1080,9 +1080,12 @@ Dynast - 1/0
 <td>
 (2)
 </td>
+<td>
+(3)
+</td>
 </tr>
 <tr>
-<td colspan="3" style="border-bottom: 1px solid black">
+<td colspan="4" style="border-bottom: 1px solid black">
 </td>
 </tr>
 <tr>
@@ -1090,20 +1093,22 @@ Dynast - 1/0
 N_minister
 </td>
 <td>
-0.264<sup>*</sup>
+0.353<sup>***</sup>
 </td>
 <td>
-0.282<sup>***</sup>
+</td>
+<td>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.140)
+(0.092)
 </td>
 <td>
-(0.103)
+</td>
+<td>
 </td>
 </tr>
 <tr>
@@ -1111,60 +1116,76 @@ N_minister
 minister_duration
 </td>
 <td>
-0.007
 </td>
 <td>
+</td>
+<td>
+0.069<sup>***</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.034)
 </td>
 <td>
+</td>
+<td>
+(0.023)
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
-pre_90
+decadesPost-90
 </td>
 <td>
--0.176
+0.138
 </td>
 <td>
--0.186
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
+0.629<sup>***</sup>
 </td>
 <td>
-(0.197)
-</td>
-<td>
-(0.191)
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-post_90
-</td>
-<td>
-0.262
-</td>
-<td>
-0.263
+0.346<sup>**</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.170)
+(0.161)
 </td>
 <td>
-(0.170)
+(0.097)
+</td>
+<td>
+(0.138)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+decadesPre-90
+</td>
+<td>
+-0.241
+</td>
+<td>
+0.368<sup>***</sup>
+</td>
+<td>
+0.129
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.205)
+</td>
+<td>
+(0.122)
+</td>
+<td>
+(0.150)
 </td>
 </tr>
 <tr>
@@ -1172,10 +1193,13 @@ post_90
 link
 </td>
 <td>
-1.548<sup>***</sup>
+1.550<sup>***</sup>
 </td>
 <td>
-1.548<sup>***</sup>
+1.570<sup>***</sup>
+</td>
+<td>
+1.556<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -1185,7 +1209,10 @@ link
 (0.071)
 </td>
 <td>
-(0.071)
+(0.070)
+</td>
+<td>
+(0.070)
 </td>
 </tr>
 <tr>
@@ -1193,10 +1220,13 @@ link
 Constant
 </td>
 <td>
--1.814<sup>***</sup>
+-1.813<sup>***</sup>
 </td>
 <td>
 -1.815<sup>***</sup>
+</td>
+<td>
+-1.812<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -1208,14 +1238,20 @@ Constant
 <td>
 (0.037)
 </td>
+<td>
+(0.037)
+</td>
 </tr>
 <tr>
-<td colspan="3" style="border-bottom: 1px solid black">
+<td colspan="4" style="border-bottom: 1px solid black">
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 Observations
+</td>
+<td>
+4,632
 </td>
 <td>
 4,632
@@ -1229,21 +1265,24 @@ Observations
 Akaike Inf. Crit.
 </td>
 <td>
-1,992.106
+1,991.856
 </td>
 <td>
-1,990.146
+2,005.744
+</td>
+<td>
+1,998.273
 </td>
 </tr>
 <tr>
-<td colspan="3" style="border-bottom: 1px solid black">
+<td colspan="4" style="border-bottom: 1px solid black">
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 <em>Note:</em>
 </td>
-<td colspan="2" style="text-align:right">
+<td colspan="3" style="text-align:right">
 <sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
 </td>
 </tr>
@@ -1327,5 +1366,4 @@ Akaike Inf. Crit.
 <!-- inv_tab_text <- data.frame(c("Non-family_No", "Non-family_Yes", "Family_No", "Family_Yes")) -->
 <!-- cbind(inv_tab_text,inv_tab ) %>% select(-dyn_tot) %>% kable(col.names = c("Involvement", "Politics", "Association", "Organisation"), digits = 2) -->
 <!-- ``` -->
-</div>
 </div>

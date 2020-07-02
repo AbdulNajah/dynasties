@@ -32,6 +32,7 @@ library(stargazer)
 dyn<- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 dyn$n_sc_minster <- NULL
+dyn$n_sc_minister <- NULL
 dyn$minister_dur <- NULL
 
 
@@ -340,7 +341,7 @@ ggplot(dyn_rafael %>% filter(position==1  & year == 2017) , aes(partypercent, co
 <!-- dyn %>% group_by(election_type, contest_type) %>% summarise(mean(mob)/100) %>%  kable(caption = "Mobilisation wrt type of contest", col.names = c("Election Type", "Type of contest", "Mobilisation score"), digit = 1) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
 
-## Cabinet ministers
+# Cabinet ministers
 
 
 
@@ -398,6 +399,8 @@ cabinet <- cabinet %>% filter(rel_id_unique >0 )
 cabinet <- cabinet %>% mutate(pre_90 = case_when(dplyr::between(year, 1977,1990)~ 1,
                              TRUE ~0), post_90 =case_when(dplyr::between(year, 1990,2017)~ 1,
                              TRUE ~0) )
+
+
 #table(cabinet$post_90)
 
 
@@ -434,6 +437,14 @@ pre_90 <- ifelse(dyn_uniq_last_ind$pre_90_n >0,1,0) %>% replace_na(0)
 
 post_90 <- ifelse(dyn_uniq_last_ind$post_90_n >0,1,0) %>% replace_na(0)
 
+
+
+decades <- paste(pre_90, post_90, sep = "")
+
+decades <- case_when(decades == "00"~ "Never",
+                     decades %in% c("11","10")~"Pre-90",
+                     TRUE ~ "Post-90")
+
 link <- ifelse(dyn_uniq_last_ind$level %in% c("AE","GE"),0,1) %>% replace_na(0)
 ```
 
@@ -442,14 +453,16 @@ link <- ifelse(dyn_uniq_last_ind$level %in% c("AE","GE"),0,1) %>% replace_na(0)
 
 
 ```{r regression, results= "asis"}
-fit.1 <- glm(dynast ~ N_minister+minister_duration+pre_90+post_90 +link, family =  binomial(link = "probit"))
+fit.1 <- glm(dynast ~ N_minister+decades+link, family =  binomial(link = "probit"))
 
+fit.2 <- glm(dynast ~ decades+link, family =  binomial(link = "probit"))
 
-fit.2 <- glm(dynast ~ N_minister+pre_90+post_90 +link, family =  binomial(link = "probit"))
-#summary(fit)
+fit.3 <- glm(dynast ~ minister_duration+decades +link, family =  binomial(link = "probit"))
+#summary(fit.2)
 
-stargazer(fit.1, fit.2,title="Regression Results",type = "html",
-align=TRUE,dep.var.labels=c("Dynast - 1/0"),
+#summary(fit.2)
+stargazer(fit.1, fit.2,fit.3,title="Regression Results",type = "html",
+align=TRUE,dep.var.labels=c("Dynast - 1/0","Dynast - 1/0","Dynast - 1/0"),
 omit.stat=c("LL","ser","f"), no.space=TRUE)
 
 ```
