@@ -157,6 +157,30 @@ library(stargazer)
 ```{r}
 
 
+# 
+# 
+# tcpd <- read.csv("D:/cpr/up-dynasties/dyn_other_data/TCPD_GE_all_2020-7-2.csv")
+# 
+# tcpd_nota <- tcpd %>% filter(Party !="NOTA" &Vote_Share_Percentage != "NA" & Poll_No==0)
+# 
+# 
+# tcpd_nota_t <- tcpd_nota %>% mutate(VS_PC = cut(Vote_Share_Percentage,breaks= c(0,5,Inf), labels = c("Below  5 PC", "Above 5 PC")))
+# 
+# tcpd_nota_t %>% group_by(Year,VS_PC) %>% summarise(count = n()) %>% group_by(Year) %>% mutate (sum = sum(count), prop = count/sum) %>% kable(digits = 2) %>% kable_styling(bootstrap_options = "striped")
+# 
+# tcpd_09_14_19_VS_5PC%>% filter(str_detect( Party,"NOTA"))
+# 
+# tcpd_09_14_19_VS_5PC <- tcpd %>% filter(Vote_Share_Percentage >5 & Poll_No ==0 & Party != "NOTA" )
+# 
+# 
+# 
+# 
+# write.csv(tcpd_09_14_19_VS_5PC, "D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_09_14_19_VS_5PC.csv")
+# 
+# 
+# 
+# tcpd
+
 tcpd_5 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_19_VS_corrected.csv")
 
 

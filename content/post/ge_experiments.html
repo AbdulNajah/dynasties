@@ -1,0 +1,505 @@
+---
+title: "Marginal Candidates Analysis"
+author: ""
+date: "2020-07-02"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#vote-share">Vote share</a></li>
+</ul>
+</div>
+
+<div id="vote-share" class="section level2">
+<h2>Vote share</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+count_(0,1]
+</th>
+<th style="text-align:right;">
+prop_(0,1]
+</th>
+<th style="text-align:right;">
+count_(1,5]
+</th>
+<th style="text-align:right;">
+prop_(1,5]
+</th>
+<th style="text-align:right;">
+count_(5,17]
+</th>
+<th style="text-align:right;">
+prop_(5,17]
+</th>
+<th style="text-align:right;">
+count_(17,Inf]
+</th>
+<th style="text-align:right;">
+prop_(17,Inf]
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1962
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+310
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+523
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+<td style="text-align:right;">
+1118
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1967
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+485
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+649
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+<td style="text-align:right;">
+1151
+</td>
+<td style="text-align:right;">
+0.49
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1971
+</td>
+<td style="text-align:right;">
+545
+</td>
+<td style="text-align:right;">
+0.20
+</td>
+<td style="text-align:right;">
+743
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+<td style="text-align:right;">
+424
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+<td style="text-align:right;">
+1071
+</td>
+<td style="text-align:right;">
+0.38
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+612
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:right;">
+586
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+158
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+1081
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+2093
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+1015
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+<td style="text-align:right;">
+315
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+1205
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:right;">
+3150
+</td>
+<td style="text-align:right;">
+0.59
+</td>
+<td style="text-align:right;">
+844
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+273
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+1045
+</td>
+<td style="text-align:right;">
+0.20
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+4030
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+<td style="text-align:right;">
+729
+</td>
+<td style="text-align:right;">
+0.12
+</td>
+<td style="text-align:right;">
+244
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+1150
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+6432
+</td>
+<td style="text-align:right;">
+0.74
+</td>
+<td style="text-align:right;">
+605
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+441
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+1172
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+11385
+</td>
+<td style="text-align:right;">
+0.82
+</td>
+<td style="text-align:right;">
+799
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+478
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+1255
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+2646
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+329
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+1255
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+2622
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+<td style="text-align:right;">
+488
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
+293
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+1245
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+2777
+</td>
+<td style="text-align:right;">
+0.51
+</td>
+<td style="text-align:right;">
+1133
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+312
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+1213
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+5157
+</td>
+<td style="text-align:right;">
+0.64
+</td>
+<td style="text-align:right;">
+1254
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+423
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+1236
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+5739
+</td>
+<td style="text-align:right;">
+0.70
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+359
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+1243
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+6011
+</td>
+<td style="text-align:right;">
+0.75
+</td>
+<td style="text-align:right;">
+645
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+245
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+1125
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+</tr>
+</tbody>
+</table>
+<!-- ## Incumbent -->
+<!-- ```{r} -->
+<!-- ge <-  ge %>% mutate(vote_share_pc = cut(Vote_Share_Percentage,breaks = c(0,1,5,17,Inf))) -->
+<!-- ge %>%filter(Vote_Share_Percentage>15) %>%  group_by(Year, Incumbent) %>% summarise(count = n()) %>% group_by(Year) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(Year %!in% c(1985,1992)) %>% select(Year, Incumbent,count,prop) %>% pivot_wider(names_from = Incumbent, values_from = 3:4) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+<!-- ## Recontest -->
+<!-- ```{r} -->
+<!-- ge %>%filter(Vote_Share_Percentage>5) %>%  group_by(Year, Recontest) %>% summarise(count = n()) %>% group_by(Year) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(Year %!in% c(1985,1992)) %>% select(Year, Recontest,count,prop) %>% pivot_wider(names_from = Recontest, values_from = 3:4) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+<!-- ## Turncoat -->
+<!-- ```{r} -->
+<!-- ge %>%filter(Vote_Share_Percentage>5& !is.na(Turncoat) ) %>%  group_by(Year, Turncoat) %>% summarise(count = n()) %>% group_by(Year) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(Year %!in% c(1985,1992)) %>% select(Year, Turncoat,count,prop) %>% pivot_wider(names_from = Turncoat, values_from = 3:4) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+</div>

@@ -12,12 +12,30 @@
     
     
     <item>
+      <title>District Level Analysis</title>
+      <link>/post/district-levelo/</link>
+      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/district-levelo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Local Body Analysis</title>
       <link>/post/local-body-analysis/</link>
       <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/local-body-analysis/</guid>
       <description>Members distribution among familiesMembers distribution among familiesRelative IDCountProportion19840.442540.023620.034570.035170.016930.</description>
+    </item>
+    
+    <item>
+      <title>Marginal Candidates Analysis</title>
+      <link>/post/ge_experiments/</link>
+      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/ge_experiments/</guid>
+      <description>Vote shareVote shareYearcount_(0,1]prop_(0,1]count_(1,5]prop_(1,5]count_(5,17]prop_(5,17]count_(17,Inf]prop_(17,Inf]1962310.023100.165230.2611180.561967790.034850.216490.2711510.4919715450.</description>
     </item>
     
     <item>

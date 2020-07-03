@@ -47,7 +47,7 @@ This data set knits  the families of contestants in the elections held in Uttar 
 ```{r reading files, echo = FALSE}
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
 
-dyn <- dyn %>% filter(status != "ADD")
+#dyn <- dyn %>% filter(status != "ADD")
 ```
 
 
@@ -168,14 +168,56 @@ dyn$dyn_cum  <-ifelse(dyn$fam_size_cum>1,1,0)
 dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
 # 
 # ##caste_group dist
+
+### Levels
+
+dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+                        election_type == "GE" ~ "GE",
+                         TRUE ~ "LB")) 
+
+dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+
+
+dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+
+
+
+dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+
+dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
+
+dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
+
+dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
+
+dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+
+
+dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
+
+
+
+dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+
 # 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
+
+# write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
 #
 ```
 
 
 ```{r configuring files1, echo = FALSE}
-# write.csv(dyn_ae_ge, "dyn_other_data/dyn_ae_ge.csv")
+ # write.csv(dyn_ae_ge, "dyn_other_data/dyn_ae_ge.csv")
 
 
 ## adding cabinet info to this
@@ -583,41 +625,41 @@ dyn_uniq <- dyn %>% group_by(family_id) %>% filter(year == max(year)) %>% distin
 
 ```{r}
 
-dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-                        election_type == "GE" ~ "GE",
-                         TRUE ~ "LB")) 
-
-dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-
-dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-
-
-dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
-
-dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
-
-dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
-
-dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-
-
-dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
-
-
-
-dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+# dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+# dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
+# 
+# dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
+# 
+# dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
+# 
+# dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# 
+# 
+# dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
+# 
+# 
+# 
+# dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
 
 dyn_fam_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 

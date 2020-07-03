@@ -1,0 +1,89 @@
+---
+title: "Marginal Candidates Analysis"
+author: ""
+date: "2020-07-02"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+`%!in%` = Negate(`%in%`)
+```
+
+
+## Vote share
+
+```{r}
+
+ge_all <- fread("D:/cpr/up-dynasties/dyn_other_data/GE_all.csv")
+
+
+ge <- ge_all %>% filter(Poll_No ==0 & Party != "NOTA" & Vote_Share_Percentage >0)
+
+ge <-  ge %>% mutate(vote_share_pc = cut(Vote_Share_Percentage,breaks = c(0,1,5,17,Inf)))
+
+ge %>%
+  group_by(Year, vote_share_pc)%>%
+  summarise(count = n())%>%
+  group_by(Year) %>%
+  mutate(sum = sum(count), prop = count/sum) %>%
+  filter(Year %!in% c(1985,1992))%>%
+  select(Year, vote_share_pc,count,prop)%>%
+  pivot_wider(names_from = vote_share_pc, values_from = 3:4) %>%
+  select(Year,`count_(0,1]`,`prop_(0,1]`, `count_(1,5]`, `prop_(1,5]`, `count_(5,17]`, `prop_(5,17]`, `count_(17,Inf]`,`prop_(17,Inf]` )%>%
+  kable(digits =2) %>% 
+  kable_styling(bootstrap_options = "striped")
+
+
+
+```
+
+
+<!-- ## Incumbent -->
+
+
+<!-- ```{r} -->
+<!-- ge <-  ge %>% mutate(vote_share_pc = cut(Vote_Share_Percentage,breaks = c(0,1,5,17,Inf))) -->
+
+
+
+<!-- ge %>%filter(Vote_Share_Percentage>15) %>%  group_by(Year, Incumbent) %>% summarise(count = n()) %>% group_by(Year) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(Year %!in% c(1985,1992)) %>% select(Year, Incumbent,count,prop) %>% pivot_wider(names_from = Incumbent, values_from = 3:4) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+
+
+<!-- ## Recontest -->
+
+
+<!-- ```{r} -->
+
+
+
+<!-- ge %>%filter(Vote_Share_Percentage>5) %>%  group_by(Year, Recontest) %>% summarise(count = n()) %>% group_by(Year) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(Year %!in% c(1985,1992)) %>% select(Year, Recontest,count,prop) %>% pivot_wider(names_from = Recontest, values_from = 3:4) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+
+<!-- ## Turncoat -->
+
+
+<!-- ```{r} -->
+
+
+
+
+<!-- ge %>%filter(Vote_Share_Percentage>5& !is.na(Turncoat) ) %>%  group_by(Year, Turncoat) %>% summarise(count = n()) %>% group_by(Year) %>% mutate(sum = sum(count), prop = count/sum) %>% filter(Year %!in% c(1985,1992)) %>% select(Year, Turncoat,count,prop) %>% pivot_wider(names_from = Turncoat, values_from = 3:4) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+
+

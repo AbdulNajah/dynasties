@@ -263,7 +263,7 @@ rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", strings
 # 
 # names(rafael)
 # 
-# unique(rafael$year)
+unique(rafael$year)
 # 
 # unique(rafael$position)
 
@@ -461,6 +461,11 @@ fit.3 <- glm(dynast ~ minister_duration+decades +link, family =  binomial(link =
 #summary(fit.2)
 
 #summary(fit.2)
+# stargazer(fit, fit_logit, fit_turnout,omit = c("bjp" ), title="Probit regression Results",type = "html",
+# align=TRUE, dep.var.labels=c("Vote share percentage","Winner", "Turnout percentage"),
+# omit.stat=c("LL","ser","f"), no.space=TRUE)
+
+
 stargazer(fit.1, fit.2,fit.3,title="Regression Results",type = "html",
 align=TRUE,dep.var.labels=c("Dynast - 1/0","Dynast - 1/0","Dynast - 1/0"),
 omit.stat=c("LL","ser","f"), no.space=TRUE)
