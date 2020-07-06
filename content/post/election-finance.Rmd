@@ -38,6 +38,7 @@ el_fin <- read.csv("D:/cpr/up-dynasties/dyn_other_data/UP_expenditure.csv", stri
 #glimpse(el_fin)
 
 
+
 names(el_fin) <- tolower(names(el_fin))
 
 
@@ -74,6 +75,7 @@ dyn_el_fin$fam_rel_id_uniq <-  paste(dyn_el_fin$family_id, dyn_el_fin$rel_id_uni
 
 ```{r summary}
 #
+
 
 # dyn_ae_12_17_w %>% group_by(year,dyn_cum_text) %>% summarise(count_actual = n()) %>% kable(caption = "Actual distribution of families and non-families", col.names = c("Year", "Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
 # 
@@ -164,6 +166,151 @@ dyn_el_fin %>% group_by(dyn_cum_text) %>% summarise( Media = mean(ex_media), Veh
   ) 
 ```
 
+
+# Election finance wrt to criminality
+
+
+```{r adr}
+
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
+
+names(adr)[1] <- "position"
+
+names(adr) <- tolower(names(adr))
+
+adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
+ month,-              poll_no,-           
+ delimid,-            position,-          
+candidate,-          sex,-               
+party,-              votes,-             
+ candidate_type,-     valid_votes,-       
+ electors,-           constituency_name,- 
+ constituency_type,-  sub_region,-        
+ n_cand,-             turnout_percentage,-
+ vote_share_percentage,-     deposit_lost,-      
+margin,-             margin_percentage,- 
+
+enop,-              
+ pid,-                max_poll_no,-       
+ last_poll,-          contested,-         
+ last_party,-         last_constituency_name,-                     
+same_constituency,-  same_party,-        
+ no_terms,-           turncoat,-          
+incumbent,-          recontest   )
+
+adr <- adr %>% filter(position_tcpd ==1)
+
+adr <- adr %>% rename( position = position_tcpd)
+
+adr_ae <- adr %>% filter(year %in% c(2012,2017))
+
+#uniqueN(adr$position)
+
+
+
+# dim(adr)
+# 
+# adr %>% glimpse()
+# 
+# unique(adr$year)
+# 
+# summary(adr)
+# names(adr)
+
+
+```
+
+
+```{r merging with funding data}
+
+fin_crime <- merge(el_fin, adr_ae, by = c("constituency_no", "year"))
+
+#summary(fin_crime)
+
+fin_crime$serious_crime_log <- ifelse(fin_crime$serious_crime !=0, TRUE, FALSE)
+
+table(fin_crime$serious_crime_log) %>% kable(caption = "Summary of the criminality variable",col.names= c("Criminality", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+
+
+
+```
+
+## Funding
+
+
+```{r}
+
+fin_crime%>% group_by(serious_crime_log) %>% summarise(Total_funds= mean(tot_fund), Candidate = mean(own), Party = mean(party_office), donations = mean(donations)) %>%  kable(caption = "Election Funding - Averages", col.names = c( "Politician's criminality", "Total fund", "Candidate", "Party", "Donations"), digits = 0) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+```{r}
+
+fin_crime %>% group_by(serious_crime_log) %>% summarise( Candidate = mean(own), Party = mean(party_office), Donations = mean(donations)) %>% melt(id = 1:1, measure = 2:4) %>% group_by(serious_crime_log) %>% mutate(sum = sum(value), prop = value/sum) %>% select(serious_crime_log, variable, prop) %>% 
+  ggplot(aes(factor(serious_crime_log), prop, fill = variable,label = round(prop,1)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = " Election funding composition \n among criminals and non-criminals ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+```
+
+
+
+## Expenditure
+
+```{r}
+
+fin_crime %>% group_by(serious_crime_log) %>% summarise( Total_expenditure = mean(toal_expense), Media = mean(ex_media), Vehicles = mean(ex_vehicles), Materials = mean(ex_materials), Meetings = mean(ex_meetings), Campaigns = mean(ex_campaign), Misc = mean(ex_misc)) %>% kable(caption = "Election Expenditure - Averages", col.names = c( "Politician's criminality", "Total Expenditure",  "Media","Vehicles","Materials", "Meetings","Campaigns", "Miscellanious"), digits = 0) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+```{r}
+
+fin_crime %>% group_by(serious_crime_log) %>% summarise( Media = mean(ex_media), Vehicles = mean(ex_vehicles), Materials = mean(ex_materials), Meetings = mean(ex_meetings), Campaigns = mean(ex_campaign), Misc = mean(ex_misc)) %>% melt(id = 1:1, measure = 2:7) %>% group_by(serious_crime_log) %>% mutate(sum = sum(value), prop = value/sum) %>% select(serious_crime_log, variable, prop) %>% 
+     ggplot(aes(factor(serious_crime_log), prop, fill = variable,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = " Election expenditure composition \n among criminals and non-criminals ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+```
 
 
 
