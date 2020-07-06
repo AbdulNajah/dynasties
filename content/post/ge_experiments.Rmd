@@ -36,6 +36,24 @@ ge <- ge_all %>% filter(Poll_No ==0 & Party != "NOTA" & Vote_Share_Percentage >0
 
 ge <-  ge %>% mutate(vote_share_pc = cut(Vote_Share_Percentage,breaks = c(0,1,5,17,Inf)))
 
+ge <- ge %>% mutate(ind= case_when(Party == "IND" ~ "IND",
+                                   TRUE ~"NA"))
+
+
+
+ge %>%
+  filter(Vote_Share_Percentage <5) %>% 
+  group_by(Year, ind)%>%
+  summarise(count = n())%>%
+  group_by(Year) %>%
+  mutate(sum = sum(count), prop = count/sum) %>% 
+  select(Year, ind, count, prop) %>% 
+  pivot_wider(names_from = ind, values_from = 3:4) %>% 
+  kable(digits =2) %>% 
+  kable_styling(bootstrap_options = "striped")
+
+
+
 ge %>%
   group_by(Year, vote_share_pc)%>%
   summarise(count = n())%>%

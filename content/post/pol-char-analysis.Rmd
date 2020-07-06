@@ -257,23 +257,54 @@ dyn %>% filter(position==1)%>% group_by(election_type,dyn_cum_text,constituency_
 
 
 ```{r}
-rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
+ rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
 
 # dim(rafael)
 # 
 # names(rafael)
 # 
-unique(rafael$year)
+#unique(rafael$year)
 # 
 # unique(rafael$position)
-
-rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent)
-
-# summary(rafael_up)
-
+# 
+ rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent)
+# 
+# # summary(rafael_up)
+# 
 dyn_rafael <- merge(dyn_ae, rafael_up, by = c("year", "constituency_no", "position"), allow.cartesian = TRUE)
 
+
 ```
+
+```{r}
+
+
+# raphael_12 <- fread("D:/cpr/up-dynasties/dyn_other_data/upvidhansabha2012-rafael.csv", stringsAsFactors = FALSE)
+# 
+# raphael_17 <- fread("D:/cpr/up-dynasties/dyn_other_data/upvidhansabha2017-rafael.csv", stringsAsFactors = FALSE)
+# 
+# 
+# summary(raphael_12)
+# rafael_up_17 <- rafael_up %>% filter(year == 2012)
+# 
+# 
+# 
+# dyn_ae_12_17 <- dyn_ae %>% filter(year %in% c(2012,2017))
+# 
+# 
+# 
+# 
+# dyn_ae_12_17 %>% filter (year == 2017 &incumbent == TRUE) %>% group_by(dyn_cum) %>% summarise(mean(margin_percentage))
+```
+
+
+
+
+
+
+
+
+
 
 
 

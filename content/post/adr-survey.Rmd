@@ -1,0 +1,116 @@
+---
+title: "ADR Survey Analysis"
+author: ""
+date: "2020-07-03"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+`%!in%` = Negate(`%in%`)
+```
+
+```{r}
+adr_survey <- fread("D:/cpr/up-dynasties/dyn_other_data/adr-survey-data.csv")
+
+adr_up <- adr_survey %>% filter(`Actual State` == "UP")
+
+
+
+con <- data.frame(str_split(adr_up$`Actual Const`, "-", simplify = TRUE))
+
+adr_up$constituency_no <- as.numeric(con$X1)
+
+#adr_up %>% arrange(constituency_no) %>% distinct(constituency_no)
+
+
+#adr_up %>% filter(str_detect(`Actual Const`, "34"))
+
+ dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+ 
+ dyn_ge_09 <- dyn %>% filter(election_type== "GE" & year == 2009 & position == 1)
+ 
+ 
+ dyn_adr_survey <- merge(dyn_ge_09, adr_up, by = "constituency_no", allow.cartesian = TRUE)
+```
+
+
+## Composite index
+
+```{r}
+dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job = mean(`Training for jobs`), 
+                                                    road =mean(`Better roads`) ,
+                                                    water = mean(`Drinking water`),
+                                                    public_transport = mean(`Better public transport`),
+                                                    electric_supply = mean(`Better electric supply`),
+                                                    hospital = mean(`Better hospitals / Primary Healthcare Centres`),
+                                                    school = mean(`Better schools`),
+                                                    law_and_order = mean(`Better Law and Order / Policing`),
+                                                    women_empowerment = mean(`Empowerment of Women`),
+                                                    subsidized_food = mean(`Subsidized food distribution`))%>%
+   melt(id = "dyn_cum", measure = 2:11) %>% pivot_wider(names_from = "dyn_cum", values_from = "value") %>%
+   kable(caption = "Need of better *** among constituents", col.names = c("Need", "Non-dynast MP", "Dynast MP"),digits =2) %>% 
+  kable_styling(bootstrap_options = "striped")
+ 
+ 
+ 
+ #dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(trust = mean(`Trustworthiness of MP`))
+ 
+ 
+
+
+
+```
+
+
+## Improvement needed
+
+```{r}
+ dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job = mean(`I: Training for jobs`), 
+                                                    road =mean(`I: Better roads`) ,
+                                                    water = mean(`I: Drinking water`),
+                                                    public_transport = mean(`I: Better public transport`),
+                                                    electric_supply = mean(`I: Better electric supply`),
+                                                    hospital = mean(`I: Better hospitals / Primary Healthcare Centres`),
+                                                    school = mean(`I: Better schools`),
+                                                    law_and_order = mean(`I: Better Law and Order / Policing`),
+                                                    women_empowerment = mean(`I: Empowerment of Women`),
+                                                    subsidized_food = mean(`I: Subsidized food distribution`))%>%
+   melt(id = "dyn_cum", measure = 2:11) %>% pivot_wider(names_from = "dyn_cum", values_from = "value") %>%
+   kable(caption = "Importance of *** among constituents", col.names = c("Need", "Non-dynast MP", "Dynast MP"),digits =2) %>% 
+  kable_styling(bootstrap_options = "striped")
+```
+
+
+# Performance
+
+```{r}
+dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job = mean(`P: Training for jobs`), 
+                                                    road =mean(`P: Better roads`) ,
+                                                    water = mean(`P: Drinking water`),
+                                                    public_transport = mean(`P: Better public transport`),
+                                                    electric_supply = mean(`P: Better electric supply`),
+                                                    hospital = mean(`P: Better hospitals / Primary Healthcare Centres`),
+                                                    school = mean(`P: Better schools`),
+                                                    law_and_order = mean(`P: Better Law and Order / Policing`),
+                                                    women_empowerment = mean(`P: Empowerment of Women`),
+                                                    subsidized_food = mean(`P: Subsidized food distribution`))%>%
+   melt(id = "dyn_cum", measure = 2:11) %>% pivot_wider(names_from = "dyn_cum", values_from = "value") %>%
+   kable(caption = "Performance of MPs on", col.names = c("Need", "Non-dynast MP", "Dynast MP"),digits =2) %>% 
+  kable_styling(bootstrap_options = "striped")
+```
+
