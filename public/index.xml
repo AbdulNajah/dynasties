@@ -26,7 +26,7 @@
       <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/adr-survey/</guid>
-      <description>Composite indexImprovement neededPerformanceComposite indexTable 1: Need of better *** among constituentsNeedNon-dynast MPDynast MPjob3.733.82road4.104.53water4.184.24public_transport4.064.22electric_supply4.</description>
+      <description>All IndiaComposite indexImprovement neededPerformanceUPComposite indexImprovement neededPerformanceAll IndiaComposite indexTable 1: Need of better *** among constituentsNeedNon-dynast MPDynast MPjob3.943.68road4.294.28water4.254.13public_transport4.</description>
     </item>
     
     <item>
@@ -62,7 +62,7 @@
       <pubDate>Fri, 26 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/election-finance/</guid>
-      <description>Election financeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection financeTable 1: Summary table of election finance affidavit submissionYearPolitician’s identityCount trueCount submittedProportion2012Family93740.79569892012Non-family3102370.</description>
+      <description>Election financeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection finance## int [1:311] 1434520 1403554 983738 1163256 978795 1150747 1043568 1065618 815339 761905 ...FundingTable 1: Election Funding - AveragesPolitician’s identityTotal fundCandidatePartyDonationsFamily1094946322420328851438938Non-family1218951389519459137367889ExpenditureTable 2: Election Expenditure - AveragesPolitician’s identityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFamily107501269668528095107467137471819619658553766Non-family10301008582947884797528136618775327007283674Election finance wrt to criminality(#tab:merging with funding data)Summary of the criminality variableCriminalityCountFALSE397TRUE130FundingTable 3: Election Funding - AveragesPolitician’s criminalityTotal fundCandidatePartyDonationsFALSE1226784376309453325396432TRUE1063013355725325604370548ExpenditureTable 4: Election Expenditure - AveragesPolitician’s criminalityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFALSE10488398181349759193425138196812997530581210TRUE102285591699467110117707132381710598057862322</description>
     </item>
     
     <item>
@@ -124,6 +124,16 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       
       <guid>/post/master-file-analysis/</guid>
       <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral ElectionsAE GE election contestlocal body electionsLinkagesAnalyis at different levelsAll electionsLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
+    </item>
+    
+    <item>
+      <title>Linkage Analysis</title>
+      <link>/post/linkage-analysis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/linkage-analysis/</guid>
+      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
     </item>
     
   </channel>
