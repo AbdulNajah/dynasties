@@ -6,10 +6,19 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 06 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Linkage Analysis</title>
+      <link>/post/linkage-analysis/</link>
+      <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/linkage-analysis/</guid>
+      <description>AssetsCrimeTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019Election_typeLinkageCountAEFALSE134AETRUE191GEFALSE21GETRUE125AssetsTable 2: Average assets among families with and without linkagesElection_typeLinkageTotal assetsMovable AssetsImmovable AssetsAEFALSE29385569625393718982623AETRUE42626474967158628068401GEFALSE17565870475176298100154682GETRUE539389541256467933903132CrimeTable 3: Serious criminal cases among families with and without linkagesElection_typeLinkageProportionAEFALSE0.</description>
+    </item>
     
     <item>
       <title>District Level Analysis</title>
@@ -35,7 +44,7 @@
       <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/local-body-analysis/</guid>
-      <description>Members distribution among familiesMembers distribution among familiesRelative IDCountProportion19840.442540.023620.034570.035170.016930.</description>
+      <description>Members distribution among familiesLocal bodiesElection WonLinkageLandcasteEducationMembers distribution among familiesRelative IDCountProportion19840.442540.023620.034570.035170.</description>
     </item>
     
     <item>
@@ -124,16 +133,6 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       
       <guid>/post/master-file-analysis/</guid>
       <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral ElectionsAE GE election contestlocal body electionsLinkagesAnalyis at different levelsAll electionsLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
-    </item>
-    
-    <item>
-      <title>Linkage Analysis</title>
-      <link>/post/linkage-analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/post/linkage-analysis/</guid>
-      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
     </item>
     
   </channel>

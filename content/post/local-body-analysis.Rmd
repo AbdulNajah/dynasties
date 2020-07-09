@@ -27,11 +27,6 @@ library(stargazer)
 
 
 ```{r file config}
-
-
-
-
-
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
 
 dyn$rel_id_uniq <- as.numeric(paste(dyn$relative_id, dyn$rel_id_rep, sep = ""))
@@ -136,14 +131,58 @@ dyn$caste_groups <- ifelse(dyn$caste_id %in% c(0,13),"Others",dyn$caste_groups)
 dyn$dyn_cum  <-ifelse(dyn$fam_size_cum>1,1,0)
 
 dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
+
+
+dyn$dyn_tot_text <- ifelse(dyn$dyn_tot==1, "Family", "Non-family")
+
 # 
 # ##caste_group dist
-# 
-dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
+```
+
+```{r}
 
 dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
                          election_type == "GE" ~ "GE",
                         TRUE ~ "LB")) 
+
+dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+
+
+dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+
+
+
+dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+
+dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
+
+dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
+
+dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
+
+dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+
+
+dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
+
+
+
+dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+```
+
+```{r file config1}
+# 
+
+
+
 
 dyn_lb <- dyn %>% filter(election_level== "LB")
 
@@ -166,6 +205,228 @@ dyn_lb_fam %>% filter(relative_id !="NA") %>% group_by(relative_id) %>% summaris
 
 
 
+```
+
+
+## Local bodies
+
+
+
+## Election Won
+
+```{r}
+
+
+
+
+dyn_lb <- dyn_lb  %>% group_by(family_id) %>% mutate(el_nos = n_distinct(election_type, year))
+
+dyn_lb <- dyn_lb %>% mutate(el_nos = ifelse(family_id== "" | family_id == "NE",NA, el_nos))
+
+dyn_lb_uniq <- dyn_lb %>% arrange (-year) %>%  distinct(family_id, .keep_all = TRUE)
+
+dyn_lb_uniq_fam <- dyn_lb %>% arrange (-year) %>% filter(dyn_tot ==1) %>%  distinct(family_id, .keep_all = TRUE)
+
+
+
+table(dyn_lb_uniq_fam$el_nos) %>% kable(caption = "Distribution of families wrt number of elections won", col.names = c("Number of elections", "Count"))%>% kable_styling(bootstrap_options = "striped")
+
+table(dyn_lb_uniq$el_nos) %>% kable(caption = "Distribution of unique entities wrt number of elections won", col.names = c("Number of elections", "Count")) %>% kable_styling(bootstrap_options = "striped")
 
 ```
+
+
+
+```{r lb uniq}
+# 
+#dyn_lb$dyn<-if_else(dyn_lb$fam_size_tot>1,1,0)
+
+dyn_lb_uniq <- dyn_lb %>% arrange (-year) %>%  distinct(family_id, .keep_all = TRUE)
+
+
+
+```
+
+
+```{r}
+
+dyn_lb_uniq %>% group_by(dyn_tot_text) %>% summarise(count = n()) %>% kable(caption = "Unique individuals and families", col.names = c("Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+```{r}
+
+dyn_lb_uniq %>% group_by(dyn_tot_text) %>% summarise(count = n()) %>% kable(caption = "Unique individuals and families", col.names = c("Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+## Linkage
+
+```{r}
+
+table(dyn_lb_uniq$level)
+
+dyn_lb  <- dyn_lb %>% mutate(level_log = ifelse(level == "LB",FALSE,TRUE))
+
+dyn_lb_uniq <- dyn_lb %>% arrange (-year) %>%  distinct(family_id, .keep_all = TRUE)
+
+count_tot  <-  dim(dyn_lb_uniq %>% filter(dyn_tot ==1))[1]
+dyn_lb_uniq %>% filter(dyn_tot ==1) %>% group_by(level_log) %>% summarise(prop = n()/count_tot) %>% kable(caption = "Family linkages", col.names = c("Connection", "Proportion"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+
+
+dyn_lb_uniq %>% filter(dyn_tot ==1 & caste_groups!= "NA") %>% group_by(level_log, caste_groups) %>% summarise( count = n()) %>% group_by(level_log) %>% mutate(sum = sum(count), prop = count/sum) %>% select(level_log, caste_groups, prop) %>% 
+  ggplot(aes(factor(level_log), prop, fill = caste_groups,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = "Caste composition \n among families with and without upward linkages  ",x = "", y = "Proportion", fill = "") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+```
+
+
+
+## Land
+
+```{r lb fam land }
+# png("UP/graphs/bplot_land_exp.png", width = 800, height = 600)
+
+
+# 
+# dyn_lb_uniq <- dyn_lb%>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+# 
+# 
+# # dyn_lb <- dyn_lb %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,16,Inf),include.lowest = TRUE, right =FALSE))
+# 
+# dyn_lb_fam <- dyn_lb %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_lb_tot ==1)
+
+
+
+dyn_lb_uniq$land <- as.numeric(dyn_lb_uniq$land)
+
+ylim1 = boxplot.stats(dyn_lb_uniq$land)$stats[c(1, 5)]
+
+ggplot(subset(dyn_lb_uniq,!is.na(land)),aes(as.factor(dyn_tot), land)) +
+  geom_boxplot(outlier.shape = NA)+
+  scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  coord_cartesian(ylim = ylim1*1.05)+
+  theme_minimal()+
+  labs(title = "Land size  of families and non-families ",x = "", y = "Land Size \n (in bhigas)") +
+  
+  theme(plot.background = element_blank(),
+        plot.title = element_text(family = "sans",hjust = 0.5, size = 20, 
+                                  margin= margin(0,0,20,0)), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 15),
+        axis.title = element_text(vjust = -1, size = 16),        
+        axis.ticks = element_blank()
+  ) 
+
+#dyn_lb_uniq %>% group_by(dyn_tot) %>% summarise(mean(land, na.rm = TRUE))
+```
+
+## caste
+
+```{r}
+
+dyn_lb_uniq %>% filter(caste_groups != "NA") %>% group_by(dyn_tot_text, caste_groups) %>% summarise(count= n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, caste_groups, prop) %>% 
+    ggplot(aes(factor(dyn_tot_text), prop, fill = caste_groups,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = "Caste composition \n among families and non-families ",x = "", y = "Proportion", fill = "") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+```
+
+
+## Education
+
+```{r}
+
+
+dyn_lb$edu <- as.numeric(paste(dyn_lb$school, dyn_lb$college, sep = ""))
+
+
+dyn_lb_uniq <- dyn_lb %>% arrange (-year) %>%  distinct(family_id, .keep_all = TRUE)
+
+
+edu_tab <- dyn_lb_uniq %>%  filter(!is.na(edu)) %>% group_by(dyn_tot_text,edu) %>% summarise(count = n())  %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count),prop= count/sum) %>% filter(edu!= 0) %>%  arrange(edu, -prop) 
+
+edu_tab$id=rep(c(1:2),3)
+ggplot(edu_tab , aes(x= reorder(as.factor(edu),-prop), prop , group = id )) +   
+  geom_bar(aes(fill = as.factor(dyn_tot_text)), position = "dodge", stat="identity")+
+  theme_minimal()+
+  scale_x_discrete(labels=(c(  "School" ,"College","Both")))+
+  scale_fill_manual (labels = c( "Family", "Non-family"),
+    values = c("#468189", "#9DBEBB"))+
+  labs(title = "Ownership of educational institutions \n among families and non-families", 
+       x = "", y = "Proportion") +
+  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif", 
+                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
+        text = element_text(color = "gray20",family = "serif"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_text(vjust = 2, size =16),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  ) 
+
+  
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 

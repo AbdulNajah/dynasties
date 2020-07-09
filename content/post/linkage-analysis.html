@@ -1,28 +1,249 @@
 ---
 title: "Linkage Analysis"
-author: "Abdul Najah"
-date: "06/07/2020"
-output: html_document
+author: ""
+date: "2020-07-08"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
 ---
 
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
-
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="TOC">
+<ul>
+<li><a href="#assets">Assets</a></li>
+<li><a href="#crime">Crime</a></li>
+</ul>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="/post/linkage-analysis_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-1">Table 1: </span>Summary table of individuals from families with and without linkages
+AE: 2012-2017, GE: 2009-2019
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election_type
+</th>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+134
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+125
+</td>
+</tr>
+</tbody>
+</table>
+<div id="assets" class="section level2">
+<h2>Assets</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 2: </span>Average assets among families with and without linkages
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election_type
+</th>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Total assets
+</th>
+<th style="text-align:right;">
+Movable Assets
+</th>
+<th style="text-align:right;">
+Immovable Assets
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+29385569
+</td>
+<td style="text-align:right;">
+6253937
+</td>
+<td style="text-align:right;">
+18982623
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+42626474
+</td>
+<td style="text-align:right;">
+9671586
+</td>
+<td style="text-align:right;">
+28068401
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+175658704
+</td>
+<td style="text-align:right;">
+75176298
+</td>
+<td style="text-align:right;">
+100154682
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+53938954
+</td>
+<td style="text-align:right;">
+12564679
+</td>
+<td style="text-align:right;">
+33903132
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="crime" class="section level2">
+<h2>Crime</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 3: </span>Serious criminal cases among families with and without linkages
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Election_type
+</th>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+</tr>
+</tbody>
+</table>
 </div>

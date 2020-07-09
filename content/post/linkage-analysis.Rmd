@@ -1,30 +1,150 @@
 ---
 title: "Linkage Analysis"
-author: "Abdul Najah"
-date: "06/07/2020"
-output: html_document
+author: ""
+date: "2020-07-08"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
 ---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+`%!in%` = Negate(`%in%`)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r read main file}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
-```{r cars}
-summary(cars)
+
 ```
 
-## Including Plots
+```{r adr}
 
-You can also embed plots, for example:
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+names(adr)[1] <- "position"
+
+names(adr) <- tolower(names(adr))
+
+adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
+ month,-              poll_no,-           
+ delimid,-            position,-          
+candidate,-          sex,-               
+party,-              votes,-             
+ candidate_type,-     valid_votes,-       
+ electors,-           constituency_name,- 
+ constituency_type,-  sub_region,-        
+ n_cand,-             turnout_percentage,-
+ vote_share_percentage,-     deposit_lost,-      
+margin,-             margin_percentage,- 
+
+enop,-              
+ pid,-                max_poll_no,-       
+ last_poll,-          contested,-         
+ last_party,-         last_constituency_name,-                     
+same_constituency,-  same_party,-        
+ no_terms,-           turncoat,-          
+incumbent,-          recontest   )
+
+adr <- adr %>% filter(position_tcpd %in% c(1,2))
+
+adr <- adr %>% rename( position = position_tcpd)
+
+#uniqueN(adr$position)
+
+
+
+# dim(adr)
+# 
+# adr %>% glimpse()
+# 
+# unique(adr$year)
+# 
+# summary(adr)
+# names(adr)
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r merging it with dyn -adr}
+
+
+dyn_adr <- merge(dyn,adr, by = c("year", "constituency_no", "position"))
+
+
+names(dyn_adr) <- make.unique(names(dyn_adr))
+
+dyn_adr$total_assets <- as.numeric(dyn_adr$total_assets)
+
+dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+
+
+#dyn_adr$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019"))
+
+dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
+
+dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family")
+
+dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
+
+dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
+```
+
+
+
+```{r}
+dyn_adr <- dyn_adr %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
+
+
+
+
+dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
+
+dyn_adr_fam %>% group_by( election_type,level_log) %>%  summarise(n()) %>%  kable(caption = "Summary table of individuals from families with and without linkages \n AE: 2012-2017, GE: 2009-2019", col.names = c("Election_type","Linkage", "Count"))  %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+## Assets
+
+```{r}
+dyn_adr_fam %>% group_by(election_type,level_log) %>% summarise(mean(total_assets, trim = .1),mean(total_movable_assets_totals, trim = .1),mean(total_immovable_assets_totals, trim = .1)) %>% kable(caption = "Average assets among families with and without linkages", col.names = c("Election_type","Linkage", "Total assets", "Movable Assets", "Immovable Assets"))  %>% kable_styling(bootstrap_options = "striped")
+
+
+
+```
+
+
+## Crime
+
+
+```{r}
+dyn_adr <- dyn_adr %>% mutate(serious_crime_log = serious_crime>0, TRUE, FALSE)
+
+dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
+
+dyn_adr_fam %>% group_by(election_type,level_log) %>% summarise(mean(serious_crime_log)) %>% kable(caption = "Serious criminal cases among families with and without linkages", col.names = c("Election_type","Linkage", "Proportion"), digits = 2)  %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+
+
+
+
+
+
