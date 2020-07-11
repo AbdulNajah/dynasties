@@ -107,7 +107,7 @@ dyn_ae_80_07 <- dyn_ae_07 %>% filter(election_nos ==8) %>% group_by(constituency
 ```{r for all years/ all districts}
 
 
-dyn_ae  <- dyn_ae %>%  filter(district_name != "" ) %>% group_by(district_name) %>% mutate(dist_el_n = n())  
+dyn_ae  <- dyn_ae %>%  filter(district_name != "" & position == 1) %>% group_by(district_name) %>% mutate(dist_el_n = n())  
 dyn_ae <- dyn_ae %>%filter(district_name != "" ) %>%  group_by(district_name) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/dist_el_n) 
 
 dyn_ae %>% select(district_name, dyn_eln_prop) %>%distinct(district_name, .keep_all = TRUE)%>% arrange(-dyn_eln_prop) %>% kable(col.names = c("district name", "dynasty score"),digits = 2) %>% kable_styling(bootstrap_options = "striped")
@@ -161,6 +161,126 @@ dyn_ae %>% select(year, dyn_eln_prop) %>%distinct(year, .keep_all = TRUE)%>% arr
 
 
 ```
+
+# criminality
+
+
+```{r }
+
+
+dyn_ae <- dyn_ae %>% filter(district_name != "" )  %>% group_by(year, district_name) %>% mutate(dist_year_el_n = n())  
+dyn_ae <- dyn_ae %>% filter(district_name != "" )%>% group_by(year, district_name) %>% mutate(dist_dyn_el_n=sum(dyn_cum), dist_dyn_eln_prop = dyn_el_n/year_el_n) 
+
+dist_dyn_prop  <- dyn_ae %>% select(district_name, dist_dyn_eln_prop, year) %>% distinct(year, district_name, .keep_all = TRUE) 
+
+dist_dyn_prop$district_name <- tolower(dist_dyn_prop$district_name)
+dyn_ae_12_17 <- dyn_ae%>%filter(election_type== "AE" &position == 1 & year %in% c(2012,2017))
+
+up_crime <- read.csv("D:/cpr/up-dynasties/dyn_other_data/crime-district-level-uttarpradesh.csv")
+
+
+up_crime_dist <- up_crime %>% select(adunit, district_name,year, murder, dacoity, riots) %>% distinct(district_name, year, .keep_all = TRUE)
+
+
+dyn_crime <- merge(dist_dyn_prop, up_crime_dist, by = c("year", "district_name"))
+
+murder <- dacoity <- ggplot(dyn_crime, aes(murder, dist_dyn_eln_prop))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
+   labs(y = "dynasty score")
+
+dacoity <- ggplot(dyn_crime, aes(dacoity, dist_dyn_eln_prop))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  scale_y_continuous(limits = c(0,.2))+
+  theme_minimal()+
+   labs(y = "dynasty score")
+
+riot <- ggplot(dyn_crime, aes(riots, dist_dyn_eln_prop))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  scale_y_continuous(limits = c(0,.2))+
+  theme_minimal()+
+  theme(axis.title.y = element_blank(), 
+        axis.text.y = element_blank())
+
+ggarrange(murder,  riot, dacoity)
+
+```
+
+```{r adr}
+
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
+
+names(adr)[1] <- "position"
+
+names(adr) <- tolower(names(adr))
+
+adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
+ month,-              poll_no,-           
+ delimid,-            position,-          
+candidate,-          sex,-               
+party,-              votes,-             
+ candidate_type,-     valid_votes,-       
+ electors,-           constituency_name,- 
+ constituency_type,-  sub_region,-        
+ n_cand,-             turnout_percentage,-
+ vote_share_percentage,-     deposit_lost,-      
+margin,-             margin_percentage,- 
+
+enop,-              
+ pid,-                max_poll_no,-       
+ last_poll,-          contested,-         
+ last_party,-         last_constituency_name,-                     
+same_constituency,-  same_party,-        
+ no_terms,-           turncoat,-          
+incumbent,-          recontest   )
+
+adr <- adr %>% filter(position_tcpd %in% c(1,2))
+
+adr <- adr %>% rename( position = position_tcpd)
+
+adr_ae <- adr %>% filter(year %in% c(2012,2017))
+
+#uniqueN(adr$position)
+
+
+
+# dim(adr)
+# 
+# adr %>% glimpse()
+# 
+# unique(adr$year)
+# 
+# summary(adr)
+# names(adr)
+
+
+```
+
+```{r}
+
+dyn_ae_adr <- merge(dyn_ae_12_17, adr_ae, by = c("constituency_no", "position", "year"))
+
+
+dyn_ae_adr$serious_crime_log <- ifelse(dyn_ae_adr$serious_crime !=0, TRUE, FALSE)
+
+# dyn_ae_adr %>% group_by(serious_crime_log) %>% summarise(mean(dyn_eln_prop))
+# 
+# 
+# 
+# ggplot(dyn_ae_adr, aes(serious_crime_log, dyn_eln_prop))+
+#   geom_point()
+
+#dyn_ae_adr %>% select(serious_crime, dyn_eln_prop)
+
+
+```
+
+
+
+
 
 ```{r configuring files -21}
 
