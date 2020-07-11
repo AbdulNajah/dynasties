@@ -17,7 +17,7 @@
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/linkage-analysis/</guid>
-      <description>AssetsCrimeTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019Election_typeLinkageCountAEFALSE134AETRUE191GEFALSE21GETRUE125AssetsTable 2: Average assets among families with and without linkagesElection_typeLinkageTotal assetsMovable AssetsImmovable AssetsAEFALSE29385569625393718982623AETRUE42626474967158628068401GEFALSE17565870475176298100154682GETRUE539389541256467933903132CrimeTable 3: Serious criminal cases among families with and without linkagesElection_typeLinkageProportionAEFALSE0.</description>
+      <description>AssetsCrimeIndustryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE155TRUE316AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE37952223869404524608301TRUE469531291072343030311556CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/district-levelo/</guid>
-      <description>Dynast scoreDas guptaAlexanderIyerDynast scoredistrict namedynasty scoreLALITPUR0.29SITAPUR0.18ETAH0.18MORADABAD0.17SHAHJAHANPUR0.16MAINPURI0.15AZAMGARH0.15PRATAPGARH0.14BAHRAICH0.</description>
+      <description>Dynast scorecriminalityDas guptaAlexanderIyerDynast scoredistrict namedynasty scoreLALITPUR0.25ETAWAH0.24ETAH0.23MORADABAD0.21MATHURA0.20SITAPUR0.19MAINPURI0.19AZAMGARH0.</description>
     </item>
     
     <item>
@@ -132,7 +132,7 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/master-file-analysis/</guid>
-      <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral ElectionsAE GE election contestlocal body electionsLinkagesAnalyis at different levelsAll electionsLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
+      <description>Political FamiliesAnalysis goalsSummary statisticsElections coveredBasic edaAssembly ElectionsGeneral ElectionsAE GE election contestlocal body electionsLinkagesretentionIndustriesAnalyis at different levelsAll electionsLand distributionIndustries: EducationIndustries : OtherscasteExperienceAE - GELand distributionIndustries: EducationIndustries : OthersCasteExperienceLocal bodiesMid levelLow levelPRI’sULB’sFig 1Political FamiliesThis data set knits the families of contestants in the elections held in Uttar Pradesh.</description>
     </item>
     
   </channel>

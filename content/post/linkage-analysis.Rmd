@@ -114,16 +114,26 @@ dyn_adr <- dyn_adr %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE,
 
 dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
 
-dyn_adr_fam %>% group_by( election_type,level_log) %>%  summarise(n()) %>%  kable(caption = "Summary table of individuals from families with and without linkages \n AE: 2012-2017, GE: 2009-2019", col.names = c("Election_type","Linkage", "Count"))  %>% kable_styling(bootstrap_options = "striped")
+dyn_adr_fam %>%  group_by(level_log) %>%  summarise(n()) %>%  kable(caption = "Summary table of individuals from families with and without linkages \n AE: 2012-2017, GE: 2009-2019", col.names = c("Linkage", "Count"))  %>% kable_styling(bootstrap_options = "striped")
 ```
 
 
 ## Assets
 
 ```{r}
-dyn_adr_fam %>% group_by(election_type,level_log) %>% summarise(mean(total_assets, trim = .1),mean(total_movable_assets_totals, trim = .1),mean(total_immovable_assets_totals, trim = .1)) %>% kable(caption = "Average assets among families with and without linkages", col.names = c("Election_type","Linkage", "Total assets", "Movable Assets", "Immovable Assets"))  %>% kable_styling(bootstrap_options = "striped")
+dyn_adr_fam %>%  group_by(level_log) %>% summarise(mean(total_assets, trim = .1),mean(total_movable_assets_totals, trim = .1),mean(total_immovable_assets_totals, trim = .1)) %>% kable(caption = "Average assets among families with and without linkages", col.names = c("Linkage", "Total assets", "Movable Assets", "Immovable Assets"))  %>% kable_styling(bootstrap_options = "striped")
 
 
+
+# 
+# dyn_adr_fam %>% ggplot(aes(total_assets))+
+#   geom_density()+
+#    scale_x_continuous(label = label_number_si())
+# 
+# 
+# dyn_adr_w  <- dyn_adr %>% filter(position==1)
+# table(cut(dyn_adr_w$total_assets, breaks = c(0,1000000000, Inf)))
+#   
 
 ```
 
@@ -136,12 +146,39 @@ dyn_adr <- dyn_adr %>% mutate(serious_crime_log = serious_crime>0, TRUE, FALSE)
 
 dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
 
-dyn_adr_fam %>% group_by(election_type,level_log) %>% summarise(mean(serious_crime_log)) %>% kable(caption = "Serious criminal cases among families with and without linkages", col.names = c("Election_type","Linkage", "Proportion"), digits = 2)  %>% kable_styling(bootstrap_options = "striped")
+dyn_adr_fam %>% group_by(level_log) %>% summarise(mean(serious_crime_log)) %>% kable(caption = "Serious criminal cases among families with and without linkages", col.names = c("Linkage", "Proportion"), digits = 2)  %>% kable_styling(bootstrap_options = "striped")
 
 
 ```
 
 
+## Industry
+
+```{r}
+dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
+
+dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
+
+
+dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
+
+names(dyn_indus)[1] <- "election_type"
+
+dyn_indus_ae_ge <- merge(dyn, dyn_indus, by = c("election_type", "year", "pid"))
+
+dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
+
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>%  filter(dyn_cum ==1) %>% arrange(-year) %>% 
+  distinct( family_id,rel_id_uniq, .keep_all = T) 
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
+
+
+dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
+
+dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership among families with and without linkages", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+```
 
 
 
