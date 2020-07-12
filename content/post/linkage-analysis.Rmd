@@ -104,7 +104,7 @@ dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
 dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
 ```
 
-
+## Summary
 
 ```{r}
 dyn_adr <- dyn_adr %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
@@ -169,7 +169,7 @@ dyn_indus_ae_ge <- merge(dyn, dyn_indus, by = c("election_type", "year", "pid"))
 dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
 
 
-dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>%  filter(dyn_cum ==1) %>% arrange(-year) %>% 
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>%  filter(dyn_tot ==1) %>% arrange(-year) %>% 
   distinct( family_id,rel_id_uniq, .keep_all = T) 
 
 dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
@@ -177,7 +177,218 @@ dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq %>% mutate(level_log= ifelse(level 
 
 dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
 
-dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership among families with and without linkages", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership among families with and without linkages", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 1) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+
+## Caste
+
+
+
+```{r caste}
+
+
+
+dyn_uniq_fam <- dyn %>%  filter(dyn_tot ==1) %>% arrange(-year) %>% 
+  distinct( family_id,rel_id_uniq, .keep_all = T) 
+
+dyn_uniq_fam<- dyn %>%  filter(dyn_tot ==1 & position ==1) %>% arrange(-year) %>% 
+  distinct( family_id,rel_id_uniq, .keep_all = T) 
+
+dyn_uniq_fam <- dyn_uniq_fam %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
+
+
+dyn_uniq_fam$dyn_tot_text <- ifelse(dyn_uniq_fam$dyn_tot==1, "Family", "Non-family")
+
+dyn_uniq_fam %>% group_by(level_log,caste_groups) %>% summarise(count= n()) %>% group_by(level_log) %>% mutate(sum_count = sum(count), prop = count/sum_count) %>% 
+  ggplot(aes(factor(level_log), prop, fill = caste_groups,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+   labs(title = " Caste composition of families wrt linkage ",x = "", y = "Proportion", fill = "Caste Groups") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+```
+
+
+## MPLADS
+
+
+```{r}
+
+dyn_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+##2009
+
+dyn_pre09 <- dyn_all %>% filter(year < 2010)
+
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+ dyn_pre09_ae_lvl <- dyn_pre09 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+ dyn_pre09_ge_lvl <- dyn_pre09 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+dyn_pre09_lb_lvl <- dyn_pre09 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+dyn_pre09_ae_ge_lvl <- merge(dyn_pre09_ge_lvl, dyn_pre09_ae_lvl, by = "family_id" , all =TRUE)
+# 
+ dyn_pre09_all_lvl <- merge(dyn_pre09_ae_ge_lvl ,dyn_pre09_lb_lvl,by = "family_id" , all =TRUE )
+# 
+ dyn_pre09_all_lvl$levels <- paste(dyn_pre09_all_lvl $election_level.x,dyn_pre09_all_lvl $election_level.y, dyn_pre09_all_lvl $election_level, sep = "")
+# 
+ dyn_pre09_all_lvl <- dyn_pre09_all_lvl %>% mutate(level_09 =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+# 
+# 
+ dyn_pre09_all_lvl <- dyn_pre09_all_lvl %>% select(family_id, level_09)
+ dyn_pre09_all_lvl$year <- as.numeric(2009)
+# 
+# 
+ 
+##2004
+
+dyn_pre04 <- dyn_all %>% filter(year < 2005)
+
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+dyn_pre04_ae_lvl <- dyn_pre04 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+dyn_pre04_ge_lvl <- dyn_pre04 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+dyn_pre04_lb_lvl <- dyn_pre04 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+dyn_pre04_ae_ge_lvl <- merge(dyn_pre04_ge_lvl, dyn_pre04_ae_lvl, by = "family_id" , all =TRUE)
+# 
+dyn_pre04_all_lvl <- merge(dyn_pre04_ae_ge_lvl ,dyn_pre04_lb_lvl,by = "family_id" , all =TRUE )
+# 
+dyn_pre04_all_lvl$levels <- paste(dyn_pre04_all_lvl $election_level.x,dyn_pre04_all_lvl $election_level.y, dyn_pre04_all_lvl $election_level, sep = "")
+# 
+dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% mutate(level_04 =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+# 
+# 
+dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% select(family_id, level_04)
+dyn_pre04_all_lvl$year <- as.numeric(2004)
+
+
+dyn_pre04_09 <- rbindlist(list(data.frame(dyn_pre04_all_lvl) , data.frame(dyn_pre09_all_lvl)), use.names = FALSE)
+
+dyn <- merge(dyn, dyn_pre04_09, by =c ("year", "family_id"), all.x = TRUE)
+
+
+
+# 
+# 
+# dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+# 
+# dyn_fam_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
+# 
+# #dyn_fam_uniq_last_ind %>% group_by(level) %>%  summarise(count = n()) %>% arrange(-count) %>% kable()
+
+```
+
+```{r }
+
+mplads <- fread("D:/cpr/up-dynasties/dyn_other_data/mplads-dataset.csv", stringsAsFactors = FALSE)
+
+# glimpse(mplads)
+
+
+names(mplads) <- tolower(names(mplads))
+
+mplads <- mplads %>% select(constituency_no,year, everything()) %>% select(- c(30:102))
+
+mplads$cost_cat <- cut(mplads$costnew, breaks = c(0,200000,500000,Inf), labels = c("Low", "Medium", "High"))
+
+dyn_ge_w <- dyn %>% filter(election_type == "GE" & position==1)
+
+
+dyn_mplads <- merge(dyn_ge_w,mplads, by = c("year", "constituency_no"))
+
+
+names(dyn_mplads) <- make.unique(names(dyn_mplads))
+
+dyn_mplads$dyn_cum_text <- ifelse(dyn_mplads$dyn_cum ==0, "Non-family","Family")
+
+
+dyn_mplads <- dyn_mplads %>% group_by(year, constituency_no) %>% mutate(ac_contr_n = n())
+
+
+dyn_mplads_fam <- dyn_mplads %>%  filter(dyn_cum ==1) 
+
+# dyn_uniq_fam<- dyn %>%  filter(dyn_tot ==1 & position ==1) %>% arrange(-year) %>% 
+#   distinct( family_id,rel_id_uniq, .keep_all = T) 
+
+dyn_mplads_fam<- dyn_mplads_fam %>% mutate(level_log= ifelse(level_04 %in% c("AE", "GE"), FALSE, TRUE))
+
+#dyn_mplads_fam %>% group_by(year, level_log) %>% summarise(n_distinct(constituency_no))
+
+
+dyn_mplads_fam %>% group_by(level_log) %>% summarise(n_distinct(constituency_no)) %>% kable(caption = "Summary stat of families in 2004 & 2009 GE wrt linkage", col.names = c("Linkage", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+#dyn_ge_uniq_fam$dyn_tot_text <- ifelse(dyn_ge_uniq_fam$dyn_cum==1, "Family", "Non-family")
+
+
+# dyn_mplads %>% group_by(year, constituency_no) %>% summarise(count = n()) %>% 
+#   ggplot(aes(factor(constituency_no), count))+
+#   geom_histogram(stat = "identity")+
+#   facet_grid(rows = vars(year))
+
+
+
+
+
+# dyn_mplads_mean <- dyn_mplads %>% group_by(dyn_cum) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))
+
+## Linkage
+
+```
+
+```{r}
+ dyn_mplads_fam  %>% group_by( ,level_log) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending wrt linkage",col.names = c ("Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+
+
 ```
 
 
@@ -185,3 +396,170 @@ dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %
 
 
 
+### Project count and expenditure
+
+```{r spending composition}
+
+ dyn_mplads_fam %>% group_by(level_log, category_work) %>% summarise(sum_cat = sum(costnew), count = n()) %>% group_by(level_log) %>% mutate(sum_tot = sum(sum_cat), prop_expenditure = sum_cat/sum_tot,sum = sum(count), prop_spending = count/sum) %>% select(level_log, category_work, prop_spending, prop_expenditure) %>% melt(id = 1:2, measure = 3:4) %>% 
+   ggplot(aes(factor(variable), value, fill = category_work,label = round(value,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+  scale_x_discrete(labels = c("Count","Expenditure"))+
+    facet_grid(~level_log)+
+    labs(title = " MPLADS projects count and expenditure composition \n wrt linkage ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+```
+
+
+### Type of work v/s projects
+
+```{r}
+
+dyn_mplads_fam %>% group_by(level_log, category_work ) %>% summarise(mean_projects = mean(ac_contr_n)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(level_log)))+
+  geom_bar(stat = "identity", position = "dodge")+
+    theme_minimal()+
+  scale_y_continuous(label = label_number_si())+
+  scale_fill_manual (labels = c("FALSE", "TRUE"),
+    values = c("#468189", "#9DBEBB"))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average count of projects wrt linkage",  x = "Type of project", y = "Average count") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+ 
+
+```
+
+
+
+
+
+### Type of work v/s cost
+
+
+```{r}
+dyn_mplads_fam %>% group_by(level_log, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(level_log)))+
+  geom_bar(stat = "identity", position = "dodge")+
+  theme_minimal()+
+  scale_y_continuous(label = label_number_si())+
+  scale_fill_manual (labels = c("FALSE", "TRUE"),
+    values = c("#468189", "#9DBEBB"))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Average cost per project",  x = "Type of project", y = "Average cost") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
+```
+
+
+
+
+```{r}
+
+
+# names(mplads)
+# 
+# summary(mplads$costnew)
+# 
+# hist(mplads$costnew) %>% scale_x_continuous(label = label_number_si())
+
+ggplot(dyn_mplads_fam, aes(costnew, color = level_log))+
+  geom_density()+ 
+  theme_minimal()+ scale_y_continuous(label = label_number())+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Project cost distribution wrt linkage",  x = "Cost", y = "Density") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        
+  )
+
+
+
+```
+
+
+
+
+### cost categories
+
+
+Categories:
+
+Low - 0-.2 mn
+
+Medium - 2.2 mn - 5 mn
+
+High - 5 mn+
+
+
+
+```{r}
+
+dyn_mplads_fam %>% group_by(level_log,cost_cat) %>% summarise(count = n()) %>% group_by(level_log) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% arrange(cost_cat)%>%  kable(caption = "Project cost categories wrt politician's identity", col.names = c("Linkage", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+```
