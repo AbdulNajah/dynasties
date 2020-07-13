@@ -32,208 +32,92 @@ dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 ```
 
-```{r adr}
-
-adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
-
-names(adr)[1] <- "position"
-
-names(adr) <- tolower(names(adr))
-
-adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
- month,-              poll_no,-           
- delimid,-            position,-          
-candidate,-          sex,-               
-party,-              votes,-             
- candidate_type,-     valid_votes,-       
- electors,-           constituency_name,- 
- constituency_type,-  sub_region,-        
- n_cand,-             turnout_percentage,-
- vote_share_percentage,-     deposit_lost,-      
-margin,-             margin_percentage,- 
-
-enop,-              
- pid,-                max_poll_no,-       
- last_poll,-          contested,-         
- last_party,-         last_constituency_name,-                     
-same_constituency,-  same_party,-        
- no_terms,-           turncoat,-          
-incumbent,-          recontest   )
-
-adr <- adr %>% filter(position_tcpd %in% c(1,2))
-
-adr <- adr %>% rename( position = position_tcpd)
-
-#uniqueN(adr$position)
-
-
-
-# dim(adr)
-# 
-# adr %>% glimpse()
-# 
-# unique(adr$year)
-# 
-# summary(adr)
-# names(adr)
-
-
-```
-
-```{r merging it with dyn -adr}
-
-
-dyn_adr <- merge(dyn,adr, by = c("year", "constituency_no", "position"))
-
-
-names(dyn_adr) <- make.unique(names(dyn_adr))
-
-dyn_adr$total_assets <- as.numeric(dyn_adr$total_assets)
-
-dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
-
-
-#dyn_adr$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019"))
-
-dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
-
-dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family")
-
-dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
-
-dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
-```
-
-## Summary
-
-```{r}
-dyn_adr <- dyn_adr %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
-
-
-
-
-dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
-
-dyn_adr_fam %>%  group_by(level_log) %>%  summarise(n()) %>%  kable(caption = "Summary table of individuals from families with and without linkages \n AE: 2012-2017, GE: 2009-2019", col.names = c("Linkage", "Count"))  %>% kable_styling(bootstrap_options = "striped")
-```
-
-
-## Assets
-
-```{r}
-dyn_adr_fam %>%  group_by(level_log) %>% summarise(mean(total_assets, trim = .1),mean(total_movable_assets_totals, trim = .1),mean(total_immovable_assets_totals, trim = .1)) %>% kable(caption = "Average assets among families with and without linkages", col.names = c("Linkage", "Total assets", "Movable Assets", "Immovable Assets"))  %>% kable_styling(bootstrap_options = "striped")
-
-
-
-# 
-# dyn_adr_fam %>% ggplot(aes(total_assets))+
-#   geom_density()+
-#    scale_x_continuous(label = label_number_si())
-# 
-# 
-# dyn_adr_w  <- dyn_adr %>% filter(position==1)
-# table(cut(dyn_adr_w$total_assets, breaks = c(0,1000000000, Inf)))
-#   
-
-```
-
-
-## Crime
-
-
-```{r}
-dyn_adr <- dyn_adr %>% mutate(serious_crime_log = serious_crime>0, TRUE, FALSE)
-
-dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
-
-dyn_adr_fam %>% group_by(level_log) %>% summarise(mean(serious_crime_log)) %>% kable(caption = "Serious criminal cases among families with and without linkages", col.names = c("Linkage", "Proportion"), digits = 2)  %>% kable_styling(bootstrap_options = "striped")
-
-
-```
-
-
-## Industry
-
-```{r}
-dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
-
-dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
-
-
-dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
-
-names(dyn_indus)[1] <- "election_type"
-
-dyn_indus_ae_ge <- merge(dyn, dyn_indus, by = c("election_type", "year", "pid"))
-
-dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
-
-
-dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>%  filter(dyn_tot ==1) %>% arrange(-year) %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
-
-
-dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
-
-dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership among families with and without linkages", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 1) %>% kable_styling(bootstrap_options = "striped")
-```
-
-
-
-## Caste
-
-
-
-```{r caste}
-
-
-
-dyn_uniq_fam <- dyn %>%  filter(dyn_tot ==1) %>% arrange(-year) %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_uniq_fam<- dyn %>%  filter(dyn_tot ==1 & position ==1) %>% arrange(-year) %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_uniq_fam <- dyn_uniq_fam %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
-
-
-dyn_uniq_fam$dyn_tot_text <- ifelse(dyn_uniq_fam$dyn_tot==1, "Family", "Non-family")
-
-dyn_uniq_fam %>% group_by(level_log,caste_groups) %>% summarise(count= n()) %>% group_by(level_log) %>% mutate(sum_count = sum(count), prop = count/sum_count) %>% 
-  ggplot(aes(factor(level_log), prop, fill = caste_groups,label = round(prop,2)))+
-   geom_bar(stat="identity", position = "stack")+
-    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-    theme_minimal()+
-   labs(title = " Caste composition of families wrt linkage ",x = "", y = "Proportion", fill = "Caste Groups") +
-    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 14,family = "serif"),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.text.y = element_blank(),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()
-  ) 
-
-
-```
-
-
-## MPLADS
-
 
 ```{r}
 
 dyn_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+##2019
+
+dyn_pre19 <- dyn_all %>% filter(year < 2020)
+
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+dyn_pre19_ae_lvl <- dyn_pre19 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+dyn_pre19_ge_lvl <- dyn_pre19 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+dyn_pre19_lb_lvl <- dyn_pre19 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+dyn_pre19_ae_ge_lvl <- merge(dyn_pre19_ge_lvl, dyn_pre19_ae_lvl, by = "family_id" , all =TRUE)
+# 
+dyn_pre19_all_lvl <- merge(dyn_pre19_ae_ge_lvl ,dyn_pre19_lb_lvl,by = "family_id" , all =TRUE )
+# 
+dyn_pre19_all_lvl$levels <- paste(dyn_pre19_all_lvl $election_level.x,dyn_pre19_all_lvl $election_level.y, dyn_pre19_all_lvl $election_level, sep = "")
+# 
+dyn_pre19_all_lvl <- dyn_pre19_all_lvl %>% mutate(level_19 =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+# 
+# 
+dyn_pre19_all_lvl <- dyn_pre19_all_lvl %>% select(family_id, level_19)
+dyn_pre19_all_lvl$year <- as.numeric(2019)
+# 
+# 
+
+##2014
+
+dyn_pre14 <- dyn_all %>% filter(year < 2015)
+
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+dyn_pre14_ae_lvl <- dyn_pre14 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+dyn_pre14_ge_lvl <- dyn_pre14 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+dyn_pre14_lb_lvl <- dyn_pre14 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+dyn_pre14_ae_ge_lvl <- merge(dyn_pre14_ge_lvl, dyn_pre14_ae_lvl, by = "family_id" , all =TRUE)
+# 
+dyn_pre14_all_lvl <- merge(dyn_pre14_ae_ge_lvl ,dyn_pre14_lb_lvl,by = "family_id" , all =TRUE )
+# 
+dyn_pre14_all_lvl$levels <- paste(dyn_pre14_all_lvl $election_level.x,dyn_pre14_all_lvl $election_level.y, dyn_pre14_all_lvl $election_level, sep = "")
+# 
+dyn_pre14_all_lvl <- dyn_pre14_all_lvl %>% mutate(level_14 =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+# 
+# 
+dyn_pre14_all_lvl <- dyn_pre14_all_lvl %>% select(family_id, level_14)
+dyn_pre14_all_lvl$year <- as.numeric(2014)
+
+
+
+
+
+
 
 ##2009
 
@@ -312,10 +196,6 @@ dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% select(family_id, level_04)
 dyn_pre04_all_lvl$year <- as.numeric(2004)
 
 
-dyn_pre04_09 <- rbindlist(list(data.frame(dyn_pre04_all_lvl) , data.frame(dyn_pre09_all_lvl)), use.names = FALSE)
-
-dyn <- merge(dyn, dyn_pre04_09, by =c ("year", "family_id"), all.x = TRUE)
-
 
 
 # 
@@ -326,7 +206,308 @@ dyn <- merge(dyn, dyn_pre04_09, by =c ("year", "family_id"), all.x = TRUE)
 # 
 # #dyn_fam_uniq_last_ind %>% group_by(level) %>%  summarise(count = n()) %>% arrange(-count) %>% kable()
 
+##2012
+
+dyn_pre12 <- dyn_all %>% filter(year < 2013)
+
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+ dyn_pre12_ae_lvl <- dyn_pre12 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+ dyn_pre12_ge_lvl <- dyn_pre12 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+dyn_pre12_lb_lvl <- dyn_pre12 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+dyn_pre12_ae_ge_lvl <- merge(dyn_pre12_ge_lvl, dyn_pre12_ae_lvl, by = "family_id" , all =TRUE)
+# 
+ dyn_pre12_all_lvl <- merge(dyn_pre12_ae_ge_lvl ,dyn_pre12_lb_lvl,by = "family_id" , all =TRUE )
+# 
+ dyn_pre12_all_lvl$levels <- paste(dyn_pre12_all_lvl $election_level.x,dyn_pre12_all_lvl $election_level.y, dyn_pre12_all_lvl $election_level, sep = "")
+# 
+ dyn_pre12_all_lvl <- dyn_pre12_all_lvl %>% mutate(level_12 =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+# 
+# 
+ dyn_pre12_all_lvl <- dyn_pre12_all_lvl %>% select(family_id, level_12)
+ dyn_pre12_all_lvl$year <- as.numeric(2012)
+# 
+# 
+ 
+##2017
+
+dyn_pre17 <- dyn_all %>% filter(year < 2018)
+
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                         election_type == "GE" ~ "GE",
+#                          TRUE ~ "LB")) 
+# 
+dyn_pre17_ae_lvl <- dyn_pre17 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+dyn_pre17_ge_lvl <- dyn_pre17 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+dyn_pre17_lb_lvl <- dyn_pre17 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+dyn_pre17_ae_ge_lvl <- merge(dyn_pre17_ge_lvl, dyn_pre17_ae_lvl, by = "family_id" , all =TRUE)
+# 
+dyn_pre17_all_lvl <- merge(dyn_pre17_ae_ge_lvl ,dyn_pre17_lb_lvl,by = "family_id" , all =TRUE )
+# 
+dyn_pre17_all_lvl$levels <- paste(dyn_pre17_all_lvl $election_level.x,dyn_pre17_all_lvl $election_level.y, dyn_pre17_all_lvl $election_level, sep = "")
+# 
+dyn_pre17_all_lvl <- dyn_pre17_all_lvl %>% mutate(level_17 =case_when(
+  levels == "GEAELB" ~ "GE-AE-LB",
+  levels == "GEAENA" ~ "GE-AE",
+  levels == "GENALB" ~ "GE-LB",
+  levels == "GENANA" ~ "GE",
+  levels == "NAAELB" ~ "AE-LB",
+  levels == "NAAENA" ~ "AE",
+  levels == "NANALB" ~ "LB",
+))
+# 
+# 
+dyn_pre17_all_lvl <- dyn_pre17_all_lvl %>% select(family_id, level_17)
+dyn_pre17_all_lvl$year <- as.numeric(2017)
+
+
+
+dyn_pre04_09_14_19_12_17 <- rbindlist(list(data.frame(dyn_pre04_all_lvl) , data.frame(dyn_pre09_all_lvl),data.frame(dyn_pre14_all_lvl) , data.frame(dyn_pre19_all_lvl),data.frame(dyn_pre12_all_lvl) , data.frame(dyn_pre17_all_lvl)), use.names = FALSE)
+
+names(dyn_pre04_09_14_19_12_17)[2] <- "level_cum"
+
+dyn <- merge(dyn,dyn_pre04_09_14_19_12_17 , by =c ("year", "family_id"), all.x = TRUE)
+
+dyn<- dyn %>% mutate(level_log_cum= ifelse(level_cum %in% c("AE", "GE"), FALSE, TRUE))
+
+
+
+# dyn_pre12_17 <- rbindlist(list(data.frame(dyn_pre12_all_lvl) , data.frame(dyn_pre17_all_lvl)), use.names = FALSE)
+# 
+# dyn <- merge(dyn, dyn_pre12_17, by =c ("year", "family_id"), all.x = TRUE)
 ```
+
+
+```{r adr}
+
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
+
+names(adr)[1] <- "position"
+
+names(adr) <- tolower(names(adr))
+
+adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
+ month,-              poll_no,-           
+ delimid,-            position,-          
+candidate,-          sex,-               
+party,-              votes,-             
+ candidate_type,-     valid_votes,-       
+ electors,-           constituency_name,- 
+ constituency_type,-  sub_region,-        
+ n_cand,-             turnout_percentage,-
+ vote_share_percentage,-     deposit_lost,-      
+margin,-             margin_percentage,- 
+
+enop,-              
+ pid,-                max_poll_no,-       
+ last_poll,-          contested,-         
+ last_party,-         last_constituency_name,-                     
+same_constituency,-  same_party,-        
+ no_terms,-           turncoat,-          
+incumbent,-          recontest   )
+
+adr <- adr %>% filter(position_tcpd %in% c(1,2))
+
+adr <- adr %>% rename( position = position_tcpd)
+
+#uniqueN(adr$position)
+
+
+
+# dim(adr)
+# 
+# adr %>% glimpse()
+# 
+# unique(adr$year)
+# 
+# summary(adr)
+# names(adr)
+
+
+```
+
+```{r merging it with dyn -adr}
+
+
+dyn_adr <- merge(dyn,adr, by = c("year", "constituency_no", "position"))
+
+
+names(dyn_adr) <- make.unique(names(dyn_adr))
+
+dyn_adr$total_assets <- as.numeric(dyn_adr$total_assets)
+
+dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+
+
+#dyn_adr$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019"))
+
+dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
+
+dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family")
+
+dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
+
+dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
+```
+
+## Summary
+
+```{r}
+#dyn_adr <- dyn_adr %>% mutate(level_log_cum= ifelse(level_cum %in% c("AE", "GE"), FALSE, TRUE))
+
+
+
+
+dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
+
+dyn_adr_fam %>%  group_by(level_log_cum) %>%  summarise(n()) %>%  kable(caption = "Summary table of individuals from families with and without linkages \n AE: 2012-2017, GE: 2009-2019", col.names = c("Linkage", "Count"))  %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+## Assets
+
+```{r}
+dyn_adr_fam %>%  group_by(level_log_cum) %>% summarise(mean(total_assets, trim = .1),mean(total_movable_assets_totals, trim = .1),mean(total_immovable_assets_totals, trim = .1)) %>% kable(caption = "Average assets among families with and without linkages", col.names = c("Linkage", "Total assets", "Movable Assets", "Immovable Assets"))  %>% kable_styling(bootstrap_options = "striped")
+
+
+
+# 
+# dyn_adr_fam %>% ggplot(aes(total_assets))+
+#   geom_density()+
+#    scale_x_continuous(label = label_number_si())
+# 
+# 
+# dyn_adr_w  <- dyn_adr %>% filter(position==1)
+# table(cut(dyn_adr_w$total_assets, breaks = c(0,1000000000, Inf)))
+#   
+
+```
+
+
+## Crime
+
+
+```{r}
+dyn_adr <- dyn_adr %>% mutate(serious_crime_log = serious_crime>0, TRUE, FALSE)
+
+dyn_adr_fam <- dyn_adr %>% filter(dyn_cum == 1)
+
+dyn_adr_fam %>% group_by(level_log_cum) %>% summarise(mean(serious_crime_log)) %>% kable(caption = "Serious criminal cases among families with and without linkages", col.names = c("Linkage", "Proportion"), digits = 2)  %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Industry
+
+```{r}
+dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
+
+dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
+
+
+dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
+
+names(dyn_indus)[1] <- "election_type"
+
+dyn_indus_ae_ge <- merge(dyn, dyn_indus, by = c("election_type", "year", "pid"))
+
+dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
+
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>%  filter(dyn_tot ==1) %>% arrange(-year) %>% 
+  distinct( family_id, .keep_all = T) 
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
+
+
+dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
+
+dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership among families with and without linkages", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 1) %>% kable_styling(bootstrap_options = "striped")
+
+
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq  %>% mutate(indus_rt = case_when(indus_2 == 0 ~ "0", ind_2 %in% c(1,3,7,2,4,5)~ "rent-thick",
+                                  TRUE~ "non-rent-thick"))
+
+
+dyn_indus_ae_ge_uniq   %>% filter(indus_rt != "0") %>% group_by(level_log, indus_rt) %>% summarise(count = n()) %>% group_by(level_log) %>% mutate(sum = sum(count), prop = count/sum) %>% select(level_log, indus_rt, prop) %>% kable(captioni = "industry ownership wrt rent extraction type", col.names = c("Politician's identity","rent-type", "Proportion"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+## Caste
+
+
+
+```{r caste}
+
+
+
+dyn_uniq_fam <- dyn %>%  filter(dyn_tot ==1) %>% arrange(-year) %>% 
+  distinct( family_id,rel_id_uniq, .keep_all = T) 
+
+dyn_uniq_fam<- dyn %>%  filter(dyn_tot ==1 & position ==1) %>% arrange(-year) %>% 
+  distinct( family_id,rel_id_uniq, .keep_all = T) 
+
+dyn_uniq_fam <- dyn_uniq_fam %>% mutate(level_log= ifelse(level %in% c("AE", "GE"), FALSE, TRUE))
+
+
+dyn_uniq_fam$dyn_tot_text <- ifelse(dyn_uniq_fam$dyn_tot==1, "Family", "Non-family")
+
+dyn_uniq_fam %>% group_by(level_log,caste_groups) %>% summarise(count= n()) %>% group_by(level_log) %>% mutate(sum_count = sum(count), prop = count/sum_count) %>% 
+  ggplot(aes(factor(level_log), prop, fill = caste_groups,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+   labs(title = " Caste composition of families wrt linkage ",x = "", y = "Proportion", fill = "Caste Groups") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+```
+
+
+## MPLADS
+
+
 
 ```{r }
 
@@ -360,12 +541,12 @@ dyn_mplads_fam <- dyn_mplads %>%  filter(dyn_cum ==1)
 # dyn_uniq_fam<- dyn %>%  filter(dyn_tot ==1 & position ==1) %>% arrange(-year) %>% 
 #   distinct( family_id,rel_id_uniq, .keep_all = T) 
 
-dyn_mplads_fam<- dyn_mplads_fam %>% mutate(level_log= ifelse(level_04 %in% c("AE", "GE"), FALSE, TRUE))
+#dyn_mplads_fam<- dyn_mplads_fam %>% mutate(level_log= ifelse(level_04 %in% c("AE", "GE"), FALSE, TRUE))
 
 #dyn_mplads_fam %>% group_by(year, level_log) %>% summarise(n_distinct(constituency_no))
 
 
-dyn_mplads_fam %>% group_by(level_log) %>% summarise(n_distinct(constituency_no)) %>% kable(caption = "Summary stat of families in 2004 & 2009 GE wrt linkage", col.names = c("Linkage", "Count")) %>% kable_styling(bootstrap_options = "striped")
+dyn_mplads_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency_no)) %>% kable(caption = "Summary stat of families in 2004 & 2009 GE wrt linkage", col.names = c("Linkage", "Count")) %>% kable_styling(bootstrap_options = "striped")
 
 #dyn_ge_uniq_fam$dyn_tot_text <- ifelse(dyn_ge_uniq_fam$dyn_cum==1, "Family", "Non-family")
 
@@ -386,7 +567,7 @@ dyn_mplads_fam %>% group_by(level_log) %>% summarise(n_distinct(constituency_no)
 ```
 
 ```{r}
- dyn_mplads_fam  %>% group_by( ,level_log) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending wrt linkage",col.names = c ("Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+ dyn_mplads_fam  %>% group_by(level_log_cum) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending wrt linkage",col.names = c ("Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
 
 
 ```
@@ -400,13 +581,13 @@ dyn_mplads_fam %>% group_by(level_log) %>% summarise(n_distinct(constituency_no)
 
 ```{r spending composition}
 
- dyn_mplads_fam %>% group_by(level_log, category_work) %>% summarise(sum_cat = sum(costnew), count = n()) %>% group_by(level_log) %>% mutate(sum_tot = sum(sum_cat), prop_expenditure = sum_cat/sum_tot,sum = sum(count), prop_spending = count/sum) %>% select(level_log, category_work, prop_spending, prop_expenditure) %>% melt(id = 1:2, measure = 3:4) %>% 
+ dyn_mplads_fam %>% group_by(level_log_cum, category_work) %>% summarise(sum_cat = sum(costnew), count = n()) %>% group_by(level_log_cum) %>% mutate(sum_tot = sum(sum_cat), prop_expenditure = sum_cat/sum_tot,sum = sum(count), prop_spending = count/sum) %>% select(level_log_cum, category_work, prop_spending, prop_expenditure) %>% melt(id = 1:2, measure = 3:4) %>% 
    ggplot(aes(factor(variable), value, fill = category_work,label = round(value,2)))+
    geom_bar(stat="identity", position = "stack")+
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
   scale_x_discrete(labels = c("Count","Expenditure"))+
-    facet_grid(~level_log)+
+    facet_grid(~level_log_cum)+
     labs(title = " MPLADS projects count and expenditure composition \n wrt linkage ",x = "", y = "Proportion", fill = "Type of work") +
     theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
   theme(plot.background = element_blank(),
@@ -433,8 +614,8 @@ dyn_mplads_fam %>% group_by(level_log) %>% summarise(n_distinct(constituency_no)
 
 ```{r}
 
-dyn_mplads_fam %>% group_by(level_log, category_work ) %>% summarise(mean_projects = mean(ac_contr_n)) %>% 
-  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(level_log)))+
+dyn_mplads_fam %>% group_by(level_log_cum, category_work ) %>% summarise(mean_projects = mean(ac_contr_n)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(level_log_cum)))+
   geom_bar(stat = "identity", position = "dodge")+
     theme_minimal()+
   scale_y_continuous(label = label_number_si())+
@@ -473,8 +654,8 @@ dyn_mplads_fam %>% group_by(level_log, category_work ) %>% summarise(mean_projec
 
 
 ```{r}
-dyn_mplads_fam %>% group_by(level_log, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
-  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(level_log)))+
+dyn_mplads_fam %>% group_by(level_log_cum, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(level_log_cum)))+
   geom_bar(stat = "identity", position = "dodge")+
   theme_minimal()+
   scale_y_continuous(label = label_number_si())+
@@ -515,7 +696,7 @@ dyn_mplads_fam %>% group_by(level_log, category_work ) %>% summarise(mean_cost =
 # 
 # hist(mplads$costnew) %>% scale_x_continuous(label = label_number_si())
 
-ggplot(dyn_mplads_fam, aes(costnew, color = level_log))+
+ggplot(dyn_mplads_fam, aes(costnew, color = level_log_cum))+
   geom_density()+ 
   theme_minimal()+ scale_y_continuous(label = label_number())+
   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
@@ -560,6 +741,128 @@ High - 5 mn+
 
 ```{r}
 
-dyn_mplads_fam %>% group_by(level_log,cost_cat) %>% summarise(count = n()) %>% group_by(level_log) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% arrange(cost_cat)%>%  kable(caption = "Project cost categories wrt politician's identity", col.names = c("Linkage", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+dyn_mplads_fam %>% group_by(level_log_cum,cost_cat) %>% summarise(count = n()) %>% group_by(level_log_cum) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% arrange(cost_cat)%>%  kable(caption = "Project cost categories wrt politician's identity", col.names = c("Linkage", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+## Raphael
+
+
+# Vote dispersion
+
+
+
+
+
+
+
+
+```{r}
+ rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
+
+# dim(rafael)
+# 
+# names(rafael)
+# 
+#unique(rafael$year)
+# 
+# unique(rafael$position)
+# 
+rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent) %>% filter(year != 2007)
+# 
+# # summary(rafael_up)
+ 
+ #dyn_mplads <- merge(dyn_ge_w,mplads, by = c("year", "constituency_no"))
+# 
+dyn_rafael <- merge(dyn, rafael_up, by = c("year", "constituency_no", "position"), allow.cartesian = TRUE)
+
+dyn_rafael_fam <- dyn_rafael %>% filter(dyn_cum ==1)
+
+#dyn_rafael_fam<- dyn_rafael_fam %>% mutate(level_log_ae= ifelse(level_12 %in% c("AE", "GE"), FALSE, TRUE))
+
+#dyn_mplads_fam %>% group_by(year, level_log) %>% summarise(n_distinct(constituency_no))
+
+
+dyn_rafael_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency_no)) %>% kable(caption = "Summary stat of families in 2012 & 2017 AE wrt linkage", col.names = c("Linkage", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+```{r}
+
+
+# raphael_12 <- fread("D:/cpr/up-dynasties/dyn_other_data/upvidhansabha2012-rafael.csv", stringsAsFactors = FALSE)
+# 
+# raphael_17 <- fread("D:/cpr/up-dynasties/dyn_other_data/upvidhansabha2017-rafael.csv", stringsAsFactors = FALSE)
+# 
+# 
+# summary(raphael_12)
+# rafael_up_17 <- rafael_up %>% filter(year == 2012)
+# 
+# 
+# 
+# dyn_ae_12_17 <- dyn_ae %>% filter(year %in% c(2012,2017))
+# 
+# 
+# 
+# 
+# dyn_ae_12_17 %>% filter (year == 2017 &incumbent == TRUE) %>% group_by(dyn_cum) %>% summarise(mean(margin_percentage))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+dyn_rafael_fam %>% filter(position==1 & partypercent <100&  partypercent >10) %>% group_by(constituency_no) %>% mutate(var = var(partypercent) ) %>% group_by(level_log_cum) %>% summarise(var_mean = mean(var)) %>% 
+  kable(caption = "Vote dispersion at booth level wrt Politicians identity", col.names = c("Politician's Identity", "Variance"), digit = 0) %>% kable_styling(bootstrap_options = "striped")
+```
+
+```{r}
+dyn_rafael_fam %>% filter(position==1 & partypercent <100&  partypercent >10) %>% group_by(constituency_no) %>% mutate(sd = sd(partypercent) ) %>% group_by(level_log_cum) %>% summarise(sd_mean = mean(sd)) %>% 
+  kable(caption = "Vote dispersion at booth level wrt Politicians identity", col.names = c("Politician's Identity", "SD"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+<!-- ```{r} -->
+<!-- ggplot(dyn_rafael %>% filter(position==1 & partypercent <100) , aes(dyn_cum_text, partypercent))+ -->
+<!--   geom_boxplot() -->
+<!-- ``` -->
+
+```{r}
+ggplot(dyn_rafael_fam %>% filter(position==1) , aes(partypercent, color =level_log_cum))+
+  geom_density(size = 1)+
+  xlim(10, 90)+
+  #facet_grid(~dyn_cum_text )+
+  theme_minimal()+
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  labs(title = "Distribution of booth level votes",  x = "Percentage of votes", y = "Density") +
+  theme(legend.position = "top",
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20), 
+        plot.subtitle = element_text(hjust = 0.5, size = 15,
+                                     margin = margin(t = 0, r = 0, b = 20, l = 0)),
+        text = element_text(color = "gray20",family = "serif"),
+        axis.text.x = element_text( 
+                                   hjust = .5, vjust = 0),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(vjust = 1, size = 15,
+                                  margin = margin(t = 20, r = 0, b = 0, l = 0)),  
+        axis.title.y = element_text(vjust = 1, size = 15),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+  ) 
 
 ```

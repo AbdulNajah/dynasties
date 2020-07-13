@@ -210,6 +210,8 @@ dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian =
 # 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
+#write.csv(dyn, "D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
 # write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 #
@@ -809,7 +811,7 @@ dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),
 
 
 dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>% arrange(-year) %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
+  distinct( family_id, .keep_all = T) 
 
 dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
 
@@ -820,6 +822,56 @@ dyn_indus_ae_ge_uniq %>%  group_by(dyn_tot_text) %>% summarise(mean(indus_count)
 #   ggplot(aes(indus_2, prop))+
 #   geom_bar(stat = "identity")+
 #   facet_grid(~dyn_tot)
+dyn_indus_ae_ge_uniq$indus_2 <- replace_na(dyn_indus_ae_ge_uniq$indus_2 ,0)
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq  %>% mutate(indus_rt = case_when(indus_2 == 0 ~ "0", ind_2 %in% c(1,3,7,2,4,5)~ "rent-thick",
+                                  TRUE~ "non-rent-thick"))
+
+
+dyn_indus_ae_ge_uniq   %>% filter(indus_rt != "0") %>% group_by(dyn_tot_text, indus_rt) %>% summarise(count = n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, indus_rt, prop) %>% kable(captioni = "industry ownership wrt rent extraction type", col.names = c("Politician's identity","rent-type", "Proportion"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+# 
+dyn_all <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+dyn_all$ind_2 <- replace_na(dyn_all$ind_2,0)
+
+dyn_all <- dyn_all %>% mutate(ind_rt = case_when(ind_2 == 0 ~ "0", ind_2 %in% c(1,5)~ "rent-thick",
+                                  TRUE~ "non-rent-thick"))
+
+dyn_all$dyn_tot_text <- ifelse(dyn_all$dyn_tot==1, "Family", "Non-family")
+
+dyn_all_uniq <- dyn_all %>% arrange(-year) %>%
+  distinct( family_id, .keep_all = T)
+
+dyn_ae_ge_uniq <-  dyn_all %>% filter(election_type %in% c("AE", "GE")) %>% arrange(-year) %>%
+  distinct( family_id, .keep_all = T)
+dyn_ae_ge_uniq  %>% filter(ind_2 != 0) %>% group_by(dyn_tot_text, ind_2) %>% summarise(count = n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, ind_2, prop) %>% 
+  ggplot(aes(dyn_tot_text, prop, fill = factor(ind_2),,label = round(prop,2)))+
+  geom_bar(stat= "identity", position ="stack")+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = " Industry ownership composition \n among non-families and families ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+
+
 ```
 
 
