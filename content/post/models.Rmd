@@ -188,7 +188,7 @@ link <- ifelse(dyn_ae_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
 
 
 
-fit.1 <- glm(dynast ~ caste_uc + link + industry+ minister_duration  , family = binomial(link = "probit"))
+fit.1 <- glm(dynast ~ caste_uc +  industry+ minister_duration  , family = binomial(link = "probit"))
 
 
 position <- ifelse(position ==1,1,0)
@@ -268,7 +268,7 @@ link <- ifelse(dyn_ge_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
 
 position <- ifelse(position ==1,1,0)
 
-fit.1 <- glm(dynast ~ caste_uc + link + industry+ minister_duration  , family = binomial(link = "probit"))
+fit.1 <- glm(dynast ~ caste_uc +  industry+ minister_duration  , family = binomial(link = "probit"))
 
 
 
