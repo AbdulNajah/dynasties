@@ -229,13 +229,13 @@ position <- dyn_ge_uniq$position
 
 vote_share <- dyn_ge_uniq$vote_share_percentage
 
-margin <- dyn_ge_uniq$margin_percentage
+#margin <- dyn_ge_uniq$margin_percentage
 
 incumbent <- dyn_ge_uniq$incumbent
 
 turncoat <- dyn_ge_uniq$turncoat
 
-turnout <- dyn_ge_uniq$turnout_percentage
+turnout1 <- dyn_ge_uniq$turnout_percentage
 
 caste_uc <- ifelse(dyn_ge_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
 
@@ -272,12 +272,12 @@ fit.1 <- glm(dynast ~ caste_uc +  industry+ minister_duration  , family = binomi
 
 
 
-fit.2 <- glm(winner ~ vote_share + dynast + caste_uc + incumbent + turnout +turncoat+ industry + link , family = binomial(link = "probit") )
+fit.2 <- glm(winner ~ vote_share + dynast + caste_uc + incumbent + turnout1 +turncoat+ industry + link , family = binomial(link = "probit") )
 # 
 # summary(fit.1)
 
 
-fit.3 <- lm(vote_share ~ dynast + caste_uc +incumbent + turnout + industry + link+ turncoat)
+fit.3 <- lm(vote_share ~ dynast + caste_uc +incumbent + turnout1 + industry + link+ turncoat)
 
 # summary(fit.2)
 
