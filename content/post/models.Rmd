@@ -145,25 +145,15 @@ dyn_ae_uniq <-dyn_ae_ge %>% filter(election_type == "AE"& family_id != "") %>% g
 dynast <-dyn_ae_uniq$dyn_tot
 
 
-caste <- dyn_ae_uniq$caste_groups
 
 industry <- dyn_ae_uniq$indus_count
 
-position <- dyn_ae_uniq$position
+
 
 caste_uc <- ifelse(dyn_ae_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
 
-winner <- ifelse(dyn_ae_uniq$position==1,1,0)
-
-vote_share <- dyn_ae_uniq$vote_share_percentage
-
-margin <- dyn_ae_uniq$margin_percentage
-
-incumbent <- dyn_ae_uniq$incumbent
 
 turncoat <- dyn_ae_uniq$turncoat
-
-turnout <- dyn_ae_uniq$turnout_percentage
 
 
 N_minister <- dyn_ae_uniq$n_sc_minster%>% replace_na(0)
@@ -183,107 +173,27 @@ decades <- case_when(decades == "00"~ "Never",
                      decades %in% c("11","10")~"Pre-90",
                      TRUE ~ "Post-90")
 
-link <- ifelse(dyn_ae_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+
+school <- dyn_ae_uniq$school
+
+college <- dyn_ae_uniq$college
+
+linkage <- ifelse(dyn_ae_uniq$level %in% c("AE", "GE"),0,1)
 
 
 
 
-fit.1 <- glm(dynast ~ caste_uc +  industry+ minister_duration  , family = binomial(link = "probit"))
+fit.1 <- glm(dynast ~ caste_uc+ minister_duration +  industry + school + college  , family = binomial(link = "probit"))
+
+#summary(fit.2)
 
 
-position <- ifelse(position ==1,1,0)
-
-fit.2 <- glm(winner ~ vote_share + dynast + caste_uc + incumbent + turnout + industry + minister_duration + link , family = binomial(link = "probit") )
-
-# summary(fit.1)
-# 
-# summary(fit.2)
-
-
-
-fit.3 <- lm(vote_share ~ dynast + caste_uc +incumbent + turnout + industry + minister_duration + decades + link )
+fit.2 <- glm(linkage ~ caste_uc+ minister_duration +  industry + school + college )
 
 # summary(model_vc)
 
-stargazer(fit.1, fit.2,fit.3,title="AE all - Regression Results",type = "html",omit.stat=c("LL","ser","f"),
-align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"), no.space=TRUE)
-
-
-```
-
-## GE All
-
-```{r ge  , results= "asis"}
-dyn_ge_uniq <-dyn_ae_ge %>% filter(election_type == "GE"& family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
-
-
-dynast <-dyn_ge_uniq$dyn_tot
-
-
-
-caste <- dyn_ge_uniq$caste_groups
-
-industry <- dyn_ge_uniq$indus_count
-
-position <- dyn_ge_uniq$position
-
-vote_share <- dyn_ge_uniq$vote_share_percentage
-
-margin <- dyn_ge_uniq$margin_percentage
-
-incumbent <- dyn_ge_uniq$incumbent
-
-turncoat <- dyn_ge_uniq$turncoat
-
-turnout <- dyn_ge_uniq$turnout_percentage
-
-caste_uc <- ifelse(dyn_ge_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
-
-winner <- ifelse(dyn_ge_uniq$position==1,1,0)
-
-# 
-# N_minister <- dyn_ge_uniq$n_sc_minster%>% replace_na(0)
-# 
- minister_duration <- dyn_ge_uniq$min_dur_yr %>% replace_na(0)
-# 
-# 
-# pre_90 <- ifelse(dyn_ge_uniq$pre_90_n >0,1,0) %>% replace_na(0)
-# 
-# post_90 <- ifelse(dyn_ge_uniq$post_90_n >0,1,0) %>% replace_na(0)
-# 
-# 
-# 
-# decades <- paste(pre_90, post_90, sep = "")
-# 
-# decades <- case_when(decades == "00"~ "Never",
-#                      decades %in% c("11","10")~"Pre-90",
-#                      TRUE ~ "Post-90")
-
-link <- ifelse(dyn_ge_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
-
-
-
-#fit.1 <- glm(dynast ~ caste + link + industry+ minister_duration  , family = binomial(link = "probit"))
-
-
-position <- ifelse(position ==1,1,0)
-
-fit.1 <- glm(dynast ~ caste_uc +  industry+ minister_duration  , family = binomial(link = "probit"))
-
-
-
-fit.2 <- glm(winner ~ vote_share + dynast + caste_uc + incumbent + turnout +turncoat+ industry + link , family = binomial(link = "probit") )
-# 
-# summary(fit.1)
-
-
-fit.3 <- lm(vote_share ~ dynast + caste_uc +incumbent + turnout + industry + link+ turncoat)
-
-# summary(fit.2)
-
-stargazer(fit.1, fit.2,fit.3,title=" GE all - Regression Results",type = "html",
-align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
-omit.stat=c("LL","ser","f"), no.space=TRUE)
+stargazer(fit.1,fit.2,title="AE all - Regression Results",type = "html",
+align=TRUE,dep.var.labels=c("Dynast", "Linkage"), no.space=TRUE)
 
 
 ```
@@ -360,134 +270,36 @@ dyn_ae_ge $total_assets <- as.numeric(dyn_ae_ge $total_assets)
 # dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
 ```
 
-## AE-GE combined
 
 
-```{r AE GE combined, results="asis"}
+## AE GE all
+```{r results = "asis"}
 
-dyn_ae_ge_09_19 <- dyn_ae_ge %>% filter(year > 2008)
+dyn_ae_ge_uniq <-dyn_ae_ge %>% filter(family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
 
 
-dynast <-dyn_ae_ge_09_19$dyn_cum
+dynast <-dyn_ae_ge_uniq$dyn_tot
 
 
-caste <- dyn_ae_ge_09_19$caste_groups
 
-caste_uc <- ifelse(dyn_ae_ge_09_19$caste_groups == "Upper Caste", TRUE,FALSE)
+industry <- dyn_ae_ge_uniq$indus_count
 
-winner <- ifelse(dyn_ae_ge_09_19$position==1,1,0)
 
-industry <- dyn_ae_ge_09_19$indus_count
 
-position <- dyn_ae_ge_09_19$position
+caste_uc <- ifelse(dyn_ae_ge_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
 
-vote_share <- dyn_ae_ge_09_19$vote_share_percentage
 
-margin <- dyn_ae_ge_09_19$margin_percentage
+turncoat <- dyn_ae_ge_uniq$turncoat
 
-incumbent <- dyn_ae_ge_09_19$incumbent
 
-turncoat <- dyn_ae_ge_09_19$turncoat
+N_minister <- dyn_ae_ge_uniq$n_sc_minster%>% replace_na(0)
 
-turnout <- dyn_ae_ge_09_19$turnout_percentage
+minister_duration <- dyn_ae_ge_uniq$min_dur_yr %>% replace_na(0)
 
 
-# N_minister <- dyn_ae_ge_09_19$n_sc_minster%>% replace_na(0)
-# 
-minister_duration <- dyn_ae_ge_09_19$min_dur_yr %>% replace_na(0)
-# 
-# 
-# pre_90 <- ifelse(dyn_ae_ge_09_19$pre_90_n >0,1,0) %>% replace_na(0)
-# 
-# post_90 <- ifelse(dyn_ae_ge_09_19$post_90_n >0,1,0) %>% replace_na(0)
-# 
-# 
-# 
-# decades <- paste(pre_90, post_90, sep = "")
-# 
-# decades <- case_when(decades == "00"~ "Never",
-#                      decades %in% c("11","10")~"Pre-90",
-#                      TRUE ~ "Post-90")
+pre_90 <- ifelse(dyn_ae_ge_uniq$pre_90_n >0,1,0) %>% replace_na(0)
 
-link <- ifelse(dyn_ae_ge_09_19$level %in% c("AE","GE"),0,1) %>% replace_na(0)
-
-
-movable_assets <- dyn_ae_ge_09_19$total_movable_assets_totals
-
-
-immovable_assets <- dyn_ae_ge_09_19$total_immovable_assets_totals
-
-total_assets <- dyn_ae_ge_09_19$total_assets
-
-
-
-serious_crime <- ifelse(dyn_ae_ge_09_19$serious_crime>0, TRUE, FALSE)
-
-non_serious_crime <- ifelse(dyn_ae_ge_09_19$non_serious_crime>0, TRUE, FALSE)
-
-
-fit.1 <- glm(dynast ~ caste_uc + winner + turnout + industry + incumbent + turncoat +  serious_crime + non_serious_crime + total_assets )
-
-
-
-
-fit.2 <- glm(winner ~ caste_uc + vote_share+ turnout + industry + incumbent + turncoat + link + serious_crime + non_serious_crime + dynast + total_assets, family = binomial(link = "probit"))
-
-#summary(fit.3)
-
-fit.3 <- lm(vote_share ~ caste_uc +  turnout + industry + incumbent + turncoat + link + serious_crime + non_serious_crime + dynast+total_assets)
-
-# summary(fit.2)
-
-
-stargazer(fit.1, fit.2,fit.3,title="AE- GE combined  - 2009:19 - Regression Results",type = "html",
-align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
-omit.stat=c("LL","ser","f"), no.space=TRUE)
-
-
-```
-
-
-
-## AE 2012 -17
-
-```{r ae 2012-2017, results= "asis"}
-
-dyn_ae_12_17 <- dyn_ae_ge %>% filter(year %in% c(2012,2017))
-
-
-dynast <-dyn_ae_12_17$dyn_cum
-
-
-caste <- dyn_ae_12_17$caste_groups
-
-caste_uc <- ifelse(dyn_ae_12_17$caste_groups == "Upper Caste", TRUE,FALSE)
-
-winner <- ifelse(dyn_ae_12_17$position==1,1,0)
-
-industry <- dyn_ae_12_17$indus_count
-
-position <- dyn_ae_12_17$position
-
-vote_share <- dyn_ae_12_17$vote_share_percentage
-
-margin <- dyn_ae_12_17$margin_percentage
-
-incumbent <- dyn_ae_12_17$incumbent
-
-turncoat <- dyn_ae_12_17$turncoat
-
-turnout <- dyn_ae_12_17$turnout_percentage
-
-
-N_minister <- dyn_ae_12_17$n_sc_minster%>% replace_na(0)
-
-minister_duration <- dyn_ae_12_17$min_dur_yr %>% replace_na(0)
-
-
-pre_90 <- ifelse(dyn_ae_12_17$pre_90_n >0,1,0) %>% replace_na(0)
-
-post_90 <- ifelse(dyn_ae_12_17$post_90_n >0,1,0) %>% replace_na(0)
+post_90 <- ifelse(dyn_ae_ge_uniq$post_90_n >0,1,0) %>% replace_na(0)
 
 
 
@@ -497,127 +309,210 @@ decades <- case_when(decades == "00"~ "Never",
                      decades %in% c("11","10")~"Pre-90",
                      TRUE ~ "Post-90")
 
-link <- ifelse(dyn_ae_12_17$level %in% c("AE","GE"),0,1) %>% replace_na(0)
 
+school <- dyn_ae_ge_uniq$school
 
-movable_assets <- dyn_ae_12_17$total_movable_assets_totals
+college <- dyn_ae_ge_uniq$college
 
-
-immovable_assets <- dyn_ae_12_17$total_immovable_assets_totals
-
-total_assets <- dyn_ae_12_17$total_assets
+linkage <- ifelse(dyn_ae_ge_uniq$level %in% c("AE", "GE"),0,1)
 
 
 
+fit.1 <- glm(dynast ~ caste_uc+   industry + school + college , family = binomial(link = "probit"))
 
-serious_crime <- ifelse(dyn_ae_12_17$serious_crime>0, TRUE, FALSE)
-                  
-non_serious_crime <- ifelse(dyn_ae_12_17$non_serious_crime>0, TRUE, FALSE)
+fit.2 <- glm(linkage ~ caste_uc+   industry + school + college , family = binomial(link = "probit"))
 
-position <- ifelse(dyn_ae_12_17$position==1,1,0)
+#summary(fit.1)
 
-fit.1 <- glm(dynast ~ caste_uc + winner + turnout + vote_share + industry + incumbent + turncoat + link + serious_crime + non_serious_crime + total_assets )
 
-fit.2 <- glm(winner ~ caste_uc + vote_share + turnout + industry + incumbent + turncoat + minister_duration + link + + total_assets+ serious_crime + non_serious_crime + dynast)
+# summary(model_vc)
 
-# summary(fit.1)
+stargazer(fit.1,fit.2,title="AE - GE all - Regression Results",type = "html",
+          align=TRUE,dep.var.labels=c("Dynast", "Linkage"), no.space=TRUE)
 
-fit.3 <- lm(vote_share ~ caste_uc +  turnout + industry + incumbent + turncoat + minister_duration + link + total_assets + serious_crime + non_serious_crime + dynast)
-# 
-# summary(fit.2)
 
-stargazer(fit.1, fit.2,fit.3,title="AE - 2012:17 - Regression Results",type = "html",
-align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
-omit.stat=c("LL","ser","f"), no.space=TRUE)
 
 ```
 
-## GE 2009:2019
 
-```{r ge 2009-14-19, results= "asis"}
+## AE 2012 -17
 
-dyn_ge_09_14_19 <- dyn_ae_ge %>% filter(year %in% c(2009,2014,2019))
-
-
-dynast <-dyn_ge_09_14_19$dyn_cum
+```{r ae 2012-2017, results= "asis"}
 
 
-caste <- dyn_ge_09_14_19$caste_groups
 
-caste_uc <- ifelse(dyn_ge_09_14_19$caste_groups == "Upper Caste", TRUE,FALSE)
+dyn_ae_12_17_uniq <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 
-winner <- ifelse(dyn_ge_09_14_19$position==1,1,0)
-
-industry <- dyn_ge_09_14_19$indus_count
-
-position <- dyn_ge_09_14_19$position
-
-vote_share <- dyn_ge_09_14_19$vote_share_percentage
-
-margin <- dyn_ge_09_14_19$margin_percentage
-
-incumbent <- dyn_ge_09_14_19$incumbent
-
-turncoat <- dyn_ge_09_14_19$turncoat
-
-turnout <- dyn_ge_09_14_19$turnout_percentage
+dynast <-dyn_ae_12_17_uniq$dyn_tot
 
 
-# N_minister <- dyn_ge_09_14_19$n_sc_minster%>% replace_na(0)
+caste_uc <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
+
+
+industry <- dyn_ae_12_17_uniq$indus_count
+
+
+turncoat <- dyn_ae_12_17_uniq$turncoat
+
+
+
+N_minister <- dyn_ae_12_17_uniq$n_sc_minster%>% replace_na(0)
+
+minister_duration <- dyn_ae_12_17_uniq$min_dur_yr %>% replace_na(0)
+
+
+pre_90 <- ifelse(dyn_ae_12_17_uniq$pre_90_n >0,1,0) %>% replace_na(0)
+
+post_90 <- ifelse(dyn_ae_12_17_uniq$post_90_n >0,1,0) %>% replace_na(0)
+
+
+
+decades <- paste(pre_90, post_90, sep = "")
+
+decades <- case_when(decades == "00"~ "Never",
+                     decades %in% c("11","10")~"Pre-90",
+                     TRUE ~ "Post-90")
+
+link <- ifelse(dyn_ae_12_17_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+
+
+movable_assets <- dyn_ae_12_17_uniq$total_movable_assets_totals
+
+
+immovable_assets <- dyn_ae_12_17_uniq$total_immovable_assets_totals
+
+total_assets <- dyn_ae_12_17_uniq$total_assets
+
+# ggplot(dyn_ae_12_17_uniq %>% filter(total_assets <30000000), aes(total_assets))+
+#   geom_density()+
+#    scale_x_continuous(label = label_number_si())
+
+
+dyn_ae_12_17_uniq$total_assets_cat <- cut(dyn_ae_12_17_uniq$total_assets, breaks = c(0,10000000,30000000,Inf), labels = c("Low", "Medium", "High"))
+
+
+assets <- dyn_ae_12_17_uniq$total_assets_cat
+# assets_low <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "low", 1,0)
 # 
-# minister_duration <- dyn_ge_09_14_19$min_dur_yr %>% replace_na(0)
+# assets_medium <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "Medium", 1,0)
 # 
+# assets_high <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "High", 1,0)
+
+
+serious_crime <- ifelse(dyn_ae_12_17_uniq$serious_crime>0, TRUE, FALSE)
+
+non_serious_crime <- ifelse(dyn_ae_12_17_uniq$non_serious_crime>0, TRUE, FALSE)
+
+school <- dyn_ae_12_17_uniq$school
+
+college <- dyn_ae_12_17_uniq$college
+
+position <- ifelse(dyn_ae_12_17_uniq$position==1,1,0)
+
+fit.1 <- glm(dynast ~ caste_uc + industry + turncoat + serious_crime  + assets + school + college)
+
+
 # 
-# pre_90 <- ifelse(dyn_ge_09_14_19$pre_90_n >0,1,0) %>% replace_na(0)
-# 
-# post_90 <- ifelse(dyn_ge_09_14_19$post_90_n >0,1,0) %>% replace_na(0)
-# 
-# 
-# 
-# decades <- paste(pre_90, post_90, sep = "")
-# 
-# decades <- case_when(decades == "00"~ "Never",
-#                      decades %in% c("11","10")~"Pre-90",
-#                      TRUE ~ "Post-90")
+#summary(fit.1)
 
-link <- ifelse(dyn_ge_09_14_19$level %in% c("AE","GE"),0,1) %>% replace_na(0)
-
-
-movable_assets <- dyn_ge_09_14_19$total_movable_assets_totals
-
-
-immovable_assets <- dyn_ge_09_14_19$total_immovable_assets_totals
-
-total_assets <- dyn_ge_09_14_19$total_assets
-
-
-
-serious_crime <- ifelse(dyn_ge_09_14_19$serious_crime>0, TRUE, FALSE)
-
-non_serious_crime <- ifelse(dyn_ge_09_14_19$non_serious_crime>0, TRUE, FALSE)
-
-fit.1 <- glm(dynast ~ caste_uc + winner + turnout + industry +vote_share + incumbent + turncoat + link + serious_crime + non_serious_crime + total_assets )
-
-
-
-fit.2 <- glm(winner ~ caste_uc + vote_share+ turnout + industry + incumbent + turncoat + link + serious_crime + non_serious_crime + dynast + total_assets, family = binomial(link = "probit"))
-
-#summary(fit.3)
-
-fit.3 <- lm(vote_share ~ caste_uc + turnout + industry + incumbent + turncoat + link + serious_crime + non_serious_crime + dynast+total_assets)
-
-# summary(fit.2)
-
-
-stargazer(fit.1, fit.2,fit.3,title="GE - 2009:19 - Regression Results",type = "html",
-align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
-omit.stat=c("LL","ser","f"), no.space=TRUE)
+stargazer(fit.1, title="AE - 2012:17 - Regression Results",type = "html",
+          align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
+           no.space=TRUE)
 
 ```
 
 
 
 
+
+
+
+
+## AE-GE (2009:19)
+
+
+```{r AE GE combined, results="asis"}
+
+
+
+dyn_ae_ge_09_19_uniq_uniq <- dyn_ae_ge %>% filter(year >2008) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
+
+dynast <-dyn_ae_ge_09_19_uniq_uniq$dyn_tot
+
+
+caste_uc <- ifelse(dyn_ae_ge_09_19_uniq_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
+
+
+industry <- dyn_ae_ge_09_19_uniq_uniq$indus_count
+
+
+turncoat <- dyn_ae_ge_09_19_uniq_uniq$turncoat
+
+
+
+N_minister <- dyn_ae_ge_09_19_uniq_uniq$n_sc_minster%>% replace_na(0)
+
+minister_duration <- dyn_ae_ge_09_19_uniq_uniq$min_dur_yr %>% replace_na(0)
+
+
+pre_90 <- ifelse(dyn_ae_ge_09_19_uniq_uniq$pre_90_n >0,1,0) %>% replace_na(0)
+
+post_90 <- ifelse(dyn_ae_ge_09_19_uniq_uniq$post_90_n >0,1,0) %>% replace_na(0)
+
+
+
+decades <- paste(pre_90, post_90, sep = "")
+
+decades <- case_when(decades == "00"~ "Never",
+                     decades %in% c("11","10")~"Pre-90",
+                     TRUE ~ "Post-90")
+
+link <- ifelse(dyn_ae_ge_09_19_uniq_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+
+
+
+
+total_assets <- dyn_ae_ge_09_19_uniq_uniq$total_assets
+# 
+#  ggplot(dyn_ae_ge_09_19_uniq_uniq, aes(total_assets))+
+#  geom_density()+
+#  scale_x_continuous(label = label_number_si())
+#  
+#  table(cut(dyn_ae_ge_09_19_uniq_uniq$total_assets, breaks = c(0,20000000,50000000,Inf)))
+
+
+dyn_ae_ge_09_19_uniq_uniq$total_assets_cat <- cut(dyn_ae_ge_09_19_uniq_uniq$total_assets, breaks = c(0,20000000,50000000,Inf), labels = c("Low", "Medium", "High"))
+
+
+assets <- dyn_ae_ge_09_19_uniq_uniq$total_assets_cat
+# assets_low <- ifelse(dyn_ae_ge_09_19_uniq_uniq$total_assets_cat== "low", 1,0)
+# 
+# assets_medium <- ifelse(dyn_ae_ge_09_19_uniq_uniq$total_assets_cat== "Medium", 1,0)
+# 
+# assets_high <- ifelse(dyn_ae_ge_09_19_uniq_uniq$total_assets_cat== "High", 1,0)
+
+
+serious_crime <- ifelse(dyn_ae_ge_09_19_uniq_uniq$serious_crime>0, TRUE, FALSE)
+
+non_serious_crime <- ifelse(dyn_ae_ge_09_19_uniq_uniq$non_serious_crime>0, TRUE, FALSE)
+
+school <- dyn_ae_ge_09_19_uniq_uniq$school
+
+college <- dyn_ae_ge_09_19_uniq_uniq$college
+
+position <- ifelse(dyn_ae_ge_09_19_uniq_uniq$position==1,1,0)
+
+fit.1 <- glm(dynast ~ caste_uc + industry + turncoat + serious_crime  + assets + school + college)
+
+
+# 
+#summary(fit.1)
+
+stargazer(fit.1,title="AE - GE combined - 2009:19 - Regression Results",type = "html",
+          align=TRUE,dep.var.labels=c("Dynast"), no.space=TRUE)
+
+
+```
 
 
 
