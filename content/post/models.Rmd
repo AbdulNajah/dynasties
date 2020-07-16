@@ -192,8 +192,90 @@ fit.2 <- glm(linkage ~ caste_uc+ minister_duration +  industry + school + colleg
 
 # summary(model_vc)
 
+<<<<<<< HEAD
 stargazer(fit.1,fit.2,title="AE all - Regression Results",type = "html",
 align=TRUE,dep.var.labels=c("Dynast", "Linkage"), no.space=TRUE)
+=======
+stargazer(fit.1, fit.2,fit.3,title="AE all - Regression Results",type = "html",omit.stat=c("LL","ser","f"),
+align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"), no.space=TRUE)
+
+
+```
+
+## GE All
+
+```{r ge  , results= "asis"}
+dyn_ge_uniq <-dyn_ae_ge %>% filter(election_type == "GE"& family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
+
+
+dynast <-dyn_ge_uniq$dyn_tot
+
+
+
+caste <- dyn_ge_uniq$caste_groups
+
+industry <- dyn_ge_uniq$indus_count
+
+position <- dyn_ge_uniq$position
+
+vote_share <- dyn_ge_uniq$vote_share_percentage
+
+#margin <- dyn_ge_uniq$margin_percentage
+
+incumbent <- dyn_ge_uniq$incumbent
+
+turncoat <- dyn_ge_uniq$turncoat
+
+turnout1 <- dyn_ge_uniq$turnout_percentage
+
+caste_uc <- ifelse(dyn_ge_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
+
+winner <- ifelse(dyn_ge_uniq$position==1,1,0)
+
+# 
+# N_minister <- dyn_ge_uniq$n_sc_minster%>% replace_na(0)
+# 
+ minister_duration <- dyn_ge_uniq$min_dur_yr %>% replace_na(0)
+# 
+# 
+# pre_90 <- ifelse(dyn_ge_uniq$pre_90_n >0,1,0) %>% replace_na(0)
+# 
+# post_90 <- ifelse(dyn_ge_uniq$post_90_n >0,1,0) %>% replace_na(0)
+# 
+# 
+# 
+# decades <- paste(pre_90, post_90, sep = "")
+# 
+# decades <- case_when(decades == "00"~ "Never",
+#                      decades %in% c("11","10")~"Pre-90",
+#                      TRUE ~ "Post-90")
+
+link <- ifelse(dyn_ge_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+
+
+
+#fit.1 <- glm(dynast ~ caste + link + industry+ minister_duration  , family = binomial(link = "probit"))
+
+
+position <- ifelse(position ==1,1,0)
+
+fit.1 <- glm(dynast ~ caste_uc +  industry+ minister_duration  , family = binomial(link = "probit"))
+
+
+
+fit.2 <- glm(winner ~ vote_share + dynast + caste_uc + incumbent + turnout1 +turncoat+ industry + link , family = binomial(link = "probit") )
+# 
+# summary(fit.1)
+
+
+fit.3 <- lm(vote_share ~ dynast + caste_uc +incumbent + turnout1 + industry + link+ turncoat)
+
+# summary(fit.2)
+
+stargazer(fit.1, fit.2,fit.3,title=" GE all - Regression Results",type = "html",
+align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
+omit.stat=c("LL","ser","f"), no.space=TRUE)
+>>>>>>> 933e433aabfc90da5917f4c89f7d043a2900f535
 
 
 ```
