@@ -1,0 +1,295 @@
+---
+title: "Taluqdars Analysis"
+author: ""
+date: "2020-07-20"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#revenue-1930">Revenue 1930</a></li>
+<li><a href="#revenue-books">Revenue Books</a></li>
+</ul>
+</div>
+
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-1">Table 1: </span>Caste Distribution
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Caste
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Rajputs
+</td>
+<td style="text-align:right;">
+174
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Muslims
+</td>
+<td style="text-align:right;">
+90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other upper caste
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Others
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 2: </span>Politics active status
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+status
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+261
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 3: </span>Caste summary
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+caste
+</th>
+<th style="text-align:right;">
+mean_1930
+</th>
+<th style="text-align:right;">
+mean_book
+</th>
+<th style="text-align:right;">
+median_1930
+</th>
+<th style="text-align:right;">
+median_book
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Muslims
+</td>
+<td style="text-align:right;">
+26677
+</td>
+<td style="text-align:right;">
+18425
+</td>
+<td style="text-align:right;">
+9310
+</td>
+<td style="text-align:right;">
+8670
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other upper caste
+</td>
+<td style="text-align:right;">
+36800
+</td>
+<td style="text-align:right;">
+40606
+</td>
+<td style="text-align:right;">
+8558
+</td>
+<td style="text-align:right;">
+9372
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Others
+</td>
+<td style="text-align:right;">
+39857
+</td>
+<td style="text-align:right;">
+29553
+</td>
+<td style="text-align:right;">
+12386
+</td>
+<td style="text-align:right;">
+12971
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rajputs
+</td>
+<td style="text-align:right;">
+44246
+</td>
+<td style="text-align:right;">
+30349
+</td>
+<td style="text-align:right;">
+21049
+</td>
+<td style="text-align:right;">
+16099
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-4">Table 4: </span>Active politics summary
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Active status
+</th>
+<th style="text-align:right;">
+mean_1930
+</th>
+<th style="text-align:right;">
+mean_book
+</th>
+<th style="text-align:right;">
+median_1930
+</th>
+<th style="text-align:right;">
+median_book
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+89394
+</td>
+<td style="text-align:right;">
+54075
+</td>
+<td style="text-align:right;">
+94808
+</td>
+<td style="text-align:right;">
+41900
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+82691
+</td>
+<td style="text-align:right;">
+62050
+</td>
+<td style="text-align:right;">
+37016
+</td>
+<td style="text-align:right;">
+28432
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+26903
+</td>
+<td style="text-align:right;">
+20668
+</td>
+<td style="text-align:right;">
+12561
+</td>
+<td style="text-align:right;">
+10861
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="revenue-1930" class="section level2">
+<h2>Revenue 1930</h2>
+<p><img src="/post/taluqdars_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/taluqdars_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="revenue-books" class="section level2">
+<h2>Revenue Books</h2>
+<p><img src="/post/taluqdars_analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post/taluqdars_analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>

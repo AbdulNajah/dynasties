@@ -1,0 +1,209 @@
+---
+title: "Taluqdars Analysis"
+author: ""
+date: "2020-07-20"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+`%!in%` = Negate(`%in%`)
+```
+
+
+
+```{r file config}
+
+
+taluqdars<- read.csv("D:/cpr/up-dynasties/dyn_other_data/taluqdars_July20.csv")
+
+taluqdars <- taluqdars %>% filter(caste_1!= "")
+
+#summary(taluqdars)
+
+taluqdars$revenue_1930 <- as.numeric(taluqdars$revenue_1930 )
+
+taluqdars$revenue_book <- as.numeric(taluqdars$revenue_book )
+```
+
+
+## Summary
+
+```{r}
+# caste_names <- tribble(
+#   ~caste_id, ~ caste_name,
+#   0 , "unspecified",
+#   1 , "Brahmin",
+#   2 , "Thakur/ Rajput",
+#   3 , "Baniya",
+#   4 , "Other upper caste",
+#   5  ,"Jat",
+#   6 , "Gujjar",
+#   7 , "Yadav",
+#   8 , "Kurmi" ,
+#   9 , "Lodh",
+#   10 , "Other OBC",
+#   11 , "Dalit",
+#   12 , "Muslim",
+#   13  , "Others",
+#   NA , "NA"
+# )
+# 
+# taluqdars <- taluqdars %>% rename(caste_id = caste_1)
+# 
+# taluqdars<- merge(taluqdars, caste_names, by = "caste_id", all.x =TRUE)
+
+taluqdars %>% group_by(caste_name) %>% summarise(count = n()) %>% arrange(-count) %>% kable(caption= "Caste Distribution", col.names = c("Caste", "Count")) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+```{r}
+taluqdars %>% group_by(active_politics) %>% summarise(count = n()) %>% kable(caption= "Politics active status", col.names = c("status", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+# table( taluqdars$caste_name,taluqdars$active_politics)
+# 
+# taluqdars %>% group_by(active_politics, caste_name) %>% summarise(count = n()) %>% kable(caption= "Politics active status wrt caste ", col.names = c(" active status", "caste", "Count")) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+
+```{r}
+taluqdars %>% group_by(caste_name) %>% summarise(mean(revenue_1930, na.rm = TRUE),mean(revenue_book, na.rm = TRUE), 
+                                                  median(revenue_1930, na.rm = TRUE),median(revenue_book, na.rm = TRUE)) %>% kable(caption = "Caste summary",col.names = c("caste", "mean_1930", "mean_book","median_1930", "median_book"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+```
+
+
+
+
+```{r}
+taluqdars %>% group_by(active_politics) %>% summarise(mean(revenue_1930, na.rm = TRUE),mean(revenue_book, na.rm = TRUE), 
+                                                  median(revenue_1930, na.rm = TRUE),median(revenue_book, na.rm = TRUE)) %>% kable(caption = "Active politics summary",col.names = c("Active status", "mean_1930", "mean_book","median_1930", "median_book"),digits = 0) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+## Revenue 1930
+
+
+```{r}
+ylim1 = boxplot.stats(taluqdars$revenue_1930)$stats[c(1, 5)]
+
+
+
+ggplot(subset(taluqdars,!is.na(revenue_1930)),aes(x = reorder(as.factor(caste_name),-revenue_1930,median), y = revenue_1930)) +
+  geom_boxplot(outlier.shape = NA)+
+  #scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  coord_cartesian(ylim = ylim1*1.5)+
+  theme_minimal()+
+  labs(title = " Revenue - 1930 wrt caste ",x = "Caste", y = "Revenue") +
+  
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20, 
+                                  margin= margin(0,0,20,0)), 
+        text = element_text(color = "gray20", family = "serif"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 15),
+        axis.title = element_text(vjust = -1, size = 16),        
+        axis.ticks = element_blank()
+  ) 
+```
+
+
+```{r}
+ylim1 = boxplot.stats(taluqdars$revenue_1930)$stats[c(1, 5)]
+
+
+
+ggplot(subset(taluqdars,!is.na(revenue_1930)),aes(x = reorder(as.factor(active_politics),-revenue_1930,median), y = revenue_1930)) +
+  geom_boxplot(outlier.shape = NA)+
+  #scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  coord_cartesian(ylim = ylim1*3)+
+  theme_minimal()+
+  labs(title = " Revenue - 1930 wrt active status ",x = "Active status", y = "Revenue") +
+  
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20, 
+                                  margin= margin(0,0,20,0)), 
+        text = element_text(color = "gray20", family = "serif"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 15),
+        axis.title = element_text(vjust = -1, size = 16),        
+        axis.ticks = element_blank()
+  ) 
+```
+
+
+## Revenue Books
+
+
+```{r}
+
+
+ylim1 = boxplot.stats(taluqdars$revenue_book)$stats[c(1, 5)]
+
+
+
+ggplot(subset(taluqdars,!is.na(revenue_book)),aes(x = reorder(as.factor(caste_name),-revenue_book, median), y = revenue_book)) +
+  geom_boxplot(outlier.shape = NA)+
+  #scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  coord_cartesian(ylim = ylim1*1)+
+  theme_minimal()+
+  labs(title = " Revenue - book wrt caste ",x = "Caste", y = "Revenue") +
+  
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20, 
+                                  margin= margin(0,0,20,0)), 
+        text = element_text(color = "gray20", family = "serif"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 15),
+        axis.title = element_text(vjust = -1, size = 16),        
+        axis.ticks = element_blank()
+  ) 
+```
+
+```{r}
+ylim1 = boxplot.stats(taluqdars$revenue_book)$stats[c(1, 5)]
+
+
+
+ggplot(subset(taluqdars,!is.na(revenue_book)),aes(x = reorder(as.factor(active_politics),-revenue_book,median, na.rm = TRUE), y = revenue_1930)) +
+  geom_boxplot(outlier.shape = NA)+
+  #scale_x_discrete(labels=(c("Non - Family", "Family")))+
+  coord_cartesian(ylim = ylim1*4)+
+  theme_minimal()+
+  labs(title = " Revenue - book wrt active status ",x = "Active status", y = "Revenue") +
+  
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(family = "serif",hjust = 0.5, size = 20, 
+                                  margin= margin(0,0,20,0)), 
+        text = element_text(color = "gray20", family = "serif"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 15),
+        axis.text = element_text(face = "italic", size = 15),
+        axis.title = element_text(vjust = -1, size = 16),        
+        axis.ticks = element_blank()
+  ) 
+```
+

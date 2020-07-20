@@ -51,6 +51,43 @@ dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
 ```
 
 
+```{r relative id correction}
+
+dyn <- dyn %>% rename(relative_id_1 = relative_id)
+
+
+
+dyn <- dyn %>% mutate(relative_id =ifelse(relative_id_1 %in% c(8,9,10,11,12,13,17),10,
+                                           ifelse(relative_id_1 %in% c(15),11,
+                                                  ifelse(relative_id_1==14,8,
+                                                        ifelse(relative_id_1==16,9,
+                                                               ifelse(relative_id_1==18,12, relative_id_1))))))
+relative_names <- tribble(
+  ~relative_id, ~ relative_name,
+  1 , "Patriarch",
+  2 , "Father",
+  3 , "Mother",
+  4 , "Son",
+  5  ,"Daughter",
+  6 , "Brother",
+  7 , "Sister",
+  8 , "Wife" ,
+  9 , "Husband",
+  10 , "Extended",
+  11 , "Outside",
+  12, "Ext outside"
+)
+
+dyn<- merge(dyn, relative_names, by = "relative_id", all.x =TRUE, allow.cartesian = TRUE)
+
+
+# table(dyn$relative_id) 
+# 
+# dyn %>% filter(is.na(relative_id)) %>% select(relative_id)
+
+```
+
+
 ```{r configuring files, echo = FALSE}
 #dim(dyn)
 #glimpse(dyn)
@@ -210,9 +247,16 @@ dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian =
 # 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
-#write.csv(dyn, "D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+dyn_ae_ge_uniq <- dyn_ae_ge %>% distinct(family_id, rel_id_uniq, .keep_all = TRUE)
 
-# write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+dyn_ae_ge_uniq_fam <- dyn_ae_ge_uniq %>% filter(dyn_tot ==1)
+total_count <-dyn_ae_ge_uniq_fam %>% filter(relative_id !="NA") %>% count() %>% as.integer()
+
+dyn_ae_ge_uniq_fam %>% filter(relative_id !="NA") %>% group_by( relative_id,relative_name) %>% summarise(count = n(), prop = count/total_count) %>%  kable(Caption = "Members distribution among families \n AE-GE",col.names = c("Relative ID","Relative", "Count", "Proportion"), digits =2) %>% kable_styling(bootstrap_options = "striped")
+
+write.csv(dyn, "D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 #
 ```

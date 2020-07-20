@@ -45,7 +45,7 @@ names(adr)[1] <- "position"
 
 names(adr) <- tolower(names(adr))
 
-adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
+adr <- adr %>% dplyr::select( -constituency_id,-state,-         assembly_no,-              
  month,-              poll_no,-           
  delimid,-            position,-          
 candidate,-          sex,-               

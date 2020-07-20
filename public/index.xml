@@ -6,10 +6,19 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Taluqdars Analysis</title>
+      <link>/post/taluqdars_analysis/</link>
+      <pubDate>Mon, 20 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/taluqdars_analysis/</guid>
+      <description>SummaryRevenue 1930Revenue BooksSummaryTable 1: Caste DistributionCasteCountRajputs174Muslims90Other upper caste31Others18Table 2: Politics active statusstatusCount1132393261Table 3: Caste summarycastemean_1930mean_bookmedian_1930median_bookMuslims266771842593108670Other upper caste368004060685589372Others39857295531238612971Rajputs44246303492104916099Table 4: Active politics summaryActive statusmean_1930mean_bookmedian_1930median_book189394540759480841900282691620503701628432326903206681256110861Revenue 1930Revenue Books</description>
+    </item>
     
     <item>
       <title>Models</title>
@@ -17,7 +26,7 @@
       <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/models/</guid>
-      <description>AE AllAE GE allAE 2012 -17AE-GE (2009:19)AE AllAE all - Regression ResultsDependent variable:DynastLinkageprobitnormal(1)(2)caste_uc0.</description>
+      <description>AE AllAE GE allAE 2012 -17GE 2009:19AE-GE (2009:19)AE AllRegression Results - AE AllDependent variable:DynastUpward LinkageDownward Linkage(1)(2)(3)caste_uc0.</description>
     </item>
     
     <item>
@@ -53,7 +62,7 @@
       <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/local-body-analysis/</guid>
-      <description>Members distribution among familiesLocal bodiesElection WonLinkageLandcasteEducationMembers distribution among familiesRelative IDCountProportion19840.442540.023620.034570.035170.</description>
+      <description>Members distribution among familiesLocal bodiesElection WonLinkageLandcasteEducationMembers distribution among familiesRelative IDRelativeCountProportion1Patriarch7540.402Father530.033Mother520.034Son530.</description>
     </item>
     
     <item>

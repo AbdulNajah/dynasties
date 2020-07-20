@@ -22,115 +22,117 @@ library(scales)
 library(gridExtra)
 library(stargazer)
 `%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
 ```
 
 
 
 ```{r file config}
-dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
-
-dyn$rel_id_uniq <- as.numeric(paste(dyn$relative_id, dyn$rel_id_rep, sep = ""))
-
-
-
-
-## fam_size
-
-dyn <- dyn %>% group_by (family_id) %>% mutate(fam_size_tot = n_distinct(rel_id_uniq))
-
-##term duration
-
-#
-
-dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP", "ZP", "BP")]  <- ""
-
-dyn$term_duration <- as.numeric(dyn$term_duration)
-
-
-##
-
-
-## family_expericne
-
-
-
-dyn <- dyn%>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>%
-  ungroup()
-
-year_group <- dyn %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn<- merge(dyn, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-
-dyn$fam_exp_tot <-   as.numeric(dyn$fam_exp_tot)
-
-dyn$fam_exp_cum <-   as.numeric(dyn$fam_exp_cum)
-
-###
-
-##fam expereince categoreis
-
-
-dyn<- dyn %>%  mutate(fam_exp_tot_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-dyn<- dyn %>%  mutate(fam_exp_cum_cat = cut(fam_exp_cum,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-
-
-##caste_category
-
-####
-
-caste_names <- tribble(
-  ~caste_id, ~ caste_name,
-  0 , "unspecified",
-  1 , "Brahmin",
-  2 , "Thakur/ Rajput",
-  3 , "Baniya",
-  4 , "Other upper caste",
-  5  ,"Jat",
-  6 , "Gujjar",
-  7 , "Yadav",
-  8 , "Kurmi" ,
-  9 , "Lodh",
-  10 , "Other OBC",
-  11 , "Dalit",
-  12 , "Muslim",
-  13  , "Others"
-)
-
-dyn<- merge(dyn, caste_names, by = "caste_id", all.x =TRUE)
-
-##caste distribution
-
-dyn$caste_groups <- NA
-
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(7,12,11),dyn$caste_name,dyn$caste_groups)
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(1,2,4,3),"Upper Caste",dyn$caste_groups)
-
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(5,6,9,8,10),"Non-Yadav OBC",dyn$caste_groups)
-
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(0,13),"Others",dyn$caste_groups)
-
-
-## dyn classification
-
-dyn$dyn_cum  <-ifelse(dyn$fam_size_cum>1,1,0)
-
-dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+# 
+# dyn$rel_id_uniq <- as.numeric(paste(dyn$relative_id, dyn$rel_id_rep, sep = ""))
+# 
+# 
+# 
+# 
+# ## fam_size
+# 
+# dyn <- dyn %>% group_by (family_id) %>% mutate(fam_size_tot = n_distinct(rel_id_uniq))
+# 
+# ##term duration
+# 
+# #
+# 
+# dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP", "ZP", "BP")]  <- ""
+# 
+# dyn$term_duration <- as.numeric(dyn$term_duration)
+# 
+# 
+# ##
+# 
+# 
+# ## family_expericne
+# 
+# 
+# 
+# dyn <- dyn%>%
+#   group_by(family_id) %>%
+#   mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>%
+#   ungroup()
+# 
+# year_group <- dyn %>%
+#   group_by(family_id, year) %>%
+#   summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>%
+#   mutate(cum_exp = cumsum(year_sum)) %>%
+#   mutate(fam_exp_cum = cum_exp - year_sum) %>%
+#   select(family_id,year,cum_exp, fam_exp_cum, year_sum)
+# 
+# year_group <- year_group %>%
+#   select(family_id, year, fam_exp_cum)
+# 
+# dyn<- merge(dyn, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
+# 
+# dyn$fam_exp_tot <-   as.numeric(dyn$fam_exp_tot)
+# 
+# dyn$fam_exp_cum <-   as.numeric(dyn$fam_exp_cum)
+# 
+# ###
+# 
+# ##fam expereince categoreis
+# 
+# 
+# dyn<- dyn %>%  mutate(fam_exp_tot_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
+# 
+# dyn<- dyn %>%  mutate(fam_exp_cum_cat = cut(fam_exp_cum,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
+# 
+# 
+# 
+# ##caste_category
+# 
+# ####
+# 
+# caste_names <- tribble(
+#   ~caste_id, ~ caste_name,
+#   0 , "unspecified",
+#   1 , "Brahmin",
+#   2 , "Thakur/ Rajput",
+#   3 , "Baniya",
+#   4 , "Other upper caste",
+#   5  ,"Jat",
+#   6 , "Gujjar",
+#   7 , "Yadav",
+#   8 , "Kurmi" ,
+#   9 , "Lodh",
+#   10 , "Other OBC",
+#   11 , "Dalit",
+#   12 , "Muslim",
+#   13  , "Others"
+# )
+# 
+# dyn<- merge(dyn, caste_names, by = "caste_id", all.x =TRUE)
+# 
+# ##caste distribution
+# 
+# dyn$caste_groups <- NA
+# 
+# 
+# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(7,12,11),dyn$caste_name,dyn$caste_groups)
+# 
+# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(1,2,4,3),"Upper Caste",dyn$caste_groups)
+# 
+# 
+# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(5,6,9,8,10),"Non-Yadav OBC",dyn$caste_groups)
+# 
+# 
+# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(0,13),"Others",dyn$caste_groups)
+# 
+# 
+# ## dyn classification
+# 
+# dyn$dyn_cum  <-ifelse(dyn$fam_size_cum>1,1,0)
+# 
+# dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
 
 
 dyn$dyn_tot_text <- ifelse(dyn$dyn_tot==1, "Family", "Non-family")
@@ -139,43 +141,65 @@ dyn$dyn_tot_text <- ifelse(dyn$dyn_tot==1, "Family", "Non-family")
 # ##caste_group dist
 ```
 
+
+
+```{r}
+# dyn_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+# 
+# dyn_post95_ae_lb_w <- dyn %>% filter(year >1994 & election_type!= "GE" & position ==1)
+# dyn_post95_ae_lb_w$district_name <- tolower(dyn_post95_ae_lb_w$district_name)
+# 
+# uniqueN(dyn_post95_ae_lb_w$district_name)
+# 
+# unique(dyn_post95_ae_lb_w$district_name)
+# 
+# table(dyn_post95_ae_lb_w$district_name)
+# 
+# 
+# 
+# table(dyn_post95_ae_lb_w$year)
+# 
+# table(cut(dyn_post95_ae_lb_w$year, breaks = c(1995,1999,2004,2009,2014,2018), include.lowest = TRUE))
+
+```
+
 ```{r}
 
-dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-                         election_type == "GE" ~ "GE",
-                        TRUE ~ "LB")) 
-
-dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-
-dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-
-
-dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
-
-dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
-
-dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
-
-dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-
-
-dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
-
-
-
-dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+#                          election_type == "GE" ~ "GE",
+#                         TRUE ~ "LB")) 
+# 
+# dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# 
+# 
+# dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# 
+# dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
+# 
+# dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
+# 
+# dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
+# 
+# dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# 
+# 
+# dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
+# 
+# 
+# 
+# dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
 ```
 
 ```{r file config1}
@@ -186,7 +210,7 @@ dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian =
 
 dyn_lb <- dyn %>% filter(election_level== "LB")
 
-dyn_lb_fam <- dyn_lb %>% filter(dyn_tot == 1)
+dyn_lb_fam_uniq <- dyn_lb %>% filter(dyn_tot == 1) %>% distinct(family_id, rel_id_uniq, .keep_all = TRUE)
 
 
 
@@ -196,12 +220,49 @@ dyn_lb_fam <- dyn_lb %>% filter(dyn_tot == 1)
 ## Members distribution among families
 
 ```{r}
+total_count <-dyn_lb_fam_uniq  %>% filter(relative_id !="NA") %>% count() %>% as.integer()
+
+dyn_lb_fam_uniq %>% filter(relative_id !="NA") %>% group_by(relative_id, relative_name) %>% summarise(count = n(), prop = count/total_count) %>% kable(Caption = "Members distribution among families \n LB",col.names = c("Relative ID","Relative", "Count", "Proportion"), digits =2) %>% kable_styling(bootstrap_options = "striped")
+```
 
 
+```{r}
+dyn_bp_res <-  read.csv("D:/cpr/up-dynasties/block_may.csv")
 
-total_count <-dyn_lb_fam %>% filter(relative_id !="NA") %>% count() %>% as.integer()
+dyn_bp_res  <- dyn_bp_res %>% select(lb_cen_21, year, reservation) %>% rename(constituency_no= lb_cen_21)
 
-dyn_lb_fam %>% filter(relative_id !="NA") %>% group_by(relative_id) %>% summarise(count = n(), prop = count/total_count) %>% kable(Caption = "Members distribution among families",col.names = c("Relative ID", "Count", "Proportion"), digits =2) %>% kable_styling(bootstrap_options = "striped")
+dyn_bp_fam_uniq  <- dyn_lb_fam_uniq %>% filter(election_type== "BP") 
+
+
+dyn_bp_res <- merge( dyn_bp_fam_uniq,dyn_bp_res, by = c("constituency_no", "year"))
+
+#table(dyn_bp_res$reservation)
+
+dyn_bp_res <- dyn_bp_res %>% mutate(reservation_cat1 = case_when(reservation==1 ~ "General",
+                                                   reservation ==2 ~ "General-women",
+                                                   reservation == 3 ~"OBC",
+                                                   reservation == 4~ "OBC-women",
+                                                   reservation == 5 ~ "SC",
+                                                   reservation == 6 ~ "SC-women"))
+
+dyn_bp_res <- dyn_bp_res %>% mutate(reservation_cat2 = case_when(reservation%in% c(1,2) ~ "General",
+                                                   
+                                                   reservation %in% c(3,4) ~"OBC",
+                                                   
+                                                   
+                                                   reservation %in% c(5,6) ~ "SC"))
+
+
+total_count <- dyn_bp_res  %>% filter(relative_id ==12) %>% count() %>% as.integer()
+# library(reshape2)
+
+
+dyn_bp_res  %>% group_by(family_id) %>% filter(all(c(1,12) %in% relative_id )) %>%ungroup() %>% filter( relative_id %in% c(1,12)) %>% select(family_id,relative_id, caste_groups, reservation_cat2) %>% group_by(family_id,relative_id) %>%  mutate(row = row_number()) %>% pivot_wider(names_from = relative_id, values_from =c(reservation_cat2, caste_groups)) %>% select(caste_groups_1, reservation_cat2_12) %>% group_by(caste_groups_1, reservation_cat2_12) %>% summarise(count = n()) %>% filter(caste_groups_1!= "NA") %>% group_by(reservation_cat2_12) %>% mutate(sum_count = sum(count), prop = count/total_count) %>% select(1:2, 5:5)%>% arrange(-prop) %>% kable(caption = "",col.names = c("Patriarch's caste", "Reservation", "Proportion"),digits = 2) %>% kable_styling(bootstrap_options = "striped")
+ 
+
+
+# group_by(relative_id,caste_groups) %>% 
+# %>% summarise(prop = total_count/n()) %>%arrange(-prop) %>%  kable(digits = 0)
 
 
 
@@ -416,7 +477,6 @@ ggplot(edu_tab , aes(x= reorder(as.factor(edu),-prop), prop , group = id )) +
 
   
 ```
-
 
 
 

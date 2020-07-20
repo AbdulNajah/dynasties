@@ -28,6 +28,8 @@ library(gridExtra)
 
 
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+
 mplads <- read.csv("D:/cpr/up-dynasties/dyn_other_data/mplads-dataset.csv", stringsAsFactors = FALSE)
 
 # glimpse(mplads)
@@ -296,7 +298,7 @@ dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_projects = m
         panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank()
   ) 
-
+ 
 
 
 
@@ -465,5 +467,4 @@ ggplot(dyn_mplads, aes(costnew, color = dyn_cum_text))+
 dyn_mplads %>% group_by(dyn_cum_text,cost_cat) %>% summarise(count = n()) %>% group_by(dyn_cum_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% kable(caption = "Project cost categories wrt politician's identity", col.names = c("Politicians Identity", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
 
 ```
-
 

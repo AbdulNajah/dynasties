@@ -32,9 +32,15 @@ library(stargazer)
 
 dyn_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
 
+dyn_all <- dyn_all %>% group_by(family_id) %>%  mutate(n_el_c_ae = length(year[position==1 & election_type== "AE" & fam_size_cum <2]))
+
+dyn_all <- dyn_all %>% group_by(family_id) %>%  mutate(n_el_c_all =  length(year[position==1 & fam_size_cum <2]))
+
 dyn_all_uniq <- dyn_all %>% filter(family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
 
 #dyn_all_uniq %>% filter(str_detect( patriarch_name,"Mulayam Singh"))
+
+# dyn_ae_ge %>% filter(n_el_c_all==34) %>% dplyr::select(patriarch_name)
 
 
 
@@ -44,6 +50,8 @@ dyn_all_uniq <- dyn_all %>% filter(family_id != "") %>% group_by(family_id) %>% 
 
 ```{r}
 
+ dyn_ae_ge <- dyn_all %>% filter(election_type %in% c("AE", "GE"))
+
 ## Industries
 
 dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
@@ -51,17 +59,43 @@ dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
 dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
 
 
-dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
+# dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
 
 names(dyn_indus)[1] <- "election_type"
 
-dyn_ae_ge <- dyn_all %>% filter(election_type %in% c("AE", "GE"))
 
-dyn_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = c("election_type", "year", "pid"))
+# 
+ dyn_indus <- dyn_indus %>% mutate(indus_2_c = ifelse(indus_2 >= 0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4 > 0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c) %>% dplyr::select(-c(indus_2_c, indus_3_c, indus_4_c))
+# 
 
-dyn_ae_ge <- dyn_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c) %>% select(-c(indus_2_c, indus_3_c, indus_4_c))
+#dyn_indus$indus_2 <- replace_na(dyn_indus$indus_2 ,0)
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt_2 = case_when(indus_2 %in% c(NA, "") ~ 0, indus_2 %in% c(1,3,7,2,4,5)~ 1,
+                                  TRUE~ 2))
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt_3 = case_when(indus_3 %in% c(NA, "",0) ~ 0, indus_3 %in% c(1,3,7,2,4,5)~ 1,
+                                  TRUE~ 2))
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt_4 = case_when(indus_4 %in% c(NA, "",0) ~ 0, indus_4 %in% c(1,3,7,2,4,5)~ 1,
+                                  TRUE~ 2))
+
+dyn_indus$indus_rt_glue <- paste(dyn_indus$indus_rt_2, dyn_indus$indus_rt_3, dyn_indus$indus_rt_4, sep = "")
 
 
+dyn_indus <- dyn_indus %>% mutate(indus_rt = case_when(indus_rt_glue %in% c("100","120","122","201", "210", "212", "221") ~.3,
+                                                               indus_rt_glue %in% c("110","112","121", "211")~.6,
+                                                               indus_rt_glue == "111" ~1,
+                                                               TRUE ~ 0))
+
+dyn_indus <- dyn_indus %>% mutate(indus_nrt = case_when(indus_rt_glue %in% c("020","102","112","120","121","200", "210", "211", "221") ~.3,
+                                                               indus_rt_glue %in% c("122", "202","220")~.6,
+                                                               indus_rt_glue == "222" ~1,
+                                                               TRUE ~ 0))
+
+dyn_indus <- dyn_indus %>% dplyr::select(election_type, year, pid, indus_rt, indus_nrt,indus_count)
+
+# 
+dyn_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = c("election_type", "year", "pid"), all.x = TRUE)
 ## cabinet
 
 
@@ -83,6 +117,8 @@ cabinet$rel_id_unique <- as.numeric(cabinet$rel_id_unique)
 
 cabinet <- cabinet %>% filter(rel_id_unique >0 )
 
+#cabinet %>% filter(is.na())
+
 
 cabinet <- cabinet %>% mutate(pre_90 = case_when(dplyr::between(year, 1977,1990)~ 1,
                              TRUE ~0), post_90 =case_when(dplyr::between(year, 1990,2017)~ 1,
@@ -103,38 +139,31 @@ dyn_cabinet$min_dur_yr <- round(dyn_cabinet$minister_dur/12,2)
 dyn_ae_ge <- merge(dyn_ae_ge,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE )
 
 
-
-```
-
-```{r ae-ge}
-
-dyn_ae_ge_uniq <-dyn_ae_ge %>% filter( family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
-
-#prop.table(table(dyn_ae_ge_uniq$year)) %>% kable(digits = 2)
-
-dynast <-dyn_ae_ge_uniq$dyn_tot
+## Involvemnt
 
 
-caste <- dyn_ae_ge_uniq$caste_groups
 
-industries <- dyn_ae_ge_uniq$indus_count
 
-position <- dyn_ae_ge_uniq$position
+inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv")
 
-vote_share <- dyn_ae_ge_uniq$vote_share_percentage
+inv <- inv  %>% dplyr::select(family_id,association_inv,org_inv, poitical_inv )
 
-margin <- dyn_ae_ge_uniq$margin_percentage
+dyn_ae_ge <- merge(dyn_ae_ge,inv, by ="family_id", allow.cartesian = TRUE, all.x =TRUE )
 
-incumbent <- dyn_ae_ge_uniq$incumbent
 
-turncoat <- dyn_ae_ge_uniq$turncoat
 
-turnout <- dyn_ae_ge_uniq$turnout_percentage
+
+
 
 
 
 
 ```
+
+
+
+
+
 
 ## AE All 
 
@@ -142,15 +171,28 @@ turnout <- dyn_ae_ge_uniq$turnout_percentage
 dyn_ae_uniq <-dyn_ae_ge %>% filter(election_type == "AE"& family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
 
 
+#dyn_ae_ge <- dyn_ae_ge %>% mutate(fam_size_new)
+
 dynast <-dyn_ae_uniq$dyn_tot
 
 
 
-industry <- dyn_ae_uniq$indus_count
+industry <- dyn_ae_uniq$indus_count %>% replace_na(0)
+
+industry_rent_thick <- dyn_ae_uniq$indus_rt %>% replace_na(0)
+
+industry_non_rent_thick <- dyn_ae_uniq$indus_nrt %>% replace_na(0)
+
+caste_uc <- ifelse(dyn_ae_uniq$caste_groups == "Upper Caste", 1,0)
 
 
+caste_yadav <- ifelse(dyn_ae_uniq$caste_groups == "Yadav", 1,0)
 
-caste_uc <- ifelse(dyn_ae_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
+caste_muslim <- ifelse(dyn_ae_uniq$caste_groups == "Muslim", 1,0)
+
+caste_dalit <- ifelse(dyn_ae_uniq$caste_groups == "Dalit", 1,0)
+
+caste_non_yadav_obc <- ifelse(dyn_ae_uniq$caste_groups == "Non-Yadav OBC", 1,0)
 
 
 turncoat <- dyn_ae_uniq$turncoat
@@ -160,44 +202,194 @@ N_minister <- dyn_ae_uniq$n_sc_minster%>% replace_na(0)
 
 minister_duration <- dyn_ae_uniq$min_dur_yr %>% replace_na(0)
 
+#minister_duration <-  cut(minister_duration, breaks = c(0,00.1,3,5,Inf),labels = c("ANever", "Low","Medium", "High"),include.lowest = TRUE)
 
-pre_90 <- ifelse(dyn_ae_uniq$pre_90_n >0,1,0) %>% replace_na(0)
-
-post_90 <- ifelse(dyn_ae_uniq$post_90_n >0,1,0) %>% replace_na(0)
-
+minister <-ifelse(dyn_ae_uniq$min_dur_yr>0,1,0)%>% replace_na(0) 
 
 
-decades <- paste(pre_90, post_90, sep = "")
-
-decades <- case_when(decades == "00"~ "Never",
-                     decades %in% c("11","10")~"Pre-90",
-                     TRUE ~ "Post-90")
+post_90 <- ifelse(dyn_ae_uniq$year >1990,1,0)
 
 
-school <- dyn_ae_uniq$school
 
-college <- dyn_ae_uniq$college
+#prop.table(table(dyn_ae_uniq$level)) %>% kable(digits = 2)
+
+#table(dyn_ae_uniq$dyn_tot)
+
+#prop.table(table(dyn_ae_uniq$indus_count)) %>% kable(caption = "Industry",digits = 2)
+
+
+
+
+#prop.table(table(school_college)) %>% kable(caption = "School-college",digits = 2)
+
+# dyn_ae_uniq$dyn_tot_text <- ifelse(dyn_ae_uniq$dyn_tot==1 , "Family","Non - family")
+# 
+# dyn_ae_uniq %>% group_by( fam_size_tot) %>% summarise( n_entities = n_distinct(family_id),elections_w_2 = sum(n_el_c_ae))  %>% kable(caption = "Elections distribution", col.names = c( "Family_Size", "Number of enetities", "Total number of elections"))
+
+n_elections_w<- as.numeric(dyn_ae_uniq$n_el_c_ae)
+
+#elections_w_2<-  ifelse(elections_w_2>1,1,0)
+
+
+school <- dyn_ae_uniq$school%>% replace_na(0)
+
+college <- dyn_ae_uniq$college%>% replace_na(0)
+
+school_college <- paste(school, college, sep = "")
+
+school_college <- case_when(school_college == "00"~ 0,
+                            TRUE ~ 1)
+
+land <- as.numeric(dyn_ae_uniq$land) %>% replace_na(0)
+
+association <- ifelse(dyn_ae_uniq$association_inv >0,1,0) %>% replace_na(0)
+
+organisation <- ifelse(dyn_ae_uniq$org_inv > 0,1,0) %>% replace_na(0)
+
+# assoc_org <- paste(association, organisation, sep = "")
+# 
+# association <- ifelse(assoc_org== "00",0,1)
+
+politics <- ifelse(dyn_ae_uniq$poitical_inv>0,1,0) %>% replace_na(0) 
+  
+  
 
 linkage <- ifelse(dyn_ae_uniq$level %in% c("AE", "GE"),0,1)
 
+linkage_up <- ifelse(dyn_ae_uniq$level %in% c("GE-AE", "GE-AE-LB"),1,0)
 
+linkage_down <- ifelse(dyn_ae_uniq$level %in% c("AE-LB", "GE-AE-LB"),1,0)
 
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 +n_elections_w+ association +organisation+ politics , family = binomial(link = "probit"))
 
-fit.1 <- glm(dynast ~ caste_uc+ minister_duration +  industry + school + college  , family = binomial(link = "probit"))
+#summary(fit.3)
 
-#summary(fit.2)
+#dyn_ae_uniq %>% filter(is.na(college))
 
+#table(dyn_ae_uniq$minister_dur)
 
-fit.2 <- glm(linkage ~ caste_uc+ minister_duration +  industry + school + college )
-
-# summary(model_vc)
-
-stargazer(fit.1,fit.2,title="AE all - Regression Results",type = "html",
-align=TRUE,dep.var.labels=c("Dynast", "Linkage"), no.space=TRUE)
+#library(glmnet)
+fit.2 <- glm(linkage_up ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 +n_elections_w+ association +organisation+ politics , family = binomial(link = "probit"))
+# 
+ fit.3 <- glm(linkage_down ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 +n_elections_w + association +organisation+ politics , family = binomial(link = "probit"))
+ 
+ stargazer(fit.1, fit.2, fit.3,title="Regression Results - AE All ",type = "html",
+align=TRUE, dep.var.labels=c("Dynast","Upward Linkage ", "Downward Linkage"), no.space=TRUE)
+# 
+##summary(fit.1)
+# 
+# stargazer(fit.1,fit.2,title="AE all - Regression Results",type = "html",
+# align=TRUE,dep.var.labels=c("Dynast", "Linkage"), no.space=TRUE)
 
 
 ```
 
+
+
+
+
+## AE GE all
+```{r results = "asis"}
+
+dyn_ae_ge_uniq <-dyn_ae_ge %>% filter(family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
+
+
+#dyn_ae_ge <- dyn_ae_ge %>% mutate(fam_size_new)
+
+dynast <-dyn_ae_ge_uniq$dyn_tot
+
+
+
+industry <- dyn_ae_ge_uniq$indus_count %>% replace_na(0)
+
+industry_rent_thick <- dyn_ae_ge_uniq$indus_rt %>% replace_na(0)
+
+industry_non_rent_thick <- dyn_ae_ge_uniq$indus_nrt %>% replace_na(0)
+
+caste_uc <- ifelse(dyn_ae_ge_uniq$caste_groups == "Upper Caste", 1,0)
+
+
+caste_yadav <- ifelse(dyn_ae_ge_uniq$caste_groups == "Yadav", 1,0)
+
+caste_muslim <- ifelse(dyn_ae_ge_uniq$caste_groups == "Muslim", 1,0)
+
+caste_dalit <- ifelse(dyn_ae_ge_uniq$caste_groups == "Dalit", 1,0)
+
+caste_non_yadav_obc <- ifelse(dyn_ae_ge_uniq$caste_groups == "Non-Yadav OBC", 1,0)
+
+
+turncoat <- dyn_ae_ge_uniq$turncoat
+
+
+N_minister <- dyn_ae_ge_uniq$n_sc_minster%>% replace_na(0)
+
+minister_duration <- dyn_ae_ge_uniq$min_dur_yr %>% replace_na(0)
+
+#minister_duration <-  cut(minister_duration, breaks = c(0,00.1,3,5,Inf),labels = c("ANever", "Low","Medium", "High"),include.lowest = TRUE)
+
+minister <-ifelse(dyn_ae_ge_uniq$min_dur_yr>0,1,0)%>% replace_na(0) 
+
+
+post_90 <- ifelse(dyn_ae_ge_uniq$year >1990,1,0)
+
+
+
+#prop.table(table(dyn_ae_ge_uniq$level)) %>% kable(digits = 2)
+
+#table(dyn_ae_ge_uniq$dyn_tot)
+
+#prop.table(table(dyn_ae_ge_uniq$indus_count)) %>% kable(caption = "Industry",digits = 2)
+
+
+
+
+#prop.table(table(school_college)) %>% kable(caption = "School-college",digits = 2)
+
+# dyn_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_ae_ge_uniq$dyn_tot==1 , "Family","Non - family")
+# 
+# dyn_ae_ge_uniq %>% group_by( fam_size_tot) %>% summarise( n_entities = n_distinct(family_id),elections_w_2 = sum(n_el_c_ae))  %>% kable(caption = "Elections distribution", col.names = c( "Family_Size", "Number of enetities", "Total number of elections"))
+
+#n_elections_w <- cut(dyn_ae_ge_uniq$n_el_c_all, breaks = c(0,1,2,5,Inf), include.lowest = TRUE, right = FALSE)
+
+n_elections_w<- as.numeric(dyn_ae_ge_uniq$n_el_c_ae)
+
+school <- dyn_ae_ge_uniq$school%>% replace_na(0)
+
+college <- dyn_ae_ge_uniq$college%>% replace_na(0)
+
+school_college <- paste(school, college, sep = "")
+
+school_college <- case_when(school_college == "00"~ 0,
+                            TRUE ~ 1)
+
+land <- as.numeric(dyn_ae_ge_uniq$land) %>% replace_na(0)
+
+
+
+linkage <- ifelse(dyn_ae_ge_uniq$level %in% c("AE", "GE"),0,1)
+#library(arm)
+
+
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 + n_elections_w  , family = binomial(link = "probit"))
+
+
+#summary(fit.2)
+
+#dyn_ae_ge_uniq %>% filter(is.na(college))
+
+#table(dyn_ae_ge_uniq$minister_dur)
+
+#library(glmnet)
+fit.2 <- glm(linkage~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 + n_elections_w , family="binomial")
+
+ stargazer(fit.1, fit.2,title="Regression Results - GE All ",type = "html",
+align=TRUE, dep.var.labels=c("Dynast","Linkage"), no.space=TRUE)
+# 
+
+
+
+
+```
 
 
 
@@ -209,44 +401,29 @@ names(adr)[1] <- "position"
 
 names(adr) <- tolower(names(adr))
 
-adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
- month,-              poll_no,-           
- delimid,-            position,-          
-candidate,-          sex,-               
-party,-              votes,-             
- candidate_type,-     valid_votes,-       
- electors,-           constituency_name,- 
- constituency_type,-  sub_region,-        
- n_cand,-             turnout_percentage,-
- vote_share_percentage,-     deposit_lost,-      
-margin,-             margin_percentage,- 
-
-enop,-              
- pid,-                max_poll_no,-       
- last_poll,-          contested,-         
- last_party,-         last_constituency_name,-                     
-same_constituency,-  same_party,-        
- no_terms,-           turncoat,-          
-incumbent,-          recontest   )
+adr <- adr %>% dplyr::select( -c(constituency_id,state,         assembly_no,              
+  month,              poll_no,           
+  delimid,            position,          
+  candidate,          sex,               
+  party,              votes,             
+  candidate_type,     valid_votes,       
+  electors,           constituency_name, 
+  constituency_type,  sub_region,        
+  n_cand,             turnout_percentage,
+  vote_share_percentage,     deposit_lost,      
+  margin,             margin_percentage, 
+  
+  enop,              
+  pid,                max_poll_no,       
+  last_poll,          contested,         
+  last_party,         last_constituency_name,                     
+  same_constituency,  same_party,        
+  no_terms,           turncoat,          
+  incumbent,          recontest )  )
 
 adr <- adr %>% filter(position_tcpd %in% c(1,2))
 
 adr <- adr %>% rename( position = position_tcpd)
-
-#uniqueN(adr$position)
-
-
-
-# dim(adr)
-# 
-# adr %>% glimpse()
-# 
-# unique(adr$year)
-# 
-# summary(adr)
-# names(adr)
-
-
 
 
 dyn_ae_ge <- merge(dyn_ae_ge,adr, by = c("year", "constituency_no", "position"))
@@ -271,159 +448,226 @@ dyn_ae_ge $total_assets <- as.numeric(dyn_ae_ge $total_assets)
 ```
 
 
-
-## AE GE all
-```{r results = "asis"}
-
-dyn_ae_ge_uniq <-dyn_ae_ge %>% filter(family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)
-
-
-dynast <-dyn_ae_ge_uniq$dyn_tot
-
-
-
-industry <- dyn_ae_ge_uniq$indus_count
-
-
-
-caste_uc <- ifelse(dyn_ae_ge_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
-
-
-turncoat <- dyn_ae_ge_uniq$turncoat
-
-
-N_minister <- dyn_ae_ge_uniq$n_sc_minster%>% replace_na(0)
-
-minister_duration <- dyn_ae_ge_uniq$min_dur_yr %>% replace_na(0)
-
-
-pre_90 <- ifelse(dyn_ae_ge_uniq$pre_90_n >0,1,0) %>% replace_na(0)
-
-post_90 <- ifelse(dyn_ae_ge_uniq$post_90_n >0,1,0) %>% replace_na(0)
-
-
-
-decades <- paste(pre_90, post_90, sep = "")
-
-decades <- case_when(decades == "00"~ "Never",
-                     decades %in% c("11","10")~"Pre-90",
-                     TRUE ~ "Post-90")
-
-
-school <- dyn_ae_ge_uniq$school
-
-college <- dyn_ae_ge_uniq$college
-
-linkage <- ifelse(dyn_ae_ge_uniq$level %in% c("AE", "GE"),0,1)
-
-
-
-fit.1 <- glm(dynast ~ caste_uc+   industry + school + college , family = binomial(link = "probit"))
-
-fit.2 <- glm(linkage ~ caste_uc+   industry + school + college , family = binomial(link = "probit"))
-
-#summary(fit.1)
-
-
-# summary(model_vc)
-
-stargazer(fit.1,fit.2,title="AE - GE all - Regression Results",type = "html",
-          align=TRUE,dep.var.labels=c("Dynast", "Linkage"), no.space=TRUE)
-
-
-
-```
-
-
 ## AE 2012 -17
 
-```{r ae 2012-2017, results= "asis"}
+```{r ae 2012-2017, results = "asis"}
 
 
 
 dyn_ae_12_17_uniq <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 
+
 dynast <-dyn_ae_12_17_uniq$dyn_tot
 
 
-caste_uc <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
+vote_share <- dyn_ae_12_17_uniq$vote_share_percentage
 
 
-industry <- dyn_ae_12_17_uniq$indus_count
+industry <- dyn_ae_12_17_uniq$indus_count %>% replace_na(0)
+
+industry_rent_thick <- dyn_ae_12_17_uniq$indus_rt %>% replace_na(0)
+
+industry_non_rent_thick <- dyn_ae_12_17_uniq$indus_nrt %>% replace_na(0)
+
+caste_uc <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Upper Caste", 1,0)
+
+
+caste_yadav <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Yadav", 1,0)
+
+caste_muslim <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Muslim", 1,0)
+
+caste_dalit <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Dalit", 1,0)
+
+caste_non_yadav_obc <- ifelse(dyn_ae_12_17_uniq$caste_groups == "Non-Yadav OBC", 1,0)
 
 
 turncoat <- dyn_ae_12_17_uniq$turncoat
-
 
 
 N_minister <- dyn_ae_12_17_uniq$n_sc_minster%>% replace_na(0)
 
 minister_duration <- dyn_ae_12_17_uniq$min_dur_yr %>% replace_na(0)
 
+#minister_duration <-  cut(minister_duration, breaks = c(0,00.1,3,5,Inf),labels = c("ANever", "Low","Medium", "High"),include.lowest = TRUE)
 
-pre_90 <- ifelse(dyn_ae_12_17_uniq$pre_90_n >0,1,0) %>% replace_na(0)
-
-post_90 <- ifelse(dyn_ae_12_17_uniq$post_90_n >0,1,0) %>% replace_na(0)
-
+minister <-ifelse(dyn_ae_12_17_uniq$min_dur_yr>0,1,0)%>% replace_na(0) 
 
 
-decades <- paste(pre_90, post_90, sep = "")
-
-decades <- case_when(decades == "00"~ "Never",
-                     decades %in% c("11","10")~"Pre-90",
-                     TRUE ~ "Post-90")
-
-link <- ifelse(dyn_ae_12_17_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+n_elections_w <- dyn_ae_12_17_uniq$n_el_c_ae
 
 
-movable_assets <- dyn_ae_12_17_uniq$total_movable_assets_totals
+school <- dyn_ae_12_17_uniq$school%>% replace_na(0)
 
+college <- dyn_ae_12_17_uniq$college%>% replace_na(0)
 
-immovable_assets <- dyn_ae_12_17_uniq$total_immovable_assets_totals
+school_college <- paste(school, college, sep = "")
+
+school_college <- case_when(school_college == "00"~ 0,
+                            TRUE ~ 1)
+
+land <- as.numeric(dyn_ae_12_17_uniq$land) %>% replace_na(0)
 
 total_assets <- dyn_ae_12_17_uniq$total_assets
 
-# ggplot(dyn_ae_12_17_uniq %>% filter(total_assets <30000000), aes(total_assets))+
-#   geom_density()+
-#    scale_x_continuous(label = label_number_si())
-
-
-dyn_ae_12_17_uniq$total_assets_cat <- cut(dyn_ae_12_17_uniq$total_assets, breaks = c(0,10000000,30000000,Inf), labels = c("Low", "Medium", "High"))
-
-
-assets <- dyn_ae_12_17_uniq$total_assets_cat
-# assets_low <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "low", 1,0)
-# 
-# assets_medium <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "Medium", 1,0)
-# 
-# assets_high <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "High", 1,0)
-
+assets_above_median <- ifelse(dyn_ae_12_17_uniq$total_assets>median(dyn_ae_12_17_uniq$total_assets),1,0)
 
 serious_crime <- ifelse(dyn_ae_12_17_uniq$serious_crime>0, TRUE, FALSE)
 
-non_serious_crime <- ifelse(dyn_ae_12_17_uniq$non_serious_crime>0, TRUE, FALSE)
-
-school <- dyn_ae_12_17_uniq$school
-
-college <- dyn_ae_12_17_uniq$college
-
-position <- ifelse(dyn_ae_12_17_uniq$position==1,1,0)
-
-fit.1 <- glm(dynast ~ caste_uc + industry + turncoat + serious_crime  + assets + school + college)
+winner <- ifelse(dyn_ae_12_17_uniq$position==1, 1,0)
 
 
+
+linkage <- ifelse(dyn_ae_12_17_uniq$level %in% c("AE", "GE"),0,1)
+library(arm)
+
+
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w+ log(total_assets)  + serious_crime + turncoat, family = binomial(link = "probit"))
+
+
+#summary(fit.2)
+
+fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets) + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
+
+fit.3 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets) + serious_crime + turncoat + dynast)
+
+stargazer(fit.1, fit.2, fit.3,title="Regression Results - AE 2012:17 ",type = "html",
+align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.space=TRUE)
+
+#summary(fit.3)
+
+# fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + log(elections_w_2 ) + log(total_assets) + serious_crime + turncoat + linkage, family = binomial(link = "probit"))
+
+
+# movable_assets <- dyn_ae_12_17_uniq$total_movable_assets_totals
 # 
-#summary(fit.1)
-
-stargazer(fit.1, title="AE - 2012:17 - Regression Results",type = "html",
-          align=TRUE,dep.var.labels=c("Dynast","Winner","Vote share"),
-           no.space=TRUE)
+# 
+# immovable_assets <- dyn_ae_12_17_uniq$total_immovable_assets_totals
+# 
+# 
+# 
+# # ggplot(dyn_ae_12_17_uniq %>% filter(total_assets <30000000), aes(total_assets))+
+# #   geom_density()+
+# #    scale_x_continuous(label = label_number_si())
+# 
+# 
+# dyn_ae_12_17_uniq$total_assets_cat <- cut(dyn_ae_12_17_uniq$total_assets, breaks = c(0,10000000,30000000,Inf), labels = c("Low", "Medium", "High"))
+# 
+# 
+# assets <- dyn_ae_12_17_uniq$total_assets_cat
+# # assets_low <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "low", 1,0)
+# # 
+# # assets_medium <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "Medium", 1,0)
+# # 
+# # assets_high <- ifelse(dyn_ae_12_17_uniq$total_assets_cat== "High", 1,0)
+# 
+# 
+# 
+# 
+# non_serious_crime <- ifelse(dyn_ae_12_17_uniq$non_serious_crime>0, TRUE, FALSE)
+# 
+# 
+# 
+# position <- ifelse(dyn_ae_12_17_uniq$position==1,1,0)
+# 
+# fit.1 <- glm(dynast ~ caste_uc + industry + turncoat + serious_crime  + assets + school_college,, family = binomial(link = "probit"))
+# 
+# 
+# # 
+# summary(fit.1)
+# 
+# stargazer(fit.1, title="AE - 2012:17 - Regression Results",type = "html",
+#           align=TRUE,dep.var.labels=c("Dynast"),
+#            no.space=TRUE)
 
 ```
 
 
+## GE 2009:19
+
+```{r results = "asis"}
+
+dyn_ge_09_19_uniq  <- dyn_ae_ge %>% filter(year %in% c(2009,2014,2019)) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 
 
+dynast <-dyn_ge_09_19_uniq $dyn_tot
+
+
+
+industry <- dyn_ge_09_19_uniq$indus_count %>% replace_na(0)
+
+industry_rent_thick <- dyn_ge_09_19_uniq $indus_rt %>% replace_na(0)
+
+industry_non_rent_thick <- dyn_ge_09_19_uniq $indus_nrt %>% replace_na(0)
+
+caste_uc <- ifelse(dyn_ge_09_19_uniq $caste_groups == "Upper Caste", 1,0)
+
+
+caste_yadav <- ifelse(dyn_ge_09_19_uniq $caste_groups == "Yadav", 1,0)
+
+caste_muslim <- ifelse(dyn_ge_09_19_uniq $caste_groups == "Muslim", 1,0)
+
+caste_dalit <- ifelse(dyn_ge_09_19_uniq $caste_groups == "Dalit", 1,0)
+
+caste_non_yadav_obc <- ifelse(dyn_ge_09_19_uniq $caste_groups == "Non-Yadav OBC", 1,0)
+
+
+turncoat <- dyn_ge_09_19_uniq$turncoat
+
+vote_share <- dyn_ge_09_19_uniq$vote_share_percentage
+
+
+N_minister <- dyn_ge_09_19_uniq $n_sc_minster%>% replace_na(0)
+
+minister_duration <- dyn_ge_09_19_uniq $min_dur_yr %>% replace_na(0)
+
+#minister_duration <-  cut(minister_duration, breaks = c(0,00.1,3,5,Inf),labels = c("ANever", "Low","Medium", "High"),include.lowest = TRUE)
+
+minister <-ifelse(dyn_ge_09_19_uniq $min_dur_yr>0,1,0)%>% replace_na(0) 
+
+
+n_elections_w <- dyn_ge_09_19_uniq$n_el_c_all
+
+
+school <- dyn_ge_09_19_uniq $school%>% replace_na(0)
+
+college <- dyn_ge_09_19_uniq $college%>% replace_na(0)
+
+school_college <- paste(school, college, sep = "")
+
+school_college <- case_when(school_college == "00"~ 0,
+                            TRUE ~ 1)
+
+land <- as.numeric(dyn_ge_09_19_uniq $land) %>% replace_na(0)
+
+total_assets <- dyn_ge_09_19_uniq $total_assets
+
+assets_above_median <- ifelse(dyn_ge_09_19_uniq $total_assets>median(dyn_ge_09_19_uniq $total_assets),1,0)
+
+serious_crime <- ifelse(dyn_ge_09_19_uniq $serious_crime>0, TRUE, FALSE)
+
+winner <- ifelse(dyn_ge_09_19_uniq $position==1, 1,0)
+
+
+
+linkage <- ifelse(dyn_ge_09_19_uniq $level %in% c("AE", "GE"),0,1)
+#library(arm)
+
+
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land +n_elections_w+ total_assets  + serious_crime + turncoat, family = binomial(link = "probit"))
+
+
+
+
+fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
+
+fit.3 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets  + serious_crime + turncoat + dynast)
+
+stargazer(fit.1, fit.2, fit.3,title="Regression Results - GE 2009:19 ",type = "html",
+align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.space=TRUE)
+
+#summary(fit.3)
+
+```
 
 
 
@@ -437,82 +681,84 @@ stargazer(fit.1, title="AE - 2012:17 - Regression Results",type = "html",
 
 dyn_ae_ge_09_19_uniq <- dyn_ae_ge %>% filter(year >2008) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 
-dynast <-dyn_ae_ge_09_19_uniq$dyn_tot
+
+dynast <-dyn_ae_ge_09_19_uniq $dyn_tot
 
 
 
-caste_uc <- ifelse(dyn_ae_ge_09_19_uniq$caste_groups == "Upper Caste", TRUE,FALSE)
+industry <- dyn_ae_ge_09_19_uniq $indus_count %>% replace_na(0)
+
+industry_rent_thick <- dyn_ae_ge_09_19_uniq $indus_rt %>% replace_na(0)
+
+industry_non_rent_thick <- dyn_ae_ge_09_19_uniq $indus_nrt %>% replace_na(0)
+
+caste_uc <- ifelse(dyn_ae_ge_09_19_uniq $caste_groups == "Upper Caste", 1,0)
 
 
-industry <- dyn_ae_ge_09_19_uniq$indus_count
+caste_yadav <- ifelse(dyn_ae_ge_09_19_uniq $caste_groups == "Yadav", 1,0)
+
+caste_muslim <- ifelse(dyn_ae_ge_09_19_uniq $caste_groups == "Muslim", 1,0)
+
+caste_dalit <- ifelse(dyn_ae_ge_09_19_uniq $caste_groups == "Dalit", 1,0)
+
+caste_non_yadav_obc <- ifelse(dyn_ae_ge_09_19_uniq $caste_groups == "Non-Yadav OBC", 1,0)
 
 
 turncoat <- dyn_ae_ge_09_19_uniq$turncoat
 
+vote_share <- dyn_ae_ge_09_19_uniq$vote_share_percentage
 
 
-N_minister <- dyn_ae_ge_09_19_uniq$n_sc_minster%>% replace_na(0)
+N_minister <- dyn_ae_ge_09_19_uniq $n_sc_minster%>% replace_na(0)
 
-minister_duration <- dyn_ae_ge_09_19_uniq$min_dur_yr %>% replace_na(0)
+minister_duration <- dyn_ae_ge_09_19_uniq $min_dur_yr %>% replace_na(0)
 
+#minister_duration <-  cut(minister_duration, breaks = c(0,00.1,3,5,Inf),labels = c("ANever", "Low","Medium", "High"),include.lowest = TRUE)
 
-pre_90 <- ifelse(dyn_ae_ge_09_19_uniq$pre_90_n >0,1,0) %>% replace_na(0)
-
-post_90 <- ifelse(dyn_ae_ge_09_19_uniq$post_90_n >0,1,0) %>% replace_na(0)
-
+minister <-ifelse(dyn_ae_ge_09_19_uniq $min_dur_yr>0,1,0)%>% replace_na(0) 
 
 
-decades <- paste(pre_90, post_90, sep = "")
-
-decades <- case_when(decades == "00"~ "Never",
-                     decades %in% c("11","10")~"Pre-90",
-                     TRUE ~ "Post-90")
-
-link <- ifelse(dyn_ae_ge_09_19_uniq$level %in% c("AE","GE"),0,1) %>% replace_na(0)
+n_elections_w<- dyn_ae_ge_09_19_uniq $n_el_c_all
 
 
+school <- dyn_ae_ge_09_19_uniq $school%>% replace_na(0)
+
+college <- dyn_ae_ge_09_19_uniq $college%>% replace_na(0)
+
+school_college <- paste(school, college, sep = "")
+
+school_college <- case_when(school_college == "00"~ 0,
+                            TRUE ~ 1)
+
+land <- as.numeric(dyn_ae_ge_09_19_uniq $land) %>% replace_na(0)
+
+total_assets <- dyn_ae_ge_09_19_uniq $total_assets
+
+assets_above_median <- ifelse(dyn_ae_ge_09_19_uniq $total_assets>median(dyn_ae_ge_09_19_uniq $total_assets),1,0)
+
+serious_crime <- ifelse(dyn_ae_ge_09_19_uniq $serious_crime>0, TRUE, FALSE)
+
+winner <- ifelse(dyn_ae_ge_09_19_uniq $position==1, 1,0)
 
 
-total_assets <- dyn_ae_ge_09_19_uniq$total_assets
-# 
-#  ggplot(dyn_ae_ge_09_19_uniq, aes(total_assets))+
-#  geom_density()+
-#  scale_x_continuous(label = label_number_si())
-#  
-#  table(cut(dyn_ae_ge_09_19_uniq$total_assets, breaks = c(0,20000000,50000000,Inf)))
+
+linkage <- ifelse(dyn_ae_ge_09_19_uniq $level %in% c("AE", "GE"),0,1)
+library(arm)
 
 
-dyn_ae_ge_09_19_uniq$total_assets_cat <- cut(dyn_ae_ge_09_19_uniq$total_assets, breaks = c(0,20000000,50000000,Inf), labels = c("Low", "Medium", "High"))
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w+ total_assets  + serious_crime + turncoat, family = binomial(link = "probit"))
 
 
-assets <- dyn_ae_ge_09_19_uniq$total_assets_cat
-# assets_low <- ifelse(dyn_ae_ge_09_19_uniq$total_assets_cat== "low", 1,0)
-# 
-# assets_medium <- ifelse(dyn_ae_ge_09_19_uniq$total_assets_cat== "Medium", 1,0)
-# 
-# assets_high <- ifelse(dyn_ae_ge_09_19_uniq$total_assets_cat== "High", 1,0)
 
 
-serious_crime <- ifelse(dyn_ae_ge_09_19_uniq$serious_crime>0, TRUE, FALSE)
+fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
 
-non_serious_crime <- ifelse(dyn_ae_ge_09_19_uniq$non_serious_crime>0, TRUE, FALSE)
+fit.3 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets  + serious_crime + turncoat + dynast)
 
-school <- dyn_ae_ge_09_19_uniq$school
+stargazer(fit.1, fit.2, fit.3,title="Regression Results - AE & GE 2009:19 ",type = "html",
+align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.space=TRUE)
 
-college <- dyn_ae_ge_09_19_uniq$college
-
-position <- ifelse(dyn_ae_ge_09_19_uniq$position==1,1,0)
-
-fit.1 <- glm(dynast ~ caste_uc + industry + turncoat + serious_crime  + assets + school + college)
-
-
-# 
-#summary(fit.1)
-
-stargazer(fit.1,title="AE-GE combined - 2009:19 - Regression Results",type = "html",
-          align=TRUE,dep.var.labels=c("Dynast"), no.space=TRUE)
-
-
+#summary(fit.3)
 ``` 
 
 
