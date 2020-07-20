@@ -380,7 +380,7 @@ fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + 
 #table(dyn_ae_ge_uniq$minister_dur)
 
 #library(glmnet)
-fit.2 <- glm(linkage~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 + n_elections_w , family="binomial")
+fit.2 <- glm(linkage~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 + n_elections_w, family = binomial(link = "probit"))
 
  stargazer(fit.1, fit.2,title="Regression Results - GE All ",type = "html",
 align=TRUE, dep.var.labels=c("Dynast","Linkage"), no.space=TRUE)
