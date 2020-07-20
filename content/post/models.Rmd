@@ -382,7 +382,7 @@ fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + 
 #library(glmnet)
 fit.2 <- glm(linkage~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + post_90 + n_elections_w, family = binomial(link = "probit"))
 
- stargazer(fit.1, fit.2,title="Regression Results - GE All ",type = "html",
+ stargazer(fit.1, fit.2,title="Regression Results - AE-GE All ",type = "html",
 align=TRUE, dep.var.labels=c("Dynast","Linkage"), no.space=TRUE)
 # 
 
@@ -432,6 +432,7 @@ dyn_ae_ge <- merge(dyn_ae_ge,adr, by = c("year", "constituency_no", "position"))
 names(dyn_ae_ge ) <- make.unique(names(dyn_ae_ge ))
 
 dyn_ae_ge $total_assets <- as.numeric(dyn_ae_ge $total_assets)
+#dyn_ae_ge  <- dyn_ae_ge %>% filter(total_assets>0)
 
 #dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
 
@@ -586,7 +587,7 @@ align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.spa
 
 ```{r results = "asis"}
 
-dyn_ge_09_19_uniq  <- dyn_ae_ge %>% filter(year %in% c(2009,2014,2019)) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
+dyn_ge_09_19_uniq  <- dyn_ae_ge %>% filter(year %in% c(2009,2014,2019) &total_assets>0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 
 
 dynast <-dyn_ge_09_19_uniq $dyn_tot
@@ -639,7 +640,7 @@ school_college <- case_when(school_college == "00"~ 0,
 
 land <- as.numeric(dyn_ge_09_19_uniq $land) %>% replace_na(0)
 
-total_assets <- dyn_ge_09_19_uniq $total_assets
+total_assets <- as.numeric(dyn_ge_09_19_uniq $total_assets)
 
 assets_above_median <- ifelse(dyn_ge_09_19_uniq $total_assets>median(dyn_ge_09_19_uniq $total_assets),1,0)
 
@@ -653,14 +654,14 @@ linkage <- ifelse(dyn_ge_09_19_uniq $level %in% c("AE", "GE"),0,1)
 #library(arm)
 
 
-fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land +n_elections_w+ total_assets  + serious_crime + turncoat, family = binomial(link = "probit"))
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land +n_elections_w+ log(total_assets) + serious_crime + turncoat, family = binomial(link = "probit"))
 
 
 
 
-fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
+fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets) + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
 
-fit.3 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets  + serious_crime + turncoat + dynast)
+fit.3 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets)  + serious_crime + turncoat + dynast)
 
 stargazer(fit.1, fit.2, fit.3,title="Regression Results - GE 2009:19 ",type = "html",
 align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.space=TRUE)
@@ -679,7 +680,7 @@ align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.spa
 
 
 
-dyn_ae_ge_09_19_uniq <- dyn_ae_ge %>% filter(year >2008) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
+dyn_ae_ge_09_19_uniq <- dyn_ae_ge %>% filter(year >2008&total_assets>0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
 
 
 dynast <-dyn_ae_ge_09_19_uniq $dyn_tot
@@ -740,23 +741,29 @@ serious_crime <- ifelse(dyn_ae_ge_09_19_uniq $serious_crime>0, TRUE, FALSE)
 
 winner <- ifelse(dyn_ae_ge_09_19_uniq $position==1, 1,0)
 
+linkage <-  ifelse(dyn_ae_ge_09_19_uniq$level_cum %in% c("AE", "GE"),0,1)
+
+# linkage <- ifelse(dyn_ae_ge_09_19_uniq $level %in% c("AE", "GE"),0,1)
+# library(arm)
 
 
-linkage <- ifelse(dyn_ae_ge_09_19_uniq $level %in% c("AE", "GE"),0,1)
-library(arm)
-
-
-fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w+ total_assets  + serious_crime + turncoat, family = binomial(link = "probit"))
+fit.1 <- glm(dynast ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w+ log(total_assets)  + serious_crime + turncoat, family = binomial(link = "probit"))
 
 
 
 
-fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
+fit.2 <- glm(winner ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets) + serious_crime + turncoat + dynast, family = binomial(link = "probit"))
 
-fit.3 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + total_assets  + serious_crime + turncoat + dynast)
 
-stargazer(fit.1, fit.2, fit.3,title="Regression Results - AE & GE 2009:19 ",type = "html",
-align=TRUE, dep.var.labels=c("Dynast","Winner", "Vote Share Percentage"), no.space=TRUE)
+
+fit.3 <- glm(linkage ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets) + serious_crime + turncoat , family = binomial(link = "probit"))
+
+fit.4 <- lm(vote_share ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + n_elections_w + log(total_assets)  + serious_crime + turncoat + dynast)
+
+#summary(fit.4)
+
+stargazer(fit.1, fit.2, fit.3,fit.4,title="Regression Results - AE & GE 2009:19 ",type = "html",
+align=TRUE, dep.var.labels=c("Dynast","Winner", "Linkage","Vote Share Percentage"), no.space=TRUE)
 
 #summary(fit.3)
 ``` 
