@@ -22,10 +22,12 @@ library(kableExtra)
 library(scales)
 library(gridExtra)
 `%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
 ```
 
 
-# Election finance
+# Election finance wrt family type
 
 ```{r file config}
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
@@ -38,7 +40,7 @@ fin_17 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/up2017expenses.csv", stri
 
 fin_12 <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/up2012expenses.csv", stringsAsFactors = FALSE)
 
-str(fin_12$exp_tot_given)
+#str(fin_12$exp_tot_given)
 
 fin_12  <- fin_12 %>% mutate(exp_missing = exp_tot_given - exp_tot_calc)
 
@@ -343,5 +345,86 @@ fin_crime %>% group_by(serious_crime_log) %>% summarise(  Media = mean(exp_media
 
 ```
 
+# Election finance wrt caste group
+
+## Funding
 
 
+```{r}
+
+
+dyn_el_fin %>% filter (fund_tot_calc >0) %>% group_by(caste_groups) %>% summarise(mean(fund_tot_given),mean(fund_own), mean(fund_party), mean(fund_donations)) %>%  kable(caption = "Election Funding - Averages", col.names = c( "Politician's caste group", "Total fund", "Candidate", "Party", "Donations"), digits = 0) %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+
+```{r}
+
+dyn_el_fin %>% filter (exp_tot_calc>0) %>% group_by(caste_groups) %>% summarise( Candidate = mean(fund_own), Party = mean(fund_party), Donations = mean(fund_donations)) %>% melt(id = 1:1, measure = 2:4) %>% group_by(caste_groups) %>% mutate(sum = sum(value), prop = value/sum) %>% select(caste_groups, variable, prop) %>% 
+  ggplot(aes(factor(caste_groups), prop, fill = variable,label = round(prop,1)))+
+  geom_bar(stat="identity", position = "stack")+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+  theme_minimal()+
+  labs(title = " Election funding composition wrt caste groups",x = "", y = "Proportion", fill = "Type of work") +
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 11),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+
+
+```
+
+
+
+## Expenditure
+
+```{r}
+
+
+
+dyn_el_fin %>% group_by(caste_groups) %>% summarise( Total_expenditure = mean(exp_tot_given), Media = mean(exp_media), Vehicles = mean(exp_vehicles_travel), Materials = mean(exp_materials), Meetings = mean(exp_meetings), Workers = mean(exp_workers), Misc = mean(exp_misc), Missing = mean(exp_missing)) %>% kable(caption = "Election Expenditure - Averages", col.names = c( "Politician's caste group", "Total Expenditure",  "Media","Vehicles","Materials", "Meetings","Campaigns", "Miscellanious", "Missing"), digits = 0) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+
+```{r}
+dyn_el_fin %>% group_by(caste_groups) %>% summarise( Media = mean(exp_media), Vehicles = mean(exp_vehicles_travel), Materials = mean(exp_materials), Meetings = mean(exp_meetings), Workers = mean(exp_workers), Misc = mean(exp_misc), Missing = mean(exp_missing)) %>% melt(id = 1:1, measure = 2:8) %>% group_by(caste_groups) %>% mutate(sum = sum(value), prop = value/sum) %>% select(caste_groups, variable, prop) %>% 
+  ggplot(aes(factor(caste_groups), prop, fill = variable,label = round(prop,2)))+
+  geom_bar(stat="identity", position = "stack")+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+  theme_minimal()+
+  labs(title = " Election expenditure composition wrt caste groups",x = "", y = "Proportion", fill = "Type of work") +
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 11),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+```
