@@ -92,10 +92,10 @@ dyn_indus <- dyn_indus %>% mutate(indus_nrt = case_when(indus_rt_glue %in% c("02
                                                                indus_rt_glue == "222" ~1,
                                                                TRUE ~ 0))
 
-dyn_indus <- dyn_indus %>% dplyr::select(election_type, year, pid, indus_rt, indus_nrt,indus_count)
+dyn_indus <- dyn_indus %>% distinct(family_id, .keep_all = TRUE)%>% dplyr::select(family_id, indus_rt, indus_nrt,indus_count)
 
 # 
-dyn_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = c("election_type", "year", "pid"), all.x = TRUE)
+dyn_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
 ## cabinet
 
 

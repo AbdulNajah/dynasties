@@ -1,0 +1,280 @@
+---
+title: "Quality of candidates"
+author: ""
+date: "2020-07-23"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+library(ggbump)
+`%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
+```
+
+#Miscellaneous nhj 
+
+```{r file config}
+
+ge_19 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/TCPD_2019_all_candidates_with_caste_and_political_family.csv")
+
+names(ge_19 ) <- tolower(names(ge_19))
+
+ge_19 <- ge_19 %>% filter(state_name == "Uttar_Pradesh")
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
+
+dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum ==1),1,0))
+
+dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum)%>% distinct(year, constituency_no, .keep_all = TRUE)
+
+dyn_ge19 <- merge(ge_19, dyn_ae_ge_uniq_con , by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE)
+
+dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum ==0)
+#dyn_ae_ge_uniq_con %>% filter(year==2019) %>% group_by(dyn_con) %>% count()
+```
+
+
+```{r adr}
+
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
+
+names(adr)[1] <- "position"
+
+names(adr) <- tolower(names(adr))
+
+adr <- adr %>% dplyr::select( -c(constituency_id,state,         assembly_no,              
+  month,              poll_no,           
+  delimid,            position,          
+  candidate,          sex,               
+  party,              votes,             
+  candidate_type,     valid_votes,       
+  electors,           constituency_name, 
+  constituency_type,  sub_region,        
+  n_cand,             turnout_percentage,
+  vote_share_percentage,     deposit_lost,      
+  margin,             margin_percentage, 
+  
+  enop,              
+  pid,                max_poll_no,       
+  last_poll,          contested,         
+  last_party,         last_constituency_name,                     
+  same_constituency,  same_party,        
+  no_terms,           turncoat,          
+  incumbent,          recontest )  )
+
+#adr <- adr %>% filter(position_tcpd %in% c(1,2))
+
+adr <- adr %>% rename( position = position_tcpd)
+
+
+adr_dyn<- merge(adr,dyn_ae_ge_uniq_con, by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE)
+
+
+names(dyn_ae_ge ) <- make.unique(names(dyn_ae_ge ))
+
+adr_dyn$total_assets <- as.numeric(adr_dyn$total_assets)
+#dyn_ae_ge  <- dyn_ae_ge %>% filter(total_assets>0)
+
+#dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))
+
+
+#dyn_adr$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019"))
+
+#dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
+
+# dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family")
+# 
+# dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
+# 
+# dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
+```
+
+<!-- #2019 -->
+
+<!-- ## N_candidates -->
+
+<!-- ```{r} -->
+
+
+<!-- adr_dyn_19 <- adr_dyn %>% filter(year ==2019) -->
+
+
+<!-- adr_dyn_19 %>% group_by(dyn_con) %>% distinct(constituency_no, .keep_all = TRUE) %>%  summarise(count = n()) %>% kable(caption = "Summary", col.names = c("Constituency Type", "N")) -->
+
+
+<!-- adr_dyn_19 <- adr_dyn_19 %>%group_by(constituency_no) %>%  mutate(n_cand = n()) -->
+
+<!-- adr_dyn_19 %>% group_by(dyn_con) %>% summarise(mean(n_cand)) %>% kable(caption = "Average n of candidtes", col.names = c("Constituency Type", "Mean n_cand"),digits = 0) -->
+
+<!-- ``` -->
+
+<!-- ## Assets -->
+
+<!-- ```{r} -->
+<!-- adr_dyn_19 %>% group_by(dyn_con) %>% summarise(mean(total_assets), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %>% kable(caption = "Assets", col.names= c("Constituency Type", "Total assets", "Total movable assets", "Total immovable assets")) -->
+
+<!-- ``` -->
+
+
+<!-- ## Criminality -->
+
+<!-- ```{r} -->
+<!-- adr_dyn_19 %>% group_by(dyn_con) %>% summarise(mean(serious_crime), mean(non_serious_crime)) %>% kable(caption = "Criminality", col.names= c("Constituency Type", "Serious crime", "Non-serious crime"), digits = 2) -->
+
+<!-- ``` -->
+
+
+
+
+# 2012 & 2017
+
+```{r}
+adr_dyn_12_17 <- adr_dyn %>% filter(year %in% c(2012,2017) & dyn_cum != 1)
+```
+
+## Assets
+
+```{r}
+
+adr_dyn_12_17 %>% group_by(dyn_con) %>% summarise(mean(total_assets, na.rm =TRUE), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %>% kable(caption = "Assets", col.names= c("Constituency Type", "Total assets", "Total movable assets", "Total immovable assets")) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+## Criminality
+
+```{r}
+
+
+
+
+adr_dyn_12_17%>% group_by(dyn_con) %>% summarise(mean(serious_crime), mean(non_serious_crime)) %>% kable(caption = "Criminality", col.names= c("Constituency Type", "Serious crime", "Non-serious crime"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
+
+
+
+```
+
+
+
+
+
+# GE 2019
+
+
+```{r}
+
+
+# summary(dyn_ge19)
+# 
+# glimpse(dyn_ge19)
+
+```
+
+<!-- ## N_candidates -->
+
+<!-- ```{r} -->
+
+
+<!-- #adr_dyn_19 <- adr_dyn %>% filter(year ==2019) -->
+
+
+<!-- dyn_ge19 %>% group_by(dyn_con) %>% distinct(constituency_no, .keep_all = TRUE) %>%  summarise(count = n()) %>% kable(caption = "Summary", col.names = c("Constituency Type", "N")) -->
+
+
+<!-- dyn_ge19 <- dyn_ge19 %>%group_by(constituency_no) %>%  mutate(n_cand = n()) -->
+
+<!-- dyn_ge19 %>% group_by(dyn_con) %>% summarise(mean(n_cand)) %>% kable(caption = "Average n of candidtes", col.names = c("Constituency Type", "Mean n_cand"),digits = 0) -->
+
+<!-- ``` -->
+
+
+
+## Assets
+
+```{r}
+dyn_ge19 %>% group_by(dyn_con) %>% summarise(mean(myneta_assets, na.rm = TRUE), mean(myneta_liabilities, na.rm =TRUE), mean(myneta_net_assets, na.rm =TRUE)) %>% kable(caption = "Assets", col.names= c("Constituency Type", "Assets", "Total liabilities", "Net assets"), digitis = 0)%>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Criminality
+
+```{r}
+dyn_ge19 %>% group_by(dyn_con) %>% summarise(mean(myneta_criminal_cases, na.rm =TRUE), mean(myneta_serious_criminal_cases, na.rm =TRUE)) %>% kable(caption = "Criminality", col.names= c("Constituency Type", "criminal cases - count", "Serious crime - logical"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+##  Gender
+
+
+```{r}
+dyn_ge19 %>% filter(myneta_gender!= "") %>% group_by(dyn_con, myneta_gender) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, myneta_gender, prop) %>% kable(caption = "Gender", col.names= c("Constituency type", "Gender", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
+```
+
+## Education
+
+```{r}
+#table(dyn_ge19$myneta_education)
+
+  dyn_ge19$education <- case_when(str_detect(dyn_ge19$myneta_education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "School", str_detect(dyn_ge19$myneta_education,"(Doctorate)|(Post)") ~ "PG+", TRUE ~ "UG") 
+
+dyn_ge19$education <- factor(dyn_ge19$education,levels =c( "School", "UG", "PG+"))
+
+
+
+dyn_ge19 %>% filter(myneta_education!= "") %>% group_by(dyn_con, education) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, education, prop) %>% kable(caption = "Education", col.names= c("Constituency type", "Education", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
+
+
+```
+
+## Professsion
+
+```{r}
+
+# data.frame(table(dyn_ge19$myneta_profession)) %>% arrange(-Freq)
+# table(dyn_ge19$profession)
+# 
+# agri <- c("^Agriculture","Agriculture", "^Farmer", "Farming")
+# 
+# retired <- c("Pension", "retire", "retired", "Pensioner")
+# 
+# social <- c("^Social", "Social work", "Social Work")
+# 
+# teaching <-   c("Teacher", "Teaching", "College", "School", "Lecturer", "Lecture", "Tution")
+# 
+# 
+#   dyn_ge19$profession <- case_when(str_detect(dyn_ge19$myneta_profession, paste(agri, collapse = "|")) ~ "Agriculture",
+#                                    str_detect(dyn_ge19$myneta_profession, "Advocate")~"Advocate",
+#                                    str_detect(dyn_ge19$myneta_profession, paste(teaching, collapse = "|"))~"Teaching",
+#                                    str_detect(dyn_ge19$myneta_profession, paste(social, collapse = "|"))~"Social Worker",
+#                                    str_detect(dyn_ge19$myneta_profession, paste(retired, collapse = "|"))~"Retired",
+#                                    str_detect(dyn_ge19$myneta_profession, "^Business")~"Business",
+#                                    str_detect(dyn_ge19$myneta_profession, "Doctor")~"Doctor",
+#                                    TRUE ~ "Others")
+
+```
+
+

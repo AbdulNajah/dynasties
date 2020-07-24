@@ -1,0 +1,330 @@
+---
+title: "Families"
+author: ""
+date: "2020-07-21"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>#Miscellaneous nhj</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Success
+</th>
+<th style="text-align:right;">
+land
+</th>
+<th style="text-align:right;">
+industires
+</th>
+<th style="text-align:right;">
+N_minister
+</th>
+<th style="text-align:right;">
+Minister duration (months)
+</th>
+<th style="text-align:right;">
+school
+</th>
+<th style="text-align:right;">
+college
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Declining
+</td>
+<td style="text-align:right;">
+283.01
+</td>
+<td style="text-align:right;">
+1.58
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+11.92
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rising
+</td>
+<td style="text-align:right;">
+401.82
+</td>
+<td style="text-align:right;">
+2.09
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+<td style="text-align:right;">
+29.25
+</td>
+<td style="text-align:right;">
+0.40
+</td>
+<td style="text-align:right;">
+0.47
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/post/families_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post/families_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<table style="text-align:center">
+<caption>
+<strong>Regression Results - Dynasties success</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+success
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_uc
+</td>
+<td>
+4.315
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(179.897)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_yadav
+</td>
+<td>
+4.697
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(179.897)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_non_yadav_obc
+</td>
+<td>
+4.498
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(179.897)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_dalit
+</td>
+<td>
+4.261
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(179.897)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_muslim
+</td>
+<td>
+4.220
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(179.897)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+minister_duration
+</td>
+<td>
+0.062<sup>*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.035)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+industry
+</td>
+<td>
+0.364<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.132)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+school_college
+</td>
+<td>
+0.193
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.220)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+land
+</td>
+<td>
+0.0003
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.0003)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+linkage
+</td>
+<td>
+0.718<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.206)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+-5.742
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(179.897)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+187
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Log Likelihood
+</td>
+<td>
+-105.308
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+232.616
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>

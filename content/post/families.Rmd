@@ -1,0 +1,438 @@
+---
+title: "Families"
+author: ""
+date: "2020-07-21"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+library(ggbump)
+`%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
+```
+
+#Miscellaneous nhj 
+
+```{r file config}
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
+
+
+
+```
+
+```{r}
+
+
+
+## Industries
+
+dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
+
+dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
+
+
+# dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
+
+names(dyn_indus)[1] <- "election_type"
+
+
+# 
+ dyn_indus <- dyn_indus %>% mutate(indus_2_c = ifelse(indus_2 >= 0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4 > 0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c) %>% dplyr::select(-c(indus_2_c, indus_3_c, indus_4_c))
+# 
+
+#dyn_indus$indus_2 <- replace_na(dyn_indus$indus_2 ,0)
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt_2 = case_when(indus_2 %in% c(NA, "") ~ 0, indus_2 %in% c(1,3,7,2,4,5)~ 1,
+                                  TRUE~ 2))
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt_3 = case_when(indus_3 %in% c(NA, "",0) ~ 0, indus_3 %in% c(1,3,7,2,4,5)~ 1,
+                                  TRUE~ 2))
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt_4 = case_when(indus_4 %in% c(NA, "",0) ~ 0, indus_4 %in% c(1,3,7,2,4,5)~ 1,
+                                  TRUE~ 2))
+
+dyn_indus$indus_rt_glue <- paste(dyn_indus$indus_rt_2, dyn_indus$indus_rt_3, dyn_indus$indus_rt_4, sep = "")
+
+
+dyn_indus <- dyn_indus %>% mutate(indus_rt = case_when(indus_rt_glue %in% c("100","120","122","201", "210", "212", "221") ~.3,
+                                                               indus_rt_glue %in% c("110","112","121", "211")~.6,
+                                                               indus_rt_glue == "111" ~1,
+                                                               TRUE ~ 0))
+
+dyn_indus <- dyn_indus %>% mutate(indus_nrt = case_when(indus_rt_glue %in% c("020","102","112","120","121","200", "210", "211", "221") ~.3,
+                                                               indus_rt_glue %in% c("122", "202","220")~.6,
+                                                               indus_rt_glue == "222" ~1,
+                                                               TRUE ~ 0))
+
+dyn_indus <- dyn_indus %>% distinct(family_id, .keep_all = TRUE)%>% dplyr::select(family_id, indus_rt, indus_nrt,indus_count)
+
+# 
+dyn_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+## cabinet
+
+
+cabinet <- read.csv("D:/cpr/up-dynasties/dyn_other_data/up_cabinet_01.07.20.csv")
+
+#glimpse(cabinet)
+
+names(cabinet) <- tolower(names(cabinet))
+
+names(cabinet) <- make.unique(names(cabinet))
+
+cabinet <- cabinet %>% rename(year = election_year_1)
+
+
+
+
+
+cabinet$rel_id_unique <- as.numeric(cabinet$rel_id_unique)
+
+cabinet <- cabinet %>% filter(rel_id_unique >0 )
+
+#cabinet %>% filter(is.na())
+
+
+cabinet <- cabinet %>% mutate(pre_90 = case_when(dplyr::between(year, 1977,1990)~ 1,
+                             TRUE ~0), post_90 =case_when(dplyr::between(year, 1990,2017)~ 1,
+                             TRUE ~0) )
+
+
+#table(cabinet$post_90)
+
+
+dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >0 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_months, na.rm = TRUE), pre_90_n = sum(pre_90), post_90_n = sum(post_90))
+
+dyn_cabinet$min_dur_yr <- round(dyn_cabinet$minister_dur/12,2)
+
+
+
+
+
+dyn_ae_ge <- merge(dyn_ae_ge,dyn_cabinet, by ="family_id", all.x =TRUE )
+
+
+## Involvemnt
+
+
+
+# 
+# inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv")
+# 
+# inv <- inv  %>% dplyr::select(family_id,association_inv,org_inv, poitical_inv )
+# 
+# dyn_ae_ge <- merge(dyn_ae_ge,inv, by ="family_id", allow.cartesian = TRUE, all.x =TRUE )
+
+```
+
+```{r}
+
+
+
+# tab <- dyn_ae_ge_fam %>% group_by(family_id) %>% arrange(year) %>%  filter(dyn_cum ==1 &min(year)) %>% distinct(family_id, .keep_all = TRUE) %>% group_by(year) %>% summarise(count = n()) %>% kable()
+
+dyn_ae_ge_fam <- dyn_ae_ge %>% filter(dyn_tot ==1 ) 
+
+fam_pre02 <-  dyn_ae_ge_fam %>% group_by(family_id) %>% filter(fam_size_cum==2 & year<=2007) %>% distinct(family_id)
+
+dyn_ae_ge_fam <- merge(dyn_ae_ge_fam ,fam_pre02, by = "family_id")
+
+#dyn_ae_ge_fam <- dyn_ae_ge %>% group_by(family_id) %>% mutate(year_fam_size_2 = min(year[fam_size_cum==2])) 
+
+dyn_ae_ge_fam  <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(
+                                                                   n_el_c_post02 = length(year[year>2007]), n_el_w_post02 = length(year[position ==1 & year>2007])) 
+
+
+
+
+#dyn_ae_ge_fam <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(last_year = max(year), first_year = min(year))
+
+#dyn_ae_ge_fam  <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(n_el_c = n(), n_el_w = length(year[position ==1])) 
+
+ #dyn_ae_ge_fam %>% filter(str_detect( patriarch_name, "singh"))
+
+
+#dyn_ae_ge_fam <- dyn_ae_ge_fam %>% mutate(duration = sum(term_duration[relative_id==1]))
+
+dyn_ae_ge_fam_uniq <- dyn_ae_ge_fam  %>% distinct(family_id, .keep_all = TRUE)
+#%>% filter(str_detect(level, "LB", negate = TRUE))
+#dyn_ae_ge_fam_uniq  <- dyn_ae_ge_fam_uniq   %>% filter(n_el_w_pre02 !=0 | n_el_w_post02 !=0)
+#dyn_ae_ge_fam_uniq$success_pre02 <- dyn_ae_ge_fam_uniq$n_el_w_pre02/dyn_ae_ge_fam_uniq$n_el_c_pre02
+
+dyn_ae_ge_fam_uniq$success_post02 <- dyn_ae_ge_fam_uniq$n_el_w_post02/dyn_ae_ge_fam_uniq$n_el_c_post02
+
+ # dyn_ae_ge_fam_uniq$success_pre02 <- ifelse(dyn_ae_ge_fam_uniq$success_pre02 == "NaN", 0,dyn_ae_ge_fam_uniq$success_pre02)
+dyn_ae_ge_fam_uniq$success_post02 <- ifelse(dyn_ae_ge_fam_uniq$success_post02== "NaN", 0,dyn_ae_ge_fam_uniq$success_post02)
+
+#dyn_ae_ge_fam_uniq$success_diff <- dyn_ae_ge_fam_uniq$success_post02-dyn_ae_ge_fam_uniq$success_pre02 
+
+#dyn_ae_ge_fam_uniq$success_diff_cat <- ifelse(dyn_ae_ge_fam_uniq$success_diff>=0,"Rising", "Declining")
+
+dyn_ae_ge_fam_uniq$success_cat <- ifelse(dyn_ae_ge_fam_uniq$success_post02>0,"Rising", "Declining")
+
+#dyn_ae_ge%>% filter(family_id == "f0009806")
+
+# 
+# 
+# # dyn_ae_ge_fam_uniq %>% filter(success_pre02 =="NaN")
+# 
+# 
+# 
+# 
+# 
+# 
+# dyn_ae_ge_fam_uniq$success_pre02_cat <- cut(dyn_ae_ge_fam_uniq$success_pre02, breaks = c(0,.34,.66, 1), labels = c("Declining", "Stable", "Rising"), include.lowest = TRUE)
+# 
+# dyn_ae_ge_fam_uniq$success_post02_cat <- cut(dyn_ae_ge_fam_uniq$success_post02 , breaks = c(0,.34,.66, 1), labels = c("Declining", "Stable", "Rising"), include.lowest = TRUE)
+# 
+# 
+# 
+# 
+# dyn_ae_ge_fam_uniq$success_cat_1 <- paste(dyn_ae_ge_fam_uniq$success_pre02_cat, dyn_ae_ge_fam_uniq$success_post02_cat)
+# 
+# dyn_ae_ge_fam_uniq  <- dyn_ae_ge_fam_uniq %>% mutate(success_cat = case_when(success_cat_1 == "Declining Declining" ~ "Declining",
+#                                                       success_cat_1 == "Rising Rising" ~ "Rising",
+#                                                       success_cat_1 == "Stable Stable" ~ "Stable",
+#                                                       TRUE ~ success_cat_1 ))
+# 
+# table(dyn_ae_ge_fam_uniq$success_cat )
+# dyn_ae_ge_fam_uniq$duration <- dyn_ae_ge_fam_uniq$last_year - dyn_ae_ge_fam_uniq$first_year 
+# median(dyn_ae_ge_fam_uniq$duration)
+# 
+# 
+# 
+# prop.table(table(cut(dyn_ae_ge_fam_uniq$success, breaks = c(0,.34,.67,1))))
+# 
+# # 
+# # hist(dyn_ae_ge_fam_uniq$duration)
+# # 
+# # ggplot(dyn_ae_ge_fam %>% filter(level == "AE") , aes(year, factor(position), color = family_id))+
+# #   geom_bump()
+# 
+# dyn_ae_ge_fam_uniq %>% select(family_id,first_year, last_year) %>% melt(id = "family_id", measure = 2:3) %>% 
+#   ggplot(aes(factor(value),family_id, group = variable, color =family_id                                                                       )) +
+#   geom_point()+
+#   geom_line()+
+#   theme(legend.position = "none")
+# 
+# # dyn_ae_ge_fam_uniq %>% filter(duration >29) %>% select(patriarch_name, family_id,first_year, last_year, duration)
+
+#minister_duration <- dyn_ae_ge_fam_uniq$min_dur_yr %>% replace_na(0)
+
+
+#dyn_ae_ge_fam %>% group_by(family_id) %>% filter(min(year)>2002 ) %>% filter(n_el_w >0)%>% distinct(family_id)
+
+```
+
+
+
+```{r}
+
+dyn_ae_ge_fam_uniq$minister_dur <- dyn_ae_ge_fam_uniq$minister_dur %>% replace_na(0)
+
+dyn_ae_ge_fam_uniq$land <- as.numeric(dyn_ae_ge_fam_uniq$land)
+
+dyn_ae_ge_fam_uniq$school <- as.numeric(dyn_ae_ge_fam_uniq$school)%>% replace_na(0)
+
+dyn_ae_ge_fam_uniq$college<- as.numeric(dyn_ae_ge_fam_uniq$college)%>% replace_na(0)
+
+dyn_ae_ge_fam_uniq$n_sc_minster <- dyn_ae_ge_fam_uniq$n_sc_minster%>% replace_na(0)
+
+dyn_ae_ge_fam_uniq %>% group_by(success_cat) %>% summarise(mean(land, na.rm = TRUE),mean(indus_count),mean(n_sc_minster), mean(minister_dur), mean(school), mean(college)) %>% kable(col.names = c("Success","land", "industires", "N_minister", "Minister duration (months)", "school", "college"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+#dyn_ae_ge_fam_uniq %>% filter(success_diff_cat == "Stable") 
+```
+
+
+```{r}
+# dyn_lb  <- dyn_lb %>% mutate(level_log = ifelse(level == "LB",FALSE,TRUE))
+# 
+# dyn_lb_uniq <- dyn_lb %>% arrange (-year) %>%  distinct(family_id, .keep_all = TRUE)
+# 
+# count_tot  <-  dim(dyn_lb_uniq %>% filter(dyn_tot ==1))[1]
+# dyn_lb_uniq %>% filter(dyn_tot ==1) %>% group_by(level_log) %>% summarise(prop = n()/count_tot) %>% kable(caption = "Family linkages", col.names = c("Connection", "Proportion"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+
+
+dyn_ae_ge_fam_uniq %>% filter(caste_groups!= "NA") %>% group_by(success_cat, caste_groups) %>% summarise( count = n()) %>% group_by(success_cat) %>% mutate(sum = sum(count), prop = count/sum) %>% select(success_cat, caste_groups, prop) %>% 
+  ggplot(aes(factor(success_cat), prop, fill = caste_groups,label = round(prop,2)))+
+   geom_bar(stat="identity", position = "stack")+
+    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = "Caste composition \n among families wrt success  ",x = "", y = "Proportion", fill = "") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+```
+
+
+```{r}
+dyn_ae_ge_fam_uniq$edu <- as.numeric(paste(dyn_ae_ge_fam_uniq$school, dyn_ae_ge_fam_uniq$college, sep = ""))
+
+
+# dyn_lb_uniq <- dyn_lb %>% arrange (-year) %>%  distinct(family_id, .keep_all = TRUE)
+
+
+edu_tab <- dyn_ae_ge_fam_uniq %>%  filter(!is.na(edu)) %>% group_by(success_cat,edu) %>% summarise(count = n())  %>% group_by(success_cat) %>% mutate(sum = sum(count),prop= count/sum) %>% filter(edu!= 0) %>%  arrange(edu, -prop) 
+
+edu_tab$id=rep(c(1:2),3)
+
+edu_tab$success_cat <- factor(edu_tab$success_cat , levels = c("Rising", "Declining"))
+
+
+ggplot(edu_tab , aes(x= reorder(as.factor(edu),-prop), prop , group = id )) +   
+  geom_bar(aes(fill = as.factor(success_cat)), position = "dodge", stat="identity")+
+  theme_minimal()+
+  scale_x_discrete(labels=(c(  "School" ,"College","Both")))+
+  scale_fill_manual (labels = c( "Rising", "Declining"),
+    values = c("#468189", "#9DBEBB"))+
+  labs(title = "Ownership of educational institutions wrt success", 
+       x = "", y = "Proportion") +
+  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif", 
+                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
+        text = element_text(color = "gray20",family = "serif"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_text(vjust = 2, size =16),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_line(color = "gray50", size = .5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank()
+          
+  ) 
+```
+
+```{r, results= "asis"}
+
+
+#library(nnet)
+
+#success <- dyn_ae_ge_fam_uniq$success_diff_cat
+
+
+industry <- dyn_ae_ge_fam_uniq$indus_count %>% replace_na(0)
+
+# industry_rent_thick <- dyn_ae_ge_fam_uniq$indus_rt %>% replace_na(0)
+# 
+# industry_non_rent_thick <- dyn_ae_ge_fam_uniq$indus_nrt %>% replace_na(0)
+
+caste_uc <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Upper Caste", 1,0)
+
+
+caste_yadav <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Yadav", 1,0)
+
+caste_muslim <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Muslim", 1,0)
+
+caste_dalit <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Dalit", 1,0)
+
+caste_non_yadav_obc <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Non-Yadav OBC", 1,0)
+
+
+turncoat <- dyn_ae_ge_fam_uniq$turncoat
+
+
+N_minister <- dyn_ae_ge_fam_uniq$n_sc_minster%>% replace_na(0)
+
+minister_duration <- dyn_ae_ge_fam_uniq$min_dur_yr %>% replace_na(0)
+
+
+minister <-ifelse(dyn_ae_ge_fam_uniq$min_dur_yr>0,1,0)%>% replace_na(0) 
+
+
+post_2002 <- ifelse(dyn_ae_ge_fam_uniq$year >=2002,1,0)
+
+
+
+n_elections_w<- as.numeric(dyn_ae_ge_fam_uniq$n_el_w)
+
+school <- dyn_ae_ge_fam_uniq$school%>% replace_na(0)
+
+college <- dyn_ae_ge_fam_uniq$college%>% replace_na(0)
+
+school_college <- paste(school, college, sep = "")
+
+school_college <- case_when(school_college == "00"~ 0,
+                            TRUE ~ 1)
+
+land <- as.numeric(dyn_ae_ge_fam_uniq$land) %>% replace_na(0)
+
+
+
+linkage <- ifelse(dyn_ae_ge_fam_uniq$level %in% c("AE", "GE"),0,1)
+
+linkage_up <- ifelse(dyn_ae_ge_fam_uniq$level%in% c("GE-AE", "GE-AE-LB"),1,0)
+
+linkage_down <- ifelse(dyn_ae_ge_fam_uniq$level %in% c("AE-LB", "GE-AE-LB"),1,0)
+
+#ml$prog2 <- relevel(ml$prog, ref = "academic")
+
+# dyn_ae_ge_fam_uniq$success_cat <- as.factor(dyn_ae_ge_fam_uniq$success__cat)
+
+success <- ifelse(dyn_ae_ge_fam_uniq$success_cat=="Rising",1,0)
+
+#success_rate <- dyn_ae_ge_fam_uniq$success_diff
+
+
+
+
+
+fit.1 <- glm(success ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage, family= binomial(link = "probit") )
+
+stargazer(fit.1,title="Regression Results - Dynasties success ",type = "html",
+align=TRUE, no.space=TRUE)
+
+# fit.2 <- lm(success_rate ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage_up) 
+#library(arm)
+
+#summary(fit.1)
+
+# stargazer(fit.1, type="html", out="multi1.htm")
+# 
+# fit.1.rrr = exp(coef(fit.1))
+# 
+# 
+# stargazer(fit.1, type="html", coef=list(fit.1.rrr), p.auto=FALSE, out="multi1rrr.htm")
+# 
+# library(tidyverse)
+# 
+# df %>% filter(variable %in% c("id1", "id2", "id3")) %>% select(varibale, variable_1, variable_2)
+
+```
+

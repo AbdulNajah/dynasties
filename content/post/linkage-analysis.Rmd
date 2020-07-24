@@ -34,263 +34,265 @@ dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 
 ```{r}
-
-dyn_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
-
-##2019
-
-dyn_pre19 <- dyn_all %>% filter(year < 2020)
-
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
 # 
-dyn_pre19_ae_lvl <- dyn_pre19 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-dyn_pre19_ge_lvl <- dyn_pre19 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-dyn_pre19_lb_lvl <- dyn_pre19 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-dyn_pre19_ae_ge_lvl <- merge(dyn_pre19_ge_lvl, dyn_pre19_ae_lvl, by = "family_id" , all =TRUE)
-# 
-dyn_pre19_all_lvl <- merge(dyn_pre19_ae_ge_lvl ,dyn_pre19_lb_lvl,by = "family_id" , all =TRUE )
-# 
-dyn_pre19_all_lvl$levels <- paste(dyn_pre19_all_lvl $election_level.x,dyn_pre19_all_lvl $election_level.y, dyn_pre19_all_lvl $election_level, sep = "")
-# 
-dyn_pre19_all_lvl <- dyn_pre19_all_lvl %>% mutate(level_19 =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-# 
-# 
-dyn_pre19_all_lvl <- dyn_pre19_all_lvl %>% select(family_id, level_19)
-dyn_pre19_all_lvl$year <- as.numeric(2019)
-# 
-# 
-
-##2014
-
-dyn_pre14 <- dyn_all %>% filter(year < 2015)
-
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
-# 
-dyn_pre14_ae_lvl <- dyn_pre14 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-dyn_pre14_ge_lvl <- dyn_pre14 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-dyn_pre14_lb_lvl <- dyn_pre14 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-dyn_pre14_ae_ge_lvl <- merge(dyn_pre14_ge_lvl, dyn_pre14_ae_lvl, by = "family_id" , all =TRUE)
-# 
-dyn_pre14_all_lvl <- merge(dyn_pre14_ae_ge_lvl ,dyn_pre14_lb_lvl,by = "family_id" , all =TRUE )
-# 
-dyn_pre14_all_lvl$levels <- paste(dyn_pre14_all_lvl $election_level.x,dyn_pre14_all_lvl $election_level.y, dyn_pre14_all_lvl $election_level, sep = "")
-# 
-dyn_pre14_all_lvl <- dyn_pre14_all_lvl %>% mutate(level_14 =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-# 
-# 
-dyn_pre14_all_lvl <- dyn_pre14_all_lvl %>% select(family_id, level_14)
-dyn_pre14_all_lvl$year <- as.numeric(2014)
-
-
-
-
-
-
-
-##2009
-
-dyn_pre09 <- dyn_all %>% filter(year < 2010)
-
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
-# 
- dyn_pre09_ae_lvl <- dyn_pre09 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
- dyn_pre09_ge_lvl <- dyn_pre09 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-dyn_pre09_lb_lvl <- dyn_pre09 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-dyn_pre09_ae_ge_lvl <- merge(dyn_pre09_ge_lvl, dyn_pre09_ae_lvl, by = "family_id" , all =TRUE)
-# 
- dyn_pre09_all_lvl <- merge(dyn_pre09_ae_ge_lvl ,dyn_pre09_lb_lvl,by = "family_id" , all =TRUE )
-# 
- dyn_pre09_all_lvl$levels <- paste(dyn_pre09_all_lvl $election_level.x,dyn_pre09_all_lvl $election_level.y, dyn_pre09_all_lvl $election_level, sep = "")
-# 
- dyn_pre09_all_lvl <- dyn_pre09_all_lvl %>% mutate(level_09 =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-# 
-# 
- dyn_pre09_all_lvl <- dyn_pre09_all_lvl %>% select(family_id, level_09)
- dyn_pre09_all_lvl$year <- as.numeric(2009)
-# 
-# 
- 
-##2004
-
-dyn_pre04 <- dyn_all %>% filter(year < 2005)
-
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
-# 
-dyn_pre04_ae_lvl <- dyn_pre04 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-dyn_pre04_ge_lvl <- dyn_pre04 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-dyn_pre04_lb_lvl <- dyn_pre04 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-dyn_pre04_ae_ge_lvl <- merge(dyn_pre04_ge_lvl, dyn_pre04_ae_lvl, by = "family_id" , all =TRUE)
-# 
-dyn_pre04_all_lvl <- merge(dyn_pre04_ae_ge_lvl ,dyn_pre04_lb_lvl,by = "family_id" , all =TRUE )
-# 
-dyn_pre04_all_lvl$levels <- paste(dyn_pre04_all_lvl $election_level.x,dyn_pre04_all_lvl $election_level.y, dyn_pre04_all_lvl $election_level, sep = "")
-# 
-dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% mutate(level_04 =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-# 
-# 
-dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% select(family_id, level_04)
-dyn_pre04_all_lvl$year <- as.numeric(2004)
-
-
-
-
-# 
-# 
-# dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
-# 
-# dyn_fam_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
-# 
-# #dyn_fam_uniq_last_ind %>% group_by(level) %>%  summarise(count = n()) %>% arrange(-count) %>% kable()
-
-##2012
-
-dyn_pre12 <- dyn_all %>% filter(year < 2013)
-
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
-# 
- dyn_pre12_ae_lvl <- dyn_pre12 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
- dyn_pre12_ge_lvl <- dyn_pre12 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-dyn_pre12_lb_lvl <- dyn_pre12 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-dyn_pre12_ae_ge_lvl <- merge(dyn_pre12_ge_lvl, dyn_pre12_ae_lvl, by = "family_id" , all =TRUE)
-# 
- dyn_pre12_all_lvl <- merge(dyn_pre12_ae_ge_lvl ,dyn_pre12_lb_lvl,by = "family_id" , all =TRUE )
-# 
- dyn_pre12_all_lvl$levels <- paste(dyn_pre12_all_lvl $election_level.x,dyn_pre12_all_lvl $election_level.y, dyn_pre12_all_lvl $election_level, sep = "")
-# 
- dyn_pre12_all_lvl <- dyn_pre12_all_lvl %>% mutate(level_12 =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-# 
-# 
- dyn_pre12_all_lvl <- dyn_pre12_all_lvl %>% select(family_id, level_12)
- dyn_pre12_all_lvl$year <- as.numeric(2012)
-# 
-# 
- 
-##2017
-
-dyn_pre17 <- dyn_all %>% filter(year < 2018)
-
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
-# 
-dyn_pre17_ae_lvl <- dyn_pre17 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-dyn_pre17_ge_lvl <- dyn_pre17 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-dyn_pre17_lb_lvl <- dyn_pre17 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-dyn_pre17_ae_ge_lvl <- merge(dyn_pre17_ge_lvl, dyn_pre17_ae_lvl, by = "family_id" , all =TRUE)
-# 
-dyn_pre17_all_lvl <- merge(dyn_pre17_ae_ge_lvl ,dyn_pre17_lb_lvl,by = "family_id" , all =TRUE )
-# 
-dyn_pre17_all_lvl$levels <- paste(dyn_pre17_all_lvl $election_level.x,dyn_pre17_all_lvl $election_level.y, dyn_pre17_all_lvl $election_level, sep = "")
-# 
-dyn_pre17_all_lvl <- dyn_pre17_all_lvl %>% mutate(level_17 =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-# 
-# 
-dyn_pre17_all_lvl <- dyn_pre17_all_lvl %>% select(family_id, level_17)
-dyn_pre17_all_lvl$year <- as.numeric(2017)
-
-
-
-dyn_pre04_09_14_19_12_17 <- rbindlist(list(data.frame(dyn_pre04_all_lvl) , data.frame(dyn_pre09_all_lvl),data.frame(dyn_pre14_all_lvl) , data.frame(dyn_pre19_all_lvl),data.frame(dyn_pre12_all_lvl) , data.frame(dyn_pre17_all_lvl)), use.names = FALSE)
-
-names(dyn_pre04_09_14_19_12_17)[2] <- "level_cum"
-
-dyn <- merge(dyn,dyn_pre04_09_14_19_12_17 , by =c ("year", "family_id"), all.x = TRUE)
-
-dyn<- dyn %>% mutate(level_log_cum= ifelse(level_cum %in% c("AE", "GE"), FALSE, TRUE))
+# dyn_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+# 
+# dyn_all <- dyn_all %>% dplyr::select(-c(level_cum, level_log_cum))
+# 
+# ##2019
+# 
+# dyn_pre19 <- dyn_all %>% filter(year < 2020)
+# 
+# # dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+# #                         election_type == "GE" ~ "GE",
+# #                          TRUE ~ "LB")) 
+# # 
+# dyn_pre19_ae_lvl <- dyn_pre19 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# dyn_pre19_ge_lvl <- dyn_pre19 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# # 
+# dyn_pre19_lb_lvl <- dyn_pre19 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# dyn_pre19_ae_ge_lvl <- merge(dyn_pre19_ge_lvl, dyn_pre19_ae_lvl, by = "family_id" , all =TRUE)
+# # 
+# dyn_pre19_all_lvl <- merge(dyn_pre19_ae_ge_lvl ,dyn_pre19_lb_lvl,by = "family_id" , all =TRUE )
+# # 
+# dyn_pre19_all_lvl$levels <- paste(dyn_pre19_all_lvl $election_level.x,dyn_pre19_all_lvl $election_level.y, dyn_pre19_all_lvl $election_level, sep = "")
+# # 
+# dyn_pre19_all_lvl <- dyn_pre19_all_lvl %>% mutate(level_19 =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# # 
+# # 
+# dyn_pre19_all_lvl <- dyn_pre19_all_lvl %>% select(family_id, level_19)
+# dyn_pre19_all_lvl$year <- as.numeric(2019)
+# # 
+# # 
+# 
+# ##2014
+# 
+# dyn_pre14 <- dyn_all %>% filter(year < 2015)
+# 
+# # dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+# #                         election_type == "GE" ~ "GE",
+# #                          TRUE ~ "LB")) 
+# # 
+# dyn_pre14_ae_lvl <- dyn_pre14 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# dyn_pre14_ge_lvl <- dyn_pre14 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# # 
+# dyn_pre14_lb_lvl <- dyn_pre14 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# dyn_pre14_ae_ge_lvl <- merge(dyn_pre14_ge_lvl, dyn_pre14_ae_lvl, by = "family_id" , all =TRUE)
+# # 
+# dyn_pre14_all_lvl <- merge(dyn_pre14_ae_ge_lvl ,dyn_pre14_lb_lvl,by = "family_id" , all =TRUE )
+# # 
+# dyn_pre14_all_lvl$levels <- paste(dyn_pre14_all_lvl $election_level.x,dyn_pre14_all_lvl $election_level.y, dyn_pre14_all_lvl $election_level, sep = "")
+# # 
+# dyn_pre14_all_lvl <- dyn_pre14_all_lvl %>% mutate(level_14 =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# # 
+# # 
+# dyn_pre14_all_lvl <- dyn_pre14_all_lvl %>% select(family_id, level_14)
+# dyn_pre14_all_lvl$year <- as.numeric(2014)
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# ##2009
+# 
+# dyn_pre09 <- dyn_all %>% filter(year < 2010)
+# 
+# # dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+# #                         election_type == "GE" ~ "GE",
+# #                          TRUE ~ "LB")) 
+# # 
+#  dyn_pre09_ae_lvl <- dyn_pre09 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+#  dyn_pre09_ge_lvl <- dyn_pre09 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# # 
+# dyn_pre09_lb_lvl <- dyn_pre09 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# dyn_pre09_ae_ge_lvl <- merge(dyn_pre09_ge_lvl, dyn_pre09_ae_lvl, by = "family_id" , all =TRUE)
+# # 
+#  dyn_pre09_all_lvl <- merge(dyn_pre09_ae_ge_lvl ,dyn_pre09_lb_lvl,by = "family_id" , all =TRUE )
+# # 
+#  dyn_pre09_all_lvl$levels <- paste(dyn_pre09_all_lvl $election_level.x,dyn_pre09_all_lvl $election_level.y, dyn_pre09_all_lvl $election_level, sep = "")
+# # 
+#  dyn_pre09_all_lvl <- dyn_pre09_all_lvl %>% mutate(level_09 =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# # 
+# # 
+#  dyn_pre09_all_lvl <- dyn_pre09_all_lvl %>% select(family_id, level_09)
+#  dyn_pre09_all_lvl$year <- as.numeric(2009)
+# # 
+# # 
+#  
+# ##2004
+# 
+# dyn_pre04 <- dyn_all %>% filter(year < 2005)
+# 
+# # dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+# #                         election_type == "GE" ~ "GE",
+# #                          TRUE ~ "LB")) 
+# # 
+# dyn_pre04_ae_lvl <- dyn_pre04 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# dyn_pre04_ge_lvl <- dyn_pre04 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# # 
+# dyn_pre04_lb_lvl <- dyn_pre04 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# dyn_pre04_ae_ge_lvl <- merge(dyn_pre04_ge_lvl, dyn_pre04_ae_lvl, by = "family_id" , all =TRUE)
+# # 
+# dyn_pre04_all_lvl <- merge(dyn_pre04_ae_ge_lvl ,dyn_pre04_lb_lvl,by = "family_id" , all =TRUE )
+# # 
+# dyn_pre04_all_lvl$levels <- paste(dyn_pre04_all_lvl $election_level.x,dyn_pre04_all_lvl $election_level.y, dyn_pre04_all_lvl $election_level, sep = "")
+# # 
+# dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% mutate(level_04 =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# # 
+# # 
+# dyn_pre04_all_lvl <- dyn_pre04_all_lvl %>% select(family_id, level_04)
+# dyn_pre04_all_lvl$year <- as.numeric(2004)
+# 
+# 
+# 
+# 
+# # 
+# # 
+# # dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+# # 
+# # dyn_fam_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
+# # 
+# # #dyn_fam_uniq_last_ind %>% group_by(level) %>%  summarise(count = n()) %>% arrange(-count) %>% kable()
+# 
+# ##2012
+# 
+# dyn_pre12 <- dyn_all %>% filter(year < 2013)
+# 
+# # dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+# #                         election_type == "GE" ~ "GE",
+# #                          TRUE ~ "LB")) 
+# # 
+#  dyn_pre12_ae_lvl <- dyn_pre12 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+#  dyn_pre12_ge_lvl <- dyn_pre12 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# # 
+# dyn_pre12_lb_lvl <- dyn_pre12 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# dyn_pre12_ae_ge_lvl <- merge(dyn_pre12_ge_lvl, dyn_pre12_ae_lvl, by = "family_id" , all =TRUE)
+# # 
+#  dyn_pre12_all_lvl <- merge(dyn_pre12_ae_ge_lvl ,dyn_pre12_lb_lvl,by = "family_id" , all =TRUE )
+# # 
+#  dyn_pre12_all_lvl$levels <- paste(dyn_pre12_all_lvl $election_level.x,dyn_pre12_all_lvl $election_level.y, dyn_pre12_all_lvl $election_level, sep = "")
+# # 
+#  dyn_pre12_all_lvl <- dyn_pre12_all_lvl %>% mutate(level_12 =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# # 
+# # 
+#  dyn_pre12_all_lvl <- dyn_pre12_all_lvl %>% select(family_id, level_12)
+#  dyn_pre12_all_lvl$year <- as.numeric(2012)
+# # 
+# # 
+#  
+# ##2017
+# 
+# dyn_pre17 <- dyn_all %>% filter(year < 2018)
+# 
+# # dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
+# #                         election_type == "GE" ~ "GE",
+# #                          TRUE ~ "LB")) 
+# # 
+# dyn_pre17_ae_lvl <- dyn_pre17 %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# dyn_pre17_ge_lvl <- dyn_pre17 %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# # 
+# # 
+# dyn_pre17_lb_lvl <- dyn_pre17 %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
+# # 
+# dyn_pre17_ae_ge_lvl <- merge(dyn_pre17_ge_lvl, dyn_pre17_ae_lvl, by = "family_id" , all =TRUE)
+# # 
+# dyn_pre17_all_lvl <- merge(dyn_pre17_ae_ge_lvl ,dyn_pre17_lb_lvl,by = "family_id" , all =TRUE )
+# # 
+# dyn_pre17_all_lvl$levels <- paste(dyn_pre17_all_lvl $election_level.x,dyn_pre17_all_lvl $election_level.y, dyn_pre17_all_lvl $election_level, sep = "")
+# # 
+# dyn_pre17_all_lvl <- dyn_pre17_all_lvl %>% mutate(level_17 =case_when(
+#   levels == "GEAELB" ~ "GE-AE-LB",
+#   levels == "GEAENA" ~ "GE-AE",
+#   levels == "GENALB" ~ "GE-LB",
+#   levels == "GENANA" ~ "GE",
+#   levels == "NAAELB" ~ "AE-LB",
+#   levels == "NAAENA" ~ "AE",
+#   levels == "NANALB" ~ "LB",
+# ))
+# # 
+# # 
+# dyn_pre17_all_lvl <- dyn_pre17_all_lvl %>% select(family_id, level_17)
+# dyn_pre17_all_lvl$year <- as.numeric(2017)
+# 
+# 
+# 
+# dyn_pre04_09_14_19_12_17 <- rbindlist(list(data.frame(dyn_pre04_all_lvl) , data.frame(dyn_pre09_all_lvl),data.frame(dyn_pre14_all_lvl) , data.frame(dyn_pre19_all_lvl),data.frame(dyn_pre12_all_lvl) , data.frame(dyn_pre17_all_lvl)), use.names = FALSE)
+# 
+# names(dyn_pre04_09_14_19_12_17)[2] <- "level_cum"
+# 
+# dyn <- merge(dyn,dyn_pre04_09_14_19_12_17 , by =c ("year", "family_id"), all.x = TRUE)
+# 
+# dyn<- dyn %>% mutate(level_log_cum= ifelse(level_cum %in% c("AE", "GE"), FALSE, TRUE))
 
 
 
@@ -428,11 +430,16 @@ dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
 dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
 
 
-dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
+dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(family_id, indus_2, indus_3, indus_4)
 
-names(dyn_indus)[1] <- "election_type"
+#names(dyn_indus)[1] <- "election_type"
 
-dyn_indus_ae_ge <- merge(dyn, dyn_indus, by = c("election_type", "year", "pid"))
+dyn_indus_ae_ge <- merge(dyn,  dyn_indus, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+
+# dyn_indus <- dyn_indus %>% distinct(family_id, .keep_all = TRUE)%>% dplyr::select(family_id, indus_rt, indus_nrt,indus_count)
+# 
+# # 
+# dyn_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
 
 dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
 

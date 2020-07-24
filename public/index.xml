@@ -6,10 +6,30 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Quality of candidates</title>
+      <link>/post/cand_quality/</link>
+      <pubDate>Thu, 23 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/cand_quality/</guid>
+      <description>2012 &amp;amp; 2017AssetsCriminalityGE 2019AssetsCriminalityGenderEducationProfesssion#Miscellaneous nhj
+% filter(year ==2019) --% group_by(dyn_con) %% distinct(constituency_no, .keep_all = TRUE) %% summarise(count = n()) %% kable(caption = &#34;Summary&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;N&#34;)) --%group_by(constituency_no) %% mutate(n_cand = n()) --% group_by(dyn_con) %% summarise(mean(n_cand)) %% kable(caption = &#34;Average n of candidtes&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;Mean n_cand&#34;),digits = 0) --% group_by(dyn_con) %% summarise(mean(total_assets), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %% kable(caption = &#34;</description>
+    </item>
+    
+    <item>
+      <title>Families</title>
+      <link>/post/families/</link>
+      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/families/</guid>
+      <description>#Miscellaneous nhj
+SuccesslandindustiresN_ministerMinister duration (months)schoolcollegeDeclining283.011.580.4511.920.290.29Rising401.822.090.7629.250.400.47Regression Results - Dynasties successDependent variable:successcaste_uc4.</description>
+    </item>
     
     <item>
       <title>Taluqdars Analysis</title>
