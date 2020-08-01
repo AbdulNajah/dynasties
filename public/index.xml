@@ -2,139 +2,162 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Political families of Uttar Pradesh</title>
-    <link>/</link>
+    <link>https://dynasties.netlify.app/</link>
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 28 Jul 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://dynasties.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Graphs</title>
-      <link>/post/graphs/</link>
+      <link>https://dynasties.netlify.app/post/graphs/</link>
       <pubDate>Tue, 28 Jul 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/graphs/</guid>
       <description>% melt(1:1, 2:7) %% --% select(Loksabha, serious_crime, non_serious_crime) %% filter(Loksabha!= &#34;13th&#34;) %% melt(1:1, 2:3) --% filter(Loksabha!= &#34;13th&#34;), aes(Loksabha, Assets))+ --% filter(Loksabha!= &#34;13th&#34;), aes(Loksabha, Dynast))+ --</description>
+=======
+      <guid>https://dynasties.netlify.app/post/graphs/</guid>
+      <description></description>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
     </item>
     
     <item>
       <title>Quality of candidates</title>
-      <link>/post/cand_quality/</link>
+      <link>https://dynasties.netlify.app/post/cand_quality/</link>
       <pubDate>Thu, 23 Jul 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/cand_quality/</guid>
       <description>2012 &amp;amp; 2017AssetsCriminalityProfessionEducationGE 2019AssetsCriminalityGenderEducationProfesssion% filter(year ==2019) --% group_by(dyn_con) %% distinct(constituency_no, .keep_all = TRUE) %% summarise(count = n()) %% kable(caption = &#34;Summary&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;N&#34;)) --%group_by(constituency_no) %% mutate(n_cand = n()) --% group_by(dyn_con) %% summarise(mean(n_cand)) %% kable(caption = &#34;Average n of candidtes&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;Mean n_cand&#34;),digits = 0) --% group_by(dyn_con) %% summarise(mean(total_assets), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %% kable(caption = &#34;</description>
+=======
+      <guid>https://dynasties.netlify.app/post/cand_quality/</guid>
+      <description>Miscellaneous nhj2012 &amp;amp; 2017AssetsCriminalityProfessionGE 2019AssetsCriminalityGenderEducationProfesssionInvolvementMiscellaneous nhj% filter(year ==2019) --% group_by(dyn_con) %% distinct(constituency_no, .keep_all = TRUE) %% summarise(count = n()) %% kable(caption = &#34;Summary&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;N&#34;)) --%group_by(constituency_no) %% mutate(n_cand = n()) --% group_by(dyn_con) %% summarise(mean(n_cand)) %% kable(caption = &#34;Average n of candidtes&#34;, col.names = c(&#34;Constituency Type&#34;</description>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
     </item>
     
     <item>
       <title>Families</title>
-      <link>/post/families/</link>
+      <link>https://dynasties.netlify.app/post/families/</link>
       <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/families/</guid>
+      <guid>https://dynasties.netlify.app/post/families/</guid>
       <description>DecadeProporion of families startedProportion of families with second member19700.580.0919800.160.1419900.190.2520000.060.2420100.010.27Table 1: Proportion of families started in each decadedecadeprop19700.</description>
     </item>
     
     <item>
       <title>Taluqdars Analysis</title>
-      <link>/post/taluqdars_analysis/</link>
+      <link>https://dynasties.netlify.app/post/taluqdars_analysis/</link>
       <pubDate>Mon, 20 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/taluqdars_analysis/</guid>
+      <guid>https://dynasties.netlify.app/post/taluqdars_analysis/</guid>
       <description>SummaryRevenue 1930Revenue BooksSummaryTable 1: Caste DistributionCasteCountRajputs174Muslims90Other upper caste31Others18Table 2: Politics active statusstatusCount1132393261Table 3: Caste summarycastemean_1930mean_bookmedian_1930median_bookMuslims266771842593108670Other upper caste368004060685589372Others39857295531238612971Rajputs44246303492104916099Table 4: Active politics summaryActive statusmean_1930mean_bookmedian_1930median_book189394540759480841900282691620503701628432326903206681256110861Revenue 1930Revenue Books</description>
     </item>
     
     <item>
       <title>Models</title>
-      <link>/post/models/</link>
+      <link>https://dynasties.netlify.app/post/models/</link>
       <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/models/</guid>
+      <guid>https://dynasties.netlify.app/post/models/</guid>
       <description>AE AllAE GE allAE 2012 -17GE 2009:19AE-GE (2009:19)AE AllRegression Results - AE AllDependent variable:DynastUpward LinkageDownward Linkage(1)(2)(3)caste_uc0.</description>
     </item>
     
     <item>
       <title>Linkage Analysis</title>
-      <link>/post/linkage-analysis/</link>
+      <link>https://dynasties.netlify.app/post/linkage-analysis/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/linkage-analysis/</guid>
+      <guid>https://dynasties.netlify.app/post/linkage-analysis/</guid>
       <description>SummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditureType of work v/s projectsType of work v/s costcost categoriesRaphaelVote dispersionSummaryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE130TRUE201AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE40946486976030927099946TRUE532434531257898334705213CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
     </item>
     
     <item>
       <title>District Level Analysis</title>
-      <link>/post/district-levelo/</link>
+      <link>https://dynasties.netlify.app/post/district-levelo/</link>
       <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/district-levelo/</guid>
+=======
+      <guid>https://dynasties.netlify.app/post/district-levelo/</guid>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
       <description>Dynast scorecriminalityDas guptaAlexanderIyerDynast scoredistrict namedynasty scoreETAWAH0.24MAINPURI0.23MORADABAD0.21LALITPUR0.21MATHURA0.20ETAH0.17baharaich0.15LUCKNOW0.</description>
     </item>
     
     <item>
       <title>ADR Survey Analysis</title>
-      <link>/post/adr-survey/</link>
+      <link>https://dynasties.netlify.app/post/adr-survey/</link>
       <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/adr-survey/</guid>
+      <guid>https://dynasties.netlify.app/post/adr-survey/</guid>
       <description>All IndiaImageUPy
 All IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s identityIssueComposite Score - non-dynastComposite Score - dynastImportance - non-dynastImportance - dynastPerformance - non-dynastPerformance- dynastjob_training4.183.942.272.241.671.</description>
     </item>
     
     <item>
       <title>Local Body Analysis</title>
-      <link>/post/local-body-analysis/</link>
+      <link>https://dynasties.netlify.app/post/local-body-analysis/</link>
       <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/local-body-analysis/</guid>
+      <guid>https://dynasties.netlify.app/post/local-body-analysis/</guid>
       <description>Members distribution among familiesLocal bodiesElection WonLinkageLandcasteEducationMembers distribution among familiesRelative IDRelativeCountProportion1Patriarch7540.402Father530.033Mother520.034Son530.</description>
     </item>
     
     <item>
       <title>Marginal Candidates Analysis</title>
-      <link>/post/ge_experiments/</link>
+      <link>https://dynasties.netlify.app/post/ge_experiments/</link>
       <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/ge_experiments/</guid>
+      <guid>https://dynasties.netlify.app/post/ge_experiments/</guid>
       <description>Vote shareVote shareYearcount_INDcount_NAprop_INDprop_NA19622061350.600.4019674471160.790.2119719573310.740.2619771122760.940.06198027433640.</description>
     </item>
     
     <item>
       <title>General Elections 2019</title>
-      <link>/post/development-francesca/</link>
+      <link>https://dynasties.netlify.app/post/development-francesca/</link>
       <pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/development-francesca/</guid>
+      <guid>https://dynasties.netlify.app/post/development-francesca/</guid>
       <description>GE 2019 summaryRegressions% filter(year %!in% c(1974)) --% mutate(contest_type_1 =case_when(position ==1 &amp;dyn_cum ==0 ~1, --% group_by( election_type,year,constituency_no) %% mutate(sum_cont_type = sum(contest_type_1)) %% mutate(contest_type =ifelse(sum_cont_type ==3, &#34;non-fam v/s non-fam&#34;,ifelse(sum_cont_type ==5, &#34;fam v/s non-fam&#34;, ifelse(sum_cont_type ==6, &#34;non-fam v/s fam&#34;, ifelse(sum_cont_type ==8, &#34;fam v/s fam&#34;, &#34;NA&#34;))))) --% group_by( year,constituency_no) %% summarise(sum = sum(contest_type)) %%group_by(sum) %% summarise(n()) --% filter(election_type ==&#34;AE&#34;) --% filter(election_type ==&#34;GE&#34;) --% select(State_Name, Constituency_No, Position,Poll_No, Turncoat) %% rename(turncoat_true = Turncoat) --% filter(Vote_Share_Percentage 5) --% filter(Vote_Share_Percentage 2) --% filter(Vote_Share_Percentage 10) --% filter(Vote_Share_Percentage 1) --% replace_na(&#34;</description>
     </item>
     
     <item>
       <title>Election Finance Analysis</title>
-      <link>/post/election-finance/</link>
+      <link>https://dynasties.netlify.app/post/election-finance/</link>
       <pubDate>Fri, 26 Jun 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/election-finance/</guid>
       <description>Election finance wrt family typeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection finance wrt caste groupFundingExpenditureElection finance wrt family typeFundingTable 1: Election Funding - AveragesPolitician’s identityTotal fundCandidatePartyDonationsFamily1056686296719330432424393Non-family1227143395432455376373990ExpenditureTable 2: Election Expenditure - AveragesPolitician’s identityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFamily105318161761518259106031145132763479319352457Non-family10371858745848287898196134612791487173883156Election finance wrt to criminality(#tab:merging with funding data)Summary of the criminality variableCriminalityCountFALSE397TRUE130FundingTable 3: Election Funding - AveragesPolitician’s criminalityTotal fundCandidatePartyDonationsFALSE1226784376309453325396432TRUE1063013355725325604370548ExpenditureTable 4: Election Expenditure - AveragesPolitician’s criminalityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFALSE10488398181349759193425138196812997530581210TRUE102285591699467110117707132381710598057862322Election finance wrt caste groupFundingTable 5: Election Funding - AveragesPolitician’s caste groupTotal fundCandidatePartyDonationsDalit996139349231295145350293Muslim803914200528190539416303Non-Yadav OBC1092046452750284226355070Others856452285643327787243022Upper Caste1438744369884656068404725Yadav1248178490100317078442000ExpenditureTable 6: Election Expenditure - AveragesPolitician’s caste groupTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingDalit102905851080512869868021388417817153044108251Muslim9465417934446343283341156452421789333628458Non-Yadav OBC101646667297500424928581172386669066005105955Others89547910260443416210186893750615915210149403Upper Caste1081575110791457338112200141122993158934971460Yadav114962152431624456113364145728790587731157272</description>
+=======
+      <guid>https://dynasties.netlify.app/post/election-finance/</guid>
+      <description>Election finance wrt family typeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection finance wrt caste groupFundingExpenditureElection finance wrt family typeFundingTable 1: Election Funding - AveragesPolitician’s identityTotal fundCandidatePartyDonationsFamily1094946322420328851438938Non-family1218951389519459137367889ExpenditureTable 2: Election Expenditure - AveragesPolitician’s identityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFamily107501269668528095107467137471819619658553766Non-family10301008582947884797528136618775327007283674Election finance wrt to criminality(#tab:merging with funding data)Summary of the criminality variableCriminalityCountFALSE397TRUE130FundingTable 3: Election Funding - AveragesPolitician’s criminalityTotal fundCandidatePartyDonationsFALSE1226784376309453325396432TRUE1063013355725325604370548ExpenditureTable 4: Election Expenditure - AveragesPolitician’s criminalityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFALSE10488398181349759193425138196812997530581210TRUE102285591699467110117707132381710598057862322Election finance wrt caste groupFundingTable 5: Election Funding - AveragesPolitician’s caste groupTotal fundCandidatePartyDonationsDalit996139349231295145350293Muslim803914200528190539416303Non-Yadav OBC1092046452750284226355070Others856452285643327787243022Upper Caste1438744369884656068404725Yadav1248178490100317078442000ExpenditureTable 6: Election Expenditure - AveragesPolitician’s caste groupTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingDalit102905851080512869868021388417817153044108251Muslim9465417934446343283341156452421789333628458Non-Yadav OBC101646667297500424928581172386669066005105955Others89547910260443416210186893750615915210149403Upper Caste1081575110791457338112200141122993158934971460Yadav114962152431624456113364145728790587731157272</description>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
     </item>
     
     <item>
       <title>Political Characteristics Analysis</title>
-      <link>/post/pol-char-analysis/</link>
+      <link>https://dynasties.netlify.app/post/pol-char-analysis/</link>
       <pubDate>Tue, 23 Jun 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/pol-char-analysis/</guid>
+=======
+      <guid>https://dynasties.netlify.app/post/pol-char-analysis/</guid>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
       <description>SummaryMargin of VictoryTurnoutEffective number of partiesNumber of candidatesTurncoatSame partyIncumbentRecontestNumber of termsConstituency typeVote dispersionCabinet ministersSummaryTable 1: Summary of the dataElection TypePolitician’s IdentityProportionAEFamily0.09AENon-family0.91GEFamily0.</description>
     </item>
     
     <item>
       <title>NREGA Analysis</title>
-      <link>/post/nrega-analysis/</link>
+      <link>https://dynasties.netlify.app/post/nrega-analysis/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/nrega-analysis/</guid>
+      <guid>https://dynasties.netlify.app/post/nrega-analysis/</guid>
       <description>Constituency typeexperiencecasteVariable summary
 Workdays - total days worked under NREGS
 – Coded as: log(Workdays + 1)
@@ -147,37 +170,51 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
     
     <item>
       <title>PMGSY Analysis</title>
-      <link>/post/pmgsy-analysis/</link>
+      <link>https://dynasties.netlify.app/post/pmgsy-analysis/</link>
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/pmgsy-analysis/</guid>
       <description>PMGSY roadsSummary statsConstituency typeExperience categoriesCasteConstituency typeExperience categoriesCastePWD roadssummary statsFamily typeExperiencecastePMGSY roadsSummary statsTable 1: PMGSY across yearsLoksabha TermNumber of projectsLength coverd (Kms)Total sanctioned amount (Lakhs)200412037539256034200924269261354112Constituency typeTable 2: PMGSY summary stats wrt constituency typeConstituency TypeAverage number of projectsAverage length per projectAverage length over allFamily34.</description>
+=======
+      <guid>https://dynasties.netlify.app/post/pmgsy-analysis/</guid>
+      <description>PMGSY roadsSummary statsConstituency typeExperience categoriesCasteConstituency typeExperience categoriesCastePWD roadssummary statsFamily typeExperiencecastePMGSY roadsSummary statsTable 1: PMGSY across yearsLoksabha TermNumber of projectsLength coverd (Kms)Total sanctioned amount (Lakhs)200412037539256034200924269261354112Constituency typeTable 2: PMGSY summary stats wrt constituency typeConstituency TypeAverage number of projectsAverage length per projectAverage length over allFamily33.</description>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
     </item>
     
     <item>
       <title>MPLADS Analyis</title>
-      <link>/post/mplads-analysis/</link>
+      <link>https://dynasties.netlify.app/post/mplads-analysis/</link>
       <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/mplads-analysis/</guid>
+=======
+      <guid>https://dynasties.netlify.app/post/mplads-analysis/</guid>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
       <description>MPLADSFamil v/s Non-familyDaysNumber of ProjectsExpenditureExperience categoriesType of work v/s projectsType of work v/s costcost categoriesMPLADSFamil v/s Non-familyTable 1: MPLADS prjects and spendingType of constiuencyAverage number of contractsAvergae expenditure per projectNon-family340347082Family408318774Table 2: MPLADS prjects and spendingYearType of constiuencyAverage number of contractsAvergae expenditure per project2004Family3352866562004Non-family3433062032009Family4793501872009Non-family336405681The difference in the mean of both project count and the expenditure is statistically significant.</description>
     </item>
     
     <item>
       <title>ADR  Analysis</title>
-      <link>/post/adr-analysis/</link>
+      <link>https://dynasties.netlify.app/post/adr-analysis/</link>
       <pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/adr-analysis/</guid>
       <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePolitical expereincePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimePolitical expereinceFamilycaste v/s crime% mutate(crime_ser_d = if_else(serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --PerfromanceAll electionsTable 1: Average performance of MPs in the Parliament(trimmed mean)EntityDebates partcipatedProprtion of the sessionsattendedQuestions askedNon-family34.</description>
+=======
+      <guid>https://dynasties.netlify.app/post/adr-analysis/</guid>
+      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePolitical expereincePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimePolitical expereinceFamilycaste v/s crime% mutate(crime_ser_d = if_else(serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --PerfromanceAll electionsTable 1: Average performance of MPs in the Parliament(trimmed mean)EntityDebates partcipatedProprtion of the sessionsattendedQuestions askedNon-family35.</description>
+>>>>>>> 76a629cc983a9dc0e11e92a8abfa013f4999ee61
     </item>
     
     <item>
       <title>Master file Analyis</title>
-      <link>/post/master-file-analysis/</link>
+      <link>https://dynasties.netlify.app/post/master-file-analysis/</link>
       <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/master-file-analysis/</guid>
+      <guid>https://dynasties.netlify.app/post/master-file-analysis/</guid>
       <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levels% --% --% --% --% --% --% --% --% --% --% --AE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019.</description>
     </item>
     
