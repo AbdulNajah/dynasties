@@ -14,7 +14,7 @@ output:
 
 
 
-```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+```{r set up, warning=FALSE, include=FALSE, message= FALSE, cache = FALSE}
 # Do not edit this code block/chunk
 knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
 
@@ -34,6 +34,7 @@ library(gridExtra)
 
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
+dyn <- dyn
 
 ```
 
@@ -1268,7 +1269,7 @@ ggplot(dyn_adr_ge_w_p  %>% filter( questions_asked != "NA"), aes(factor(dyn_cum)
 
 ```
 
-##### Politcal experience
+<!-- ##### Politcal experience -->
 
 
 
