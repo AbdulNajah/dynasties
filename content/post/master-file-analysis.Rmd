@@ -317,11 +317,12 @@ dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type
 dyn_ae <- dyn_ae_ge %>% filter(election_type == "AE" & year != 1974 & position== 1)
 
 
-ae_dyn <- dyn_ae%>%  group_by(year, dyn_tot) %>% summarise(count = n_distinct(family_id))
+
+ae_dyn <- dyn_ae%>%  group_by(year, dyn_cum) %>% summarise(count = n_distinct(family_id))
 
 
 
-ae_dyn <- ae_dyn %>% spread(key = dyn_tot, value = count ) %>%  rename( non_dyn= "0", dyn = "1") ##%>% mutate(prop = (dyn/non_dyn))
+ae_dyn <- ae_dyn %>% spread(key = dyn_cum, value = count ) %>%  rename( non_dyn= "0", dyn = "1") ##%>% mutate(prop = (dyn/non_dyn))
 
 ae_dyn <- ae_dyn %>% rowwise() %>% 
   mutate(sum= dyn+ non_dyn,
@@ -335,7 +336,7 @@ ggplot(ae_dyn, aes(x = factor(year), y=prop, group = 1))+
   
   theme_minimal_grid(12)+
   labs(title = "Proportion of dynasties over years", x = "Year", y = "Proportion")+
-  scale_y_continuous(limits = c(0,.25),breaks = c(0,.05,.10,.15,.20,.25))+
+  scale_y_continuous(limits = c(0,.20),breaks = c(0,.05,.10,.15,.20))+
   # theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
         plot.background = element_blank(),
