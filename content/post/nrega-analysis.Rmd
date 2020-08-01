@@ -11,7 +11,7 @@ editor_options:
 
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 # Do not edit this code block/chunk
-knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
 
@@ -29,6 +29,8 @@ library(gridExtra)
 
 
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+
 nrega <- fread("D:/cpr/up-dynasties/dyn_other_data/nrega.csv", stringsAsFactors = FALSE)
 
 dyn_ge_w_09 <- dyn %>% filter(year == 2009 &position == 1)

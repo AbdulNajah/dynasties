@@ -27,7 +27,75 @@
   
 
 
-<p><img src="/post/graphs_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<!-- ```{r} -->
+<!-- library(cowplot) -->
+<!-- ls <- data.frame(Loksabha = c("17th", "16th", "15th", "14th", "13th"), -->
+<!--            Business = c(28.4,26.3,21.6,19.3,17.3), -->
+<!--            Assets = c(42.47, 27.49, 12.22, 4.83, NA), -->
+<!--            Dynast = c(30.1, 28.1, 30.1, 20.1, NA), -->
+<!--            serious_crime = c(43,34,29,22, NA), -->
+<!--            non_serious_crime = c(29,21,14,9,NA), -->
+<!--            First_time_MPs = c(51,58,53,41,33) -->
+<!--            ) -->
+<!-- ls_caste <- data.frame(Loksabha = c("15th", "16th", "17th"), -->
+<!--            Forward_castes = c(41.6,43.7,42.8), -->
+<!--            OBC = c(21, 22.9, 22.8), -->
+<!--            SC = c(16.2, 16.8, 16.2), -->
+<!--            ST = c(10.5, 10, 9.9), -->
+<!--            Muslims = c(5.3, 4.4, 4.2), -->
+<!--            Others = c(5.4, 2.2, 4.1)) -->
+<!-- caste <- ls_caste %>% melt(1:1, 2:7) %>%  -->
+<!--   ggplot(aes(Loksabha, value, fill = variable,label = round(value,0)))+ -->
+<!--   geom_bar(stat = "identity", position = "stack")+ -->
+<!--    geom_text(size = 2, position = position_stack(vjust = 0.5))+ -->
+<!--   scale_fill_manual(values = c( "#6aaa96", "#aecdc2", "#f1f1f1", "#f0b8b8","#e67f83","#d43d51"))+ -->
+<!--   labs (title = "Caste distribution of MPs", y = "", x = "" )+ -->
+<!--   theme_minimal_hgrid(12)+ -->
+<!--    theme(legend.position = "top",  -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.key.size = unit(.5,"line")) -->
+<!-- crime_df <- ls %>% select(Loksabha, serious_crime, non_serious_crime) %>% filter(Loksabha!= "13th") %>% melt(1:1, 2:3)  -->
+<!-- crime_df$variable <- factor(crime_df$variable, levels = c("non_serious_crime", "serious_crime")) -->
+<!-- crime <- ggplot( crime_df,aes(Loksabha ,value, group = variable, fill = variable))+ -->
+<!--   geom_bar(stat= "identity", position = "dodge")+ -->
+<!--   #guides(fill = guide_legend(reverse = TRUE)) + -->
+<!--   #coord_flip()+ -->
+<!--   labs (title = "MPs with criminal cases", y = "" , x = "")+ -->
+<!--   scale_fill_manual(values =  c( "#9DBEBB", "#468189"))+ -->
+<!--   theme_minimal_hgrid(12)+ -->
+<!--   theme(legend.position = "top",  -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.key.size = unit(.5,"line")) -->
+<!-- assets <-  ggplot(ls %>% filter(Loksabha!= "13th"), aes(Loksabha, Assets))+ -->
+<!--   geom_bar(stat= "identity", width = .75, fill = "steelblue")+ -->
+<!--   theme_minimal_hgrid(12)+ -->
+<!--   labs (title =  "Median asset decalred by MPs" , subtitle = "(in Million Rs)", y ="", x= "") -->
+<!-- business <- ggplot(ls, aes(Loksabha, Business))+ -->
+<!--   geom_bar(stat= "identity", width = .75, fill = "steelblue")+ -->
+<!--   theme_minimal_hgrid(12)+ -->
+<!--   labs (  y = "" ,title = "MPs with business occupation",subtitle = "(in percentage)")+ -->
+<!--   scale_y_continuous(limits = c(0,30)) -->
+<!--  #theme(axis.title.x = element_blank()) -->
+<!-- dynast <- ggplot(ls %>% filter(Loksabha!= "13th"), aes(Loksabha, Dynast))+ -->
+<!--   geom_bar(stat= "identity", width = .75, fill = "steelblue")+ -->
+<!--   theme_minimal_hgrid(12)+ -->
+<!--   labs ( title = "MPs with dynastic linkage", subtitle = "(in percentage)", y = "") -->
+<!--   #theme(axis.title.x = element_blank()) -->
+<!-- first_time_mp <- ggplot(ls , aes(Loksabha,First_time_MPs ))+ -->
+<!--   geom_bar(stat= "identity", width = .75, fill = "steelblue")+ -->
+<!--   theme_minimal_hgrid(12)+ -->
+<!--   labs (title =  "First timeMPs" , subtitle = "(in percentage)", y ="") -->
+<!--   #theme_cowplot() -->
+<!-- #00876c -->
+<!-- #6aaa96 -->
+<!-- #aecdc2 -->
+<!-- #f1f1f1 -->
+<!-- #f0b8b8 -->
+<!-- #e67f83 -->
+<!-- #d43d51 -->
+<!-- #plot_grid(business,dynast,assets,crime, caste, first_time_mp) -->
+<!-- plot_grid(caste, crime,assets, business,dynast, first_time_mp) -->
+<!-- ``` -->
 
 </article>
 

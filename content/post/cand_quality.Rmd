@@ -27,7 +27,7 @@ library(ggbump)
 select <- dplyr::select
 ```
 
-# Miscellaneous nhj 
+
 
 ```{r file config}
 
@@ -44,7 +44,7 @@ dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= i
 
 dyn_ae_con <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% distinct(constituency_no,year, .keep_all = TRUE)%>% select(year, constituency_name, constituency_no, dyn_con) %>% arrange( constituency_no, year)
 
-write.csv(dyn_ae_con ,"D:/cpr/up-dynasties/dyn_other_data/dyn_ae_con.csv" )
+#write.csv(dyn_ae_con ,"D:/cpr/up-dynasties/dyn_other_data/dyn_ae_con.csv" )
 
 dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum)%>% distinct(year, constituency_no, .keep_all = TRUE)
 
@@ -175,37 +175,37 @@ adr_dyn$total_assets <- as.numeric(adr_dyn$total_assets)
 
 adr_dyn_12_17 <- adr_dyn %>% filter (year %in% c(2012,2017))
 
-adr_12_17 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_adr_12_17.csv")
+#adr_12_17 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_adr_12_17.csv")
 
 
-
-str(adr_12_17)
-
-summary(adr_12_17)
-adr_12_17  %>% mutate(str_sub(total_assets,4,0))
-
-str_remove(adr_12_17$total_assets,"[ ]") %>% head(20)
-
-str_sub(adr_12_17$total_assets,4,-1) %>% head(20)
-
-
-
-
-
-adr_12_17$total_assets <- str_trim(adr_12_17$total_assets)
-
-adr_12_17$total_assets<- str_remove(adr_12_17$total_assets,"[ ]") 
-
-adr_12_17$total_assets <- str_sub(adr_12_17$total_assets,3,-1)
-adr_12_17$total_assets<- str_remove_all(adr_12_17$total_assets,"[,]") %>%  as.numeric()
-
-adr_12_17$total_movable_assets_totals<- str_remove_all(adr_12_17$total_movable_assets_totals,"[,]") %>%  as.numeric()
-
-remove <- c(",", "crore+")
-
-adr_12_17$total_immovable_assets_totals<- str_remove_all(adr_12_17$total_immovable_assets_totals,"[,]") %>%  as.numeric()
-
-adr_12_17 %>% select(8:10) %>% summarise_all (funs(sum(is.na(.))))
+# 
+# str(adr_12_17)
+# 
+# summary(adr_12_17)
+# adr_12_17  %>% mutate(str_sub(total_assets,4,0))
+# 
+# str_remove(adr_12_17$total_assets,"[ ]") %>% head(20)
+# 
+# str_sub(adr_12_17$total_assets,4,-1) %>% head(20)
+# 
+# 
+# 
+# 
+# 
+# adr_12_17$total_assets <- str_trim(adr_12_17$total_assets)
+# 
+# adr_12_17$total_assets<- str_remove(adr_12_17$total_assets,"[ ]") 
+# 
+# adr_12_17$total_assets <- str_sub(adr_12_17$total_assets,3,-1)
+# adr_12_17$total_assets<- str_remove_all(adr_12_17$total_assets,"[,]") %>%  as.numeric()
+# 
+# adr_12_17$total_movable_assets_totals<- str_remove_all(adr_12_17$total_movable_assets_totals,"[,]") %>%  as.numeric()
+# 
+# remove <- c(",", "crore+")
+# 
+# adr_12_17$total_immovable_assets_totals<- str_remove_all(adr_12_17$total_immovable_assets_totals,"[,]") %>%  as.numeric()
+# 
+# adr_12_17 %>% select(8:10) %>% summarise_all (funs(sum(is.na(.))))
 
 
 # fruits <- c("one apple", "two pears", "three bananas")
@@ -250,7 +250,7 @@ adr_12_17 <- adr_12_17 %>% mutate(profession_new = ifelse(Profession %in% c("Med
                                              ifelse(Profession %in% c("Social Worker", "Politician"), "Social Work", 
                                                     ifelse(Profession %in% c("Dependent", "Driver", "Not Known", "Others", "Wage Labourer/Worker"), "Others", Profession))))
 
-table(adr_12_17$profession_new)
+#table(adr_12_17$profession_new)
 
 adr_12_17 %>% group_by(dyn_con, profession_new) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, profession_new, prop) %>% 
   ggplot(aes(factor(dyn_con), prop, fill= profession_new,label = round(prop,2)))+
@@ -278,6 +278,23 @@ adr_12_17 %>% group_by(dyn_con, profession_new) %>% summarise(count = n()) %>% g
         panel.grid.minor = element_blank()
   ) 
  
+```
+
+
+## Education
+
+```{r}
+
+  adr_12_17$education_cl <- case_when(str_detect(adr_12_17$education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "School", str_detect(adr_12_17$education,"(Doctorate)|(Post)") ~ "PG+",str_detect(adr_12_17$education,"(Unknown)|(Not Given)") ~"NA" ,TRUE ~ "UG") 
+
+#table(adr_12_17$education_cl)
+
+adr_12_17$education_cl <- factor(adr_12_17$education_cl,levels =c( "School", "UG", "PG+"))
+
+
+
+adr_12_17 %>% filter(education_cl != "NA") %>% group_by(dyn_con, education_cl) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% arrange(education_cl) %>% select(dyn_con, education_cl, prop) %>% kable(caption = "Education", col.names= c("Constituency type", "Education", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
 ```
 
 
@@ -350,7 +367,7 @@ dyn_ge19$education <- factor(dyn_ge19$education,levels =c( "School", "UG", "PG+"
 
 
 
-dyn_ge19 %>% filter(myneta_education!= "") %>% group_by(dyn_con, education) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, education, prop) %>% kable(caption = "Education", col.names= c("Constituency type", "Education", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
+dyn_ge19 %>% filter(myneta_education!= "") %>% group_by(dyn_con, education) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>%arrange(education) %>% select(dyn_con, education, prop) %>% kable(caption = "Education", col.names= c("Constituency type", "Education", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped")
 
 
 
@@ -362,8 +379,8 @@ dyn_ge19 %>% filter(myneta_education!= "") %>% group_by(dyn_con, education) %>% 
 
 profession <- data.frame(table(dyn_ge19$myneta_profession)) %>% arrange(-Freq)
 
-write.csv(profession,"D:/cpr/up-dynasties/dyn_other_data/profession.csv" )
-table(dyn_ge19$profession)
+# write.csv(profession,"D:/cpr/up-dynasties/dyn_other_data/profession.csv" )
+# table(dyn_ge19$profession)
 
 agri <- c("^Agriculture","Agriculture", "^Farmer", "Farming")
 
@@ -374,6 +391,9 @@ social <- c("^Social", "Social work", "Social Work")
 teaching <-   c("Teacher", "Teaching", "College", "School", "Lecturer", "Lecture", "Tution")
 
 
+
+
+
   dyn_ge19$profession <- case_when(str_detect(dyn_ge19$myneta_profession, paste(agri, collapse = "|")) ~ "Agriculture",
                                    str_detect(dyn_ge19$myneta_profession, "Advocate")~"Advocate",
                                    str_detect(dyn_ge19$myneta_profession, paste(teaching, collapse = "|"))~"Teaching",
@@ -382,30 +402,57 @@ teaching <-   c("Teacher", "Teaching", "College", "School", "Lecturer", "Lecture
                                    str_detect(dyn_ge19$myneta_profession, "^Business")~"Business",
                                    str_detect(dyn_ge19$myneta_profession, "Doctor")~"Doctor",
                                    TRUE ~ "Others")
+  
+  dyn_ge19 %>% group_by(dyn_con, profession) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, profession, prop) %>% 
+     ggplot(aes(factor(dyn_con), prop, fill= profession,label = round(prop,2)))+
+  geom_bar(position = "stack", stat = "identity")+
+   geom_text(size = 2, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+  scale_x_discrete(labels=(c( "Dynast Constituency", "Non - dynast Constituency")))+
+  labs(title = " Composition of candidate's professions wrt constituency type" ,subtitle = "AE 2012 & 2017",x = "", y = "Proportion", fill = "") +
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"),
+        plot.subtitle = element_text(hjust = 0.5, size = 15, family = "serif"),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        #legend.position = "bottom",
+        legend.text = element_text(size = 12,family = "serif"),
+        axis.text = element_text(face = "italic", size = 12),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+ 
 
 ```
 
 
 
-## Involvement
+<!-- ## Involvement -->
 
 
-```{r}
+<!-- ```{r} -->
 
 
-inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv" )
+<!-- inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv" ) -->
 
-names(inv)
-summary(inv)
+<!-- names(inv) -->
+<!-- summary(inv) -->
 
-inv%>% select(22:24) %>% summarise_all (funs(sum(is.na(.))))
+<!-- inv%>% select(22:24) %>% summarise_all (funs(sum(is.na(.)))) -->
 
-inv%>%filter(election_type  == "AE")%>% group_by(year, org_inv) %>% summarise(count = n()) %>% spread(org_inv, count) %>% kable(caption = "Organisational Involvement")
+<!-- inv%>%filter(election_type  == "AE")%>% group_by(year, org_inv) %>% summarise(count = n()) %>% spread(org_inv, count) %>% kable(caption = "Organisational Involvement") -->
 
-inv %>% filter(election_type  == "AE") %>%  group_by(association_inv, year) %>% summarise(count =n()) %>% spread(association_inv, count) %>% kable(caption = "Association")
+<!-- inv %>% filter(election_type  == "AE") %>%  group_by(association_inv, year) %>% summarise(count =n()) %>% spread(association_inv, count) %>% kable(caption = "Association") -->
 
-inv %>%filter(election_type  == "AE") %>%group_by(year,poitical_inv) %>% summarise(count = n()) %>% spread(poitical_inv, count) %>% kable(caption = "Political Involvement")
+<!-- inv %>%filter(election_type  == "AE") %>%group_by(year,poitical_inv) %>% summarise(count = n()) %>% spread(poitical_inv, count) %>% kable(caption = "Political Involvement") -->
 
 
-```
+<!-- ``` -->
 
