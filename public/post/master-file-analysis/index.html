@@ -29,247 +29,50 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#political-families">Political Families</a></li>
-<li><a href="#analysis-goals">Analysis goals</a></li>
-<li><a href="#summary-statistics">Summary statistics</a><ul>
-<li><a href="#elections-covered">Elections covered</a></li>
-<li><a href="#basic-eda">Basic eda</a><ul>
+<li><a href="#analyis-at-different-levels">Analyis at different levels</a><ul>
+<li><a href="#ae---ge">AE - GE</a><ul>
 <li><a href="#assembly-elections">Assembly Elections</a></li>
 <li><a href="#general-elections">General Elections</a></li>
-<li><a href="#ae-ge-election-contest">AE GE election contest</a></li>
-<li><a href="#local-body-elections">local body elections</a></li>
-</ul></li>
-<li><a href="#linkages">Linkages</a></li>
 <li><a href="#retention">retention</a></li>
-<li><a href="#industries">Industries</a></li>
-</ul></li>
-<li><a href="#analyis-at-different-levels">Analyis at different levels</a><ul>
-<li><a href="#all-elections">All elections</a><ul>
+<li><a href="#ae-ge-election-contest">AE GE election contest</a></li>
 <li><a href="#land-distribution">Land distribution</a></li>
 <li><a href="#industries-education">Industries: Education</a></li>
 <li><a href="#industries-others">Industries : Others</a></li>
-<li><a href="#caste-2">caste</a></li>
+</ul></li>
+<li><a href="#industries">Industries</a><ul>
+<li><a href="#caste-2">Caste</a></li>
 <li><a href="#experience">Experience</a></li>
-</ul></li>
-<li><a href="#ae---ge">AE - GE</a><ul>
-<li><a href="#land-distribution-1">Land distribution</a></li>
-<li><a href="#industries-education-1">Industries: Education</a></li>
-<li><a href="#industries-others-1">Industries : Others</a></li>
-<li><a href="#caste-5">Caste</a></li>
-<li><a href="#experience-1">Experience</a></li>
-</ul></li>
-<li><a href="#local-bodies">Local bodies</a><ul>
-<li><a href="#mid-level">Mid level</a></li>
-<li><a href="#low-level">Low level</a></li>
-<li><a href="#pris">PRI’s</a></li>
-<li><a href="#ulbs">ULB’s</a></li>
-<li><a href="#fig-1">Fig 1</a></li>
 </ul></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="political-families" class="section level1">
-<h1>Political Families</h1>
-<p>This data set knits the families of contestants in the elections held in Uttar Pradesh. This includes Loksabha, Vidhnsabha, Panchayat Raj institutions and Urban local body elections.</p>
-</div>
-<div id="analysis-goals" class="section level1">
-<h1>Analysis goals</h1>
-<ul>
-<li>Exploration within the political families dataset</li>
-<li>Exploring how political families are associated with relevant variables in the other datas ets</li>
-</ul>
-</div>
-<div id="summary-statistics" class="section level1">
-<h1>Summary statistics</h1>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Relative ID
-</th>
-<th style="text-align:left;">
-Relative
-</th>
-<th style="text-align:right;">
-Count
-</th>
-<th style="text-align:right;">
-Proportion
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Patriarch
-</td>
-<td style="text-align:right;">
-383
-</td>
-<td style="text-align:right;">
-0.50
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-Father
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-Mother
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-0.01
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:left;">
-Son
-</td>
-<td style="text-align:right;">
-172
-</td>
-<td style="text-align:right;">
-0.23
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:left;">
-Daughter
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:left;">
-Brother
-</td>
-<td style="text-align:right;">
-60
-</td>
-<td style="text-align:right;">
-0.08
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:left;">
-Sister
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:left;">
-Wife
-</td>
-<td style="text-align:right;">
-54
-</td>
-<td style="text-align:right;">
-0.07
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:left;">
-Husband
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:left;">
-Extended
-</td>
-<td style="text-align:right;">
-50
-</td>
-<td style="text-align:right;">
-0.07
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:left;">
-Outside
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-</tr>
-</tbody>
-</table>
-<div id="elections-covered" class="section level2">
-<h2>Elections covered</h2>
-<ul>
-<li><p>Assembly elections</p></li>
-<li><p>General elections</p></li>
-<li><p>Local body elections</p>
-<ul>
-<li><p>Urban local bodies</p></li>
-<li><p>Panchayat raj instituions</p></li>
-</ul></li>
-</ul>
-</div>
-<div id="basic-eda" class="section level2">
-<h2>Basic eda</h2>
+<div id="analyis-at-different-levels" class="section level1">
+<h1>Analyis at different levels</h1>
+<!-- ```{r ae -ge cumulative experience} -->
+<!-- ###experience -->
+<!-- dyn_ae_ge <- dyn_ae_ge %>% -->
+<!--   group_by(family_id) %>% -->
+<!--   mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>% -->
+<!--   ungroup() -->
+<!-- # dyn_ae_ge_uniq %>% -->
+<!-- #   select(candidate_name, family_id, pat_name, fam_exp_tot) -->
+<!-- #   arrange(desc(fam_exp_tot)) %>% -->
+<!-- ##cumsum for the families -->
+<!-- year_group <- dyn_ae_ge %>% -->
+<!--   group_by(family_id, year) %>% -->
+<!--   summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>% -->
+<!--   mutate(cum_exp = cumsum(year_sum)) %>% -->
+<!--   mutate(fam_exp_cum = cum_exp - year_sum) %>% -->
+<!--   select(family_id,year,cum_exp, fam_exp_cum, year_sum) -->
+<!-- year_group <- year_group %>% -->
+<!--   select(family_id, year, fam_exp_cum) -->
+<!-- dyn_ae_ge <- merge(dyn_ae_ge, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE) -->
+<!-- ``` -->
+<div id="ae---ge" class="section level2">
+<h2>AE - GE</h2>
+<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 209. It has to be noted that 93% of this winners are just patriarchs.</p>
+<p>In this universe of families 1631 winners and runner-ups are part of some family and 903 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
 <div id="assembly-elections" class="section level3">
 <h3>Assembly Elections</h3>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
@@ -495,6 +298,252 @@ Count
 </tr>
 </tbody>
 </table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 1: </span>Break-up of unique individuals wrt to elections won
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n_elections_won
+</th>
+<th style="text-align:right;">
+n_individuals
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2089
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1886
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+665
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+329
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+173
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+35
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 1: </span>Break-up of unique individuals wrt to elections contested
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n_elections_contested
+</th>
+<th style="text-align:right;">
+n_individuals
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2764
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1061
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+558
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+333
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+255
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+127
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+78
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+54
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="retention" class="section level3">
+<h3>retention</h3>
+<p><img src="/post/master-file-analysis_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
 </div>
 <div id="ae-ge-election-contest" class="section level3">
 <h3>AE GE election contest</h3>
@@ -524,16 +573,16 @@ non-fam v/s non-fam
 1977
 </td>
 <td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-469
+471
 </td>
 </tr>
 <tr>
@@ -544,13 +593,13 @@ non-fam v/s non-fam
 NA
 </td>
 <td style="text-align:right;">
-12
+15
 </td>
 <td style="text-align:right;">
-8
+7
 </td>
 <td style="text-align:right;">
-462
+460
 </td>
 </tr>
 <tr>
@@ -558,10 +607,10 @@ NA
 1984
 </td>
 <td style="text-align:right;">
-1
+NA
 </td>
 <td style="text-align:right;">
-5
+6
 </td>
 <td style="text-align:right;">
 1
@@ -578,13 +627,13 @@ NA
 1
 </td>
 <td style="text-align:right;">
-12
+11
 </td>
 <td style="text-align:right;">
-9
+6
 </td>
 <td style="text-align:right;">
-381
+385
 </td>
 </tr>
 <tr>
@@ -595,13 +644,13 @@ NA
 2
 </td>
 <td style="text-align:right;">
-28
+26
 </td>
 <td style="text-align:right;">
-17
+14
 </td>
 <td style="text-align:right;">
-435
+440
 </td>
 </tr>
 <tr>
@@ -612,13 +661,13 @@ NA
 1
 </td>
 <td style="text-align:right;">
-27
+28
 </td>
 <td style="text-align:right;">
-21
+14
 </td>
 <td style="text-align:right;">
-426
+432
 </td>
 </tr>
 <tr>
@@ -629,13 +678,13 @@ NA
 1
 </td>
 <td style="text-align:right;">
-22
+24
 </td>
 <td style="text-align:right;">
-16
+6
 </td>
 <td style="text-align:right;">
-361
+369
 </td>
 </tr>
 <tr>
@@ -643,16 +692,16 @@ NA
 1996
 </td>
 <td style="text-align:right;">
-6
+5
 </td>
 <td style="text-align:right;">
-52
+47
 </td>
 <td style="text-align:right;">
-21
+16
 </td>
 <td style="text-align:right;">
-402
+413
 </td>
 </tr>
 <tr>
@@ -663,13 +712,13 @@ NA
 4
 </td>
 <td style="text-align:right;">
-7
+8
 </td>
 <td style="text-align:right;">
-12
+9
 </td>
 <td style="text-align:right;">
-56
+58
 </td>
 </tr>
 <tr>
@@ -680,13 +729,13 @@ NA
 5
 </td>
 <td style="text-align:right;">
-13
+14
 </td>
 <td style="text-align:right;">
-6
+4
 </td>
 <td style="text-align:right;">
-55
+56
 </td>
 </tr>
 <tr>
@@ -694,16 +743,16 @@ NA
 2002
 </td>
 <td style="text-align:right;">
-12
+8
 </td>
 <td style="text-align:right;">
-45
+42
 </td>
 <td style="text-align:right;">
-27
+11
 </td>
 <td style="text-align:right;">
-319
+342
 </td>
 </tr>
 <tr>
@@ -711,16 +760,16 @@ NA
 2004
 </td>
 <td style="text-align:right;">
-5
+3
 </td>
 <td style="text-align:right;">
-20
+21
 </td>
 <td style="text-align:right;">
-9
+6
 </td>
 <td style="text-align:right;">
-45
+49
 </td>
 </tr>
 <tr>
@@ -728,16 +777,16 @@ NA
 2007
 </td>
 <td style="text-align:right;">
-12
+5
 </td>
 <td style="text-align:right;">
-56
+52
 </td>
 <td style="text-align:right;">
-53
+29
 </td>
 <td style="text-align:right;">
-282
+317
 </td>
 </tr>
 <tr>
@@ -745,16 +794,16 @@ NA
 2009
 </td>
 <td style="text-align:right;">
-7
+3
 </td>
 <td style="text-align:right;">
 25
 </td>
 <td style="text-align:right;">
-11
+9
 </td>
 <td style="text-align:right;">
-37
+43
 </td>
 </tr>
 <tr>
@@ -762,16 +811,16 @@ NA
 2012
 </td>
 <td style="text-align:right;">
-21
+7
 </td>
 <td style="text-align:right;">
-72
+70
 </td>
 <td style="text-align:right;">
-45
+19
 </td>
 <td style="text-align:right;">
-265
+307
 </td>
 </tr>
 <tr>
@@ -779,16 +828,16 @@ NA
 2014
 </td>
 <td style="text-align:right;">
-4
+3
 </td>
 <td style="text-align:right;">
-17
+18
 </td>
 <td style="text-align:right;">
-20
+12
 </td>
 <td style="text-align:right;">
-39
+47
 </td>
 </tr>
 <tr>
@@ -796,16 +845,16 @@ NA
 2017
 </td>
 <td style="text-align:right;">
-16
+8
 </td>
 <td style="text-align:right;">
-63
+61
 </td>
 <td style="text-align:right;">
-74
+37
 </td>
 <td style="text-align:right;">
-250
+297
 </td>
 </tr>
 <tr>
@@ -816,13 +865,13 @@ NA
 3
 </td>
 <td style="text-align:right;">
-24
+20
 </td>
 <td style="text-align:right;">
-18
+13
 </td>
 <td style="text-align:right;">
-35
+44
 </td>
 </tr>
 </tbody>
@@ -853,16 +902,16 @@ non-fam v/s non-fam
 1977
 </td>
 <td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
 0.00
 </td>
 <td style="text-align:right;">
-0.01
-</td>
-<td style="text-align:right;">
-0.01
-</td>
-<td style="text-align:right;">
-0.97
+0.98
 </td>
 </tr>
 <tr>
@@ -873,13 +922,13 @@ non-fam v/s non-fam
 NA
 </td>
 <td style="text-align:right;">
-0.02
+0.03
 </td>
 <td style="text-align:right;">
-0.02
+0.01
 </td>
 <td style="text-align:right;">
-0.96
+0.95
 </td>
 </tr>
 <tr>
@@ -887,10 +936,10 @@ NA
 1984
 </td>
 <td style="text-align:right;">
-0.01
+NA
 </td>
 <td style="text-align:right;">
-0.06
+0.08
 </td>
 <td style="text-align:right;">
 0.01
@@ -910,10 +959,10 @@ NA
 0.03
 </td>
 <td style="text-align:right;">
-0.02
+0.01
 </td>
 <td style="text-align:right;">
-0.95
+0.96
 </td>
 </tr>
 <tr>
@@ -924,13 +973,13 @@ NA
 0.00
 </td>
 <td style="text-align:right;">
-0.06
+0.05
 </td>
 <td style="text-align:right;">
-0.04
+0.03
 </td>
 <td style="text-align:right;">
-0.90
+0.91
 </td>
 </tr>
 <tr>
@@ -944,10 +993,10 @@ NA
 0.06
 </td>
 <td style="text-align:right;">
-0.04
+0.03
 </td>
 <td style="text-align:right;">
-0.90
+0.91
 </td>
 </tr>
 <tr>
@@ -961,10 +1010,10 @@ NA
 0.06
 </td>
 <td style="text-align:right;">
-0.04
+0.01
 </td>
 <td style="text-align:right;">
-0.90
+0.92
 </td>
 </tr>
 <tr>
@@ -975,13 +1024,13 @@ NA
 0.01
 </td>
 <td style="text-align:right;">
-0.11
+0.10
 </td>
 <td style="text-align:right;">
-0.04
+0.03
 </td>
 <td style="text-align:right;">
-0.84
+0.86
 </td>
 </tr>
 <tr>
@@ -992,13 +1041,13 @@ NA
 0.05
 </td>
 <td style="text-align:right;">
-0.09
+0.10
 </td>
 <td style="text-align:right;">
-0.15
+0.11
 </td>
 <td style="text-align:right;">
-0.71
+0.73
 </td>
 </tr>
 <tr>
@@ -1009,13 +1058,13 @@ NA
 0.06
 </td>
 <td style="text-align:right;">
-0.16
+0.18
 </td>
 <td style="text-align:right;">
-0.08
+0.05
 </td>
 <td style="text-align:right;">
-0.70
+0.71
 </td>
 </tr>
 <tr>
@@ -1023,10 +1072,44 @@ NA
 2002
 </td>
 <td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
 0.03
 </td>
 <td style="text-align:right;">
-0.11
+0.85
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+0.62
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.13
 </td>
 <td style="text-align:right;">
 0.07
@@ -1037,53 +1120,19 @@ NA
 </tr>
 <tr>
 <td style="text-align:right;">
-2004
-</td>
-<td style="text-align:right;">
-0.06
-</td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-0.11
-</td>
-<td style="text-align:right;">
-0.57
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2007
-</td>
-<td style="text-align:right;">
-0.03
-</td>
-<td style="text-align:right;">
-0.14
-</td>
-<td style="text-align:right;">
-0.13
-</td>
-<td style="text-align:right;">
-0.70
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
 2009
 </td>
 <td style="text-align:right;">
-0.09
+0.04
 </td>
 <td style="text-align:right;">
 0.31
 </td>
 <td style="text-align:right;">
-0.14
+0.11
 </td>
 <td style="text-align:right;">
-0.46
+0.54
 </td>
 </tr>
 <tr>
@@ -1091,16 +1140,16 @@ NA
 2012
 </td>
 <td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
 0.05
 </td>
 <td style="text-align:right;">
-0.18
-</td>
-<td style="text-align:right;">
-0.11
-</td>
-<td style="text-align:right;">
-0.66
+0.76
 </td>
 </tr>
 <tr>
@@ -1108,16 +1157,16 @@ NA
 2014
 </td>
 <td style="text-align:right;">
-0.05
+0.04
 </td>
 <td style="text-align:right;">
-0.21
+0.22
 </td>
 <td style="text-align:right;">
-0.25
+0.15
 </td>
 <td style="text-align:right;">
-0.49
+0.59
 </td>
 </tr>
 <tr>
@@ -1125,16 +1174,16 @@ NA
 2017
 </td>
 <td style="text-align:right;">
-0.04
+0.02
 </td>
 <td style="text-align:right;">
-0.16
+0.15
 </td>
 <td style="text-align:right;">
-0.18
+0.09
 </td>
 <td style="text-align:right;">
-0.62
+0.74
 </td>
 </tr>
 <tr>
@@ -1145,277 +1194,56 @@ NA
 0.04
 </td>
 <td style="text-align:right;">
-0.30
+0.25
 </td>
 <td style="text-align:right;">
-0.22
+0.16
 </td>
 <td style="text-align:right;">
-0.44
+0.55
 </td>
 </tr>
 </tbody>
 </table>
+<p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
 </div>
-<div id="local-body-elections" class="section level3">
-<h3>local body elections</h3>
-<div id="urban-local-bodies" class="section level4">
-<h4>Urban local bodies</h4>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Year
-</th>
-<th style="text-align:right;">
-Nagar Nigam
-</th>
-<th style="text-align:right;">
-Nagar Panchayat
-</th>
-<th style="text-align:right;">
-Nagar Nigam Parishad
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1995
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-406
-</td>
-<td style="text-align:right;">
-190
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2001
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-414
-</td>
-<td style="text-align:right;">
-193
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2006
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-423
-</td>
-<td style="text-align:right;">
-190
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2012
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-426
-</td>
-<td style="text-align:right;">
-194
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2017
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-436
-</td>
-<td style="text-align:right;">
-203
-</td>
-</tr>
-</tbody>
-</table>
+<div id="land-distribution" class="section level3">
+<h3>Land distribution</h3>
+<div id="families" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
 </div>
-<div id="panchayat-raj-institutions" class="section level4">
-<h4>Panchayat Raj institutions</h4>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Year
-</th>
-<th style="text-align:right;">
-Block Panchayat
-</th>
-<th style="text-align:right;">
-Zilla Panchayt
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1995
-</td>
-<td style="text-align:right;">
-770
-</td>
-<td style="text-align:right;">
-70
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2000
-</td>
-<td style="text-align:right;">
-779
-</td>
-<td style="text-align:right;">
-70
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2005
-</td>
-<td style="text-align:right;">
-791
-</td>
-<td style="text-align:right;">
-70
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2010
-</td>
-<td style="text-align:right;">
-816
-</td>
-<td style="text-align:right;">
-70
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:right;">
-813
-</td>
-<td style="text-align:right;">
-71
-</td>
-</tr>
-</tbody>
-</table>
-<!-- ```{r } -->
-<!-- # ## Distribution of caste among candidates and the families -->
-<!-- #  -->
-<!-- # ```{r} -->
-<!-- # caste_groups_ind <- as.data.frame(table(dyn_1$caste_groups)) -->
-<!-- #  -->
-<!-- #  -->
-<!-- # dyn_1_uniq <- dyn_1 %>%  -->
-<!-- #   filter(relative_id ==1) %>%  -->
-<!-- #   distinct( family_id, .keep_all = T) -->
-<!-- #  -->
-<!-- # caste_groups_fam<- as.data.frame(table(dyn_1_uniq$caste_groups)) -->
-<!-- #  -->
-<!-- #  -->
-<!-- # caste_dist <- merge(caste_groups_fam,caste_groups_ind, by = "Var1") -->
-<!-- #  -->
-<!-- # names(caste_dist) <- c("caste_group","Families" , "Candidates" ) -->
-<!-- #  -->
-<!-- # caste_dist %>% arrange(desc(Freq.x)) %>% kable(col.names = c ("Caste group","Families" , "Candidates"))%>% kable_styling(bootstrap_options = "striped") -->
-<!-- ``` -->
-<!-- # Linkages -->
-<!-- ```{r} -->
-<!-- dyn <- dyn %>% group_by(family_id) %>% mutate(n_el_lvl = n_distinct(election_level )) -->
-<!-- dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", -->
-<!--                          election_type == "GE" ~ "GE", -->
-<!--                          TRUE ~ "LB")) -->
-<!-- dyn <- dyn %>% group_by(family_id) %>% mutate( -->
-<!--   fam_lvl = -->
-<!--     case_when( -->
-<!--       (grepl("AE", election_level)&grepl("GE", election_level)) ~ "AE-GE-LB", -->
-<!--       # election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
-<!--       # election_level == "GE" ~ "GE", -->
-<!--       # election_level == "AE" ~ "AE", -->
-<!--       # election_level == "LB" ~ "LB", -->
-<!--       # election_level == "AE" & election_level == "LB" ~ "AE-LB", -->
-<!--       # election_level == "GE" & election_level == "LB" ~ "GE-LB", -->
-<!--       TRUE ~ "NA" -->
-<!--     ) -->
-<!-- ) -->
-<!-- patterns <- c("AE", "GE", "LB") -->
-<!-- dyn <- dyn %>% group_by(family_id) %>% mutate( -->
-<!--   fam_lvl = -->
-<!--     #if_else(grepl("AE.*GE|GE.*AE", election_level ) ==TRUE, "AE-GE-LB", -->
-<!--              ifelse((grepl("AE", election_level) & grepl("GE", election_level)), "AE-GE", -->
-<!--             #        if_else(election_level %in% c("AE",  "LB") , "AE-LB", -->
-<!--             #               if_else(election_level %in% c("GE", "LB")  ,"GE-LB", -->
-<!--             #                      if_else(election_level == "GE" , "GE", -->
-<!--             #                             if_else(election_level == "AE" , "AE", -->
-<!--             #                                    if_else(election_level == "LB" , "LB", -->
-<!--                                                       "NA")#)#))))) -->
-<!-- ) -->
-<!-- dyn %>% group_by(family_id) %>% mutate(fam_lvl =ifelse(grepl("AE", election_level)& grepl("GE", election_level) , "AE-GE","NA")) %>% select(fam_lvl) -->
-<!-- table(grepl("AE", dyn$election_level )& grepl("GE", dyn$election_level )&grepl("LB", dyn$election_level )) -->
-<!-- table(grepl("AE", dyn$election_level )) -->
-<!--  dyn <- dyn %>% group_by(family_id) %>% mutate( -->
-<!--   fam_lvl = -->
-<!--     ifelse( -->
-<!--       grep( c("AE","GE", "LB"),election_level), "AE-GE-LB", -->
-<!--       # election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
-<!--       # election_level == "GE" ~ "GE", -->
-<!--       # election_level == "AE" ~ "AE", -->
-<!--       # election_level == "LB" ~ "LB", -->
-<!--       # election_level == "AE" & election_level == "LB" ~ "AE-LB", -->
-<!--       # election_level == "GE" & election_level == "LB" ~ "GE-LB", -->
-<!--        "NA" -->
-<!--     ) -->
-<!-- ) -->
-<!-- `dyn %>% group_by(family_id) %>% mutate(fam_lvl= -->
-<!--                                          if_else(election_level == "AE" & election_level ==  "GE" & election_level ==  "LB", "AE-GE-LB", -->
-<!--                                                  ifelse(election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
-<!--                                                         ifelse())) -->
-<!-- dyn_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE) -->
-<!-- ``` -->
+<div id="political-experience" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
+</div>
+<div id="caste" class="section level4">
+<h4>Caste</h4>
 </div>
 </div>
+<div id="industries-education" class="section level3">
+<h3>Industries: Education</h3>
+<div id="families-1" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
 </div>
-<div id="linkages" class="section level2">
-<h2>Linkages</h2>
+<div id="political-experience-1" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
 </div>
-<div id="retention" class="section level2">
-<h2>retention</h2>
-<p><img src="/post/master-file-analysis_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
-<p><img src="/post/master-file-analysis_files/figure-html/retention%20bp-1.png" width="672" /></p>
-<p><img src="/post/master-file-analysis_files/figure-html/retention%20np%20npp-1.png" width="672" /></p>
+<div id="caste-1" class="section level4">
+<h4>caste</h4>
+</div>
+</div>
+<div id="industries-others" class="section level3">
+<h3>Industries : Others</h3>
+</div>
 </div>
 <div id="industries" class="section level2">
 <h2>Industries</h2>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-3">Table 1: </span>Industry ownership
+<span id="tab:unnamed-chunk-3">Table 2: </span>Industry ownership
 </caption>
 <thead>
 <tr>
@@ -1433,7 +1261,7 @@ Average number of ownersip
 Family
 </td>
 <td style="text-align:right;">
-1.61
+1.75
 </td>
 </tr>
 <tr>
@@ -1441,7 +1269,7 @@ Family
 Non-family
 </td>
 <td style="text-align:right;">
-0.66
+0.69
 </td>
 </tr>
 </tbody>
@@ -1469,7 +1297,7 @@ Family
 non-rent-thick
 </td>
 <td style="text-align:right;">
-0.43
+0.32
 </td>
 </tr>
 <tr>
@@ -1480,7 +1308,7 @@ Family
 rent-thick
 </td>
 <td style="text-align:right;">
-0.57
+0.68
 </td>
 </tr>
 <tr>
@@ -1491,7 +1319,7 @@ Non-family
 non-rent-thick
 </td>
 <td style="text-align:right;">
-0.72
+0.71
 </td>
 </tr>
 <tr>
@@ -1502,259 +1330,33 @@ Non-family
 rent-thick
 </td>
 <td style="text-align:right;">
-0.28
+0.29
 </td>
 </tr>
 </tbody>
 </table>
 <p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-</div>
-</div>
-<div id="analyis-at-different-levels" class="section level1">
-<h1>Analyis at different levels</h1>
-<div id="all-elections" class="section level2">
-<h2>All elections</h2>
-<p>This universe includes winners and runner-ups from the general and assembly elections from the year 1977 to 2019 and the winners from the local body elections held from 1995 to 2015 in the state of Uttar Pradesh. This contains 19005 observations and the number unique individuals is 11555 and the families is 1110. It has to be noted that 88% of this winners are just patriarchs.</p>
-<p>In this universe of families 2308 winners are part of some family and 782 winners out of this is just patriarchs while the rest is other family members.</p>
-<!-- ### Members in the other levels and the probabilty  -->
-<div id="land-distribution" class="section level3">
-<h3>Land distribution</h3>
-<div id="families" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/all%20families%20land-1.png" width="672" /></p>
-</div>
-<div id="political-experience" class="section level4">
-<h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/all%20political%20experience%20land-1.png" width="672" /></p>
-</div>
-<div id="caste" class="section level4">
-<h4>Caste</h4>
-</div>
-</div>
-<div id="industries-education" class="section level3">
-<h3>Industries: Education</h3>
-<div id="families-1" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/all%20education%20family-1.png" width="672" /></p>
-</div>
-<div id="political-experience-1" class="section level4">
-<h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/all%20education%20pol%20experience-1.png" width="672" /></p>
-</div>
-<div id="caste-1" class="section level4">
-<h4>caste</h4>
-</div>
-</div>
-<div id="industries-others" class="section level3">
-<h3>Industries : Others</h3>
 <div id="families-2" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-</div>
-<div id="political-experience-2" class="section level4">
-<h4>Political experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/all%20ind%20political%20experience-1.png" width="672" /></p>
-</div>
-</div>
-<div id="caste-2" class="section level3">
-<h3>caste</h3>
-<div id="political-experience-3" class="section level4">
-<h4>Political experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" />
-<!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
-</div>
-<div id="family" class="section level4">
-<h4>Family</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-</div>
-</div>
-<div id="experience" class="section level3">
-<h3>Experience</h3>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Experience Categories
-</th>
-<th style="text-align:right;">
-Count
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-7342
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1-5
-</td>
-<td style="text-align:right;">
-1562
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-6-10
-</td>
-<td style="text-align:right;">
-610
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-11-20
-</td>
-<td style="text-align:right;">
-447
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-21+
-</td>
-<td style="text-align:right;">
-119
-</td>
-</tr>
-</tbody>
-</table>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Experience Categories
-</th>
-<th style="text-align:right;">
-Non-Families
-</th>
-<th style="text-align:right;">
-Families
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-6570
-</td>
-<td style="text-align:right;">
-772
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1-5
-</td>
-<td style="text-align:right;">
-1498
-</td>
-<td style="text-align:right;">
-64
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-6-10
-</td>
-<td style="text-align:right;">
-545
-</td>
-<td style="text-align:right;">
-65
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-11-20
-</td>
-<td style="text-align:right;">
-318
-</td>
-<td style="text-align:right;">
-129
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-21+
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-80
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="ae---ge" class="section level2">
-<h2>AE - GE</h2>
-<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5281 and the families is 305. It has to be noted that 93% of this winners are just patriarchs.</p>
-<p>In this universe of families 1086 winners and runner-ups are part of some family and 382 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
-<p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
-<div id="land-distribution-1" class="section level3">
-<h3>Land distribution</h3>
-<div id="families-3" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
-</div>
-<div id="political-experience-4" class="section level4">
-<h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
-</div>
-<div id="caste-3" class="section level4">
-<h4>Caste</h4>
-</div>
-</div>
-<div id="industries-education-1" class="section level3">
-<h3>Industries: Education</h3>
-<div id="families-4" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
-</div>
-<div id="political-experience-5" class="section level4">
-<h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
-</div>
-<div id="caste-4" class="section level4">
-<h4>caste</h4>
-</div>
-</div>
-<div id="industries-others-1" class="section level3">
-<h3>Industries : Others</h3>
-<div id="families-5" class="section level4">
 <h4>Families</h4>
 <p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
 </div>
-<div id="political-experience-6" class="section level4">
+<div id="political-experience-2" class="section level4">
 <h4>Political experience</h4>
 <p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="672" /></p>
 </div>
-</div>
-<div id="caste-5" class="section level3">
+<div id="caste-2" class="section level3">
 <h3>Caste</h3>
-<div id="political-experience-7" class="section level4">
+<div id="political-experience-3" class="section level4">
 <h4>Political experience</h4>
 <p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="672" />
 <!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
 </div>
-<div id="family-1" class="section level4">
+<div id="family" class="section level4">
 <h4>Family</h4>
 <p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20families%20caste-1.png" width="672" /></p>
 </div>
 </div>
-<div id="experience-1" class="section level3">
+<div id="experience" class="section level3">
 <h3>Experience</h3>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -1822,10 +1424,10 @@ Families
 0
 </td>
 <td style="text-align:right;">
-2119
+2163
 </td>
 <td style="text-align:right;">
-45
+1
 </td>
 </tr>
 <tr>
@@ -1833,10 +1435,10 @@ Families
 1-5
 </td>
 <td style="text-align:right;">
-1498
+1539
 </td>
 <td style="text-align:right;">
-64
+23
 </td>
 </tr>
 <tr>
@@ -1844,10 +1446,10 @@ Families
 6-15
 </td>
 <td style="text-align:right;">
-789
+852
 </td>
 <td style="text-align:right;">
-143
+80
 </td>
 </tr>
 <tr>
@@ -1855,65 +1457,15 @@ Families
 16+
 </td>
 <td style="text-align:right;">
-113
+139
 </td>
 <td style="text-align:right;">
-131
+105
 </td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div id="local-bodies" class="section level2">
-<h2>Local bodies</h2>
-<p><img src="/post/master-file-analysis_files/figure-html/lb%20fam%20land-1.png" width="672" /></p>
-<p>This universe include the winners from the local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
-This contains 7455 observations and the number unique individuals is 6341 and the families is 785. It has to be noted that 82% of this winners are just patriarchs.</p>
-<p>In this universe of families 2205 winners and runner-ups are part of some family and 977 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
-<div id="mid-level" class="section level3">
-<h3>Mid level</h3>
-<p>This universe include the winners from the mid level local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
-This contains 1381 observations and the number unique individuals is 1144 and the families is 130. It has to be noted that 83% of this winners are just patriarchs.</p>
-<p>In this universe of families 348 winners and runner-ups are part of some family and 178 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
-</div>
-<div id="low-level" class="section level3">
-<h3>Low level</h3>
-<p>This universe include the winners from the low level local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
-This contains 4029 observations and the number unique individuals is 3463 and the families is 352. It has to be noted that 81% of this winners are just patriarchs.</p>
-<p>In this universe of families 1134 winners and runner-ups are part of some family and 464 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
-</div>
-<div id="pris" class="section level3">
-<h3>PRI’s</h3>
-<div id="land" class="section level4">
-<h4>Land</h4>
-<div id="families-6" class="section level5">
-<h5>Families</h5>
-<p><img src="/post/master-file-analysis_files/figure-html/pri%20land%20fam/nonfam-1.png" width="672" /></p>
-<p>This universe include the winners from the Panachayt raj institutions local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
-This contains 4320 observations and the number unique individuals is 3730 and the families is 401. It has to be noted that 81% of this winners are just patriarchs.</p>
-<p>In this universe of families 1176 winners and runner-ups are part of some family and 477 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-</div>
-</div>
-</div>
-<div id="ulbs" class="section level3">
-<h3>ULB’s</h3>
-<div id="land-1" class="section level4">
-<h4>Land</h4>
-<div id="families-7" class="section level5">
-<h5>Families</h5>
-<p><img src="/post/master-file-analysis_files/figure-html/fam,%20non%20fam%20land-1.png" width="672" /></p>
-<p>This universe include the winners from urban local body elections held from 1995 to 2015 in the state of Uttar Pradesh.
-This contains 3135 observations and the number unique individuals is 2612 and the families is 383. It has to be noted that 83% of this winners are just patriarchs.</p>
-<p>In this universe of families 992 winners and runner-ups are part of some family and 500 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
-<p><img src="/post/master-file-analysis_files/figure-html/ulb%20dyn%20proportion%20over%20time-1.png" width="672" /></p>
-</div>
-</div>
-</div>
-<div id="fig-1" class="section level3">
-<h3>Fig 1</h3>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20distribution%20of%20family%20and%20candidates%20wrt%20caste-1.png" width="672" /></p>
+<p>C</p>
 </div>
 </div>
 </div>

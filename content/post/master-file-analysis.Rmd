@@ -26,560 +26,35 @@ library(tidyverse)
 library(data.table)
 library(knitr)
 library(kableExtra)
+library(cowplot)
 
 `%!in%` = Negate(`%in%`)
-```
 
-# Political Families
-
-This data set knits  the families of contestants in the elections held in Uttar Pradesh. This includes Loksabha, Vidhnsabha, Panchayat Raj institutions and Urban local body elections.
-
-
-# Analysis goals
-
-* Exploration within the political families dataset 
-*  Exploring how political families are associated with relevant variables in the other datas ets
-
-# Summary statistics
-
-
-
-```{r reading files, echo = FALSE}
-dyn <- read.csv("D:/cpr/up-dynasties/dyn_29.06.20.csv")
-
-#dyn <- dyn %>% filter(status != "ADD")
+select <- dplyr::select
 ```
 
 
-```{r relative id correction}
+```{r}
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
 
-dyn <- dyn %>% rename(relative_id_1 = relative_id)
-
-
-
-dyn <- dyn %>% mutate(relative_id =ifelse(relative_id_1 %in% c(8,9,10,11,12,13,17),10,
-                                           ifelse(relative_id_1 %in% c(15),11,
-                                                  ifelse(relative_id_1==14,8,
-                                                        ifelse(relative_id_1==16,9,
-                                                               ifelse(relative_id_1==18,12, relative_id_1))))))
-relative_names <- tribble(
-  ~relative_id, ~ relative_name,
-  1 , "Patriarch",
-  2 , "Father",
-  3 , "Mother",
-  4 , "Son",
-  5  ,"Daughter",
-  6 , "Brother",
-  7 , "Sister",
-  8 , "Wife" ,
-  9 , "Husband",
-  10 , "Extended",
-  11 , "Outside",
-  12, "Ext outside"
-)
-
-dyn<- merge(dyn, relative_names, by = "relative_id", all.x =TRUE, allow.cartesian = TRUE)
-
-
-# table(dyn$relative_id) 
-# 
-# dyn %>% filter(is.na(relative_id)) %>% select(relative_id)
-
-```
-
-
-```{r configuring files, echo = FALSE}
-#dim(dyn)
-#glimpse(dyn)
-
-
-# 
-# 
-# ##building the file for other analyisi
-# 
-# 
-# 
-##uniq_rel_id
-
-dyn$rel_id_uniq <- as.numeric(paste(dyn$relative_id, dyn$rel_id_rep, sep = ""))
-
-
-
-
-## fam_size
-
-dyn <- dyn %>% group_by (family_id) %>% mutate(fam_size_tot = n_distinct(rel_id_uniq))
-
-##term duration
-
-#
-
-dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP", "ZP", "BP")]  <- ""
-
-dyn$term_duration <- as.numeric(dyn$term_duration)
-
-
-##
-
-
-## family_expericne
-
-
-
-dyn <- dyn%>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>%
-  ungroup()
-
-year_group <- dyn %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn<- merge(dyn, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-
-dyn$fam_exp_tot <-   as.numeric(dyn$fam_exp_tot)
-
-dyn$fam_exp_cum <-   as.numeric(dyn$fam_exp_cum)
-
-###
-
-##fam expereince categoreis
-
-
-dyn<- dyn %>%  mutate(fam_exp_tot_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-dyn<- dyn %>%  mutate(fam_exp_cum_cat = cut(fam_exp_cum,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-
-
-##caste_category
-
-####
-
-caste_names <- tribble(
-  ~caste_id, ~ caste_name,
-  0 , "unspecified",
-  1 , "Brahmin",
-  2 , "Thakur/ Rajput",
-  3 , "Baniya",
-  4 , "Other upper caste",
-  5  ,"Jat",
-  6 , "Gujjar",
-  7 , "Yadav",
-  8 , "Kurmi" ,
-  9 , "Lodh",
-  10 , "Other OBC",
-  11 , "Dalit",
-  12 , "Muslim",
-  13  , "Others"
-)
-
-dyn<- merge(dyn, caste_names, by = "caste_id", all.x =TRUE)
-
-##caste distribution
-
-dyn$caste_groups <- NA
-
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(7,12,11),dyn$caste_name,dyn$caste_groups)
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(1,2,4,3),"Upper Caste",dyn$caste_groups)
-
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(5,6,9,8,10),"Non-Yadav OBC",dyn$caste_groups)
-
-
-dyn$caste_groups <- ifelse(dyn$caste_id %in% c(0,13),"Others",dyn$caste_groups)
-
-
-## dyn classification
-
-dyn$dyn_cum  <-ifelse(dyn$fam_size_cum>1,1,0)
-
-dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
-# 
-# ##caste_group dist
-
-### Levels
-
-dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-                        election_type == "GE" ~ "GE",
-                         TRUE ~ "LB")) 
-
-dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-
-dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-
-
-dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-
-dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
-
-dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
-
-dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
-
-dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
-  levels == "GEAELB" ~ "GE-AE-LB",
-  levels == "GEAENA" ~ "GE-AE",
-  levels == "GENALB" ~ "GE-LB",
-  levels == "GENANA" ~ "GE",
-  levels == "NAAELB" ~ "AE-LB",
-  levels == "NAAENA" ~ "AE",
-  levels == "NANALB" ~ "LB",
-))
-
-
-dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
-
-
-
-dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
-
-# 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
 dyn_ae_ge_uniq <- dyn_ae_ge %>% distinct(family_id, rel_id_uniq, .keep_all = TRUE)
 
-dyn_ae_ge_uniq_fam <- dyn_ae_ge_uniq %>% filter(dyn_tot ==1)
-total_count <-dyn_ae_ge_uniq_fam %>% filter(relative_id !="NA") %>% count() %>% as.integer()
-
-dyn_ae_ge_uniq_fam %>% filter(relative_id !="NA") %>% group_by( relative_id,relative_name) %>% summarise(count = n(), prop = count/total_count) %>%  kable(Caption = "Members distribution among families \n AE-GE",col.names = c("Relative ID","Relative", "Count", "Proportion"), digits =2) %>% kable_styling(bootstrap_options = "striped")
-
-write.csv(dyn, "D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
-
-write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
-
-#
-```
+dyn_ae_ge_uniq_fam <- dyn_ae_ge%>% filter(dyn_tot ==1)
+#total_count <-dyn_ae_ge_uniq_fam %>% filter(relative_id !="NA") %>% count() %>% as.integer()
 
 
-
-
-
-```{r configuring files1, echo = FALSE}
- # write.csv(dyn_ae_ge, "dyn_other_data/dyn_ae_ge.csv")
-
-
-## adding cabinet info to this
-
-# cabinet <- read.csv("D:/cpr/up-dynasties/dyn_up_cabinet.csv")
-# 
-# cabinet <- cabinet %>% rename(year = Election_Year_1)
-# 
-# cabinet$term_duration <- NA
-# 
-# cabinet$term_duration[cabinet$year == 1996] <- 6
-# 
-# cabinet$term_duration[cabinet$year %in% c(1977,1980,2002, 2007, 2012, 2017)]<- 5
-# 
-# cabinet$term_duration[cabinet$year == 1985]<- 4
-# 
-# cabinet$term_duration[cabinet$year %in% c(1993,1977, 1974)]<- 3
-# 
-# cabinet$term_duration[cabinet$year %in% c(1989,1991)]<- 2
-# 
-# 
-# dyn_cabinet <-  cabinet  %>% filter(year!= "" & family_id >1 & family_id != "UK") %>% group_by(family_id) %>%summarise(n_sc_minster = n(), minister_dur = sum(term_duration, na.rm = TRUE)) 
-# dyn_ae_ge <- merge(dyn_ae_ge ,dyn_cabinet, by ="family_id", allow.cartesian = TRUE, all.x =TRUE )
-# 
-
-#dyn_ae_ge$n_sc_minster <-ifelse(!is.na(dyn_ae_ge$n_sc_minster),dyn_ae_ge$n_sc_minster,0)
-
-
-
-# inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv")
-# 
-# inv <- inv %>% filter (election_type == "AE") %>% select(election_type,year, family_id, constituency_no, position,pid,association_inv, poitical_inv,org_inv,any_oth_rem) %>% rename(pol_inv =poitical_inv) 
-# 
-# dyn_ae_ge <- merge(dyn_ae_ge ,inv, by = c("election_type","year", "family_id", "constituency_no", "position","pid"),  all.x =TRUE )
-
-
-#dyn_ae_ge <- dyn_ae_ge %>% mutate(if_else(n_sc_minster >0,n_sc_minster,0))
-#table(dyn_ae_ge$n_sc_minster)
-
-
-#write.csv(dyn_ae_ge, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
-
-```
-
-```{r break of contest types}
-
-```
-
-
-```{r to send for rahul}
-
-# csds <- read.csv("csds.csv")
-# 
-# 
-# 
-# 
-# up_ae_ge_csds <- dyn_ae_ge %>% filter(year == 2012& position ==1  ) %>% select(constituency_no,constituency_name,patriarch_name, dyn_cum, fam_size_cum, fam_exp_cum, fam_exp_cum_cat)
-# 
-# csds_dyn_up_ae_12 <- merge(csds, up_ae_ge_csds, by = "constituency_no", all.x = TRUE)
-# 
-# write.csv(csds_dyn_up_ae_12, "csds_dyn_up_ae_12.csv")
-# 
-# ## 2014 one
-# 
-# dyn_up_ge_14 <- dyn_ae_ge %>% filter(election_type == "GE" & year == 2014)
-# 
-# dim(dyn_up_ge_14 )
 
 
 ```
 
-
-
-```{r uniq families, echo = FALSE}
-
- # **Distribution of family experience**
-
-# dyn_uniq <- dyn %>% 
-#   filter(relative_id ==1) %>% 
-#   distinct( family_id, .keep_all = T)
-
-dyn_uniq <- dyn %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-
-
-
-# hist(dyn_uniq$fam_exp_tot)
-# dyn_uniq %>% filter(fam_exp_tot> 0) %>% 
-# ggplot( aes(fam_exp_tot))+
-#   geom_histogram(bins= 5)+ 
-#   theme_minimal()
-# 
-# summary(dyn_uniq$fam_exp_tot)
-
-
-# dyn_uniq <- dyn_uniq %>% filter(fam_exp_tot> 0)
-# 
-# hist(dyn$fam_exp_tot)
-# 
-# dist <- data.frame(table(cut(dyn_uniq$fam_exp_tot, c(1,5,10,20,30,120))))
-# 
-# 
-# ggplot(dist,aes(Var1, Freq))+
-#   geom_bar(stat = "identity")+
-#   theme_minimal()+labs(title = "Distribution of experience", 
-#     x = "Group", y = "Frequency") + theme(plot.subtitle = element_text(hjust = 0.5), 
-#     plot.title = element_text(hjust = 0.5)) +labs(subtitle = "This plot displays the distribution of the family experience in categories. ")
-```
-## Elections covered
-
-* Assembly elections
-
-* General elections
-
-* Local body elections
-
-  * Urban local bodies
-  
-  * Panchayat raj instituions
-  
-## Basic eda
-
-
-  
-
-### Assembly Elections
-
-```{r AE summary}
-
-dyn %>% filter(election_type =="AE" ) %>% count(year) %>%  kable(col.names = c ("Year", "Count"))%>% kable_styling(bootstrap_options = "striped")
-
-```
-
-### General Elections
-
-```{r GE summary}
-dyn %>% filter(election_type == "GE") %>% count(year) %>% kable(col.names = c ("Year", "Count"))%>% kable_styling(bootstrap_options = "striped")
-```
-
-### AE GE election contest
-
-```{r break up of contest types}
-
-dyn_test <- dyn_ae_ge%>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1,
-                                                                                                                        position ==2 &dyn_cum ==0 ~2,
-                                                                                                                        position ==1 &dyn_cum ==1 ~3,
-                                                                                                                        position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA")))))
-
-
-# dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n())
-
-#table(dyn_test$contest_type)
-
-dyn_ae_ge$contest_type <- dyn_test$contest_type
-
-dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type) %>% summarise(count = n())  %>% select(year, contest_type, count) %>% spread(contest_type, count) %>% kable(digits = 2)%>% kable_styling(bootstrap_options = "striped")
-
-dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type) %>% summarise(count = n()) %>% group_by(year) %>% mutate(sum = sum(count), prop = count/sum) %>% select(year, contest_type, prop) %>% spread(contest_type, prop) %>% kable(digits = 2)%>% kable_styling(bootstrap_options = "striped")
-```
-
-
-
-
-### local body elections
-
-#### Urban local bodies
-
-```{r ULB summary}
-# dyn %>% filter(election_type %in% c("NP", "NN","NPP")) %>%  group_by( election_type,year) %>% summarise (count = n()) %>% kable()%>% kable_styling(bootstrap_options = "striped", full_width = F)
-
-
-dyn %>% filter(year != "NA" & election_type %in% c("NP", "NN","NPP")) %>%  group_by( election_type,year) %>% summarise (count = n()) %>% spread(key = "election_type", value = "count") %>% kable(col.names = c ("Year", "Nagar Nigam", "Nagar Panchayat", "Nagar Nigam Parishad"))%>% kable_styling(bootstrap_options = "striped")
-```
-
-
-#### Panchayat Raj institutions
-
-```{r PRI summary}
-dyn %>% filter(year != "NA" &election_type %in% c("ZP", "BP")) %>%  group_by( election_type,year) %>% summarise (count = n()) %>%spread(key = "election_type", value = "count") %>%  kable(col.names = c ("Year", "Block Panchayat", "Zilla Panchayt"))%>% kable_styling(bootstrap_options = "striped")
-```
-
-```{r uniq relative id}
-##fam_size
-dyn$rel_id_uniq <- as.numeric(paste(dyn$relative_id, dyn$rel_id_rep, sep = ""))
-
-```
-
-```{r expereince and term duration}
-# 
-dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP") & dyn$year  %in% c(1995,2006)] <- 6
-
-dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP")  & dyn$year %in% c(2001, 2012, 2017)]<- 5
-
-##
-
-dyn$term_duration[dyn$election_type %in% c("ZP", "BP")  & dyn$year %in% c(1995, 2000, 2005, 2010, 2015)]<- 5
-
-```
-
-```{r}
-
-# caste_names <- tribble(
-#   ~caste_id, ~ caste_name,
-#   0 , "unspecified",
-#   1 , "Brahmin",
-#   2 , "Thakur/ Rajput",
-#   3 , "Baniya",
-#   4 , "Other upper caste",
-#   5  ,"Jat",
-#   6 , "Gujjar",
-#   7 , "Yadav",
-#   8 , "Kurmi" ,
-#   9 , "Lodh",
-#   10 , "Other OBC",
-#   11 , "Dalit",
-#   12 , "Muslim",
-#   13  , "Others"
-# )
-# 
-# dyn<- merge(dyn, caste_names, by = "caste_id", all.x =TRUE)
-# 
-# ##caste distribution
-# 
-# dyn$caste_groups <- NA
-# 
-# 
-# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(7,12,11),dyn$caste_name,dyn$caste_groups)
-# 
-# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(1,2,4,3),"Upper Caste",dyn$caste_groups)
-# 
-# 
-# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(5,6,9,8,10),"Non-Yadav OBC",dyn$caste_groups)
-# 
-# 
-# dyn$caste_groups <- ifelse(dyn$caste_id %in% c(0,13),"Others",dyn$caste_groups)
-
-##caste_group dist
-```
-
-```{r all family experience}
-
-
-# dyn <- dyn%>%
-#   group_by(family_id) %>%
-#   mutate(fam_exp_tot = sum(term_duration[year< 2017])) %>%
-#   ungroup()
-# 
-# dyn$fam_size_tot <- as.numeric(dyn$fam_size_tot)
-```
-
-
-
-```{r family_size}
-# 
-# 
-# table(dyn_uniq$fam_size_tot)
-# 
-# ##adding uniq individual id
-# 
-# 
-
-# 
-# ##cumulative fam size
-# 
-# dyn %>% group_by(family_id,year) %>% mutate(count = n_distinct(rel_id_uniq), cum_sum = cummax(count)) %>% 
-#   filter(family_id == "f0009806") %>% 
-#   select(year, candidate_name,rel_id_uniq, fam_exp_cum,fam_size_tot,count, cum_sum)
-
-
-# 
-# 
-# 
-# 
-# dyn_ae_ge %>% 
-#   filter(family_id == "f0009806") %>% 
-#  select(year, candidate_name,rel_id_uniq, fam_size_tot)
-```
-
-
-```{r dynast classification}
-# dyn$dyn  <-ifelse(dyn$fam_size_cum>1,1,0)
-# 
-# dyn$dyn_tot <- ifelse(dyn$fam_size_tot>1,1,0)
-```
-
-
-<!-- ```{r } -->
-<!-- # ## Distribution of caste among candidates and the families -->
-<!-- #  -->
-<!-- # ```{r} -->
-<!-- # caste_groups_ind <- as.data.frame(table(dyn_1$caste_groups)) -->
-<!-- #  -->
-<!-- #  -->
-<!-- # dyn_1_uniq <- dyn_1 %>%  -->
-<!-- #   filter(relative_id ==1) %>%  -->
-<!-- #   distinct( family_id, .keep_all = T) -->
-<!-- #  -->
-<!-- # caste_groups_fam<- as.data.frame(table(dyn_1_uniq$caste_groups)) -->
-<!-- #  -->
-<!-- #  -->
-<!-- # caste_dist <- merge(caste_groups_fam,caste_groups_ind, by = "Var1") -->
-<!-- #  -->
-<!-- # names(caste_dist) <- c("caste_group","Families" , "Candidates" ) -->
-<!-- #  -->
-<!-- # caste_dist %>% arrange(desc(Freq.x)) %>% kable(col.names = c ("Caste group","Families" , "Candidates"))%>% kable_styling(bootstrap_options = "striped") -->
-
-<!-- ``` -->
 
 
 
 ```{r setup for description}
 
-dyn$land <- as.numeric(dyn$land)
+
 # dyn_uniq <- dyn %>%
 #   filter(relative_id ==1) %>%
 #   distinct( family_id, .keep_all = T)
@@ -602,122 +77,167 @@ dyn_uniq <- dyn %>% group_by(family_id) %>% filter(year == max(year)) %>% distin
 
 
 
-<!-- # Linkages -->
-
-<!-- ```{r} -->
 
 
-<!-- dyn <- dyn %>% group_by(family_id) %>% mutate(n_el_lvl = n_distinct(election_level )) -->
 
-<!-- dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", -->
-<!--                          election_type == "GE" ~ "GE", -->
-<!--                          TRUE ~ "LB")) -->
+# Analyis at different levels
 
 
-<!-- dyn <- dyn %>% group_by(family_id) %>% mutate( -->
-<!--   fam_lvl = -->
-<!--     case_when( -->
-<!--       (grepl("AE", election_level)&grepl("GE", election_level)) ~ "AE-GE-LB", -->
-<!--       # election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
-<!--       # election_level == "GE" ~ "GE", -->
-<!--       # election_level == "AE" ~ "AE", -->
-<!--       # election_level == "LB" ~ "LB", -->
-<!--       # election_level == "AE" & election_level == "LB" ~ "AE-LB", -->
-<!--       # election_level == "GE" & election_level == "LB" ~ "GE-LB", -->
-<!--       TRUE ~ "NA" -->
-<!--     ) -->
-<!-- ) -->
 
-<!-- patterns <- c("AE", "GE", "LB") -->
-<!-- dyn <- dyn %>% group_by(family_id) %>% mutate( -->
-<!--   fam_lvl = -->
-<!--     #if_else(grepl("AE.*GE|GE.*AE", election_level ) ==TRUE, "AE-GE-LB", -->
-<!--              ifelse((grepl("AE", election_level) & grepl("GE", election_level)), "AE-GE", -->
-<!--             #        if_else(election_level %in% c("AE",  "LB") , "AE-LB", -->
-<!--             #               if_else(election_level %in% c("GE", "LB")  ,"GE-LB", -->
-<!--             #                      if_else(election_level == "GE" , "GE", -->
-<!--             #                             if_else(election_level == "AE" , "AE", -->
-<!--             #                                    if_else(election_level == "LB" , "LB", -->
-<!--                                                       "NA")#)#))))) -->
-<!-- ) -->
 
-<!-- dyn %>% group_by(family_id) %>% mutate(fam_lvl =ifelse(grepl("AE", election_level)& grepl("GE", election_level) , "AE-GE","NA")) %>% select(fam_lvl) -->
 
-<!-- table(grepl("AE", dyn$election_level )& grepl("GE", dyn$election_level )&grepl("LB", dyn$election_level )) -->
 
-<!-- table(grepl("AE", dyn$election_level )) -->
-<!--  dyn <- dyn %>% group_by(family_id) %>% mutate( -->
-<!--   fam_lvl = -->
-<!--     ifelse( -->
-<!--       grep( c("AE","GE", "LB"),election_level), "AE-GE-LB", -->
-<!--       # election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
-<!--       # election_level == "GE" ~ "GE", -->
-<!--       # election_level == "AE" ~ "AE", -->
-<!--       # election_level == "LB" ~ "LB", -->
-<!--       # election_level == "AE" & election_level == "LB" ~ "AE-LB", -->
-<!--       # election_level == "GE" & election_level == "LB" ~ "GE-LB", -->
-<!--        "NA" -->
-<!--     ) -->
-<!-- ) -->
 
-<!-- `dyn %>% group_by(family_id) %>% mutate(fam_lvl= -->
-<!--                                          if_else(election_level == "AE" & election_level ==  "GE" & election_level ==  "LB", "AE-GE-LB", -->
-<!--                                                  ifelse(election_level == "AE" & election_level == "GE" ~ "AE-GE", -->
-<!--                                                         ifelse())) -->
 
-<!-- dyn_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE) -->
+
+```{r AE - GE filter}
+#dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
+```
+
+
+
+
+
+
+<!-- ```{r ae -ge cumulative experience} -->
+<!-- ###experience -->
+
+<!-- dyn_ae_ge <- dyn_ae_ge %>% -->
+<!--   group_by(family_id) %>% -->
+<!--   mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>% -->
+<!--   ungroup() -->
+
+
+
+<!-- # dyn_ae_ge_uniq %>% -->
+<!-- #   select(candidate_name, family_id, pat_name, fam_exp_tot) -->
+<!-- #   arrange(desc(fam_exp_tot)) %>% -->
+
+<!-- ##cumsum for the families -->
+
+<!-- year_group <- dyn_ae_ge %>% -->
+<!--   group_by(family_id, year) %>% -->
+<!--   summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>% -->
+<!--   mutate(cum_exp = cumsum(year_sum)) %>% -->
+<!--   mutate(fam_exp_cum = cum_exp - year_sum) %>% -->
+<!--   select(family_id,year,cum_exp, fam_exp_cum, year_sum) -->
+
+<!-- year_group <- year_group %>% -->
+<!--   select(family_id, year, fam_exp_cum) -->
+
+<!-- dyn_ae_ge <- merge(dyn_ae_ge, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE) -->
 
 
 <!-- ``` -->
 
-## Linkages
+
+```{r ae ge dynast calssification}
+# dyn_ae_ge$dyn_ae_ge  <-ifelse(dyn_ae_ge$fam_size_cum>1,1,0)
+# 
+# dyn_ae_ge$dyn_ae_ge_tot <- ifelse(dyn_ae_ge$fam_size_tot>1,1,0)
+```
+
+```{r  family size}
+##family_size
+
+# 
+# dyn_ae_ge <-  dyn_ae_ge %>%
+#   group_by(family_id) %>%
+#   mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
+#   ungroup()
+# #
+```
+
+
+
+```{r  AE - GE variable construction}
+  
+##adding BP<ZP<NPP<NP>NN variable
+
+
+# dyn <- dyn %>% group_by(family_id) %>% mutate(lb = ifelse(any(election_type %in% c("ZP", "BP", "NN", "NPP", "NP")[election_type  %in% c("AE", "GE")]),1,0))
+# 
+# dyn_ae_ge_uniq <- dyn_ae_ge%>% 
+#   filter(relative_id ==1) %>% 
+#   distinct( family_id, .keep_all = T)
+
+##set up fro the description
+# dyn_ae_ge$dyn <- if_else(dyn_ae_ge$fam_size_cum >1,1,0)
+
+dyn_ae_ge$land <- as.numeric(dyn_ae_ge$land)
+# 
+ dyn_ae_ge$fam_rel_uniq_id <- paste(dyn_ae_ge$family_id, dyn_ae_ge$rel_id_uniq, sep = "")
+
+
+dyn_ae_ge <- dyn_ae_ge %>% group_by(fam_rel_uniq_id) %>% mutate(n_elections_won = n_distinct(year[position ==1]))
+
+dyn_ae_ge <- dyn_ae_ge %>% group_by(fam_rel_uniq_id) %>% mutate(n_elections_contested = n_distinct(year))
+
+
+dyn_ae_ge_uniq_ind <- dyn_ae_ge %>% 
+  distinct( fam_rel_uniq_id, .keep_all = T) 
+
+dyn_ae_ge_uniq_pat <- dyn_ae_ge %>% 
+  filter(relative_id ==1) %>% 
+  distinct( family_id, .keep_all = T)
+
+##family and non-family classification
+
+dyn_ae_ge_fam <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_tot ==1)
+
+# dyn_ae_ge_non_fam <-  dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ae_ge_tot ==0)
+
+dyn_ae_ge_uniq <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+
+#dyn_ae_ge_fam %>% filter(fam_exp_tot ==0)
+
+```
+
+##  AE - GE 
+
+This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains `r dim(dyn_ae_ge)[1]` observations and the number  unique individuals is `r dim(dyn_ae_ge_uniq_ind)[1]`  and the families  is  `r (dim(dyn_ae_ge_uniq %>% filter(dyn_tot==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_ae_ge %>% filter (relative_id ==1))[1]/dim(dyn_ae_ge)[1])` of this winners are just patriarchs.
+
+In this universe of families `r dim(dyn_ae_ge %>% filter(dyn_tot==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_ae_ge %>% filter(dyn_tot==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
+
+### Assembly Elections
+
+```{r AE summary}
+
+dyn %>% filter(election_type =="AE" ) %>% count(year) %>%  kable(col.names = c ("Year", "Count"))%>% kable_styling(bootstrap_options = "striped")
+
+```
+
+### General Elections
+
+```{r GE summary}
+dyn %>% filter(election_type == "GE") %>% count(year) %>% kable(col.names = c ("Year", "Count"))%>% kable_styling(bootstrap_options = "striped")
+```
+
+
 
 ```{r}
 
-# dyn <- dyn %>% mutate(election_level =case_when(election_type == "AE" ~ "AE", 
-#                         election_type == "GE" ~ "GE",
-#                          TRUE ~ "LB")) 
-# 
-# dyn_ae_lvl <- dyn %>% filter(election_level == "AE") %>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# dyn_ge_lvl <- dyn %>% filter(election_level == "GE")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# 
-# 
-# dyn_lb_lvl <- dyn %>% filter(election_level == "LB")%>% distinct(family_id, .keep_all = TRUE) %>% select(election_level, family_id)
-# 
-# dyn_ae_ge_lvl <- merge(dyn_ge_lvl, dyn_ae_lvl, by = "family_id" , all =TRUE)
-# 
-# dyn_all_lvl <- merge(dyn_ae_ge_lvl ,dyn_lb_lvl,by = "family_id" , all =TRUE )
-# 
-# dyn_all_lvl$levels <- paste(dyn_all_lvl$election_level.x,dyn_all_lvl$election_level.y, dyn_all_lvl$election_level, sep = "")
-# 
-# dyn_all_lvl <- dyn_all_lvl %>% mutate(level =case_when(
-#   levels == "GEAELB" ~ "GE-AE-LB",
-#   levels == "GEAENA" ~ "GE-AE",
-#   levels == "GENALB" ~ "GE-LB",
-#   levels == "GENANA" ~ "GE",
-#   levels == "NAAELB" ~ "AE-LB",
-#   levels == "NAAENA" ~ "AE",
-#   levels == "NANALB" ~ "LB",
-# ))
-# 
-# 
-# dyn_all_lvl <- dyn_all_lvl %>% select(family_id, level)
-# 
-# 
-# 
-# dyn <- merge(dyn, dyn_all_lvl, by = "family_id", all.x = TRUE, allow.cartesian = TRUE)
+dyn_ae_ge_uniq_ind %>% group_by(n_elections_won) %>% summarise(n_individuals = n()) %>% kable(caption = "Break-up of unique individuals wrt to elections won") %>% kable_styling(bootstrap_options = "striped")
 
-dyn_fam_uniq_last_ind <- dyn %>% filter(dyn_tot >0) %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE)
-
-#dyn_fam_uniq_last_ind %>% group_by(level) %>%  summarise(count = n()) %>% arrange(-count) %>% kable()
+dyn_ae_ge_uniq_ind %>% group_by(n_elections_contested) %>% summarise(n_individuals = n()) %>% kable(caption = "Break-up of unique individuals wrt to elections contested") %>% kable_styling(bootstrap_options = "striped")
 
 
 ```
 
-## retention
+
+
+
+[//]: # (this has to be rechecked. I should find a way to draw this using code in some way)
+
+
+[//]: # (also the cumulative family size has to be  done using code)
+
+
+
+
+
+
+### retention
 
 ```{r retention chart 2}
 
@@ -757,1044 +277,27 @@ dyn_ae_ge %>%distinct(family_id, .keep_all = TRUE) %>%  group_by(starting_decade
 
 ```
 
-```{r retention bp}
 
-dyn_rlb <- dyn %>% filter(election_type %in% c("ZP", "BP"))
+### AE GE election contest
 
+```{r break up of contest types}
 
-dyn_rlb <- dyn_rlb %>% group_by(family_id)%>%  mutate(min_year = min(year), max_year = max(year))
-
-dyn_bp <- dyn_rlb %>% filter(election_type == "BP")
-
-#dyn_bp <- dyn_bp %>% group_by(family_id)%>%  mutate(min_year = min(year), max_year = max(year))
-
-
-dyn_bp %>%distinct(family_id, .keep_all = TRUE) %>%  group_by(min_year, max_year) %>% summarise(count = n()) %>% group_by(min_year) %>% arrange(min_year, -max_year) %>%  mutate(min_yr_tot = sum(count),cum_sum =  cumsum( count), prop = cum_sum/min_yr_tot ) %>% 
-  ggplot(aes(factor(max_year), prop, group = min_year, color = factor(min_year)))+
-  geom_point()+
-  geom_line()+
-  theme_minimal()+
-  scale_y_continuous(breaks = c(0,.2,.4,.6,.8,1), limits = c(0,1))+
-  labs(title = "Candidates/family retention in BP elections", x = "Year", y = "Proportion")+
-  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
-        plot.title = element_text(hjust = 0.5, size = 18, family = "serif", 
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
-        text = element_text(color = "gray20",family = "serif"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        
-          
-  ) 
-
-#prop_ind <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_prop_ind.csv")
+dyn_test <- dyn_ae_ge%>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1,
+                                                                                                                        position ==2 &dyn_cum ==0 ~2,
+                                                                                                                        position ==1 &dyn_cum ==1 ~3,
+                                                                                                                        position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA")))))
 
 
+# dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n())
 
+#table(dyn_test$contest_type)
+
+dyn_ae_ge$contest_type <- dyn_test$contest_type
+
+dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type) %>% summarise(count = n())  %>% select(year, contest_type, count) %>% spread(contest_type, count) %>% kable(digits = 2)%>% kable_styling(bootstrap_options = "striped")
+
+dyn_ae_ge %>% filter(position ==1& year != 1974) %>% group_by(year, contest_type) %>% summarise(count = n()) %>% group_by(year) %>% mutate(sum = sum(count), prop = count/sum) %>% select(year, contest_type, prop) %>% spread(contest_type, prop) %>% kable(digits = 2)%>% kable_styling(bootstrap_options = "striped")
 ```
-
-
-```{r retention np npp}
-
-dyn_ulb <- dyn %>% filter(election_type %in% c("NP", "NPP", "NN"))
-
-
-dyn_ulb <- dyn_ulb %>% group_by(family_id)%>%  mutate(min_year = min(year), max_year = max(year))
-
-dyn_np_nnp <- dyn_ulb %>% filter(election_type %in% c("NP", "NNP"))
-
-
-dyn_np_nnp %>%distinct(family_id, .keep_all = TRUE) %>%  group_by(min_year, max_year) %>% summarise(count = n()) %>% group_by(min_year) %>% arrange(min_year, -max_year) %>%  mutate(min_yr_tot = sum(count),cum_sum =  cumsum( count), prop = cum_sum/min_yr_tot ) %>% 
-  ggplot(aes(factor(max_year), prop, group = min_year, color = factor(min_year)))+
-  geom_point()+
-  geom_line()+
-  theme_minimal()+
-  labs(title = "Candidates/family retention in NP &NPP elections", x = "Year", y = "Proportion")+
-  scale_y_continuous(breaks = c(0,.2,.4,.6,.8,1), limits = c(0,1))+
-  theme(legend.position = "none")+
-  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
-        plot.title = element_text(hjust = 0.5, size = 18, family = "serif", 
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
-        text = element_text(color = "gray20",family = "serif"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        
-          
-  ) 
-
-
-
-```
-
-
-
-## Industries
-
-```{r}
-
-dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
-
-dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
-
-
-dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
-
-names(dyn_indus)[1] <- "election_type"
-
-dyn_indus_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = c("election_type", "year", "pid"))
-
-dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
-
-
-dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>% arrange(-year) %>% 
-  distinct( family_id, .keep_all = T) 
-
-dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
-
-dyn_indus_ae_ge_uniq %>%  group_by(dyn_tot_text) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
-
-
-# dyn_indus_ae_ge_uniq %>% filter(!is.na(ind_2)) %>% group_by(dyn_tot, indus_2) %>% summarise(count = n()) %>% group_by(dyn_tot) %>% mutate(sum_count = sum(count), prop = count/sum_count) %>% 
-#   ggplot(aes(indus_2, prop))+
-#   geom_bar(stat = "identity")+
-#   facet_grid(~dyn_tot)
-dyn_indus_ae_ge_uniq$indus_2 <- replace_na(dyn_indus_ae_ge_uniq$indus_2 ,0)
-
-dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq  %>% mutate(indus_rt = case_when(indus_2 == 0 ~ "0", ind_2 %in% c(1,3,7,2,4,5)~ "rent-thick",
-                                  TRUE~ "non-rent-thick"))
-
-
-dyn_indus_ae_ge_uniq   %>% filter(indus_rt != "0") %>% group_by(dyn_tot_text, indus_rt) %>% summarise(count = n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, indus_rt, prop) %>% kable(captioni = "industry ownership wrt rent extraction type", col.names = c("Politician's identity","rent-type", "Proportion"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
-
-
-# 
-dyn_all <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
-
-dyn_all$ind_2 <- replace_na(dyn_all$ind_2,0)
-
-dyn_all <- dyn_all %>% mutate(ind_rt = case_when(ind_2 == 0 ~ "0", ind_2 %in% c(1,5)~ "rent-thick",
-                                  TRUE~ "non-rent-thick"))
-
-dyn_all$dyn_tot_text <- ifelse(dyn_all$dyn_tot==1, "Family", "Non-family")
-
-dyn_all_uniq <- dyn_all %>% arrange(-year) %>%
-  distinct( family_id, .keep_all = T)
-
-dyn_ae_ge_uniq <-  dyn_all %>% filter(election_type %in% c("AE", "GE")) %>% arrange(-year) %>%
-  distinct( family_id, .keep_all = T)
-dyn_ae_ge_uniq  %>% filter(ind_2 != 0) %>% group_by(dyn_tot_text, ind_2) %>% summarise(count = n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, ind_2, prop) %>% 
-  ggplot(aes(dyn_tot_text, prop, fill = factor(ind_2),,label = round(prop,2)))+
-  geom_bar(stat= "identity", position ="stack")+
-  geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-    theme_minimal()+
-    labs(title = " Industry ownership composition \n among non-families and families ",x = "", y = "Proportion", fill = "Type of work") +
-    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 14,family = "serif"),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.text.y = element_blank(),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()
-  ) 
-
-
-
-
-```
-
-
-
-# Analyis at different levels
-
-## All elections
-
-
-This universe includes winners and runner-ups from the general and assembly elections from the year 1977 to 2019 and the winners from the local body elections held from 1995 to 2015  in the state of Uttar Pradesh. This contains `r dim(dyn)[1]` observations and the number  unique individuals is `r dim(dyn_uniq_ind)[1]`  and the families  is  `r (dim(dyn_uniq %>% filter(dyn_tot==1))[1])`. It has to be noted that `r scales::percent(dim(dyn %>% filter (relative_id ==1))[1]/dim(dyn)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn %>% filter(dyn_cum==1))[1]` winners are part of some family and `r dim(dyn %>% filter(dyn_cum==1 & relative_id ==1))[1]` winners out of this is just patriarchs while the rest is other family members.
-
-<!-- ### Members in the other levels and the probabilty  -->
-
-
-
-```{r}
-
-
-# dyn_uniq %>% group_by(dyn_tot, election_type) %>% summarise(count = n()) %>% group_by(election_type) %>% mutate(sum= sum(count), prop = count / sum) %>% arrange(election_type)
-
-
-dyn_ae_ge_uniq_ind <- dyn_ae_ge %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_ge_uniq_ind <- dyn_ae_ge %>% filter(election_type == "GE") %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_ae_uniq_ind <- dyn_ae_ge %>% filter(election_type == "AE") %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-# ggplot(dyn_ae_uniq_ind , aes(factor(dy_ae_ge_tot), margin_percentage))+
-#   geom_boxplot()
-# 
-# ggplot(dyn_ge_uniq_ind , aes(factor(dyn_tot), margin_percentage))+
-#   geom_boxplot()
-# 
-# 
-# ggplot(dyn_ae_uniq_ind , aes(factor(dyn_tot), turnout_percentage))+
-#   geom_boxplot()
-# 
-# ggplot(dyn_ge_uniq_ind , aes (margin_percentage,fam_exp_tot))+
-#   geom_point(aes(color = factor(dyn_tot)))+
-#   ylim(c(0,75))
- 
-```
-
-
-
-
-### Land distribution
-
-#### Families
-```{r all families land}
-# 
-# dev.off()
-# png("UP/graphs/bplot_land_exp.png", width = 800, height = 600)
-
-ylim1 = boxplot.stats(dyn_uniq$land)$stats[c(1, 5)]
-
-ggplot(subset(dyn_uniq,!is.na(land)),aes(as.factor(dyn_tot), land)) +
-  geom_boxplot(outlier.shape = NA)+
-  scale_x_discrete(labels=(c("Non - Family", "Family")))+
-  coord_cartesian(ylim = ylim1*1.05)+
-  theme_minimal()+
-  labs(title = "Land size  of families and non-families ",x = "", y = "Land Size \n (in bhigas)") +
-  
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20, 
-                                  margin= margin(0,0,20,0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 16),        
-        axis.ticks = element_blank()
-  ) 
-
-```
-
-
-
-
-#### Political Experience
-
-
-```{r all political experience land}
-
-
-
-ylim1 = boxplot.stats(dyn_uniq$land)$stats[c(1, 5)]
-
-
-
-
-ggplot(subset(dyn_uniq,!is.na(land)& !is.na(fam_exp_tot)), aes(cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE), land )) +
-  geom_boxplot(outlier.shape = NA)+
-   scale_x_discrete(labels=(c("0", "1-5", "6-10","11-20", "21+")))+
-  coord_cartesian(ylim = ylim1*1.05)+
-  theme_minimal()+
-  labs(title = "Land size  wrt political experience ",x = "Political Experience \n (In Years)", y = "Land Size \n (in bhigas)" ) +
-  
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20,
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 16),        
-        axis.ticks = element_blank()
-  ) 
-
-```
-
-
-
-#### Caste
-
-### Industries: Education
-
-
-#### Families
-
-```{r all education family }
-
-
-
-dyn$edu <- as.numeric(paste(dyn$school, dyn$college, sep = ""))
-
-
-dyn_uniq <- dyn %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-# ##dyn_uniq <- dyn %>% 
-#   filter(relative_id ==1) %>% 
-#   distinct( family_id, .keep_all = T)
-
-
-edu_tab <- dyn_uniq %>%  filter(!is.na(edu)) %>% group_by(dyn_tot,edu) %>% summarise(count = n())  %>% group_by(dyn_tot) %>% mutate(sum = sum(count),prop= count/sum) %>% filter(edu!= 0) %>%  arrange(edu,-prop) 
-
-edu_tab$id=rep(c(1:2),3)
-ggplot(edu_tab , aes(x= reorder(as.factor(edu),-prop), prop , group = id )) +   
-  geom_bar(aes(fill = as.factor(dyn_tot)), position = "dodge", stat="identity")+
-  theme_minimal()+
-  scale_x_discrete(labels=(c(  "School" ,"College","Both")))+
-  scale_fill_discrete(labels = c("Non - Family","Family"))+
-  labs(title = "Ownership of educational institutions \n among families and non-families", 
-       x = "", y = "Proportion") +
-  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-  theme(plot.title = element_text(hjust = 0.5, size = 18, family = "sans", 
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_line(color = "gray50", size = .5),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank()
-          
-  ) 
-  
-
-
-```
-
-
-
-
-#### Political Experience
-
-
-```{r all education pol experience }
-
-dyn_edu <- dyn_uniq %>% filter(edu %!in% c(NA)&!is.na(fam_exp_tot)) %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-dyn_edu_tab <- dyn_edu %>% filter(!is.na(fam_exp_cat)) %>% group_by (edu, fam_exp_cat) %>% 
-  summarise (count =n()) %>% group_by(fam_exp_cat) %>% mutate(sum = sum(count), prop = count/sum) %>% filter (edu != 0) %>%  arrange(fam_exp_cat, - prop)
-
-
-
-ggplot(dyn_edu_tab, aes(as.factor(edu),prop)) +
-  geom_bar(aes(fill = as.factor(fam_exp_cat)), position = "dodge", stat="identity")+
-  theme_minimal()+
-  scale_x_discrete(limits = c("10","1", "11"),labels=c("School", "College", "Both"))+
-  scale_fill_discrete(name = "Political experience \n (in years)",labels = c("0","1-5","6-10","11-20",  "21+"))+
-  labs(title = "Ownership of educational institutions \n wrt political experience", x = "Educational institution", y = "Proportion") +
-  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-  theme(plot.title = element_text(hjust = 0.5, size = 18, family = "sans", 
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)),
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_line(color = "gray50", size = .5),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank()
-
-  )
-  
-```
-
-#### caste
-
-### Industries : Others
-
-```{r adding old industries variable}
-
-# table(dyn_uniq$ind_2)
-# 
-# table(dyn_uniq$ind_3)
-# 
-# table(dyn_uniq$ind_4)
-
-
-# dyn_ind <- read.csv("ae_ge_lb_full.csv")
-# names(dyn_ind)[1] <- "election_type"
-# 
-# dyn_ind <- dyn_ind %>% filter(family_id != "" & year!= "") %>% select(election_type, year,family_id,relative_id,indus_2, indus_3, indus_4)
-# 
-# names(dyn_ind)
-# 
-# dim(dyn_ind)
-# 
-# dyn <- read.csv("dyn-05.06.20.csv")
-# dim(dyn)
-# names(dyn)
-# dyn_ind_m <- merge(dyn, dyn_ind, by = c("election_type","year","family_id", "relative_id"), all.x = TRUE)
-# 
-# dim(dyn_ind_m)
-# 
-# write.csv(dyn_ind_m, "dyn_10.06.20.csv" )
-
-
-```
-
-
-#### Families
-
-```{r}
-
-
-dyn_uniq$ind_all <- paste(dyn_uniq$ind_2,dyn_uniq$ind_3, sep = "")
-
-dyn_uniq$ind_all <- ifelse(dyn_uniq$ind_all =="1NA", 1, dyn_uniq$ind_all)
-
-dyn_uniq$ind_all <- ifelse(dyn_uniq$ind_all =="3NA", 3, dyn_uniq$ind_all)
-dyn_uniq$ind_all <- ifelse(dyn_uniq$ind_all =="2NA", 2, dyn_uniq$ind_all)
-
-dyn_uniq$ind_all <- ifelse(dyn_uniq$ind_all =="4NA", 4, dyn_uniq$ind_all)
-
-dyn_uniq$ind_all <- ifelse(dyn_uniq$ind_all =="5NA", 5, dyn_uniq$ind_all)
-
-dyn_uniq$ind_all <- ifelse(dyn_uniq$ind_all =="NANA", 0, dyn_uniq$ind_all)
-
-
-
-##
-
-
-
-
-ind_tab <- dyn_uniq %>% group_by(dyn_tot, ind_all) %>% summarise(count = n()) %>%  group_by(dyn_tot) %>% mutate(sum = sum(count),prop= count/sum) %>%  arrange(ind_all,-prop) %>% filter( ind_all %in% c(1,2,3,4,5) )
-
-
-edu_tab$id=rep(c(1:2),3)
-
-
-ggplot(ind_tab  , aes(x= reorder(as.factor(ind_all),-prop), prop )) +   
-  geom_bar(aes(fill = as.factor(-dyn_tot)), position = "dodge", stat="identity")+
-  theme_minimal()+
-  scale_x_discrete(labels=(c(  "Others" ,"4","5","3","Petrol Pump")))+
-  scale_fill_discrete(labels = c("Family","Non - Family"))+
-  labs(title = "Ownership of industries \n among families and non-families", 
-       x = "Industries", y = "Proportion") +
-  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-  theme(plot.title = element_text(hjust = 0.5, size = 18, family = "sans", 
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_line(color = "gray50", size = .5),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank()
-          
-  ) 
-
-
-
-
-```
-
-#### Political experience
-
-```{r all ind political experience}
-
-dyn_ind_exp <- dyn_uniq %>% filter(!is.na(fam_exp_tot)) %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-dyn_ind_exp_tab <- dyn_ind_exp %>% filter(!is.na(fam_exp_cat)) %>% group_by (ind_2, fam_exp_cat)%>% 
-  summarise (count =n()) %>% group_by(fam_exp_cat) %>% mutate(sum = sum(count), prop = count/sum) %>% filter (ind_2 != 0) %>%  arrange(fam_exp_cat, - prop)
-
-
-
-ggplot(dyn_ind_exp_tab, aes(as.factor(ind_2),prop)) +
-  geom_bar(aes(fill = as.factor(fam_exp_cat)), position = "dodge", stat="identity")+
-  theme_minimal()+
-  scale_x_discrete(labels=c("Others", "Petrol Pump", "3", "4", "5"))+
-  scale_fill_discrete(name = "Political experience \n (in years)",labels = c("0","1-5","6-10","11-20", "21+"))+
-  labs(title = "Ownership of industries \n wrt political experience", x = "Industry", y = "Proportion") +
-  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-  theme(plot.title = element_text(hjust = 0.5, size = 18, family = "sans", 
-                                  margin = margin(t = 0, r = 0, b = 20, l = 0)),
-        text = element_text(color = "gray20"),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_line(color = "gray50", size = .5),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank()
-
-  )
-
-```
-
-
-```{r all industries others}
-# 
-# indus_2 <- data.frame(table(dyn$indus_2))
-# 
-# indus_3 <- data.frame(table(dyn$indus_3))
-# 
-# indus_4 <- data.frame(table(dyn$indus_4))
-# 
-# indus_2_3 <- merge(indus_2, indus_3, by = "Var1")
-# 
-# indus_2_3_4 <- merge(indus_2_3, indus_4, by = "Var1")
-# 
-# indus_all <- rbind(indus_2, indus_3, indus_4)
-# 
-# indus <- indus_all %>% group_by(Var1) %>% summarise(sum = sum(Freq)) %>% filter(Var1 %!in% c("", "NR")) %>% arrange(-sum)
-# 
-# 
-# ggplot(indus %>% filter(Var1 != 0), aes(x = reorder(as.factor(Var1),-sum), y = sum))+
-#   geom_bar(stat = "identity")
-# 
-# names(indus_2_3_4) <- c("Industry", "Industry_2", "Industry_3", "Industry_4")
-# 
-# 
-# 
-# ggplot(indus_2_3_4 %>% filter(Var1 %!in% ("")))
-# 
-# table(dyn$indus_3)
-# 
-# 
-# table(dyn$indus_4)
-# 
-# ggplot(dyn_uniq, aes())
-# 
-# dyn_uniq %>%  group_by(indus_2 ,indus_3, indus_4) %>%  summarise(n()) 
-# 
-# library(cowplot)
-# library(ggplot2)
-# 
-# install.packages("cowplot")
-# 
-# dyn_indus_2 <- dyn_uniq %>% group_by(dyn_tot,indus_2) %>% summarise (count = n()) %>% group_by(dyn_tot) %>% mutate(sum = sum (count), prop = count/sum) %>% ungroup() %>% filter(indus_2 %!in% c("",0, NA, "NR")) %>% arrange(dyn_tot, - prop)
-#   
-# 
-# indus_2_p   <- ggplot(dyn_indus_2,aes(x=reorder(as.factor(indus_2),-prop),y= prop))+
-#   geom_bar(aes(fill = as.factor(dyn_tot)), position = "dodge", stat="identity")+
-#   theme(legend.position = "none")+
-#   labs(x = "")+
-#   scale_x_discrete(limits = c("1", "2","3","4","5","6","7","8","9","10", "11","12","13"))
-# 
-# ##2
-# dyn_indus_3 <- dyn_uniq %>% group_by(dyn_tot,indus_3) %>% summarise (count = n()) %>% group_by(dyn_tot) %>% mutate(sum = sum (count), prop = count/sum) %>% ungroup() %>% filter(indus_3 %!in% c("",0, NA, "NR")) %>% arrange(dyn_tot, - prop)
-#   
-# 
-# indus_3_p   <- ggplot(dyn_indus_3,aes(x=reorder(as.factor(indus_3),-prop),y= prop))+
-#   geom_bar(aes(fill = as.factor(dyn_tot)), position = "dodge", stat="identity")+
-#   theme(legend.position = "none")+
-#   labs(x = "")+
-#   scale_x_discrete(limits = c("1", "2","3","4","5","6","7","8","9","10", "11","12","13"))
-# 
-# ##3
-# 
-# ##2
-# dyn_indus_4 <- dyn_uniq %>% group_by(dyn_tot,indus_4) %>% summarise (count = n()) %>% group_by(dyn_tot) %>% mutate(sum = sum (count), prop = count/sum) %>% ungroup() %>% filter(indus_4 %!in% c("",0, NA, "NR")) %>% arrange(dyn_tot, - prop)
-# 
-# indus_4_p   <- ggplot(dyn_indus_4,aes(x=reorder(as.factor(indus_4),-prop),y= prop))+
-#   geom_bar(aes(fill = as.factor(dyn_tot)), position = "dodge", stat="identity")+
-# 
-#   labs(x = "")+
-#   scale_x_discrete(limits = c("1", "2","3","4","5","6","7","8","9","10", "11","12","13"))+
-#   scale_fill_discrete(name = "",labels = c("Family","Non - Family"))
-# 
-# plot_grid(indus_2_p, indus_3_p, indus_4_p, labels = c("Indus_2", "Indus_3", "Indus_4"),label_size = 10)
-
-```
-
-### caste
-
-#### Political experience
-
-```{r}
-
-dyn <- dyn %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,11,21,Inf),include.lowest = TRUE, right =FALSE))
-
-# ##dyn_uniq <- dyn %>% 
-#   filter(relative_id ==1) %>% 
-#   distinct( family_id, .keep_all = T)
-  
-
-  
-dyn_uniq <- dyn %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-  
-caste_comp_exp <- dyn_uniq %>%
-    group_by(fam_exp_cat,caste_groups)%>%
-    summarise(freq = n()) %>% filter(!is.na(fam_exp_cat) & !is.na(caste_groups))
-
-  
-caste_groups_cat_sum <- caste_comp_exp %>% 
-    group_by(fam_exp_cat) %>%
-    summarise(sum =sum(freq))
-
-  
-  
-  
-caste_cat <- merge(caste_comp_exp,caste_groups_cat_sum, by = "fam_exp_cat") 
-caste_cat$prop <- caste_cat$freq/caste_cat$sum
-  
-#png("UP/graphs/caste_cat_stacked.png", width = 800, height = 600)  
-
-ggplot(caste_cat, aes(x = fam_exp_cat, y = prop , fill = caste_groups, label = round(prop,2)))+
-    geom_bar(stat= "identity") +
-    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-    theme_minimal()+
-    scale_x_discrete(labels = c("0","1-5","6-10","11-20", "21+"))+
-    labs(title = "Caste composition wrt experience ",x = "Poltical experience \n(in years)", y = "Proportion of families", fill = "Caste Groups") +
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.text.y = element_blank(),
-        axis.title.x = element_text(vjust = -1, size = 18),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()
-  ) 
-```
-<!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) -->
-
-```{r fam non fam pol exp- checking: results not much difference}
-
-# dyn_ae_ge <- dyn_ae_ge %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,16,Inf),include.lowest = TRUE, right =FALSE))
-# 
-# dyn_ae_ge_fam <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ae_ge_tot ==1)
-# 
-# dyn_ae_ge_non_fam <-  dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ae_ge_tot ==0)
-# 
-# 
-# 
-# 
-# 
-# ##dyn_ae_ge_uniq <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-# 
-#   
-# caste_comp_exp <- dyn_ae_ge_fam %>%
-#     group_by(fam_exp_cat,caste_groups)%>%
-#     summarise(freq = n()) %>% filter(!is.na(fam_exp_cat) & !is.na(caste_groups))
-# 
-#   
-# caste_groups_cat_sum <- caste_comp_exp %>% 
-#     group_by(fam_exp_cat) %>%
-#     summarise(sum =sum(freq))
-# 
-#   
-#   
-#   
-# caste_cat <- merge(caste_comp_exp,caste_groups_cat_sum, by = "fam_exp_cat") 
-# caste_cat$prop <- caste_cat$freq/caste_cat$sum
-#   
-# #png("UP/graphs/caste_cat_stacked.png", width = 800, height = 600)  
-# 
-# fam <- ggplot(caste_cat, aes(x = fam_exp_cat, y = prop , fill = caste_groups, label = round(prop,2)))+
-#     geom_bar(stat= "identity") +
-#     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-#     theme_minimal()+
-#     scale_x_discrete(labels = c("0", "1-5", "6-15", "16+"))+
-#     labs(title = "Caste composition wrt experience ",x = "Poltical experience \n(in years)", y = "Proportion of families", fill = "Caste Groups") +
-#   theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-#   theme(plot.background = element_blank(),
-#         plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-#         text = element_text(color = "gray20"),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 15),
-#         axis.text = element_text(face = "italic", size = 15),
-#         axis.text.y = element_blank(),
-#         axis.title.x = element_text(vjust = -1, size = 18),
-#         axis.title.y = element_blank(),
-#         axis.ticks.y = element_blank(),
-#         axis.line= element_line(color = "gray40", size = .5),
-#         axis.line.y = element_blank(),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank()
-#   ) 
-# 
-# ##non - fam
-# 
-# caste_comp_exp <- dyn_ae_ge_non_fam %>%
-#     group_by(fam_exp_cat,caste_groups)%>%
-#     summarise(freq = n()) %>% filter(!is.na(fam_exp_cat) & !is.na(caste_groups))
-# 
-#   
-# caste_groups_cat_sum <- caste_comp_exp %>% 
-#     group_by(fam_exp_cat) %>%
-#     summarise(sum =sum(freq))
-# 
-#   
-#   
-#   
-# caste_cat <- merge(caste_comp_exp,caste_groups_cat_sum, by = "fam_exp_cat") 
-# caste_cat$prop <- caste_cat$freq/caste_cat$sum
-#   
-# #png("UP/graphs/caste_cat_stacked.png", width = 800, height = 600)  
-# 
-# non_fam <- ggplot(caste_cat, aes(x = fam_exp_cat, y = prop , fill = caste_groups, label = round(prop,2)))+
-#     geom_bar(stat= "identity") +
-#     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-#     theme_minimal()+
-#     scale_x_discrete(labels = c("0", "1-5", "6-15", "16+"))+
-#     labs(title = "Caste composition wrt experience ",x = "Poltical experience \n(in years)", y = "Proportion of families", fill = "Caste Groups") +
-#   theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-#   theme(plot.background = element_blank(),
-#         plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-#         text = element_text(color = "gray20"),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 15),
-#         axis.text = element_text(face = "italic", size = 15),
-#         axis.text.y = element_blank(),
-#         axis.title.x = element_text(vjust = -1, size = 18),
-#         axis.title.y = element_blank(),
-#         axis.ticks.y = element_blank(),
-#         axis.line= element_line(color = "gray40", size = .5),
-#         axis.line.y = element_blank(),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank()
-#   ) 
-# 
-# plot_grid(fam, non_fam, labels = c("Family", "Non - Family"),label_size = 10)
-
-```
-
-
-#### Family
-
-```{r}
-
-dyn_caste <- dyn_uniq %>% filter(fam_exp_tot > 1)
-caste_comp_dyn <- dyn_caste %>%
-    group_by(dyn_tot,caste_groups)%>%
-    summarise(freq = n()) %>% filter(!is.na(dyn_tot) & !is.na(caste_groups))
-
-  
-caste_groups_dyn_sum <- caste_comp_dyn %>% 
-    group_by(dyn_tot) %>%
-    summarise(sum =sum(freq))
-
-  
-  
-  
-caste_dyn <- merge(caste_comp_dyn,caste_groups_dyn_sum, by = "dyn_tot") 
-caste_dyn$prop <- caste_dyn$freq/caste_dyn$sum
-  
-#png("UP/graphs/caste_cat_stacked.png", width = 800, height = 600)  
-
-ggplot(caste_dyn, aes(x = as.factor(dyn_tot), y = prop , fill = caste_groups, label = round(prop,2)))+
-    geom_bar(stat= "identity") +
-    geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-    theme_minimal()+
-    scale_x_discrete(labels = c("Non-Families","Families"))+
-    labs(title = "Caste composition among successful \n non-families and families ",x = "", y = "Proportion of families", fill = "Caste Groups") +
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 18, family = "sans"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 14),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.text.y = element_blank(),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()
-  ) 
-
-```
-
-### Experience
-
-```{r breakup of experience catagories}
-
-
-exp_cat_tab <- data.frame(table(dyn_uniq$fam_exp_cat))
-
-catagories <- c("0","1-5","6-10","11-20",  "21+")
-
-
-
- cbind(catagories,exp_cat_tab) %>% select(-Var1) %>%  kable(col.names = c ("Experience Categories", "Count"))%>% kable_styling(bootstrap_options = "striped")
- 
- dyn_fam_exp <- dyn_uniq %>% group_by(dyn_tot, fam_exp_cat) %>% summarise(count =n()) %>% filter(!is.na(fam_exp_cat))
- 
- 
- exp_cat_tab_fam <- spread(dyn_fam_exp, key= dyn_tot, value = count)
-catagories <- c("0","1-5","6-10","11-20",  "21+")
-
-cbind(catagories,exp_cat_tab_fam) %>% select(-fam_exp_cat) %>%  kable(col.names = c ("Experience Categories", "Non-Families", "Families"))%>% kable_styling(bootstrap_options = "striped")
- 
- 
- ## what'st hsi Factor `fam_exp_cat` contains implicit NA, consider using `forcats::fct_explicit_na`
-
-
-
-```
-
-
-
-```{r term duration}
-
-dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP") & dyn$year  %in% c(1995,2006)] <- 6
-
-dyn$term_duration[dyn$election_type %in% c("NN", "NPP", "NP")  & dyn$year %in% c(2001, 2012, 2017)]<- 5
-
-##
-
-dyn$term_duration[dyn$election_type %in% c("ZP", "BP")  & dyn$year %in% c(1995, 2000, 2005, 2010, 2015)]<- 5
-```
-
-
-
-
-
-
-
-
-```{r AE - GE filter}
-dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
-```
-
-
-
-
-
-
-```{r ae -ge cumulative experience}
-###experience
-
-dyn_ae_ge <- dyn_ae_ge %>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>%
-  ungroup()
-
-
-
-# dyn_ae_ge_uniq %>%
-#   select(candidate_name, family_id, pat_name, fam_exp_tot)
-#   arrange(desc(fam_exp_tot)) %>%
-
-##cumsum for the families
-
-year_group <- dyn_ae_ge %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn_ae_ge <- merge(dyn_ae_ge, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-
-
-```
-
-
-```{r ae ge dynast calssification}
-dyn_ae_ge$dyn_ae_ge  <-ifelse(dyn_ae_ge$fam_size_cum>1,1,0)
-
-dyn_ae_ge$dyn_ae_ge_tot <- ifelse(dyn_ae_ge$fam_size_tot>1,1,0)
-```
-
-```{r  family size}
-##family_size
-
-
-dyn_ae_ge <-  dyn_ae_ge %>%
-  group_by(family_id) %>%
-  mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
-  ungroup()
-#
-```
-
-
-
-```{r  AE - GE variable construction}
-  
-##adding BP<ZP<NPP<NP>NN variable
-
-
-# dyn <- dyn %>% group_by(family_id) %>% mutate(lb = ifelse(any(election_type %in% c("ZP", "BP", "NN", "NPP", "NP")[election_type  %in% c("AE", "GE")]),1,0))
-# 
-# dyn_ae_ge_uniq <- dyn_ae_ge%>% 
-#   filter(relative_id ==1) %>% 
-#   distinct( family_id, .keep_all = T)
-
-##set up fro the description
-dyn_ae_ge$dyn <- if_else(dyn_ae_ge$fam_size_cum >1,1,0)
-
-dyn_ae_ge_uniq_ind <- dyn_ae_ge %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_ae_ge_uniq_pat <- dyn_ae_ge %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##family and non-family classification
-
-dyn_ae_ge_fam <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ae_ge_tot ==1)
-
-dyn_ae_ge_non_fam <-  dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ae_ge_tot ==0)
-
-dyn_ae_ge_uniq <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-
-
-```
-
-##  AE - GE 
-
-This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains `r dim(dyn_ae_ge)[1]` observations and the number  unique individuals is `r dim(dyn_ae_ge_uniq_ind)[1]`  and the families  is  `r (dim(dyn_ae_ge_uniq %>% filter(dyn==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_ae_ge %>% filter (relative_id ==1))[1]/dim(dyn_ae_ge)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn_ae_ge %>% filter(dyn==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_ae_ge %>% filter(dyn==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
-
-
-
-
-[//]: # (this has to be rechecked. I should find a way to draw this using code in some way)
-
-
-[//]: # (also the cumulative family size has to be  done using code)
-
-
-
-
-```{r dynasties reterntion}
-# 
-# dynasty_life<- dyn_ae_ge %>%
-#   filter(year != 1974 & !is.na(year)) %>% 
-#     group_by(family_id) %>%
-#     summarise(
-#       first_year = min(year),
-#       last_year = max(year)+5,
-#     )
-# 
-# x <- dynasty_life %>%
-#   group_by(first_year, last_year)%>%
-#   summarise(count =n())
-# 
-# 
-# 
-# 
-# x$first_decade  <- NA
-# 
-# x$first_decade[x$first_year <1990 ] <- 1980
-# 
-# x$first_decade[x$first_year >1990 & x$first_year <=2000] <- 1990
-# 
-# x$first_decade[x$first_year >2000 & x$first_year <=2010] <- 2000
-# 
-# x$first_decade[x$first_year >2010 & x$first_year <=2022] <- 2010
-# 
-# 
-# 
-# x$last_decade  <- NA
-# 
-# x$last_decade[x$last_year <=1990 ] <- 1990
-# 
-# x$last_decade[x$last_year >1990 & x$last_year <=2000] <- 2000
-# 
-# x$last_decade[x$last_year>2000 & x$last_year <=2010] <- 2010
-# 
-# x$last_decade[x$last_year >2010 & x$last_year <=2022] <- 2020
-# 
-# y <- x%>%
-#   group_by(first_decade)%>%
-#   summarise(count=sum(count))
-# 
-# y1 <- x%>%
-#   group_by(first_decade, last_decade)%>%
-#   summarise(count = sum(count))
-# 
-# 
-# 
-# y$last_decade <- y$first_decade
-# 
-# y <- select(y,first_decade, last_decade, count)
-#  l<- list(y,y1)
-# 
-# x1 <- as.data.frame(rbindlist(l))
-# 
-# x1 <- arrange(x1, first_decade, last_decade, count)
-# # ending_count <- as.vector(c(1268,742,340,178,89,784,521,200,83,491,363,94,814,498))
-# # 
-# # starting_cound <- as.vector(c(1268,1268,1268,1268,1268,784,784,784,784,491,491,491,814,814))
-# 
-# ending_count <- as.vector(c(2245,1140,583,233,256,1055,379,381,265,644,174,433,644,625))
-# 
-# starting_cound <- as.vector(c(2245,2245,2245,2245,2245,1055,1055,1055,1055,644,644,644,688,688))
-# 
-# z <- as.data.frame(cbind(starting_cound,ending_count))
-# 
-# x1 <- x1 %>% filter(!is.na(last_decade))
-# 
-# z1 <- data.frame(x1,z)
-# 
-# z1$prop <- z1$ending_count/z1$starting_cound
-# 
-# 
-# png("UP/graphs/retention_decades.png", width = 800, height = 600)
-# ggplot(z1, aes(x = last_decade, y = prop, group = first_decade))+
-#   geom_line(size = 1.5)+
-#   theme_minimal()+
-#   labs(title = "Dynasties retention across decades", x = "Decade", y = "Proportion")+
-#   theme(plot.background = element_blank(),
-#         plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-#         text = element_text(color = "gray20"),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 15),
-#         axis.text = element_text(face = "italic", size = 15),
-#         axis.title = element_text(vjust = -1, size = 18),
-#         axis.line= element_line(color = "gray50", size = .5),
-#         panel.grid.major = element_blank()
-#   ) 
-#   
-# dev.off()
-
-```
-
-
 
 [//]: # (Do I have an experience column? even )
 
@@ -1809,35 +312,41 @@ In this universe of families `r dim(dyn_ae_ge %>% filter(dyn==1))[1]` winners an
 
 ```{r dyn proportion over time}
 
-dyn_ae_ge$dyn <- if_else(dyn_ae_ge$fam_size_cum >1,1,0)
+#dyn_ae_ge$dyn <- if_else(dyn_ae_ge$fam_size_cum >1,1,0)
 
 dyn_ae <- dyn_ae_ge %>% filter(election_type == "AE" & year != 1974 & position== 1)
 
 
-ae_dyn <- dyn_ae%>%  group_by(year, dyn) %>% summarise(count = n_distinct(family_id))
+ae_dyn <- dyn_ae%>%  group_by(year, dyn_tot) %>% summarise(count = n_distinct(family_id))
 
 
 
-ae_dyn <- ae_dyn %>% spread(key = dyn, value = count ) %>%  rename( non_dyn= "0", dyn = "1") ##%>% mutate(prop = (dyn/non_dyn))
+ae_dyn <- ae_dyn %>% spread(key = dyn_tot, value = count ) %>%  rename( non_dyn= "0", dyn = "1") ##%>% mutate(prop = (dyn/non_dyn))
 
 ae_dyn <- ae_dyn %>% rowwise() %>% 
   mutate(sum= dyn+ non_dyn,
          prop= dyn/sum)
 
+library(cowplot)
 
-ggplot(ae_dyn, aes(x = year, y=prop))+
- geom_line(size = 1.5)+
-  theme_minimal()+
+ggplot(ae_dyn, aes(x = factor(year), y=prop, group = 1))+
+  geom_point()+
+  geom_line()+
+  
+  theme_minimal_grid(12)+
   labs(title = "Proportion of dynasties over years", x = "Year", y = "Proportion")+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-        text = element_text(color = "gray20"),
+  scale_y_continuous(limits = c(0,.25),breaks = c(0,.05,.10,.15,.20,.25))+
+  # theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 20, face = "bold", family = "serif"), 
+        text = element_text(color = "gray20", family = "serif"),
         legend.title = element_blank(),
         legend.text = element_text(size = 15),
         axis.text = element_text(face = "italic", size = 15),
         axis.title = element_text(vjust = -1, size = 18),
         axis.line= element_line(color = "gray50", size = .5),
-        panel.grid.major = element_blank()
+        #panel.grid.major = element_blank()
   ) 
 
 
@@ -1860,7 +369,7 @@ ggplot(ae_dyn, aes(x = year, y=prop))+
 
 ylim1 = boxplot.stats(dyn_ae_ge_uniq$land)$stats[c(1, 5)]
 
-ggplot(subset(dyn_ae_ge_uniq,!is.na(land)),aes(as.factor(dyn_ae_ge_tot), land)) +
+ggplot(subset(dyn_ae_ge_uniq,!is.na(land)),aes(as.factor(dyn_tot), land)) +
   geom_boxplot(outlier.shape = NA)+
   scale_x_discrete(labels=(c("Non - Family", "Family")))+
   coord_cartesian(ylim = ylim1*1.05)+
@@ -1935,12 +444,12 @@ dyn_ae_ge_uniq <- dyn_ae_ge %>%
   distinct( family_id, .keep_all = T)
 
 
-edu_tab <- dyn_ae_ge_uniq %>%  filter(!is.na(edu)) %>% group_by(dyn_ae_ge_tot,edu) %>% summarise(count = n())  %>% group_by(dyn_ae_ge_tot) %>% mutate(sum = sum(count),prop= count/sum) %>% filter(edu!= 0) %>%  arrange(edu,-prop) 
+edu_tab <- dyn_ae_ge_uniq %>%  filter(!is.na(edu)) %>% group_by(dyn_tot,edu) %>% summarise(count = n())  %>% group_by(dyn_tot) %>% mutate(sum = sum(count),prop= count/sum) %>% filter(edu!= 0) %>%  arrange(edu,-prop) 
 
-edu_tab$dyn_ae_ge_tot <- factor(edu_tab$dyn_ae_ge_tot, levels=c("1","0"))
+edu_tab$dyn_tot <- factor(edu_tab$dyn_tot, levels=c("1","0"))
 edu_tab$id=rep(c(1:2),3)
 ggplot(edu_tab , aes(x= reorder(as.factor(edu),-prop), prop , group = id )) +   
-  geom_bar(aes(fill = as.factor(dyn_ae_ge_tot)), position = "dodge", stat="identity")+
+  geom_bar(aes(fill = as.factor(dyn_tot)), position = "dodge", stat="identity")+
   theme_minimal()+
   scale_x_discrete(labels=(c(  "School" ,"College","Both")))+
   scale_fill_discrete(labels = c("Family","Non - Family"))+
@@ -1976,9 +485,9 @@ ggplot(edu_tab , aes(x= reorder(as.factor(edu),-prop), prop , group = id )) +
 
 ```{r ae ge education pol experience }
 
-#dyn_ae_ge_edu <- dyn_ae_ge_uniq %>% filter(edu %!in% c(NA)&!is.na(fam_exp_tot)) %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,11,21,31,Inf),include.lowest = TRUE, right =FALSE))
+dyn_ae_ge_edu <- dyn_ae_ge_uniq %>% filter(edu %!in% c(NA)&!is.na(fam_exp_tot)) %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,11,21,31,Inf),include.lowest = TRUE, right =FALSE))
 
-dyn_ae_ge_edu_tab <- dyn_ae_ge_uniq %>% filter(!is.na(fam_exp_cat)) %>% group_by (edu, fam_exp_cat) %>% 
+dyn_ae_ge_edu_tab <- dyn_ae_ge_edu %>% filter(!is.na(fam_exp_cat)) %>% group_by (edu, fam_exp_cat) %>% 
   summarise (count =n()) %>% group_by(fam_exp_cat) %>% mutate(sum = sum(count), prop = count/sum) %>% filter (edu != 0) %>%  arrange(fam_exp_cat, - prop)
 
 
@@ -2013,11 +522,97 @@ ggplot(dyn_ae_ge_edu_tab, aes(as.factor(edu),prop)) +
 
 ### Industries : Others
 
+## Industries
+
+```{r}
+
+dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
+
+dyn_indus <- dyn_indus %>% filter(ï..election_type %in% c("AE", "GE"))
+
+
+dyn_indus <- dyn_indus %>% mutate(indus_2 = ifelse(indus_2>0,indus_2,0), indus_3 = ifelse(indus_3>0,indus_2,0),indus_4 = ifelse(indus_4>0,indus_4,0)) %>% select(ï..election_type,year, pid, indus_2, indus_3, indus_4)
+
+names(dyn_indus)[1] <- "election_type"
+
+dyn_indus_ae_ge <- merge(dyn_ae_ge, dyn_indus, by = c("election_type", "year", "pid"))
+
+dyn_indus_ae_ge <- dyn_indus_ae_ge %>% mutate(indus_2_c = ifelse(indus_2>0,1,0),indus_3_c = ifelse(indus_3>0,1,0), indus_4_c = ifelse(indus_4>0,1,0), indus_count = indus_2_c+indus_3_c+ indus_4_c)
+
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge %>% arrange(-year) %>% 
+  distinct( family_id, .keep_all = T) 
+
+dyn_indus_ae_ge_uniq$dyn_tot_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot==1, "Family", "Non-family")
+
+dyn_indus_ae_ge_uniq %>%  group_by(dyn_tot_text) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+# dyn_indus_ae_ge_uniq %>% filter(!is.na(ind_2)) %>% group_by(dyn_tot, indus_2) %>% summarise(count = n()) %>% group_by(dyn_tot) %>% mutate(sum_count = sum(count), prop = count/sum_count) %>% 
+#   ggplot(aes(indus_2, prop))+
+#   geom_bar(stat = "identity")+
+#   facet_grid(~dyn_tot)
+dyn_indus_ae_ge_uniq$indus_2 <- replace_na(dyn_indus_ae_ge_uniq$indus_2 ,0)
+
+dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq  %>% mutate(indus_rt = case_when(indus_2 == 0 ~ "0", ind_2 %in% c(1,3,7,2,4,5)~ "rent-thick",
+                                  TRUE~ "non-rent-thick"))
+
+
+dyn_indus_ae_ge_uniq   %>% filter(indus_rt != "0") %>% group_by(dyn_tot_text, indus_rt) %>% summarise(count = n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, indus_rt, prop) %>% kable(captioni = "industry ownership wrt rent extraction type", col.names = c("Politician's identity","rent-type", "Proportion"), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+# 
+dyn_all <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+dyn_all$ind_2 <- replace_na(dyn_all$ind_2,0)
+
+dyn_all <- dyn_all %>% mutate(ind_rt = case_when(ind_2 == 0 ~ "0", ind_2 %in% c(1,5)~ "rent-thick",
+                                  TRUE~ "non-rent-thick"))
+
+dyn_all$dyn_tot_text <- ifelse(dyn_all$dyn_tot==1, "Family", "Non-family")
+
+dyn_all_uniq <- dyn_all %>% arrange(-year) %>%
+  distinct( family_id, .keep_all = T)
+
+
+
+dyn_ae_ge_uniq_indus<-  dyn_all %>% filter(election_type %in% c("AE", "GE")) %>% arrange(-year) %>%
+  distinct( family_id, .keep_all = T)
+dyn_ae_ge_uniq_indus  %>% filter(ind_2 != 0) %>% group_by(dyn_tot_text, ind_2) %>% summarise(count = n()) %>% group_by(dyn_tot_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_tot_text, ind_2, prop) %>% 
+  ggplot(aes(dyn_tot_text, prop, fill = factor(ind_2),,label = round(prop,2)))+
+  geom_bar(stat= "identity", position ="stack")+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+    labs(title = " Industry ownership composition \n among non-families and families ",x = "", y = "Proportion", fill = "Type of work") +
+    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
+  theme(plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), 
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14,family = "serif"),
+        axis.text = element_text(face = "italic", size = 14),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+
+
+
+```
+
 
 
 #### Families
 
 ```{r ae ge industires families}
+
+
 
 
 dyn_ae_ge_uniq$ind_all <- paste(dyn_ae_ge_uniq$ind_2,dyn_ae_ge_uniq$ind_3, sep = "")
@@ -2046,12 +641,12 @@ dyn_ae_ge_uniq$ind_all <- ifelse(dyn_ae_ge_uniq$ind_all =="NANA", 0, dyn_ae_ge_u
 
 
 
-ind_tab <- dyn_ae_ge_uniq %>% group_by(dyn_ae_ge_tot, ind_2) %>% summarise(count = n()) %>%  group_by(ind_2) %>% mutate(sum = sum(count),prop= count/sum) %>%  arrange(ind_2,-prop) 
+ind_tab <- dyn_ae_ge_uniq %>% group_by(dyn_tot, ind_2) %>% summarise(count = n()) %>%  group_by(ind_2) %>% mutate(sum = sum(count),prop= count/sum) %>%  arrange(ind_2,-prop) 
 
 
-indus_tab <- dyn_ae_ge_uniq %>% filter(ind_2!= "NA") %>% group_by (ind_2, dyn_ae_ge_tot) %>% summarise(count_ind = n()) %>% group_by(dyn_ae_ge_tot) %>% mutate(count_dyn = sum(count_ind)) %>% group_by(dyn_ae_ge_tot) %>%  mutate(ind_pc = count_ind/count_dyn) %>% group_by(ind_2) %>% mutate(sum_pc = sum(ind_pc), prop = ind_pc/sum_pc )
+indus_tab <- dyn_ae_ge_uniq %>% filter(ind_2!= "NA") %>% group_by (ind_2, dyn_tot) %>% summarise(count_ind = n()) %>% group_by(dyn_tot) %>% mutate(count_dyn = sum(count_ind)) %>% group_by(dyn_tot) %>%  mutate(ind_pc = count_ind/count_dyn) %>% group_by(ind_2) %>% mutate(sum_pc = sum(ind_pc), prop = ind_pc/sum_pc )
 ###
-ggplot(indus_tab , aes(x = as.factor(ind_2), y = prop , fill = as.factor(dyn_ae_ge_tot), label = round(prop,2)))+
+ggplot(indus_tab , aes(x = as.factor(ind_2), y = prop , fill = as.factor(dyn_tot), label = round(prop,2)))+
     geom_bar(stat= "identity") +
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
@@ -2079,7 +674,7 @@ ggplot(indus_tab , aes(x = as.factor(ind_2), y = prop , fill = as.factor(dyn_ae_
 # 
 # 
 # ggplot(ind_tab  , aes(x= reorder(as.factor(ind_all),-prop), prop )) +   
-#   geom_bar(aes(fill = as.factor(-dyn_ae_ge_tot)), position = "dodge", stat="identity")+
+#   geom_bar(aes(fill = as.factor(-dyn_tot)), position = "dodge", stat="identity")+
 #   theme_minimal()+
 #   scale_x_discrete(labels=(c(  "Others" ,"4","5","3","Petrol Pump")))+
 #   scale_fill_discrete(labels = c("Family","Non - Family"))+
@@ -2207,23 +802,23 @@ ggplot(caste_cat, aes(x = fam_exp_cat, y = prop , fill = caste_groups, label = r
 
 dyn_ae_ge_caste <- dyn_ae_ge_uniq %>% filter(fam_exp_tot > 1)
 caste_comp_dyn_ae_ge <- dyn_ae_ge_caste %>%
-    group_by(dyn_ae_ge_tot,caste_groups)%>%
-    summarise(freq = n()) %>% filter(!is.na(dyn_ae_ge_tot) & !is.na(caste_groups))
+    group_by(dyn_tot,caste_groups)%>%
+    summarise(freq = n()) %>% filter(!is.na(dyn_tot) & !is.na(caste_groups))
 
   
 caste_groups_dyn_ae_ge_sum <- caste_comp_dyn_ae_ge %>% 
-    group_by(dyn_ae_ge_tot) %>%
+    group_by(dyn_tot) %>%
     summarise(sum =sum(freq))
 
   
   
   
-caste_dyn_ae_ge <- merge(caste_comp_dyn_ae_ge,caste_groups_dyn_ae_ge_sum, by = "dyn_ae_ge_tot") 
+caste_dyn_ae_ge <- merge(caste_comp_dyn_ae_ge,caste_groups_dyn_ae_ge_sum, by = "dyn_tot") 
 caste_dyn_ae_ge$prop <- caste_dyn_ae_ge$freq/caste_dyn_ae_ge$sum
   
 #png("UP/graphs/caste_cat_stacked.png", width = 800, height = 600)  
 
-ggplot(caste_dyn_ae_ge, aes(x = as.factor(dyn_ae_ge_tot), y = prop , fill = caste_groups, label = round(prop,2)))+
+ggplot(caste_dyn_ae_ge, aes(x = as.factor(dyn_tot), y = prop , fill = caste_groups, label = round(prop,2)))+
     geom_bar(stat= "identity") +
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
@@ -2261,10 +856,10 @@ catagories <- c("0", "1-5", "6-15", "16+")
 
 
 ```{r ae ge  breakup of experience catagories - fam}
-dyn_ae_ge_fam_exp <- dyn_ae_ge_uniq %>% group_by(dyn_ae_ge_tot, fam_exp_cat) %>% summarise(count =n()) %>% filter(!is.na(fam_exp_cat))
+dyn_ae_ge_fam_exp <- dyn_ae_ge_uniq %>% group_by(dyn_tot, fam_exp_cat) %>% summarise(count =n()) %>% filter(!is.na(fam_exp_cat))
  
  
- exp_cat_tab_fam <- spread(dyn_ae_ge_fam_exp, key= dyn_ae_ge_tot, value = count)
+ exp_cat_tab_fam <- spread(dyn_ae_ge_fam_exp, key= dyn_tot, value = count)
 catagories <- c("0", "1-5", "6-15", "16+")
 
 cbind(catagories,exp_cat_tab_fam) %>% select(-fam_exp_cat) %>%  kable(col.names = c ("Experience Categories", "Non-Families", "Families"))%>% kable_styling(bootstrap_options = "striped")
@@ -2275,889 +870,4 @@ cbind(catagories,exp_cat_tab_fam) %>% select(-fam_exp_cat) %>%  kable(col.names 
 
 
 
-## Local bodies
-
-
-
-```{r lb filter}
-dyn_lb <- dyn %>% filter(election_type %!in% c("AE", "GE"))
-
-dyn_lb <- dyn_lb %>% filter(status != "ADD")
-
-```
-
-
-
-
-
-```{r local body experience}
-###experience
-
-dyn_lb <- dyn_lb %>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017])) %>%
-  ungroup()
-
-
-
-# dyn_lb_uniq %>%
-#   select(candidate_name, family_id, pat_name, fam_exp_tot)
-#   arrange(desc(fam_exp_tot)) %>%
-
-##cumsum for the families
-
-year_group <- dyn_lb %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017])) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn_lb <- merge(dyn_lb, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-
-
-
-```
-
-
-
-```{r lb family size}
-##family_size
-
-
-dyn_lb <-  dyn_lb %>%
-  group_by(family_id) %>%
-  mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
-  ungroup()
-
-
-```
-
-```{r  lb dynast calssification}
-
-dyn_lb$dyn_lb  <-ifelse(dyn_lb$fam_size_cum>1,1,0)
-
-dyn_lb$dyn_lb_tot <- ifelse(dyn_lb$fam_size_tot>1,1,0)
-
-
-```
-
-```{r lb uniq}
-# 
-#dyn_lb$dyn<-if_else(dyn_lb$fam_size_tot>1,1,0)
-
-dyn_lb_uniq <- dyn %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##set up fro the description
-
-  
-dyn_lb$dyn <- NA
-# 
-dyn_lb$dyn <-if_else(dyn_lb$fam_size_tot>1,1,0)
-
-dyn_lb_uniq_ind <- dyn_lb %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_lb_uniq_pat <- dyn_lb %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##uniq families
-
-dyn_lb_uniq <- dyn_lb %>%
-  filter(relative_id ==1) %>%
-  distinct( family_id, .keep_all = T)
-
-
-```
-
-```{r lb fam land }
-# png("UP/graphs/bplot_land_exp.png", width = 800, height = 600)
-
-
-
-dyn_lb_uniq <- dyn_lb%>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-
-# dyn_lb <- dyn_lb %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,16,Inf),include.lowest = TRUE, right =FALSE))
-
-dyn_lb_fam <- dyn_lb %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_lb_tot ==1)
-
-dyn_ae_ge_non_fam <-  dyn_lb_fam %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_lb_tot ==0)
-
-ylim1 = boxplot.stats(dyn_lb_uniq$land)$stats[c(1, 5)]
-
-ggplot(subset(dyn_lb_uniq,!is.na(land)),aes(as.factor(dyn_lb_tot), land)) +
-  geom_boxplot(outlier.shape = NA)+
-  scale_x_discrete(labels=(c("Non - Family", "Family")))+
-  coord_cartesian(ylim = ylim1*1.05)+
-  theme_minimal()+
-  labs(title = "Land size  of families and non-families ",x = "", y = "Land Size \n (in bhigas)") +
-  
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20, 
-                                  margin= margin(0,0,20,0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 16),        
-        axis.ticks = element_blank()
-  ) 
-```
-
-
-
-
-This universe include the winners from the local body elections held from 1995 to 2015  in the state of Uttar Pradesh.
-This contains `r dim(dyn_lb)[1]` observations and the number  unique individuals is `r dim(dyn_lb_uniq_ind)[1]`  and the families  is  `r (dim(dyn_lb_uniq %>% filter(dyn==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_lb %>% filter (relative_id ==1))[1]/dim(dyn_lb)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn_lb %>% filter(dyn==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_lb %>% filter(dyn==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
-
-
-
-### Mid level
-
-
-
-```{r mid level family size}
-dyn_lb_ml <- dyn %>% filter(election_type %in% c("ZP", "NN", "NPP"))
-
-dyn_lb_ml <- dyn_lb_ml %>% filter(status != "ADD")
-
-```
-
-```{r mide level experience}
-###experience
-
-dyn_lb_ml <- dyn_lb_ml %>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017])) %>%
-  ungroup()
-
-
-
-# dyn_lb_ml_uniq %>%
-#   select(candidate_name, family_id, pat_name, fam_exp_tot)
-#   arrange(desc(fam_exp_tot)) %>%
-
-##cumsum for the families
-
-year_group <- dyn_lb_ml %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017])) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn_lb_ml <- merge(dyn_lb_ml, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-```
-
-
-```{r mide level family size}
-##family_size
-
-
-dyn_lb_ml <-  dyn_lb_ml %>%
-  group_by(family_id) %>%
-  mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
-  ungroup()
-# 
-
-dyn_lb_ml$dyn <- NA
-# 
-dyn_lb_ml$dyn<-if_else(dyn_lb_ml$fam_size_tot>1,1,0)
-
-dyn_lb_ml_uniq <- dyn_lb_ml %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##set up fro the description
-
-
-dyn_lb_ml$dyn <- NA
-# 
-dyn_lb_ml$dyn <-if_else(dyn_lb_ml$fam_size_tot>1,1,0)
-
-dyn_lb_ml_uniq_ind <- dyn_lb_ml %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_lb_ml_uniq_pat <- dyn_lb_ml %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##uniq families
-
-dyn_lb_ml_uniq <- dyn_lb_ml %>%
-  filter(relative_id ==1) %>%
-  distinct( family_id, .keep_all = T)
-
-
-```
-
-
-
-This universe include the winners from the mid level local body elections held from 1995 to 2015  in the state of Uttar Pradesh.
-This contains `r dim(dyn_lb_ml)[1]` observations and the number  unique individuals is `r dim(dyn_lb_ml_uniq_ind)[1]`  and the families  is  `r (dim(dyn_lb_ml_uniq %>% filter(dyn==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_lb_ml %>% filter (relative_id ==1))[1]/dim(dyn_lb_ml)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn_lb_ml %>% filter(dyn==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_lb_ml %>% filter(dyn==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
-
-
-### Low level
-
-
- 
-```{r low level filter}
-dyn_lb_ll <- dyn %>% filter(election_type %in% c("BP","NN"))
-
-dyn_lb_ll <- dyn_lb_ll %>% filter(status != "ADD")
-
-```
-
-```{r low level expereince}
-###experience
-
-dyn_lb_ll <- dyn_lb_ll %>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017])) %>%
-  ungroup()
-
-
-
-# dyn_lb_ll_uniq %>%
-#   select(candidate_name, family_id, pat_name, fam_exp_tot)
-#   arrange(desc(fam_exp_tot)) %>%
-
-##cumsum for the families
-
-year_group <- dyn_lb_ll %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017])) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn_lb_ll <- merge(dyn_lb_ll, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-```
-
-
-```{r low level family size}
-##family_size
-
-
-dyn_lb_ll <-  dyn_lb_ll %>%
-  group_by(family_id) %>%
-  mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
-  ungroup()
-# 
-
-dyn_lb_ll$dyn <- NA
-# 
-dyn_lb_ll$dyn<-if_else(dyn_lb_ll$fam_size_tot>1,1,0)
-
-dyn_lb_ll_uniq <- dyn_lb_ll %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##set up fro the description
-
-
-dyn_lb_ll$dyn <- NA
-# 
-dyn_lb_ll$dyn <-if_else(dyn_lb_ll$fam_size_tot>1,1,0)
-
-dyn_lb_ll_uniq_ind <- dyn_lb_ll %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_lb_ll_uniq_pat <- dyn_lb_ll %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##uniq families
-
-dyn_lb_ll_uniq <- dyn_lb_ll %>%
-  filter(relative_id ==1) %>%
-  distinct( family_id, .keep_all = T)
-
-
-```
-
-
-
-This universe include the winners from the low level local body  elections held from 1995 to 2015  in the state of Uttar Pradesh.
-This contains `r dim(dyn_lb_ll)[1]` observations and the number  unique individuals is `r dim(dyn_lb_ll_uniq_ind)[1]`  and the families  is  `r (dim(dyn_lb_ll_uniq %>% filter(dyn==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_lb_ll %>% filter (relative_id ==1))[1]/dim(dyn_lb_ll)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn_lb_ll %>% filter(dyn==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_lb_ll %>% filter(dyn==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
-
-
-
-### PRI's
-
-
-
-```{r pri filter}
-dyn_pri <- dyn %>% filter(election_type %in% c("ZP", "BP"))
-
-dyn_pri <- dyn_pri %>% filter(status != "ADD")
-
-```
-
-```{r pri experience }
-###experience
-
-dyn_pri <- dyn_pri %>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017])) %>%
-  ungroup()
-
-
-
-# dyn_pri_uniq %>%
-#   select(candidate_name, family_id, pat_name, fam_exp_tot)
-#   arrange(desc(fam_exp_tot)) %>%
-
-##cumsum for the families
-
-year_group <- dyn_pri %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017])) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn_pri <- merge(dyn_pri, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-```
-
-
-```{r  pri dynast classification}
-
-dyn_pri$dyn_pri  <-ifelse(dyn_pri$fam_size_cum>1,1,0)
-
-dyn_pri$dyn_pri_tot <- ifelse(dyn_pri$fam_size_tot>1,1,0)
-
-
-```
-
-
-```{r pri family size }
-##family_size
-
-
-dyn_pri <-  dyn_pri %>%
-  group_by(family_id) %>%
-  mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
-  ungroup()
-# 
-
-#dyn_pri$dyn <- NA
-# 
-#dyn_pri$dyn<-if_else(dyn_pri$fam_size_tot>1,1,0)
-
-dyn_pri_uniq <- dyn_pri %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##set up fro the description
-
-
-dyn_pri$dyn <- NA
-# 
-dyn_pri$dyn <-if_else(dyn_pri$fam_size_tot>1,1,0)
-
-dyn_pri_uniq_ind <- dyn_pri %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_pri_uniq_pat <- dyn_pri %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##uniq families
-
-dyn_pri_uniq <- dyn_pri %>%
-  filter(relative_id ==1) %>%
-  distinct( family_id, .keep_all = T)
-
-```
-
-
-#### Land
-
-##### Families
-
-```{r pri land fam/nonfam}
-
-dyn_pri_uniq <- dyn_pri%>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-
-# dyn_pri <- dyn_pri %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,16,Inf),include.lowest = TRUE, right =FALSE))
-
-# dyn_pri_fam <- dyn_pri %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_pri_tot ==1)
-# 
-# dyn_ae_ge_non_fam <-  dyn_pri_fam %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_pri_tot ==0)
-
-ylim1 = boxplot.stats(dyn_pri_uniq$land)$stats[c(1, 5)]
-
-ggplot(subset(dyn_pri_uniq,!is.na(land)),aes(as.factor(dyn_pri_tot), land)) +
-  geom_boxplot(outlier.shape = NA)+
-  scale_x_discrete(labels=(c("Non - Family", "Family")))+
-  coord_cartesian(ylim = ylim1*1.05)+
-  theme_minimal()+
-  labs(title = "Land size  of families and non-families ",x = "", y = "Land Size \n (in bhigas)") +
-  
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20, 
-                                  margin= margin(0,0,20,0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 16),        
-        axis.ticks = element_blank()
-  ) 
-
-```
-
-
-
-This universe include the winners from the Panachayt raj institutions local body  elections held from 1995 to 2015  in the state of Uttar Pradesh.
-This contains `r dim(dyn_pri)[1]` observations and the number  unique individuals is `r dim(dyn_pri_uniq_ind)[1]`  and the families  is  `r (dim(dyn_pri_uniq %>% filter(dyn==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_pri %>% filter (relative_id ==1))[1]/dim(dyn_pri)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn_pri %>% filter(dyn==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_pri %>% filter(dyn==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
-
-```{r}
-dyn_pri <- dyn_pri %>% filter( !is.na(year))
-
-dyn_pri$dyn <- if_else(dyn_pri$fam_size_cum >1,1,0)
-
-
-
-
-
-
-
-pri_dyn <- dyn_pri%>%  group_by(year, dyn) %>% summarise(count = n_distinct(family_id))
-
-
-pri_dyn <- pri_dyn %>% spread(key = dyn, value = count ) %>%  rename( non_dyn= "0", dyn = "1") 
-
-pri_dyn <- pri_dyn  %>% rowwise() %>% 
-  mutate(sum= dyn+ non_dyn,
-         prop= dyn/sum)
-
-
-ggplot(pri_dyn, aes(x = year, y=prop))+
-  geom_line(size = 1.5)+
-  theme_minimal()+
-  labs(title = "Proportion of dynasties over years", x = "Year", y = "Proportion")+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 18),
-        axis.line= element_line(color = "gray50", size = .5),
-        panel.grid.major = element_blank()
-  ) 
-```
-
-
-### ULB's
-
-
-
-```{r ulb filter}
-dyn_ulb <- dyn %>% filter(election_type %in% c("NP", "NPP","NN"))
-
-dyn_ulb <- dyn_ulb %>% filter(status != "ADD")
-
-```
-
-```{r ulb experience}
-###experience
-
-dyn_ulb <- dyn_ulb %>%
-  group_by(family_id) %>%
-  mutate(fam_exp_tot = sum(term_duration[year< 2017])) %>%
-  ungroup()
-
-
-
-# dyn_ulb_uniq %>%
-#   select(candidate_name, family_id, pat_name, fam_exp_tot)
-#   arrange(desc(fam_exp_tot)) %>%
-
-##cumsum for the families
-
-year_group <- dyn_ulb %>%
-  group_by(family_id, year) %>%
-  summarise(year_sum=sum(term_duration[year < 2017])) %>%
-  mutate(cum_exp = cumsum(year_sum)) %>%
-  mutate(fam_exp_cum = cum_exp - year_sum) %>%
-  select(family_id,year,cum_exp, fam_exp_cum, year_sum)
-
-year_group <- year_group %>%
-  select(family_id, year, fam_exp_cum)
-
-dyn_ulb <- merge(dyn_ulb, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE)
-```
-
-```{r  pri dynast classification 2}
-
-dyn_ulb$dyn_ulb  <-ifelse(dyn_ulb$fam_size_cum>1,1,0)
-
-dyn_ulb$dyn_ulb_tot <- ifelse(dyn_ulb$fam_size_tot>1,1,0)
-
-
-```
-
-
-```{r ulb family size}
-##family_size
-
-
-dyn_ulb <-  dyn_ulb %>%
-  group_by(family_id) %>%
-  mutate(fam_size_tot = n_distinct(rel_id_uniq)) %>%
-  ungroup()
-# 
-
-dyn_ulb$dyn <- NA
-# 
-dyn_ulb$dyn<-if_else(dyn_ulb$fam_size_tot>1,1,0)
-
-dyn_ulb_uniq <- dyn_ulb %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##set up fro the description
-
-
-dyn_ulb$dyn <- NA
-# 
-dyn_ulb$dyn <-if_else(dyn_ulb$fam_size_tot>1,1,0)
-
-dyn_ulb_uniq_ind <- dyn_ulb %>% 
-  distinct( family_id,rel_id_uniq, .keep_all = T) 
-
-dyn_ulb_uniq_pat <- dyn_ulb %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-##uniq families
-
-dyn_ulb_uniq <- dyn_ulb %>%
-  filter(relative_id ==1) %>%
-  distinct( family_id, .keep_all = T)
-
-
-```
-
-
-#### Land
-
-##### Families
-
-```{r fam, non fam land}
-dyn_ulb_uniq <- dyn_ulb%>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
-
-
-# dyn_ulb <- dyn_ulb %>% mutate(fam_exp_cat = cut(fam_exp_tot,c(0,1,6,16,Inf),include.lowest = TRUE, right =FALSE))
-
-# dyn_ulb_fam <- dyn_ulb %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ulb_tot ==1)
-# 
-# dyn_ae_ge_non_fam <-  dyn_ulb_fam %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE) %>% filter(dyn_ulb_tot ==0)
-
-ylim1 = boxplot.stats(dyn_ulb_uniq$land)$stats[c(1, 5)]
-
-ggplot(subset(dyn_ulb_uniq,!is.na(land)),aes(as.factor(dyn_ulb_tot), land)) +
-  geom_boxplot(outlier.shape = NA)+
-  scale_x_discrete(labels=(c("Non - Family", "Family")))+
-  coord_cartesian(ylim = ylim1*1.05)+
-  theme_minimal()+
-  labs(title = "Land size  of families and non-families ",x = "", y = "Land Size \n (in bhigas)") +
-  
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20, 
-                                  margin= margin(0,0,20,0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 16),        
-        axis.ticks = element_blank()
-  ) 
-```
-
-
-This universe include the winners from urban local body elections held from 1995 to 2015  in the state of Uttar Pradesh.
-This contains `r dim(dyn_ulb)[1]` observations and the number  unique individuals is `r dim(dyn_ulb_uniq_ind)[1]`  and the families  is  `r (dim(dyn_ulb_uniq %>% filter(dyn==1))[1])`. It has to be noted that `r scales::percent(dim(dyn_ulb %>% filter (relative_id ==1))[1]/dim(dyn_ulb)[1])` of this winners are just patriarchs.
-
-In this universe of families `r dim(dyn_ulb %>% filter(dyn==1))[1]` winners and runner-ups are part of some family and `r dim(dyn_ulb %>% filter(dyn==1 & relative_id ==1))[1]` winners and runner-ups out of this is just patriarchs while the rest is other family members. 
-
-
-```{r ulb dyn proportion over time}
-
-dyn_ulb <- dyn_ulb %>% filter( !is.na(year))
-
-dyn_ulb$dyn <- if_else(dyn_ulb$fam_size_cum >1,1,0)
-
-
-
-
-
-
-
-ulb_dyn <- dyn_ulb%>%  group_by(year, dyn) %>% summarise(count = n_distinct(family_id))
-
-
-ulb_dyn <- ulb_dyn %>% spread(key = dyn, value = count ) %>%  rename( non_dyn= "0", dyn = "1") 
-
-ulb_dyn <- ulb_dyn  %>% rowwise() %>% 
-  mutate(sum= dyn+ non_dyn,
-         prop= dyn/sum)
-
-
-ggplot(ulb_dyn, aes(x = year, y=prop))+
-  geom_line(size = 1.5)+
-  theme_minimal()+
-  labs(title = "Proportion of dynasties over years", x = "Year", y = "Proportion")+
-  theme(plot.background = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 18),
-        axis.line= element_line(color = "gray50", size = .5),
-        panel.grid.major = element_blank()
-  ) 
-
-
-
-```
-
-```{r}
-# 
-# dyn_ae_ge_uniq_rel <- dyn_ae_ge %>% 
-#   distinct( family_id,rel_id_uniq, .keep_all = T) %>% filter(relative_id != 1)
-# 
-# rel_dist <- data.frame (table(dyn_ae_ge_uniq_rel$relative_id))
-# 
-# 
-# 
-# ggplot(rel_dist, aes(x = reorder(Var1,-Freq),y= Freq))+
-#   geom_bar(fill = "steelblue", stat = "identity") +
-#   theme_minimal()+
-#   theme(plot.title = element_text(hjust = 0.5))+
-#   ##geom_text(stat='count', aes(label=..count..), vjust=-1)+
-#   labs (title = "Relatives distribution", x = "Realtive ID", y = "Count") 
-#   theme(plot.background = element_blank(),
-#         plot.title = element_text(size = 18),
-#         axis.title.x = element_text(size = 16),
-#         axis.title.y = element_blank(),
-#         axis.text.y=element_blank(),
-#         axis.text.x = element_text(size = 15),
-#         axis.ticks = element_blank(),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border= element_blank(),
-#         axis.line.y = element_blank())
-
-
-
-```
-
-
-### Fig 1
-
-```{r ae ge distribution of family and candidates wrt caste}
-
-
-## should this be in a family set up
-
-
-## this variable has to be renamed
-
-dyn_ae_ge_fam <- dyn_ae_ge %>% filter(dyn == 1)
-
-dyn_ae_ge_fam_uniq <- dyn_ae_ge_fam %>% 
-  filter(relative_id ==1) %>% 
-  distinct( family_id, .keep_all = T)
-
-caste_fam <- as.data.frame(table(dyn_ae_ge_fam_uniq$caste_groups))
-  
-caste_fam_ind <- as.data.frame(table(dyn_ae_ge_fam$caste_groups))
-
-caste_dist_fam <- merge(caste_fam,caste_fam_ind, by = "Var1")
-
-names(caste_dist_fam) <- c("Caste_group","Families" , "Candidates")
-
-
-# caste_dist_fam %>% arrange(desc(Families)) %>% kable(col.names = c ("Caste group", "Families" , "Candidates"))%>% kable_styling(bootstrap_options = "striped")
-
-cast_dist_fam_melted <- melt(caste_dist_fam, "Caste_group", 2:3)
-
-
-
-#png("UP/graphs/fam_mem_cast_distribution.png",width = 800, height = 600)
-
-ggplot(cast_dist_fam_melted, aes(fill = variable,  y =value,x =reorder(Caste_group, -value)))+
-  geom_bar(position = "dodge", stat = "identity") + 
-  theme_minimal()+
-  labs(title = "Distribution of families and unique candidates", x = "Caste", y = "Count") +
-  scale_fill_discrete( labels = c("Families", "Members"))+
-  theme(legend.position = "top",plot.title = element_text(hjust = 0.5))+
-  theme(plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12),
-        axis.text = element_text(face = "italic", size = 14),
-        axis.title.x = element_text(vjust = -1, size = 16),
-        axis.title.y = element_text(vjust = 2, size =16),
-        axis.ticks.y = element_blank(),
-        axis.line= element_line(color = "gray40", size = .5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_line(color = "gray50", size = .5),
-        panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank()
-  ) 
-
-
-# caste_groups_ind <- as.data.frame(table(dyn_ae_ge_1$caste_groups))
-# 
-# 
-# dyn_ae_ge_1_uniq <- dyn_ae_ge_1 %>% 
-#   filter(relative_id ==1) %>% 
-#   distinct( family_id, .keep_all = T)
-# 
-# caste_groups_fam<- as.data.frame(table(dyn_ae_ge_1_uniq$caste_groups))
-# 
-# 
-# caste_dist <- merge(caste_groups_fam,caste_groups_ind, by = "Var1")
-# 
-# 
-# caste_dist %>% arrange(desc(Freq.x)) %>% kable(col.names = c ("Caste group","Families" , "Candidates"))%>% kable_styling(bootstrap_options = "striped")
-
-
-```
-
-
-```{r}
-##caste / exp stacked chart
-
-
-#dyn_uniq <- distinct(dyn, family_id, .keep_all =T)
-
-
-# barplot(table(cut(dyn_uniq$fam_exp_tot, c(0,5,10,20,30,50, 100))))
-# 
-# hist(dyn_uniq$fam_exp_tot)
-# head(ae_ge_lb)
-# 
-# 
-# dyn_pats <-  dyn %>% 
-#   filter(relative_code == 1) 
-# 
-# dyn_uniq <- distinct(dyn_pats, family_id, .keep_all =T)
-# 
-#   
-# caste_comp_exp <- dyn_1_uniq %>%
-#     group_by(fam_exp_cat,caste_groups)%>%
-#     summarise(freq = n())
-# 
-#   
-# caste_groups_cat_sum <- caste_comp_exp %>% 
-#     group_by(fam_exp_cat) %>%
-#     summarise(sum =sum(freq))
-#   
-#   
-#   
-# caste_cat <- merge(caste_comp_exp,caste_groups_cat_sum, by = "fam_exp_cat") 
-# caste_cat$prop <- caste_cat$freq/caste_cat$sum
-#   
-# 
-# 
-# ggplot(caste_cat, aes(x = fam_exp_cat, y = prop , fill = caste_groups, label = round(prop,2)))+
-#     geom_bar(stat= "identity") +
-#     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
-#     theme_minimal()+
-#     labs(title = "Caste composition of dynast families wrt experience ",x = "Poltical experience \n(in years)", y = "Proportion of families", fill = "Caste Groups") +
-#   theme(plot.background = element_blank(),
-#         plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), 
-#         text = element_text(color = "gray20"),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 15),
-#         axis.text = element_text(face = "italic", size = 15),
-#         axis.text.y = element_blank(),
-#         axis.title.x = element_text(vjust = -1, size = 18),
-#         axis.title.y = element_blank(),
-#         axis.ticks.y = element_blank(),
-#         axis.line= element_line(color = "gray40", size = .5),
-#         axis.line.y = element_blank(),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank()
-#   ) 
-
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C

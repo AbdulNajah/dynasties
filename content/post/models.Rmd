@@ -289,6 +289,8 @@ align=TRUE, dep.var.labels=c("Dynast","Upward Linkage ", "Downward Linkage"), no
 
 
 ## AE GE all
+
+
 ```{r results = "asis"}
 
 dyn_ae_ge_uniq <-dyn_ae_ge %>% filter(family_id != "") %>% group_by(family_id) %>% arrange(-year) %>% distinct(family_id, .keep_all= TRUE)

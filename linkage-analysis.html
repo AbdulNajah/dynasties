@@ -1,0 +1,553 @@
+---
+title: "Linkage Analysis"
+author: ""
+date: "2020-07-08"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#assets">Assets</a></li>
+<li><a href="#crime">Crime</a></li>
+<li><a href="#industry">Industry</a></li>
+<li><a href="#caste">Caste</a></li>
+<li><a href="#mplads">MPLADS</a><ul>
+<li><a href="#project-count-and-expenditure">Project count and expenditure</a></li>
+<li><a href="#type-of-work-vs-projects">Type of work v/s projects</a></li>
+<li><a href="#type-of-work-vs-cost">Type of work v/s cost</a></li>
+<li><a href="#cost-categories">cost categories</a></li>
+</ul></li>
+<li><a href="#raphael">Raphael</a></li>
+<li><a href="#vote-dispersion">Vote dispersion</a></li>
+</ul>
+</div>
+
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 1: </span>Summary table of individuals from families with and without linkages
+AE: 2012-2017, GE: 2009-2019
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+166
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+305
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="assets" class="section level2">
+<h2>Assets</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 2: </span>Average assets among families with and without linkages
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Total assets
+</th>
+<th style="text-align:right;">
+Movable Assets
+</th>
+<th style="text-align:right;">
+Immovable Assets
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+37366115
+</td>
+<td style="text-align:right;">
+8467227
+</td>
+<td style="text-align:right;">
+24846450
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+47628145
+</td>
+<td style="text-align:right;">
+10912614
+</td>
+<td style="text-align:right;">
+30390810
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="crime" class="section level2">
+<h2>Crime</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-4">Table 3: </span>Serious criminal cases among families with and without linkages
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+0.20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+0.28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="industry" class="section level2">
+<h2>Industry</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-5">Table 4: </span>Industry ownership among families with and without linkages
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Politician’s identity
+</th>
+<th style="text-align:right;">
+Average number of ownersip
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+1.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Politician’s identity
+</th>
+<th style="text-align:left;">
+rent-type
+</th>
+<th style="text-align:right;">
+Proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+non-rent-thick
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+rent-thick
+</td>
+<td style="text-align:right;">
+0.52
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+non-rent-thick
+</td>
+<td style="text-align:right;">
+0.41
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+rent-thick
+</td>
+<td style="text-align:right;">
+0.59
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="caste" class="section level2">
+<h2>Caste</h2>
+<p><img src="/post/linkage-analysis_files/figure-html/caste-1.png" width="672" /></p>
+</div>
+<div id="mplads" class="section level2">
+<h2>MPLADS</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-6">Table 5: </span>Summary stat of families in 2004 &amp; 2009 GE wrt linkage
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+34
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-7">Table 6: </span>MPLADS prjects and spending wrt linkage
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Type of constiuency
+</th>
+<th style="text-align:right;">
+Average number of contracts
+</th>
+<th style="text-align:right;">
+Avergae expenditure per project
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+218
+</td>
+<td style="text-align:right;">
+318447
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+485
+</td>
+<td style="text-align:right;">
+318718
+</td>
+</tr>
+</tbody>
+</table>
+<div id="project-count-and-expenditure" class="section level3">
+<h3>Project count and expenditure</h3>
+<p><img src="/post/linkage-analysis_files/figure-html/spending%20composition-1.png" width="672" /></p>
+</div>
+<div id="type-of-work-vs-projects" class="section level3">
+<h3>Type of work v/s projects</h3>
+<p><img src="/post/linkage-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="type-of-work-vs-cost" class="section level3">
+<h3>Type of work v/s cost</h3>
+<p><img src="/post/linkage-analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="/post/linkage-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="cost-categories" class="section level3">
+<h3>cost categories</h3>
+<p>Categories:</p>
+<p>Low - 0-.2 mn</p>
+<p>Medium - 2.2 mn - 5 mn</p>
+<p>High - 5 mn+</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-11">Table 7: </span>Project cost categories wrt politician’s identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:left;">
+Cost Categry
+</th>
+<th style="text-align:right;">
+Proportion of projects
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+Low
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+Low
+</td>
+<td style="text-align:right;">
+0.50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+Medium
+</td>
+<td style="text-align:right;">
+0.33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+Medium
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+High
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+High
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="raphael" class="section level2">
+<h2>Raphael</h2>
+</div>
+<div id="vote-dispersion" class="section level1">
+<h1>Vote dispersion</h1>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-12">Table 8: </span>Summary stat of families in 2012 &amp; 2017 AE wrt linkage
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Linkage
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+114
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-14">Table 9: </span>Vote dispersion at booth level wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+Variance
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+309
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-15">Table 10: </span>Vote dispersion at booth level wrt Politicians identity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Politician’s Identity
+</th>
+<th style="text-align:right;">
+SD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+19.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+17.2
+</td>
+</tr>
+</tbody>
+</table>
+<!-- ```{r} -->
+<!-- ggplot(dyn_rafael %>% filter(position==1 & partypercent <100) , aes(dyn_cum_text, partypercent))+ -->
+<!--   geom_boxplot() -->
+<!-- ``` -->
+<p><img src="/post/linkage-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>

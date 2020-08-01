@@ -27,7 +27,7 @@ library(ggbump)
 select <- dplyr::select
 ```
 
-#Miscellaneous nhj 
+# Miscellaneous nhj 
 
 ```{r file config}
 
@@ -42,12 +42,30 @@ dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
 dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum ==1),1,0))
 
+dyn_ae_con <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% distinct(constituency_no,year, .keep_all = TRUE)%>% select(year, constituency_name, constituency_no, dyn_con) %>% arrange( constituency_no, year)
+
+write.csv(dyn_ae_con ,"D:/cpr/up-dynasties/dyn_other_data/dyn_ae_con.csv" )
+
 dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum)%>% distinct(year, constituency_no, .keep_all = TRUE)
 
 dyn_ge19 <- merge(ge_19, dyn_ae_ge_uniq_con , by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE)
 
 dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum ==0)
 #dyn_ae_ge_uniq_con %>% filter(year==2019) %>% group_by(dyn_con) %>% count()
+```
+
+
+```{r shrug adr}
+
+# s_adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/affidavits_clean.csv", stringsAsFactors = FALSE)
+# 
+# s_adr_up <- s_adr %>% filter(pc01_state_id ==9)
+# 
+# s_adr_up <- s_adr_up %>% filter(year %in% c(2007,2012,2017))
+# 
+# s_adr_up_17_w <- s_adr_up %>% filter(year == 2017 & winner ==1 )
+# 
+# mean(s_adr_up_17_w$assets)
 ```
 
 
@@ -83,11 +101,19 @@ adr <- adr %>% dplyr::select( -c(constituency_id,state,         assembly_no,
 
 adr <- adr %>% rename( position = position_tcpd)
 
+# adr_17_w <- adr %>% filter(year == 2017 & position==1)
+# 
+# 
+# adr_17_w $total_assets <- as.numeric(adr_17_w $total_assets)
+# mean(adr_17_w $total_assets)
+# 
+# summary(adr_17_w)
+
 
 adr_dyn<- merge(adr,dyn_ae_ge_uniq_con, by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE)
 
 
-names(dyn_ae_ge ) <- make.unique(names(dyn_ae_ge ))
+names(adr_dyn ) <- make.unique(names(adr_dyn ))
 
 adr_dyn$total_assets <- as.numeric(adr_dyn$total_assets)
 #dyn_ae_ge  <- dyn_ae_ge %>% filter(total_assets>0)
@@ -146,7 +172,48 @@ adr_dyn$total_assets <- as.numeric(adr_dyn$total_assets)
 # 2012 & 2017
 
 ```{r}
-adr_dyn_12_17 <- adr_dyn %>% filter(year %in% c(2012,2017) & dyn_cum != 1)
+
+adr_dyn_12_17 <- adr_dyn %>% filter (year %in% c(2012,2017))
+
+adr_12_17 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_adr_12_17.csv")
+
+
+
+str(adr_12_17)
+
+summary(adr_12_17)
+adr_12_17  %>% mutate(str_sub(total_assets,4,0))
+
+str_remove(adr_12_17$total_assets,"[ ]") %>% head(20)
+
+str_sub(adr_12_17$total_assets,4,-1) %>% head(20)
+
+
+
+
+
+adr_12_17$total_assets <- str_trim(adr_12_17$total_assets)
+
+adr_12_17$total_assets<- str_remove(adr_12_17$total_assets,"[ ]") 
+
+adr_12_17$total_assets <- str_sub(adr_12_17$total_assets,3,-1)
+adr_12_17$total_assets<- str_remove_all(adr_12_17$total_assets,"[,]") %>%  as.numeric()
+
+adr_12_17$total_movable_assets_totals<- str_remove_all(adr_12_17$total_movable_assets_totals,"[,]") %>%  as.numeric()
+
+remove <- c(",", "crore+")
+
+adr_12_17$total_immovable_assets_totals<- str_remove_all(adr_12_17$total_immovable_assets_totals,"[,]") %>%  as.numeric()
+
+adr_12_17 %>% select(8:10) %>% summarise_all (funs(sum(is.na(.))))
+
+
+# fruits <- c("one apple", "two pears", "three bananas")
+# str_remove(fruits, "[aeiou]")
+# str_remove_all(fruits, "[aeiou]")
+
+
+#adr_dyn_12_17 <- adr_dyn %>% filter(year %in% c(2012,2017) & dyn_cum != 1)
 ```
 
 ## Assets
@@ -173,6 +240,45 @@ adr_dyn_12_17%>% group_by(dyn_con) %>% summarise(mean(serious_crime), mean(non_s
 ```
 
 
+## Profession
+
+```{r fig.align = "center"}
+
+adr_12_17 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_adr_12_17.csv")
+
+adr_12_17 <- adr_12_17 %>% mutate(profession_new = ifelse(Profession %in% c("Medical Worker/Doctor","Engineer", "Government Job","Private Job", "Retired", "Journalist") , "Professional Job", 
+                                             ifelse(Profession %in% c("Social Worker", "Politician"), "Social Work", 
+                                                    ifelse(Profession %in% c("Dependent", "Driver", "Not Known", "Others", "Wage Labourer/Worker"), "Others", Profession))))
+
+table(adr_12_17$profession_new)
+
+adr_12_17 %>% group_by(dyn_con, profession_new) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, profession_new, prop) %>% 
+  ggplot(aes(factor(dyn_con), prop, fill= profession_new,label = round(prop,2)))+
+  geom_bar(position = "stack", stat = "identity")+
+   geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
+    theme_minimal()+
+  scale_x_discrete(labels=(c( "Dynast Constituency", "Non - dynast Constituency")))+
+  labs(title = " Composition of candidate's professions wrt constituency type" ,subtitle = "AE 2012 & 2017",x = "", y = "Proportion", fill = "") +
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, family = "serif"),
+        plot.subtitle = element_text(hjust = 0.5, size = 15, family = "serif"),
+        text = element_text(color = "gray20"),
+        legend.title = element_blank(),
+        #legend.position = "bottom",
+        legend.text = element_text(size = 12,family = "serif"),
+        axis.text = element_text(face = "italic", size = 12),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(vjust = -1, size = 16),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line= element_line(color = "gray40", size = .5),
+        axis.line.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+ 
+```
 
 
 
@@ -254,27 +360,52 @@ dyn_ge19 %>% filter(myneta_education!= "") %>% group_by(dyn_con, education) %>% 
 
 ```{r}
 
-# data.frame(table(dyn_ge19$myneta_profession)) %>% arrange(-Freq)
-# table(dyn_ge19$profession)
-# 
-# agri <- c("^Agriculture","Agriculture", "^Farmer", "Farming")
-# 
-# retired <- c("Pension", "retire", "retired", "Pensioner")
-# 
-# social <- c("^Social", "Social work", "Social Work")
-# 
-# teaching <-   c("Teacher", "Teaching", "College", "School", "Lecturer", "Lecture", "Tution")
-# 
-# 
-#   dyn_ge19$profession <- case_when(str_detect(dyn_ge19$myneta_profession, paste(agri, collapse = "|")) ~ "Agriculture",
-#                                    str_detect(dyn_ge19$myneta_profession, "Advocate")~"Advocate",
-#                                    str_detect(dyn_ge19$myneta_profession, paste(teaching, collapse = "|"))~"Teaching",
-#                                    str_detect(dyn_ge19$myneta_profession, paste(social, collapse = "|"))~"Social Worker",
-#                                    str_detect(dyn_ge19$myneta_profession, paste(retired, collapse = "|"))~"Retired",
-#                                    str_detect(dyn_ge19$myneta_profession, "^Business")~"Business",
-#                                    str_detect(dyn_ge19$myneta_profession, "Doctor")~"Doctor",
-#                                    TRUE ~ "Others")
+profession <- data.frame(table(dyn_ge19$myneta_profession)) %>% arrange(-Freq)
+
+write.csv(profession,"D:/cpr/up-dynasties/dyn_other_data/profession.csv" )
+table(dyn_ge19$profession)
+
+agri <- c("^Agriculture","Agriculture", "^Farmer", "Farming")
+
+retired <- c("Pension", "retire", "retired", "Pensioner")
+
+social <- c("^Social", "Social work", "Social Work")
+
+teaching <-   c("Teacher", "Teaching", "College", "School", "Lecturer", "Lecture", "Tution")
+
+
+  dyn_ge19$profession <- case_when(str_detect(dyn_ge19$myneta_profession, paste(agri, collapse = "|")) ~ "Agriculture",
+                                   str_detect(dyn_ge19$myneta_profession, "Advocate")~"Advocate",
+                                   str_detect(dyn_ge19$myneta_profession, paste(teaching, collapse = "|"))~"Teaching",
+                                   str_detect(dyn_ge19$myneta_profession, paste(social, collapse = "|"))~"Social Worker",
+                                   str_detect(dyn_ge19$myneta_profession, paste(retired, collapse = "|"))~"Retired",
+                                   str_detect(dyn_ge19$myneta_profession, "^Business")~"Business",
+                                   str_detect(dyn_ge19$myneta_profession, "Doctor")~"Doctor",
+                                   TRUE ~ "Others")
 
 ```
 
+
+
+## Involvement
+
+
+```{r}
+
+
+inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv" )
+
+names(inv)
+summary(inv)
+
+inv%>% select(22:24) %>% summarise_all (funs(sum(is.na(.))))
+
+inv%>%filter(election_type  == "AE")%>% group_by(year, org_inv) %>% summarise(count = n()) %>% spread(org_inv, count) %>% kable(caption = "Organisational Involvement")
+
+inv %>% filter(election_type  == "AE") %>%  group_by(association_inv, year) %>% summarise(count =n()) %>% spread(association_inv, count) %>% kable(caption = "Association")
+
+inv %>%filter(election_type  == "AE") %>%group_by(year,poitical_inv) %>% summarise(count = n()) %>% spread(poitical_inv, count) %>% kable(caption = "Political Involvement")
+
+
+```
 
