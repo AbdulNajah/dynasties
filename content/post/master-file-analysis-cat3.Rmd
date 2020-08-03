@@ -35,7 +35,7 @@ select <- dplyr::select
 
 
 ```{r}
-dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all_3.csv")
+dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 

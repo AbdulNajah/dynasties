@@ -473,9 +473,13 @@ dyn$term_duration[dyn$election_type %in% c("ZP", "BP")  & dyn$year %in% c(1995, 
 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
-dyn_tot <- dyn_ae_ge %>% group_by(family_id) %>%  mutate(dyn_tot = max(dyn_cum)) %>% select(year, election_type,constituency_no,position, family_id,dyn_tot)
+dyn_tot <- dyn_ae_ge %>% group_by(family_id) %>%  mutate(dyn_tot_1 = max(dyn_cum_1), dyn_tot_2 = max(dyn_cum_2)) %>% select(year, election_type,constituency_no,position, family_id,dyn_tot_1,dyn_tot_2)
+
+
 
 dyn <- merge(dyn, dyn_tot, by = c("year", "election_type","constituency_no","position", "family_id"), all.x =TRUE)
+
+dyn <- dyn %>% group_by(family_id) %>%  mutate( dyn_tot_3 = max(dyn_cum_3), dyn_tot_4 = max(dyn_cum_4), dyn_tot_5 = max(dyn_cum_5))
 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 

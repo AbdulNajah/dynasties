@@ -325,7 +325,7 @@ dyn_lb_uniq %>% group_by(dyn_tot_text) %>% summarise(count = n()) %>% kable(capt
 
 ```{r}
 
-table(dyn_lb_uniq$level)
+#table(dyn_lb_uniq$level)
 
 dyn_lb  <- dyn_lb %>% mutate(level_log = ifelse(level == "LB",FALSE,TRUE))
 

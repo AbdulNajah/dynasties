@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<title>Families cat 2 | Political families of Uttar Pradesh</title>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.72.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/css/classes.css">
+<link rel="canonical" href="/post/families-cat2/">
+<link rel="alternate" type="application/rss+xml" href="" title="Political families of Uttar Pradesh">
+
+<body>
+
+<header class="icons">
+  
+    <a href="/">Political families of Uttar Pradesh</a>
+  
+  
+  
+</header>
+
+<article>
+  <header>
+    <h1>Families cat 2</h1>
+    <time datetime="2020-07-21T00:00:00Z">July 21, 2020</time>
+  </header>
+  
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<!-- ```{r} -->
+<!-- #dyn_ae_ge %>%  filter(dyn_tot ==1 &str_detect(level, "LB") ) %>% distinct(family_id) -->
+<!-- # dyn_ae_ge %>% group_by(family_id) %>% filter(year ==min(year) & dyn_tot ==1) %>% filter(election_type %!in% c("AE", "GE")) -->
+<!-- # fam_2 %>% select(decade, prop) %>% kable(caption = "Individual to family conversion of all families across decades", digits = 2) -->
+<!-- fam_1 <- dyn_ae_ge_fam %>% group_by(family_id) %>% arrange(year) %>%  filter(fam_size_tot >=2 &min(decade)) %>% distinct(family_id, .keep_all = TRUE) %>% group_by(decade) %>% summarise(count = n())# %>% kable() -->
+<!-- fam_1$sum <- sum(fam_1$count) -->
+<!-- fam_1$prop <- fam_1$count/fam_1$sum -->
+<!-- fam_1 <- fam_1 %>% select(decade, prop) -->
+<!-- fam_2 <-  dyn_ae_ge_fam %>% group_by(family_id) %>% arrange(year) %>%  filter(fam_size_cum>= 2 &min(decade)) %>% distinct(family_id, .keep_all = TRUE) %>% group_by(decade) %>% summarise(count = n()) -->
+<!-- fam_2$sum <- sum(fam_2$count) -->
+<!-- fam_2$prop <- fam_2$count/fam_2$sum -->
+<!-- fam_2 <- fam_2 %>% select( prop)  -->
+<!-- cbind(fam_1, fam_2) %>% kable(col.names = c("Decade", "Proporion of families started", "Proportion of families with second member"), digits = 2) %>% kable_styling(bootstrap_options = "striped") -->
+<!-- fam_1 %>% select(decade, prop) %>% kable(caption = "Proportion of families started in each decade ", digits = 2) -->
+<!-- ``` -->
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-4">Table 1: </span>Average life span
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Success
+</th>
+<th style="text-align:right;">
+Life span
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Declining
+</td>
+<td style="text-align:right;">
+21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rising
+</td>
+<td style="text-align:right;">
+35
+</td>
+</tr>
+</tbody>
+</table>
+<!-- We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections. If they have one atleast one election in these 5 elections we call them rising dynasties and rest of them as declining dynasties. -->
+<p><img src="/post/families-cat2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<table style="text-align:center">
+<caption>
+<strong>Regression Results - Success of dynasties</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Rising
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_uc
+</td>
+<td>
+4.894
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(225.098)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_yadav
+</td>
+<td>
+5.242
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(225.098)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_non_yadav_obc
+</td>
+<td>
+5.096
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(225.098)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_dalit
+</td>
+<td>
+5.066
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(225.098)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+caste_muslim
+</td>
+<td>
+4.930
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(225.098)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+minister_duration
+</td>
+<td>
+0.083<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.035)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+industry
+</td>
+<td>
+0.399<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.133)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+school_college
+</td>
+<td>
+0.206
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.214)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+land
+</td>
+<td>
+0.0002
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.0003)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+linkage_down
+</td>
+<td>
+0.820<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.367)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+-6.237
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(225.098)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+191
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Log Likelihood
+</td>
+<td>
+-111.164
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+244.328
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Success
+</th>
+<th style="text-align:right;">
+land
+</th>
+<th style="text-align:right;">
+industires
+</th>
+<th style="text-align:right;">
+N_minister
+</th>
+<th style="text-align:right;">
+Minister duration (months)
+</th>
+<th style="text-align:right;">
+school
+</th>
+<th style="text-align:right;">
+college
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Declining
+</td>
+<td style="text-align:right;">
+316.16
+</td>
+<td style="text-align:right;">
+1.55
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+<td style="text-align:right;">
+12.28
+</td>
+<td style="text-align:right;">
+0.35
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rising
+</td>
+<td style="text-align:right;">
+400.00
+</td>
+<td style="text-align:right;">
+2.08
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:right;">
+27.54
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/post/families-cat2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="/post/families-cat2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<!-- ## Post_90 -->
+<!-- ```{r adr} -->
+<!-- adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE) -->
+<!-- names(adr)[1] <- "position" -->
+<!-- names(adr) <- tolower(names(adr)) -->
+<!-- adr <- adr %>% dplyr::select( -c(constituency_id,state,         assembly_no,               -->
+<!--   month,              poll_no,            -->
+<!--   delimid,            position,           -->
+<!--   candidate,          sex,                -->
+<!--   party,              votes,              -->
+<!--   candidate_type,     valid_votes,        -->
+<!--   electors,           constituency_name,  -->
+<!--   constituency_type,  sub_region,         -->
+<!--   n_cand,             turnout_percentage, -->
+<!--   vote_share_percentage,     deposit_lost,       -->
+<!--   margin,             margin_percentage,  -->
+<!--   enop,               -->
+<!--   pid,                max_poll_no,        -->
+<!--   last_poll,          contested,          -->
+<!--   last_party,         last_constituency_name,                      -->
+<!--   same_constituency,  same_party,         -->
+<!--   no_terms,           turncoat,           -->
+<!--   incumbent,          recontest )  ) -->
+<!-- adr <- adr %>% filter(position_tcpd %in% c(1,2)) -->
+<!-- adr <- adr %>% rename( position = position_tcpd) -->
+<!-- dyn_ae_ge <- merge(adr,dyn_ae_ge, by = c("year", "constituency_no", "position"), all.y = TRUE) -->
+<!-- names(dyn_ae_ge ) <- make.unique(names(dyn_ae_ge )) -->
+<!-- dyn_ae_ge$total_assets <- as.numeric(dyn_ae_ge$total_assets) -->
+<!-- #dyn_ae_ge  <- dyn_ae_ge %>% filter(total_assets>0) -->
+<!-- #dyn_adr$fam_exp_cum_cat <- factor(dyn_adr$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
+<!-- #dyn_adr$year <- factor(dyn_adr$year, levels = c("2009", "2012","2014","2017","2019")) -->
+<!-- #dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "") -->
+<!-- # dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family") -->
+<!-- #  -->
+<!-- # dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE") -->
+<!-- #  -->
+<!-- # dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE") -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- dyn_ae_ge<- dyn_ae_ge %>% group_by(family_id) %>% mutate(min_year= min(year), max_year = max(year))  -->
+<!-- dyn_ae_ge$life_span <- dyn_ae_ge$max_year - dyn_ae_ge$min_year -->
+<!-- #dyn_ae_ge_fa <- dyn_ae_ge %>% filter(dyn_tot ==1 ) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- dyn_ae_ge_fam <- dyn_ae_ge %>% filter(election_type == "AE") %>% filter(dyn_tot ==1 & min_year >1989) %>% arrange(year) -->
+<!-- fam_pre09 <-  dyn_ae_ge_fam %>% group_by(family_id) %>% filter(fam_size_cum>= 2 & year>2008) %>% distinct(family_id) -->
+<!-- dyn_ae_ge_fam <- merge(dyn_ae_ge_fam ,fam_pre09, by = "family_id") -->
+<!-- #dyn_ae_ge_fam <- dyn_ae_ge %>% group_by(family_id) %>% mutate(year_fam_size_2 = min(year[fam_size_cum==2]))  -->
+<!-- dyn_ae_ge_fam  <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate( -->
+<!--                                                                    n_el_c_post09 = length(year[year>=2009]), n_el_w_post09 = length(year[position ==1 & year>=2009]))  -->
+<!-- ## -->
+<!-- #dyn_ae_ge_fam %>% filter(year == max(year)) -->
+<!-- # -->
+<!-- ##post 1990 -->
+<!-- #dyn_ae_ge_fam <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(last_year = max(year), first_year = min(year)) -->
+<!-- #dyn_ae_ge_fam  <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(n_el_c = n(), n_el_w = length(year[position ==1]))  -->
+<!--  #dyn_ae_ge_fam %>% filter(str_detect( patriarch_name, "singh")) -->
+<!-- #dyn_ae_ge_fam <- dyn_ae_ge_fam %>% mutate(duration = sum(term_duration[relative_id==1])) -->
+<!-- dyn_ae_ge_fam_uniq <- dyn_ae_ge_fam  %>% filter(fam_size_cum == 2) %>% arrange(-year) %>% distinct(family_id, .keep_all = TRUE) -->
+<!-- #%>% filter(str_detect(level, "LB", negate = TRUE)) -->
+<!-- #dyn_ae_ge_fam_uniq  <- dyn_ae_ge_fam_uniq   %>% filter(n_el_w_pre02 !=0 | n_el_w_post02 !=0) -->
+<!-- #dyn_ae_ge_fam_uniq$success_pre02 <- dyn_ae_ge_fam_uniq$n_el_w_pre02/dyn_ae_ge_fam_uniq$n_el_c_pre02 -->
+<!-- dyn_ae_ge_fam_uniq$success_post09 <- dyn_ae_ge_fam_uniq$n_el_w_post09/dyn_ae_ge_fam_uniq$n_el_c_post09 -->
+<!--  # dyn_ae_ge_fam_uniq$success_pre02 <- ifelse(dyn_ae_ge_fam_uniq$success_pre02 == "NaN", 0,dyn_ae_ge_fam_uniq$success_pre02) -->
+<!-- dyn_ae_ge_fam_uniq$success_post09<- ifelse(dyn_ae_ge_fam_uniq$success_post09== "NaN", 0,dyn_ae_ge_fam_uniq$success_post09) -->
+<!-- #dyn_ae_ge_fam_uniq$success_diff <- dyn_ae_ge_fam_uniq$success_post02-dyn_ae_ge_fam_uniq$success_pre02  -->
+<!-- #dyn_ae_ge_fam_uniq$success_diff_cat <- ifelse(dyn_ae_ge_fam_uniq$success_diff>=0,"Rising", "Declining") -->
+<!-- dyn_ae_ge_fam_uniq$success_cat <- ifelse(dyn_ae_ge_fam_uniq$success_post09>0,"Rising", "Declining") -->
+<!-- dyn_ae_ge_fam_uniq$total_assets <- as.numeric(dyn_ae_ge_fam_uniq$total_assets) -->
+<!-- dyn_ae_ge_fam_uniq <- dyn_ae_ge_fam_uniq %>% filter(total_assets>0) -->
+<!-- #dyn_ae_ge%>% filter(family_id == "f0009806") -->
+<!-- #  -->
+<!-- #  -->
+<!-- # # dyn_ae_ge_fam_uniq %>% filter(success_pre02 =="NaN") -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_ae_ge_fam_uniq$success_pre02_cat <- cut(dyn_ae_ge_fam_uniq$success_pre02, breaks = c(0,.34,.66, 1), labels = c("Declining", "Stable", "Rising"), include.lowest = TRUE) -->
+<!-- #  -->
+<!-- # dyn_ae_ge_fam_uniq$success_post02_cat <- cut(dyn_ae_ge_fam_uniq$success_post02 , breaks = c(0,.34,.66, 1), labels = c("Declining", "Stable", "Rising"), include.lowest = TRUE) -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- # dyn_ae_ge_fam_uniq$success_cat_1 <- paste(dyn_ae_ge_fam_uniq$success_pre02_cat, dyn_ae_ge_fam_uniq$success_post02_cat) -->
+<!-- #  -->
+<!-- # dyn_ae_ge_fam_uniq  <- dyn_ae_ge_fam_uniq %>% mutate(success_cat = case_when(success_cat_1 == "Declining Declining" ~ "Declining", -->
+<!-- #                                                       success_cat_1 == "Rising Rising" ~ "Rising", -->
+<!-- #                                                       success_cat_1 == "Stable Stable" ~ "Stable", -->
+<!-- #                                                       TRUE ~ success_cat_1 )) -->
+<!-- #  -->
+<!-- # table(dyn_ae_ge_fam_uniq$success_cat ) -->
+<!-- # dyn_ae_ge_fam_uniq$duration <- dyn_ae_ge_fam_uniq$last_year - dyn_ae_ge_fam_uniq$first_year  -->
+<!-- # median(dyn_ae_ge_fam_uniq$duration) -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- # prop.table(table(cut(dyn_ae_ge_fam_uniq$success, breaks = c(0,.34,.67,1)))) -->
+<!-- #  -->
+<!-- # #  -->
+<!-- # # hist(dyn_ae_ge_fam_uniq$duration) -->
+<!-- # #  -->
+<!-- # # ggplot(dyn_ae_ge_fam %>% filter(level == "AE") , aes(year, factor(position), color = family_id))+ -->
+<!-- # #   geom_bump() -->
+<!-- #  -->
+<!-- # dyn_ae_ge_fam_uniq %>% select(family_id,first_year, last_year) %>% melt(id = "family_id", measure = 2:3) %>%  -->
+<!-- #   ggplot(aes(factor(value),family_id, group = variable, color =family_id                                                                       )) + -->
+<!-- #   geom_point()+ -->
+<!-- #   geom_line()+ -->
+<!-- #   theme(legend.position = "none") -->
+<!-- #  -->
+<!-- # # dyn_ae_ge_fam_uniq %>% filter(duration >29) %>% select(patriarch_name, family_id,first_year, last_year, duration) -->
+<!-- #minister_duration <- dyn_ae_ge_fam_uniq$min_dur_yr %>% replace_na(0) -->
+<!-- #dyn_ae_ge_fam %>% group_by(family_id) %>% filter(min(year)>2002 ) %>% filter(n_el_w >0)%>% distinct(family_id) -->
+<!-- dyn_ae_ge_fam_uniq %>% group_by(success_cat) %>% summarise(mean(life_span)) %>% kable(caption = "Average life span") -->
+<!-- ``` -->
+<!-- ```{r, results= "asis"} -->
+<!-- #library(nnet) -->
+<!-- #success <- dyn_ae_ge_fam_uniq$success_diff_cat -->
+<!-- industry <- dyn_ae_ge_fam_uniq$indus_count %>% replace_na(0) -->
+<!-- # industry_rent_thick <- dyn_ae_ge_fam_uniq$indus_rt %>% replace_na(0) -->
+<!-- #  -->
+<!-- # industry_non_rent_thick <- dyn_ae_ge_fam_uniq$indus_nrt %>% replace_na(0) -->
+<!-- caste_uc <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Upper Caste", 1,0) -->
+<!-- caste_yadav <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Yadav", 1,0) -->
+<!-- caste_muslim <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Muslim", 1,0) -->
+<!-- caste_dalit <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Dalit", 1,0) -->
+<!-- caste_non_yadav_obc <- ifelse(dyn_ae_ge_fam_uniq$caste_groups == "Non-Yadav OBC", 1,0) -->
+<!-- turncoat <- dyn_ae_ge_fam_uniq$turncoat -->
+<!-- N_minister <- dyn_ae_ge_fam_uniq$n_sc_minster%>% replace_na(0) -->
+<!-- minister_duration <- dyn_ae_ge_fam_uniq$min_dur_yr %>% replace_na(0) -->
+<!-- minister <-ifelse(dyn_ae_ge_fam_uniq$min_dur_yr>0,1,0)%>% replace_na(0)  -->
+<!-- #post_2002 <- ifelse(dyn_ae_ge_fam_uniq$year >=2002,1,0) -->
+<!-- #n_elections_w<- as.numeric(dyn_ae_ge_fam_uniq$n_el_w) -->
+<!-- school <- dyn_ae_ge_fam_uniq$school%>% replace_na(0) -->
+<!-- college <- dyn_ae_ge_fam_uniq$college%>% replace_na(0) -->
+<!-- school_college <- paste(school, college, sep = "") -->
+<!-- school_college <- case_when(school_college == "00"~ 0, -->
+<!--                             TRUE ~ 1) -->
+<!-- land <- as.numeric(dyn_ae_ge_fam_uniq$land) %>% replace_na(0) -->
+<!-- linkage <- ifelse(dyn_ae_ge_fam_uniq$level %in% c("AE", "GE"),0,1) -->
+<!-- linkage_up <- ifelse(dyn_ae_ge_fam_uniq$level%in% c("GE-AE", "GE-AE-LB"),1,0) -->
+<!-- linkage_down <- ifelse(dyn_ae_ge_fam_uniq$level %in% c("AE-LB", "GE-AE-LB"),1,0) -->
+<!-- assets <- as.numeric(dyn_ae_ge_fam_uniq$total_assets) -->
+<!-- serious_crime<- dyn_ae_ge_fam_uniq$serious_crime -->
+<!-- non_serious_crime<- dyn_ae_ge_fam_uniq$non_serious_crime -->
+<!-- #ml$prog2 <- relevel(ml$prog, ref = "academic") -->
+<!-- # dyn_ae_ge_fam_uniq$success_cat <- as.factor(dyn_ae_ge_fam_uniq$success__cat) -->
+<!-- success <- ifelse(dyn_ae_ge_fam_uniq$success_cat=="Rising",1,0) -->
+<!-- #success_rate <- dyn_ae_ge_fam_uniq$success_diff -->
+<!-- fit.1 <- glm(success ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage + log(assets) + serious_crime+ non_serious_crime , family= binomial(link = "probit") ) -->
+<!-- summary(fit.1) -->
+<!-- # stargazer(fit.1,title="Regression Results - Dynasties success ",type = "html", -->
+<!-- # align=TRUE, no.space=TRUE) -->
+<!-- # fit.2 <- lm(success_rate ~ caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage_up)  -->
+<!-- #library(arm) -->
+<!-- #summary(fit.1) -->
+<!-- # stargazer(fit.1, type="html", out="multi1.htm") -->
+<!-- #  -->
+<!-- # fit.1.rrr = exp(coef(fit.1)) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # stargazer(fit.1, type="html", coef=list(fit.1.rrr), p.auto=FALSE, out="multi1rrr.htm") -->
+<!-- #  -->
+<!-- # library(tidyverse) -->
+<!-- #  -->
+<!-- # df %>% filter(variable %in% c("id1", "id2", "id3")) %>% select(varibale, variable_1, variable_2) -->
+<!-- ```  -->
+
+</article>
+
+
+
+</body>
+
+</html>

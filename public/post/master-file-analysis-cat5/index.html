@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<title>Master file Analyis - cat 3 | Political families of Uttar Pradesh</title>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.72.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/css/classes.css">
+<link rel="canonical" href="/post/master-file-analysis-cat5/">
+<link rel="alternate" type="application/rss+xml" href="" title="Political families of Uttar Pradesh">
+
+<body>
+
+<header class="icons">
+  
+    <a href="/">Political families of Uttar Pradesh</a>
+  
+  
+  
+</header>
+
+<article>
+  <header>
+    <h1>Master file Analyis - cat 3</h1>
+    <time datetime="2020-06-10T00:00:00Z">June 10, 2020</time>
+  </header>
+  
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#analyis-at-different-levels">Analyis at different levels</a><ul>
+<li><a href="#ae---ge">AE - GE</a><ul>
+<li><a href="#assembly-elections">Assembly Elections</a></li>
+<li><a href="#general-elections">General Elections</a></li>
+<li><a href="#retention">retention</a></li>
+<li><a href="#ae-ge-election-contest">AE GE election contest</a></li>
+<li><a href="#land-distribution">Land distribution</a></li>
+<li><a href="#industries-education">Industries: Education</a></li>
+<li><a href="#industries-others">Industries : Others</a></li>
+</ul></li>
+<li><a href="#industries">Industries</a><ul>
+<li><a href="#caste-2">Caste</a></li>
+<li><a href="#experience">Experience</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="analyis-at-different-levels" class="section level1">
+<h1>Analyis at different levels</h1>
+<!-- ```{r ae -ge cumulative experience} -->
+<!-- ###experience -->
+<!-- dyn_ae_ge <- dyn_ae_ge %>% -->
+<!--   group_by(family_id) %>% -->
+<!--   mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>% -->
+<!--   ungroup() -->
+<!-- # dyn_ae_ge_uniq %>% -->
+<!-- #   select(candidate_name, family_id, pat_name, fam_exp_tot) -->
+<!-- #   arrange(desc(fam_exp_tot)) %>% -->
+<!-- ##cumsum for the families -->
+<!-- year_group <- dyn_ae_ge %>% -->
+<!--   group_by(family_id, year) %>% -->
+<!--   summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>% -->
+<!--   mutate(cum_exp = cumsum(year_sum)) %>% -->
+<!--   mutate(fam_exp_cum = cum_exp - year_sum) %>% -->
+<!--   select(family_id,year,cum_exp, fam_exp_cum, year_sum) -->
+<!-- year_group <- year_group %>% -->
+<!--   select(family_id, year, fam_exp_cum) -->
+<!-- dyn_ae_ge <- merge(dyn_ae_ge, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE) -->
+<!-- ``` -->
+<div id="ae---ge" class="section level2">
+<h2>AE - GE</h2>
+<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 383. It has to be noted that 93% of this winners are just patriarchs.</p>
+<p>In this universe of families 2366 winners and runner-ups are part of some family and 1510 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<div id="assembly-elections" class="section level3">
+<h3>Assembly Elections</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1974
+</td>
+<td style="text-align:right;">
+804
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+794
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+800
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+804
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2002
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+806
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="general-elections" class="section level3">
+<h3>General Elections</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+156
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+160
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+160
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+160
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 1: </span>Break-up of unique individuals wrt to elections won
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n_elections_won
+</th>
+<th style="text-align:right;">
+n_individuals
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2089
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1886
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+665
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+329
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+173
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+35
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-2">Table 1: </span>Break-up of unique individuals wrt to elections contested
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n_elections_contested
+</th>
+<th style="text-align:right;">
+n_individuals
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2764
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1061
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+558
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+333
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+255
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+127
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+78
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+54
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="retention" class="section level3">
+<h3>retention</h3>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
+</div>
+<div id="ae-ge-election-contest" class="section level3">
+<h3>AE GE election contest</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:right;">
+fam v/s fam
+</th>
+<th style="text-align:right;">
+fam v/s non-fam
+</th>
+<th style="text-align:right;">
+non-fam v/s fam
+</th>
+<th style="text-align:right;">
+non-fam v/s non-fam
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+463
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+456
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+72
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+374
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+429
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+415
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+349
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+389
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+55
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+52
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2002
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+304
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+46
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+268
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+38
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+242
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+37
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+220
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+34
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:right;">
+fam v/s fam
+</th>
+<th style="text-align:right;">
+fam v/s non-fam
+</th>
+<th style="text-align:right;">
+non-fam v/s fam
+</th>
+<th style="text-align:right;">
+non-fam v/s non-fam
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1977
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.96
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1980
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.91
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+0.93
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1991
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.87
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.87
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.12
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+0.70
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+0.66
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2002
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.75
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2004
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
+0.58
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+0.67
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+0.60
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.20
+</td>
+<td style="text-align:right;">
+0.28
+</td>
+<td style="text-align:right;">
+0.46
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.55
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+0.42
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
+</div>
+<div id="land-distribution" class="section level3">
+<h3>Land distribution</h3>
+<div id="families" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
+</div>
+<div id="political-experience" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
+</div>
+<div id="caste" class="section level4">
+<h4>Caste</h4>
+</div>
+</div>
+<div id="industries-education" class="section level3">
+<h3>Industries: Education</h3>
+<div id="families-1" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
+</div>
+<div id="political-experience-1" class="section level4">
+<h4>Political Experience</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
+</div>
+<div id="caste-1" class="section level4">
+<h4>caste</h4>
+</div>
+</div>
+<div id="industries-others" class="section level3">
+<h3>Industries : Others</h3>
+</div>
+</div>
+<div id="industries" class="section level2">
+<h2>Industries</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 2: </span>Industry ownership
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Politician’s identity
+</th>
+<th style="text-align:right;">
+Average number of ownersip
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+1.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:right;">
+0.66
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Politician’s identity
+</th>
+<th style="text-align:left;">
+rent-type
+</th>
+<th style="text-align:right;">
+Proportion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
+non-rent-thick
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
+rent-thick
+</td>
+<td style="text-align:right;">
+0.57
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:left;">
+non-rent-thick
+</td>
+<td style="text-align:right;">
+0.72
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Non-family
+</td>
+<td style="text-align:left;">
+rent-thick
+</td>
+<td style="text-align:right;">
+0.28
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div id="families-2" class="section level4">
+<h4>Families</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
+</div>
+<div id="political-experience-2" class="section level4">
+<h4>Political experience</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="672" /></p>
+</div>
+<div id="caste-2" class="section level3">
+<h3>Caste</h3>
+<div id="political-experience-3" class="section level4">
+<h4>Political experience</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="672" />
+<!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
+</div>
+<div id="family" class="section level4">
+<h4>Family</h4>
+<p><img src="/post/master-file-analysis-cat5_files/figure-html/ae%20ge%20families%20caste-1.png" width="672" /></p>
+</div>
+</div>
+<div id="experience" class="section level3">
+<h3>Experience</h3>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience Categories
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2164
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1-5
+</td>
+<td style="text-align:right;">
+1562
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6-15
+</td>
+<td style="text-align:right;">
+932
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16+
+</td>
+<td style="text-align:right;">
+244
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Experience Categories
+</th>
+<th style="text-align:right;">
+Non-Families
+</th>
+<th style="text-align:right;">
+Families
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2119
+</td>
+<td style="text-align:right;">
+45
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1-5
+</td>
+<td style="text-align:right;">
+1498
+</td>
+<td style="text-align:right;">
+64
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6-15
+</td>
+<td style="text-align:right;">
+789
+</td>
+<td style="text-align:right;">
+143
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16+
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+131
+</td>
+</tr>
+</tbody>
+</table>
+<p>C</p>
+</div>
+</div>
+</div>
+
+</article>
+
+
+
+</body>
+
+</html>

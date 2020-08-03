@@ -39,6 +39,15 @@
     </item>
     
     <item>
+      <title>Families cat 2</title>
+      <link>/post/families-cat2/</link>
+      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/families-cat2/</guid>
+      <description>% filter(dyn_tot ==1 &amp;str_detect(level, &#34;LB&#34;) ) %% distinct(family_id) --% group_by(family_id) %% filter(year ==min(year) &amp; dyn_tot ==1) %% filter(election_type %!in% c(&#34;AE&#34;, &#34;GE&#34;)) --% select(decade, prop) %% kable(caption = &#34;Individual to family conversion of all families across decades&#34;, digits = 2) --% group_by(family_id) %% arrange(year) %% filter(fam_size_tot =2 &amp;min(decade)) %% distinct(family_id, .keep_all = TRUE) %% group_by(decade) %% summarise(count = n())# %% kable() --% select(decade, prop) --% group_by(family_id) %% arrange(year) %% filter(fam_size_cum= 2 &amp;min(decade)) %% distinct(family_id, .</description>
+    </item>
+    
+    <item>
       <title>Taluqdars Analysis</title>
       <link>/post/taluqdars_analysis/</link>
       <pubDate>Mon, 20 Jul 2020 00:00:00 +0000</pubDate>
@@ -48,11 +57,20 @@
     </item>
     
     <item>
-      <title>Models</title>
+      <title>Models cat 1</title>
       <link>/post/models/</link>
       <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/models/</guid>
+      <description>AE AllAE GE allAE 2012 -17GE 2009:19AE-GE (2009:19)AE AllRegression Results - AE AllDependent variable:DynastUpward LinkageDownward Linkage(1)(2)(3)caste_uc0.</description>
+    </item>
+    
+    <item>
+      <title>Models cat 2</title>
+      <link>/post/models-cat2/</link>
+      <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/models-cat2/</guid>
       <description>AE AllAE GE allAE 2012 -17GE 2009:19AE-GE (2009:19)AE AllRegression Results - AE AllDependent variable:DynastUpward LinkageDownward Linkage(1)(2)(3)caste_uc0.</description>
     </item>
     
@@ -63,6 +81,15 @@
       
       <guid>/post/linkage-analysis/</guid>
       <description>SummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditureType of work v/s projectsType of work v/s costcost categoriesRaphaelVote dispersionSummaryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE130TRUE201AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE40946486976030927099946TRUE532434531257898334705213CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
+    </item>
+    
+    <item>
+      <title>Linkage Analysis cat 2</title>
+      <link>/post/linkages-cat2/</link>
+      <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/linkages-cat2/</guid>
+      <description>SummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditureType of work v/s projectsType of work v/s costcost categoriesRaphaelVote dispersionSummaryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE179TRUE274AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE37408611862547925184182TRUE490084571166379331261156CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
     </item>
     
     <item>
@@ -82,15 +109,6 @@
       <guid>/post/adr-survey/</guid>
       <description>All IndiaImageUPy
 All IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s identityIssueComposite Score - non-dynastComposite Score - dynastImportance - non-dynastImportance - dynastPerformance - non-dynastPerformance- dynastjob_training4.183.942.272.241.671.</description>
-    </item>
-    
-    <item>
-      <title>Local Body Analysis</title>
-      <link>/post/local-body-analysis/</link>
-      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/local-body-analysis/</guid>
-      <description>Members distribution among familiesLocal bodiesElection WonLinkageLandcasteEducationMembers distribution among familiesRelative IDRelativeCountProportion1Patriarch7540.402Father530.033Mother520.034Son530.</description>
     </item>
     
     <item>
@@ -187,6 +205,24 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/master-file-analysis-cat3/</guid>
+      <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levels% --% --% --% --% --% --% --% --% --% --% --AE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019.</description>
+    </item>
+    
+    <item>
+      <title>Master file Analyis - cat 3</title>
+      <link>/post/master-file-analysis-cat5/</link>
+      <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/master-file-analysis-cat5/</guid>
+      <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levels% --% --% --% --% --% --% --% --% --% --% --AE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019.</description>
+    </item>
+    
+    <item>
+      <title>Master file Analyis - cat 4</title>
+      <link>/post/master-file-analysis-cat4/</link>
+      <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/master-file-analysis-cat4/</guid>
       <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levels% --% --% --% --% --% --% --% --% --% --% --AE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019.</description>
     </item>
     
