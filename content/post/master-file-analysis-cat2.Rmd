@@ -41,7 +41,7 @@ dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
 dyn_ae_ge_uniq <- dyn_ae_ge %>% distinct(family_id, rel_id_uniq, .keep_all = TRUE)
 
-dyn_ae_ge_uniq_fam <- dyn_ae_ge%>% filter(dyn_tot_2 ==1)
+dyn_ae_ge_uniq_fam <- dyn_ae_ge%>% filter(dyn_tot_2 ==1) %>% distinct(family_id, .keep_all = TRUE)
 #total_count <-dyn_ae_ge_uniq_fam %>% filter(relative_id !="NA") %>% count() %>% as.integer()
 
 
@@ -69,6 +69,8 @@ dyn_uniq_ind <- dyn %>%
   distinct( family_id,rel_id_uniq, .keep_all = T)
 
 dyn_uniq <- dyn %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
+
+
 
 # dyn_uniq <- dyn %>%
 #   filter(relative_id ==1) %>%
@@ -189,6 +191,8 @@ dyn_ae_ge_fam <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year))
 
 dyn_ae_ge_uniq <- dyn_ae_ge %>% group_by(family_id) %>% filter(year == max(year)) %>% distinct(family_id, .keep_all = TRUE)
 
+dyn_ae_ge_uniq_fam <- dyn_ae_ge_uniq %>% filter(dyn_tot_2 ==1)
+
 #dyn_ae_ge_fam %>% filter(fam_exp_tot ==0)
 
 ```
@@ -233,7 +237,160 @@ dyn_ae_ge_uniq_ind %>% group_by(n_elections_contested) %>% summarise(n_individua
 [//]: # (also the cumulative family size has to be  done using code)
 
 
+## Levels
 
+
+```{r}
+
+
+dyn_ae_ge_uniq_fam %>% group_by(level) %>% summarise(count = n()) %>% arrange(-count)%>% kable(caption = "Linkages of families(Category 2)") %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+## Life span
+
+
+```{r}
+
+dyn_ae_ge_fam <- dyn_ae_ge %>% filter(dyn_tot_2 ==1)
+
+# dyn_ae_ge_fam %>% filter(family_id == "f0030811")
+# 
+# 
+# dyn_ae_ge_fam_uniq  %>% filter(life_span ==0)
+
+dyn_ae_ge_fam <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(min_yr = min(year), max_yr = max(year))
+
+dyn_ae_ge_fam_uniq <- dyn_ae_ge_fam %>% arrange(-year) %>% distinct(family_id,  .keep_all = TRUE)
+
+dyn_ae_ge_fam_uniq$life_span <- dyn_ae_ge_fam_uniq$max_yr- dyn_ae_ge_fam_uniq$min_yr
+
+
+medx <- median(dyn_ae_ge_fam_uniq$life_span)
+meanx <- mean(dyn_ae_ge_fam_uniq$life_span)
+
+ggplot(dyn_ae_ge_fam_uniq)+
+  geom_density(aes(x=life_span, y = ..density..),size = 1, color = 'black')+
+  #scale_x_continuous(limits = c(0,20))+
+  # geom_point(x = medx, y = 0, color = "red")+
+  # geom_point(x = meanx, y = 0, color = "blue")+
+  geom_vline(xintercept = medx, color = "red")+
+  geom_vline(xintercept = meanx, color = "blue")+
+  geom_text(aes(x=(medx+1), label="Median", y=0.01), colour="red", size =4, angle = 90 )+
+  geom_text(aes(x=(meanx -1), label="Mean", y = 0.01), colour="blue", size = 4, angle = 90)+
+  theme_minimal_hgrid()+
+  labs(title = "Life span of Families", x= "Year", y = "Density")+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 20, face = "bold", family = "serif",
+                                  margin = margin(t = 0, r = 0, b = 20, l = 0))) 
+
+
+
+```
+
+
+## Elections won
+
+
+```{r}
+
+dyn_ae_ge <- dyn_ae_ge %>% group_by(family_id, rel_id_uniq) %>% mutate(n_el_w_ind = length(year[position==1]))
+
+dyn_ae_ge_uniq <- dyn_ae_ge %>% arrange(-year) %>% distinct(family_id, rel_id_uniq, .keep_all = TRUE)
+
+
+
+medx <- median(dyn_ae_ge_uniq$n_el_w_ind)
+meanx <- mean(dyn_ae_ge_uniq$n_el_w_ind)
+
+ggplot(dyn_ae_ge_uniq)+
+  geom_density(aes(x=n_el_w_ind, y = ..density..),size = .7, color = 'black')+
+  # geom_point(x = medx, y = 0, color = "red")+
+  # geom_point(x = meanx, y = 0, color = "blue")+
+  # # geom_vline(xintercept = medx, color = "red")+
+  # # geom_vline(xintercept = meanx, color = "blue")+
+  # geom_text(aes(x=(medx-.8), label="Median", y=.1), colour="red", size =3) +
+  # geom_text(aes(x=(meanx+.8), label="Mean", y = .1), colour="blue", size = 3)+
+  theme_minimal_hgrid()+
+  labs(title = "Elections won by unique candidates", x= "Number of elections")+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 20, face = "bold", family = "serif")) 
+
+```
+
+
+```{r}
+dyn_ae_ge_fam <- dyn_ae_ge %>% filter(dyn_tot_2 ==1)
+
+
+
+
+dyn_ae_ge_fam <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(n_el_w_fam =n_distinct(year[position==1]), n_el_c_fam = n_distinct(year))
+
+dyn_ae_ge_fam_uniq <- dyn_ae_ge_fam %>% arrange(-year) %>% distinct(family_id,  .keep_all = TRUE)
+
+
+medx <- median(dyn_ae_ge_fam_uniq$n_el_w_fam)
+meanx <- mean(dyn_ae_ge_fam_uniq$n_el_w_fam)
+
+ggplot(dyn_ae_ge_fam_uniq)+
+  geom_density(aes(x=n_el_w_fam, y = ..density..),size = .7, color = 'black')+
+  #scale_x_continuous(limits = c(0,20))+
+  # geom_point(x = medx, y = 0, color = "red")+
+  # geom_point(x = meanx, y = 0, color = "blue")+
+  geom_vline(xintercept = medx, color = "red")+
+  geom_vline(xintercept = meanx, color = "blue")+
+  geom_text(aes(x=(medx-.3), label="Median", y=0.01), colour="red", size =4, angle = 90 )+
+  geom_text(aes(x=(meanx +.3), label="Mean", y = 0.01), colour="blue", size = 4, angle = 90)+
+  theme_minimal_hgrid()+
+  labs(title = "Active winning cycles : Families", x= "Number of cycles")+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 20, face = "bold", family = "serif",
+                                  margin = margin(t = 0, r = 0, b = 20, l = 0))) 
+
+
+
+
+
+medx <- median(dyn_ae_ge_fam_uniq$n_el_c_fam)
+meanx <- mean(dyn_ae_ge_fam_uniq$n_el_c_fam)
+
+ ggplot(dyn_ae_ge_fam_uniq )+
+  geom_density(aes(x=n_el_c_fam, y = ..density..),size = .7, color = 'black')+
+  #scale_x_continuous(limits = c(0,20))+
+  # geom_point(x = medx, y = 0, color = "red")+
+  # geom_point(x = meanx, y = 0, color = "blue")+
+  geom_vline(xintercept = medx, color = "red")+
+  geom_vline(xintercept = meanx, color = "blue")+
+  geom_text(aes(x=(medx-.3), label="Median", y=0.01), colour="red", size =4, angle = 90) +
+  geom_text(aes(x=(meanx +.3), label="Mean", y = 0.01), colour="blue", size = 4, angle = 90)+
+  theme_minimal_hgrid()+
+  labs(title = "Active contesting cycles : Families", x= "Number of cycles")+
+  theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
+        plot.background = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 18, face = "bold", family = "serif",
+                                  margin = margin(t = 0, r = 0, b = 20, l = 0)))
+
+
+# x.dens <- density(dyn_ae_ge_fam_uniq$n_el_c_fam)
+# df.dens <- data.frame(x = x.dens$x, y = x.dens$y)
+# p + geom_area(data = df.dens, 
+#               aes(x=x,y=y), fill = 'blue') +
+#     geom_vline(xintercept = medx)+
+#   geom_vline(xintercept = meanx)
+# 
+# 
+#   stat_summary(fun.y = "mean", geom = "point", size = 5, color = "red", shape = 15)
+#    stat_summary(fun.y="sum", geom="point")
+#   geom_vline(intercept = dyn_ae_ge_fam_uniq$n_el_c_fam)
+#   geom_vline(data=df, aes(yintercept = median), colour=“red”) 
+
+```
 
 
 
@@ -352,7 +509,6 @@ ggplot(ae_dyn, aes(x = factor(year), y=prop, group = 1))+
 
 
 ```
-
 
 
 
