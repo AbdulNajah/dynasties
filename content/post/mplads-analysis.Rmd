@@ -9,7 +9,7 @@ output:
 
 
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
-# Do not edit this code block/chunk
+
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
@@ -21,6 +21,8 @@ library(kableExtra)
 library(scales)
 library(gridExtra)
 `%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
 ```
 
 
@@ -49,7 +51,7 @@ dyn_mplads <- merge(dyn_ge_w,mplads, by = c("year", "constituency_no"))
 
 names(dyn_mplads) <- make.unique(names(dyn_mplads))
 
-dyn_mplads$dyn_cum_text <- ifelse(dyn_mplads$dyn_cum ==0, "Non-family","Family")
+dyn_mplads$dyn_cum_2_text <- ifelse(dyn_mplads$dyn_cum_2 ==0, "Non-family","Family")
 
 
 
@@ -75,15 +77,15 @@ dyn_mplads$dyn_cum_text <- ifelse(dyn_mplads$dyn_cum ==0, "Non-family","Family")
 
 
 
-dyn_mplads_mean <- dyn_mplads %>% group_by(dyn_cum) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))
+dyn_mplads_mean <- dyn_mplads %>% group_by(dyn_cum_2) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))
 
 Entity <- c("Non-family", "Family")
 
 
- cbind(Entity,dyn_mplads_mean) %>% select(-dyn_cum) %>%  kable(caption = "MPLADS prjects and spending",col.names = c ("Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+ cbind(Entity,dyn_mplads_mean) %>% select(-dyn_cum_2) %>%  kable(caption = "MPLADS prjects and spending",col.names = c ("Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
 
 
- #dyn_mplads %>% group_by(dyn_cum) %>% summarise(mean_cost = mean(costsanctionedbydistrict))
+ #dyn_mplads %>% group_by(dyn_cum_2) %>% summarise(mean_cost = mean(costsanctionedbydistrict))
 
 
 
@@ -95,7 +97,7 @@ Entity <- c("Non-family", "Family")
 
 ```{r}
 
- dyn_mplads %>% group_by( year,dyn_cum_text) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending",col.names = c ("Year","Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
+ dyn_mplads %>% group_by( year,dyn_cum_2_text) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending",col.names = c ("Year","Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
 
 ```
 
@@ -103,9 +105,9 @@ Entity <- c("Non-family", "Family")
 
 
 
-# t.test(dyn_mplads$costnew ~ dyn_mplads$dyn_cum) 
+# t.test(dyn_mplads$costnew ~ dyn_mplads$dyn_cum_2) 
 # 
-# t.test(dyn_mplads$ac_contr_n ~ dyn_mplads$dyn_cum)
+# t.test(dyn_mplads$ac_contr_n ~ dyn_mplads$dyn_cum_2)
 ```
 
 The difference in the mean of both project count and the expenditure is statistically significant.
@@ -118,7 +120,7 @@ No significant difference. In both the cases of family v/s non family categories
 
 ```{r days to complete}
 # 
-#  dyn_mplads %>% filter(days >0) %>% group_by(dyn_cum, fam_exp_cum_cat) %>% summarise(mean_days = mean(days)) 
+#  dyn_mplads %>% filter(days >0) %>% group_by(dyn_cum_2, fam_exp_cum_cat) %>% summarise(mean_days = mean(days)) 
 
 
 ```
@@ -132,13 +134,13 @@ No significant difference. In both the cases of family v/s non family categories
 
 
 
- # dyn_mplads %>% group_by(year,dyn_cum, category_work) %>% summarise( count = n()) %>% 
- #  ggplot(aes(category_work, count, fill = factor(dyn_cum)))+
+ # dyn_mplads %>% group_by(year,dyn_cum_2, category_work) %>% summarise( count = n()) %>% 
+ #  ggplot(aes(category_work, count, fill = factor(dyn_cum_2)))+
  #  geom_bar(stat = "identity", position = "dodge")+
  #  facet_grid(~year)
 
- dyn_mplads %>% group_by(dyn_cum, category_work) %>% summarise( count = n()) %>% group_by(dyn_cum) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_cum, category_work, prop) %>% 
-   ggplot(aes(factor(dyn_cum), prop, fill = category_work,label = round(prop,2)))+
+ dyn_mplads %>% group_by(dyn_cum_2, category_work) %>% summarise( count = n()) %>% group_by(dyn_cum_2) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_cum_2, category_work, prop) %>% 
+   ggplot(aes(factor(dyn_cum_2), prop, fill = category_work,label = round(prop,2)))+
    geom_bar(stat="identity", position = "stack")+
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
@@ -168,8 +170,8 @@ No significant difference. In both the cases of family v/s non family categories
 
 ```{r 2004 & 2009 1}
 
-dyn_mplads %>% group_by(dyn_cum,year, category_work) %>% summarise( count = n()) %>% group_by(year,dyn_cum) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_cum, category_work, prop, year) %>% 
-   ggplot(aes(factor(dyn_cum), prop, fill = category_work,label = round(prop,2)))+
+dyn_mplads %>% group_by(dyn_cum_2,year, category_work) %>% summarise( count = n()) %>% group_by(year,dyn_cum_2) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_cum_2, category_work, prop, year) %>% 
+   ggplot(aes(factor(dyn_cum_2), prop, fill = category_work,label = round(prop,2)))+
    geom_bar(stat="identity", position = "stack")+
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
@@ -203,8 +205,8 @@ dyn_mplads %>% group_by(dyn_cum,year, category_work) %>% summarise( count = n())
 
 ```{r spending composition}
 
- dyn_mplads %>% group_by(dyn_cum, category_work) %>% summarise(sum_cat = sum(costnew)) %>% group_by(dyn_cum) %>% mutate(sum_tot = sum(sum_cat), prop = sum_cat/sum_tot) %>% select(dyn_cum, category_work, prop) %>% 
-   ggplot(aes(factor(dyn_cum), prop, fill = category_work,label = round(prop,2)))+
+ dyn_mplads %>% group_by(dyn_cum_2, category_work) %>% summarise(sum_cat = sum(costnew)) %>% group_by(dyn_cum_2) %>% mutate(sum_tot = sum(sum_cat), prop = sum_cat/sum_tot) %>% select(dyn_cum_2, category_work, prop) %>% 
+   ggplot(aes(factor(dyn_cum_2), prop, fill = category_work,label = round(prop,2)))+
    geom_bar(stat="identity", position = "stack")+
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
@@ -231,8 +233,8 @@ dyn_mplads %>% group_by(dyn_cum,year, category_work) %>% summarise( count = n())
 ```
 ```{r 2004& 2009 2 }
 
- dyn_mplads %>% group_by(year,dyn_cum, category_work) %>% summarise(sum_cat = sum(costnew)) %>% group_by(year,dyn_cum) %>% mutate(sum_tot = sum(sum_cat), prop = sum_cat/sum_tot) %>% select(dyn_cum, category_work, prop) %>% 
-   ggplot(aes(factor(dyn_cum), prop, fill = category_work,label = round(prop,2)))+
+ dyn_mplads %>% group_by(year,dyn_cum_2, category_work) %>% summarise(sum_cat = sum(costnew)) %>% group_by(year,dyn_cum_2) %>% mutate(sum_tot = sum(sum_cat), prop = sum_cat/sum_tot) %>% select(dyn_cum_2, category_work, prop) %>% 
+   ggplot(aes(factor(dyn_cum_2), prop, fill = category_work,label = round(prop,2)))+
    geom_bar(stat="identity", position = "stack")+
     geom_text(size = 3, position = position_stack(vjust = 0.5))+ 
     theme_minimal()+
@@ -270,8 +272,8 @@ I could not find any trends when I explored the experience categories along with
 
 ```{r}
 
-dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_projects = mean(ac_contr_n, trim = .1)) %>% 
-  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(dyn_cum)))+
+dyn_mplads %>% group_by(dyn_cum_2, category_work ) %>% summarise(mean_projects = mean(ac_contr_n, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(dyn_cum_2)))+
   geom_bar(stat = "identity", position = "dodge")+
     theme_minimal()+
   scale_y_continuous(label = label_number_si())+
@@ -305,7 +307,7 @@ dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_projects = m
 #z%>% melt(id = 1:3, measure = 4:4) %>% 
 #   ggplot(aes(factor(fam_exp_cum_cat,levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")), value, fill = category_work))+
 #   geom_bar(stat = "identity", position = "dodge")+
-#   facet_grid(~dyn_cum)
+#   facet_grid(~dyn_cum_2)
 
 
 
@@ -314,8 +316,8 @@ dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_projects = m
 
 ```{r}
 
-dyn_mplads %>% group_by(year,dyn_cum, category_work ) %>% summarise(mean_projects = mean(ac_contr_n, trim = .1)) %>% 
-  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(dyn_cum)))+
+dyn_mplads %>% group_by(year,dyn_cum_2, category_work ) %>% summarise(mean_projects = mean(ac_contr_n, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_projects)), mean_projects, fill = factor(dyn_cum_2)))+
   geom_bar(stat = "identity", position = "dodge")+
     theme_minimal()+
   facet_grid(~year)+
@@ -352,8 +354,8 @@ dyn_mplads %>% group_by(year,dyn_cum, category_work ) %>% summarise(mean_project
 
 
 ```{r}
-dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
-  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(dyn_cum)))+
+dyn_mplads %>% group_by(dyn_cum_2, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(dyn_cum_2)))+
   geom_bar(stat = "identity", position = "dodge")+
   theme_minimal()+
   scale_y_continuous(label = label_number_si())+
@@ -384,8 +386,8 @@ dyn_mplads %>% group_by(dyn_cum, category_work ) %>% summarise(mean_cost = mean(
 
 ```{r 2004 & 2009 3}
 
-dyn_mplads %>% group_by(year,dyn_cum, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
-  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(dyn_cum)))+
+dyn_mplads %>% group_by(year,dyn_cum_2, category_work ) %>% summarise(mean_cost = mean(costnew, trim = .1)) %>% 
+  ggplot(aes(factor(reorder(category_work, mean_cost)), mean_cost, fill = factor(dyn_cum_2)))+
   geom_bar(stat = "identity", position = "dodge")+
   theme_minimal()+
   facet_grid(~year)+
@@ -435,7 +437,7 @@ High - 5 mn+
 # 
 # hist(mplads$costnew) %>% scale_x_continuous(label = label_number_si())
 
-ggplot(dyn_mplads, aes(costnew, color = dyn_cum_text))+
+ggplot(dyn_mplads, aes(costnew, color = dyn_cum_2_text))+
   geom_density()+ 
   theme_minimal()+ scale_y_continuous(label = label_number())+
   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+
@@ -464,7 +466,7 @@ ggplot(dyn_mplads, aes(costnew, color = dyn_cum_text))+
 
 ```{r}
 
-dyn_mplads %>% group_by(dyn_cum_text,cost_cat) %>% summarise(count = n()) %>% group_by(dyn_cum_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% kable(caption = "Project cost categories wrt politician's identity", col.names = c("Politicians Identity", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
+dyn_mplads %>% group_by(dyn_cum_2_text,cost_cat) %>% summarise(count = n()) %>% group_by(dyn_cum_2_text) %>% mutate(sum = sum(count), prop = count/sum) %>% select(-c(count,sum)) %>% kable(caption = "Project cost categories wrt politician's identity", col.names = c("Politicians Identity", "Cost Categry", "Proportion of projects"), digit = 2) %>% kable_styling(bootstrap_options = "striped")
 
 ```
 

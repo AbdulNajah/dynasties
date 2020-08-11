@@ -57,43 +57,16 @@ fin_12_17 <- rbind(fin_12, fin_17, use.names= TRUE)
 
 
 ```{r file config1}
-#el_fin <- read.csv("D:/cpr/up-dynasties/dyn_other_data/UP_expenditure.csv", stringsAsFactors = FALSE)
 
-#glimpse(el_fin)
-
-
-
-# names(el_fin) <- tolower(names(el_fin))
-# 
-# 
-# el_fin <- el_fin %>% rename(constituency_name = constituency, year = election.year)
-
-#write.csv(el_fin, "D:/cpr/up-dynasties/dyn_other_data/election_finance_ae_up_12_17.csv")
-
-#pmgsy <- pmgsy %>% select(year, everything())%>%  select(- c(2:78)) %>% rename(constituency_no = `pc no`) %>% filter(year != 2014)
 
 dyn_ae_12_17_w<- dyn %>% filter(election_type == "AE" & position==1 & year %in% c(2012,2017))
 
-dyn_ae_12_17_w$dyn_cum_text <- ifelse(dyn_ae_12_17_w$dyn_cum ==0, "Non-family","Family")
+dyn_ae_12_17_w$dyn_cum_text <- ifelse(dyn_ae_12_17_w$dyn_cum_2 ==0, "Non-family","Family")
 
-# library(fuzzyjoin)
-# 
-# stringdist_right_join(dyn_ae_12_17_w, el_fin, by =c("year", "constituency_name"), distance_col = NULL)
 
 
 dyn_el_fin <- merge(fin_12_17,dyn_ae_12_17_w, by = c("year", "constituency_no"))
 
-#dyn_el_fin$dyn_cum_text <- ifelse(dyn_el_fin$dyn_cum ==0, "Non-family","Family")
-
-#summary(pwd)
-
-#dyn_el_fin$fam_exp_cum_cat <- factor(dyn_el_fin$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]"))#names(dyn_pmgsy) <- make.unique(names(dyn_pmgsy))
-
-#dyn_el_fin$fam_rel_id_uniq <-  paste(dyn_el_fin$family_id, dyn_el_fin$rel_id_uniq,sep = "")
-
-#dyn_pmgsy  <- dyn_pmgsy %>% group_by(fam_rel_id_uniq) %>% mutate(n_proj_ind = n())
-
-#table(el_fin$tot_fund > el_fin$toal_expense)
 
 ```
 
@@ -102,15 +75,6 @@ dyn_el_fin <- merge(fin_12_17,dyn_ae_12_17_w, by = c("year", "constituency_no"))
 
 
 ```{r summary}
-#
-
-
-# dyn_ae_12_17_w %>% group_by(year,dyn_cum_text) %>% summarise(count_actual = n()) %>% kable(caption = "Actual distribution of families and non-families", col.names = c("Year", "Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
-# 
-# dyn_el_fin %>% group_by(year, dyn_cum_text) %>% summarise(count_submitted = n()) %>% 
-#   kable(caption = "Candidates who has submitted election finance affidavit", col.names = c("Year", "Politician's identity", "Count")) %>% kable_styling(bootstrap_options = "striped")
-
-# cbind(dyn_ae_12_17_w %>% group_by(year,dyn_cum_text) %>% summarise(count_actual = n()),dyn_el_fin %>% group_by(year, dyn_cum_text) %>% summarise(count_submitted = n())) %>% select(year, dyn_cum_text, count_actual, count_submitted) %>% mutate(prop = count_submitted/count_actual) %>% kable(caption = "Summary table of  election finance affidavit submission", col.names = c("Year", "Politician's identity","Count true", "Count submitted", "Proportion")) %>% kable_styling(bootstrap_options = "striped")
 
 ```
 

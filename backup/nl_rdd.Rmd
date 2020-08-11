@@ -1,0 +1,274 @@
+---
+title: |
+  |
+  | 
+  | Evidence from India
+  |
+  |
+  | \vspace{1cm}Impact of Poltical Dynasties on Economic Development:
+author: |
+  |
+  | POL3032/ECO3092\vspace{0.2cm}
+  | Professor Neelanajan Sircar
+  | Abdul Najah ^[ Acknowledgments: I am grateful to Rahul Verma for granting access to  his proprietary data set on poltical families of Uttar Pradesh for the purpose of this paper.]\vspace{0.5cm}
+date: |
+  |       
+  |
+  | `r gsub("^0", "", format(Sys.time(), "%d %B, %Y"))`
+  |
+  |
+linestretch: 1.2
+colorlinks: true
+abstract: \noindent\setstretch{1}Does having a dynast legislator impact the constituency development? I use a novel political families data set compiled by Rahul Verma to classify legislators as dynasts and non-dynasts. I deploy a close election regression discontinuity design to estimate the causal effect of  politician's identity on local economic growth, measured by the night time lights. The non significant result imply that electing a dynast leads to 2.3 percentage points lower growth of the luminosity score comapred constituencies where non - dynasts are elected.\vspace{.8cm}
+bibliography: references.bib
+output:
+  pdf_document:
+    toc: no
+    number_sections: true
+mainfont: Times New Roman
+sansfont: Times New Roman
+fontsize: 12pt
+link-citations: true
+documentclass: article
+geometry: margin=1in
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+
+# Use chache = TRUE if you want to speed up compilation
+
+library(data.table)
+library(tidyverse)
+library(stargazer)
+library(kableExtra)
+
+```
+
+\clearpage
+
+\renewcommand{\baselinestretch}{0.5}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{1.1}\normalsize
+
+\clearpage
+
+# Introduction
+    
+ Although  democracy is, in principle, antithesis to dynastic rule, families with multiple members in elective offices continue to be common around the world. In most of the countries proportion of such *democratic dynasties* decline over time and rarely exceeds ten percent of all legislators [@smith2018dynasties]. India is an exception with a rising presence of dynastic legislators. 
+ 
+  In the recent times there has been an emerging literature on the causes and consequences of political dynasties. So far, only a little attention has given to the economic consequences of political dynasties dynasties. The existing literature paint a complex and a contradictory picture on this.[@daniele2016political] studies the Italian mayors and find no effect on the average spending among dynast and non-dynast mayors. [@besley2017logic] present evidence that dynastic politicians bring positive impact on the economic growth. [@asako2015dynastic] find that districts represented by the dynast leaders in Japan have worse economic outcomes.  
+  
+ In order to understand the main motivation behind this paper, consider the case of Amethi, a constituency which had been ruled by one of the India's powerful and longest surviving dynasty, till 2019.  In the 2019 election, Smrithi Irani, a non-dynast candidate won against dynast Rahul Gandhi. Smrithi Irani started her political career as a BJP party worker in 2003 and then subsequently climbed the ladders to the top leadership and then ended up contesting in Amethi in 2014. At the same time, Rahul Gandhi belongs to a family which has been holding many significant positions in Indian legislature including the prime ministerialship since the independence. Even though Smrithi lost to Rahul in 2014, in the subsequent election voters granted the Nehru-Gandhi family's bastion to  non-dynast Smrithi.  The objective of this paper is to study the economic consequences of such political selection process, where some candidates come from dynastic background and others from a non-dynastic background.
+ 
+ India is one of the top ten countries with highest proportion of dynasts among the elected representatives. It has been on a rise since 1954.In the recent years, almost over a quarter of Indian legislators in the parliament were dynastic [@chandra2016democratic]. This pheneomenon has further increased in the last 2019 palriament election contradictory to the fact that many of the campaigns were against dynasticism in politics [@verniers_2019]. 
+ 
+ The rest of the paper is organised as follows: section 2 provides a conceptual frame work to the study; section 3 discusses the context and the data used in the study; section 4 explains the identification strategy adopted for the study; section 5 reports the main findings and conducts the robustness test and finally, 6 provides concluding remarks with the implications of the study.
+ 
+\newpage
+
+# Conceptual framework
+
+ In order to study the dynasties at the sub national level in India, I focus on the legislator's background when he or she enter into politics. Based on their family's involvement in politics I classify them as either dynasts or non dynasts.
+ 
+**Dynast** : I define dynast politicians as those who are preceded by family members who are currently active in politics or were active in the past. Family is defined as a set of individuals who are bound by proximate ties based on blood or marriage, and this definition includes  father, mother, grand parents, siblings and in laws. Active in politics refers to holding an office in an elected body or being a candidate in elections.
+     
+According to this definition, the head of family or the patriarch is considered to be a non-dynast in the year of entry. Precisely, because of the fact that he did not enjoy any advantage of having family members in politics at that point of time. But, ones a family member enter into the universe of politics, in later years patriarch will be considered as dynast along with the descendants.
+
+**Non  dynast** : Non  dynast is simply the opposite of the dynast politician, where the politician has  not been proceeded by any family members who are currently present in politics or were in the past.
+     
+# Context and Data
+
+ In a recent research paper based on Indian legislators, [@george2017understanding] argued that descendants of the dynast has a negative impact on the development. Even though the study analysed the political families for a longer time span, the impact of dynasties on development was studied at the national level (parliamentary constituencies). I study the the impact of dynast politicians on development at the subnational level because of three reasons. First, states has a higher stake in the development in a federal system like India. Second, There are significantly more legislators at the stat level than  the members of the parliament. Third, state level legislators (MLA)  play a significant role in allocation and distribution of public goods than a Member of Parliament (MP) [@dar2018parachuters].
+ 
+ Within India, the study is based in the state of Uttar Pradesh. UP is home to 200 million people thus making it the most populous state, as well as the biggest state inside a country in the world. If Uttar Pradesh was a country it would be ranked in the top 10 world wide in terms of population size but in the bottom 10 in terms of per capita income. In India, it is the second poorest state with second lowest life expectancy [@kopf_varathan_2017]. In the electoral end, UP is known to be a highly competitive state with a tri-party competition. The state has a huge number of legislators in both Parliament (80) and in the state assembly (403) and it is worth noting that, it sends the highest number of MPs to the Parliament.
+ 
+  I limit the study to elections from the year 1993 to 2012 due to the delimitation's and the limited availability of the nigh light data. During this 19 year period Uttar Pradesh witnessed four elections with  different term durations.  It is also important to clarify that few parts of the Uttar Pradesh were carved out to form  Uttarakhand state  in 2000 and I do not include  constituencies in those region in my sample. Therefore I have panel of 403 assembly constituencies (AC)  the level of our analysis  for the period under study.
+  
+```{r, echo=FALSE, message= FALSE}
+dyn_dev <- fread("C:/Users/abdul/Desktop/projects & works/CPR_Verma/dyn_dev1.csv")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results="asis"}
+dyn_dev_s <- dyn_dev %>% group_by(year, dyn_cum_2, position) %>% summarise(N = n()) %>% arrange(year)
+dyn_dev_s <- dyn_dev_s %>% spread(year, N)
+type <- c("Non-dynast winner", "Non-dynast runner-up","Dynast winner", "Dynast runner-up")
+tab <- data.frame(type,dyn_dev_s)
+
+names(tab) <- c("Type of Politician", "dynast", "poition", "1993", "1996","2002", "2007")
+
+pol_tab <- tab %>% select("Type of Politician","1993", "1996","2002", "2007")
+
+# stargazer(pol_tab ,
+# title = "Distribution of the dynast and non-dynast politicians",
+# label="tab2",
+# summary = FALSE,
+# table.placement = "H",
+# header=FALSE)
+
+kable(pol_tab, "latex", caption = "Distribution of the dynast and non-dynast politicians ",booktabs = T) %>% kable_styling(latex_options =  "hold_position")
+
+```
+  
+  
+ **Electoral data:** Electoral data was accessed from the Trivedi Center for Political Data (TCPD) [@tcpd_ld].  I use winner and runner up data for  all four state  elections happened between 1993 and 2012. The data set contains many candidate level and constituency level electoral variables.
+ 
+ **Political families data:** This data set knits the family network of politicians. TCPD electoral data was used as the base information to build up the network data. Information on candidate's families  were collected through extensive field work conducted over a year.  This data  contains family information of candidates from the year 1974 for all the assembly and parliamentary elections held till date in the state of Uttar Pradesh. This dataset includes variables such as the patriarch of the family, asset information such as the land and industries they own, caste information etc.
+ 
+ *Concerns about the political family data:*
+
+There are a few concerns about the quality of the political family data. It is possible that there are candidates whom we have not been able to connect with their exisitng family members who have contested which results from the lack of credible information. Additionaly, a political family might be having members at other legislative levels such as district Panchayat, Block Panchayat and Grama Panchayat where as we have only included the state assembly and the parliament. Having a larger data set with granular level information would have helped us to assess the strength of a poltical family at a deeper level. 
+
+ 
+ **Outcome:**
+ 
+ **Local economic growth** : The main outcome variable considered in this paper is the nigh light data which is processed from multiple satellite images by U.S. Air Force Defense Meteorological Satellite Program’s Operational Linescan System (DMSPOLS). It is said to be a better measure than GDP for development countries and there are not any other reliable development data available annually at constituency level in India . On the other hand,  night light data is available annually and can be mapped to our area of interest.  It has been successfully used as a proxy for economic growth in many research studies at sub national level in Indian context. I accessed the this data from the shrug data repository [@asher2019socioeconomic]. The data set contains luminosity score aggregated at assembly constituencies yearly from 1993 to 2013. The measure used in this analysis is the growth rate of total luminosity score score per 10,000 voter, where total luminosity per capita is luminosity score divided by total electors. The main outcome variable is calculated for every year and the  night lights are aggregated and averaged over the following election years: 1994 - 1996, 1997 - 2002, 2003 - 2007, 2008 - 2012.
+ 
+![Nights lights visual](D:/Ashoka/Academics/Semester 6/Political Economy/Assignmnets/nl.png)
+ 
+ 
+Overall, there should be 1612 (403 × 4) election observations in the final data set with information on 3224 (403 × 4 × 2) candidates.  Since there are a few  candidates missing in the political family data, my final panel data has 1608 election observations and 3216 candidates data instead of 1612 and 3224 respectively.
+
+
+
+*Concerns aboout the night lights data:*
+
+There are a few caveats to interpreting night light growth  as economic growth activity. It is error prone just like the GDP data. Another problem would be that, a politician's efforts to bring in development to his/her constituency might not be fully reflected in the night light output since it only indicates the growth of the light output. A poltician could very well be influencing the economic growth in many ways which may not be shown in an a indicator like this.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results="asis"}
+nl <- dyn_dev %>% select(year,ac07_id,annual_growth)
+
+nl_c <- nl %>% group_by(year) %>% summarise(N = n())
+
+names(nl_c) <- c("Year", "N")
+
+nl_s <- nl %>% group_by(year) %>% filter(annual_growth < 100) %>% summarise(Mean = round(mean(annual_growth),2), Min = round(min(annual_growth),2),St.Dev.= round(sd(annual_growth),2), Max = round(max(annual_growth),2))
+
+nl_s_c <- merge(nl_c, nl_s, by.x = "Year", by.y = "year")
+
+# stargazer(nl_s_c,
+# title = "Summary statistics of the night lights data",
+# label="tab1",
+# summary = FALSE,
+# table.placement = "H",
+# header=FALSE)
+  
+kable(nl_s_c, "latex", caption = "Summary statistics of the night lights data ",booktabs = T) %>% kable_styling(latex_options =  "hold_position")
+
+```
+
+
+ **Control Variables**
+ 
+ I add control for two categories; electoral competitiveness and constituency - candidate level characteristics. 
+ 
+ Electoral competitiveness: Constituencies with a higher competition legislators with re-election incentives might perform well. To account for the competition I use  margin of victory and effective number of parties (enop) as controls.
+ 
+Candidate and constituency level characteristics: I employ a dummy variable for the gender since the literature suggests that constituencies with women legislators have a higher developmental outcome [@baskaran2018women]. Also, at the constituency level I add constituency type to control for the variation in the reserved and general category constituencies. 
+ 
+# Empirical Strategy
+
+ I begin estimating the effect of politicians identity on economic growth with a simple linear regression to identity the possible correlation. The estimating equation is as follows;
+ $${y_c,_t} = \beta_{0}+ \beta_{1} Dynast{_c,_t}  +Z_{_c,_t}+ \epsilon{_c,_t}$$
+where ${y_c,_t}$ is the outcome of interest(economic growth) in a constituency  at time __t__ ; $Dynast{_c,_t}$ is a dummy variable that is 1 if the winner is a dynast  at the time of the election and 0 otherwise ; $Z_{_c,_t}$  are constituency or candidate-level controls; $\epsilon{_c,_t}$ is the error term. In the data, average difference in the growth rate of light between constituencies where dynasts and no - dyansts won was .4. The regression estimate shows a non-significant positive correlation between the dyanst legislator and the economic growth after accounting for the constituency level factors such as constituency type, turnout and effective number of parties(competition) and ascriptive identities of politician such as sex. 
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results="asis"}
+dyn_dev1 <- dyn_dev %>% filter(position==1)
+fit <- lm(data= dyn_dev1, annual_growth ~ dynast + sex + constituency_type +turnout_percentage+ enop)
+stargazer(fit,
+title = "Simple linear regression table",
+label="tab2",
+table.placement = "H",
+model.numbers = FALSE,
+header=FALSE)
+```
+
+ But, even after controlling for possible confounders we one might worry about the selecton bias and the unobserved factors such as voters and voters preferences and ideology. In order to bypass these challenges I rely on a close election regression discontinuity design and compare outcomes in constituencies where dynasts barely won (treatment) with those where they narrowly lost (control).  The idea behind this is that, since close elections are considered to be -as if random-, it writes off the observed or unobserved characteristics of the candidate or the constituency. There were 94 close elections between dynast and non- dynast in the study period. The estimating equation is as follows;
+ 
+$${y_c,_t} = \beta_{0}+ \beta_{1} Dynast{_c,_t} +margin_{_c,_t} +Dynast{_c,_t} * margin_{_c,_t} + Z_{_c,_t}+ \epsilon{_c,_t}$$
+
+where yct is the outcome of interest(economic growth) in constituency c at time t as defined earlier; $Dynast{_c,_t}$ is a dummy variable that is 1 if the winner is a dynast at the time of the election and 0 otherwise; $margin_{_c,_t}$  is the running variable. By construction the margin of victory is positive when a dynast win against a non-dynast runner-up and negative when a non-dynast win against a dynast runner-up. $Dynast{_c,_t}$ is a dummy a variable which indicates whether the winner is a dynast or not; $Z_{_c,_t}$ are constituency or candidate level controls and $\epsilon{_c,_t}$ is the error term. Defined as follows;
+
+$$  Dynast{_c,_t} = \begin{Bmatrix}1&if& margin_{_c,_t}&>0 \\ 0&if& margin_{_c,_t}&<0 \\ \end{Bmatrix}$$
+
+# Findings
+
+ **Discontinuity and Balance test**
+ 
+ To validate the regression discontinuity design I ensure that there is a continuity in the relevant variables the treatment and the control when the running variable is zero by visual inspection. I confirmed the balance of the variable values on the both side  by running t.test on couple of predetermined relevant variable such as turnout, effective number of parties, margin percentage etc. There were no significant differences among any tested variables.
+ 
+ **Economic impact**
+ 
+In this section I  present the estimates of causal effect of dynast and non - dynast legislator on economic growth over the electoral term in the constituency from which they were elected. The RD estimate of impact of electing a dynast rather than a non - dynast is the difference in the luminosity at the margin of victory. In figure 1, I plot the average growth of in luminosity against margin of victory. I observe a discontinuous drop in light output at the threshold margin of victory zero, suggesting that dynast legislators  causes to lower the economic growth than non - dynast legislator.
+
+```{r, echo = FALSE}
+##changing the dyn codes
+dyn_dev$dynast_temp   <- NA
+dyn_dev$dynast_temp  <- ifelse(dyn_dev$dyn_cum_2 ==1,2,3)
+dyn_dev_rdd <- dyn_dev%>% group_by(year,constituency_no) %>% mutate(dyn_sum =sum(dynast_temp))
+# 
+dyn_dev_rdd_mov <- dyn_dev_rdd %>% filter(dyn_sum == 5 & position == 1 &margin_percentage <5) 
+
+dyn_dev_rdd_mov %>% group_by(dyn_sum) %>% summarise(n())
+#
+##assigning negative mov
+dyn_dev_rdd_mov$mov <- dyn_dev_rdd_mov$margin_percentage
+dyn_dev_rdd_mov$mov[dyn_dev_rdd_mov$dyn_cum_2 ==0 ] <- -(dyn_dev_rdd_mov$mov[dyn_dev_rdd_mov$dyn_cum_2 ==0 ])
+dyn_dev_rdd_mov$mov[dyn_dev_rdd_mov$dyn_cum_2 ==1] <- dyn_dev_rdd_mov$mov[dyn_dev_rdd_mov$dyn_cum_2 ==1 ]
+
+```
+
+```{r,echo = FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+ggplot(dyn_dev_rdd_mov, aes(mov, annual_growth, color = factor(dyn_cum_2)))+
+  geom_point()+stat_smooth(size = 1.5)+
+  geom_vline(xintercept=0, linetype="longdash")+
+  theme_minimal()+
+  xlab("Margin of Victroy (%)") +
+  ylab("Luminosity Growth") +
+  scale_colour_discrete(name="Experimental\nCondition",
+                        breaks=c("0", "1"), labels=c("Non - Dynast", "Dynast"))+
+  ylim(c(-5,20))
+```
+ 
+Corresponding regression estimates are in Table 4. I estimate the local linear and quadratic regression of growth of night lights on the margin of victory in the RD framework. According to the quadratic results, The annual luminosity growth averaged over electoral term is 2.3 percentage points lower  in constituencies in which a dynast won with a small margin. It has to be noted that even though there is a difference it is not statistically significant. This could be resulting from the small sample size I have used.
+
+In addition to that, female dynast legislators causes 2.4 percentage points higher growth in the luminosity  than a male dynast legislators, but the causation is not statistically significant. Moreover, SC constituencies represented by dynasts tend to have a 4.2 percentage point higher growth in the luminosity than the non-dynast SC constituencies and this difference is significant at 10 percent level.
+
+
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results="asis"}
+##rd test
+fit1 <- lm(data = dyn_dev_rdd_mov, annual_growth ~ dyn_cum_2+ mov+ dyn_cum_2 *mov +sex + constituency_type +turnout_percentage+enop)
+fit2 <- lm(data = dyn_dev_rdd_mov, annual_growth ~ dyn_cum_2+ mov+ dyn_cum_2 *mov +sex + constituency_type +turnout_percentage+ enop+ I(mov^2))
+
+summary(fit1)
+stargazer(fit1,fit2,
+    title = "Impact of dynasts on economic growth in close elections",
+    label="tab3", 
+    table.placement = "H", 
+    column.labels = c("Linear", "Quadratic"),
+    model.numbers = FALSE,
+    header=FALSE)
+```
+
+# Conclusion
+
+This paper study how dynastic politics affect economic development in India. The question was put into test using political families data of candidates who had contested in the assembly elections from 1993 to 2007 in the state of Uttar Pradesh. I find that there is a non-significant negative impact on the economic growth of constituencies won by the dynasts with a narrow margin.  The results are aligned with the previous studies on economic consequences of political dynasticism in India.  This has to be seen in the light of the recent research where [@jensenius2015development] does not find any significant difference in the developmental outcome among the SC reserved constituencies and the general constituencies. All these research, including this paper raises a question about whether a politician actually has a role in the developmental outcome in his/her constituency. Possible Implications including this and mechanisms of this result have to be studied further.
+
+
+\clearpage
+
+# References
+
+\linespread{1}
+
+
+::: {#refs}
+
+:::
+

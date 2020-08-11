@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: inline
 ---
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
-# Do not edit this code block/chunk
+
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
@@ -40,17 +40,17 @@ dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
 
 dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE"))
 
-dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum ==1),1,0))
+dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum_2 ==1),1,0))
 
 dyn_ae_con <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% distinct(constituency_no,year, .keep_all = TRUE)%>% select(year, constituency_name, constituency_no, dyn_con) %>% arrange( constituency_no, year)
 
 #write.csv(dyn_ae_con ,"D:/cpr/up-dynasties/dyn_other_data/dyn_ae_con.csv" )
 
-dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum)%>% distinct(year, constituency_no, .keep_all = TRUE)
+dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum_2)%>% distinct(year, constituency_no, .keep_all = TRUE)
 
 dyn_ge19 <- merge(ge_19, dyn_ae_ge_uniq_con , by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE)
 
-dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum ==0)
+dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum_2 ==0)
 #dyn_ae_ge_uniq_con %>% filter(year==2019) %>% group_by(dyn_con) %>% count()
 ```
 
@@ -125,7 +125,7 @@ adr_dyn$total_assets <- as.numeric(adr_dyn$total_assets)
 
 #dyn_adr$fam_rel_id_uniq <-  paste(dyn_adr$family_id, dyn_adr$rel_id_uniq,sep = "")
 
-# dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum ==0, "Non-family","Family")
+# dyn_adr$dyn_cum_text <- ifelse(dyn_adr$dyn_cum_2 ==0, "Non-family","Family")
 # 
 # dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
 # 
@@ -213,7 +213,7 @@ adr_dyn_12_17 <- adr_dyn %>% filter (year %in% c(2012,2017))
 # str_remove_all(fruits, "[aeiou]")
 
 
-#adr_dyn_12_17 <- adr_dyn %>% filter(year %in% c(2012,2017) & dyn_cum != 1)
+#adr_dyn_12_17 <- adr_dyn %>% filter(year %in% c(2012,2017) & dyn_cum_2 != 1)
 ```
 
 ## Assets

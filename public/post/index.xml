@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 11 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Constituency characteristics</title>
+      <link>/post/constituency_characteristics/</link>
+      <pubDate>Tue, 11 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/constituency_characteristics/</guid>
+      <description>AsherFrancescaAsherRegression Results - Dev AsherDependent variable:Dynast rulepc91_vd_power_supl-0.390*(0.206)el_con910.00001**(0.00000)p_sch_r910.216(0.</description>
+    </item>
     
     <item>
       <title>Graphs</title>
@@ -31,20 +40,11 @@
     
     <item>
       <title>Families</title>
-      <link>/post/families/</link>
-      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/families/</guid>
-      <description>DecadeProporion of families startedProportion of families with second member19700.580.0919800.160.1419900.190.2520000.060.2420100.010.27Table 1: Proportion of families started in each decadedecadeprop19700.</description>
-    </item>
-    
-    <item>
-      <title>Families cat 2</title>
       <link>/post/families-cat2/</link>
       <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/families-cat2/</guid>
-      <description>% filter(dyn_tot ==1 &amp;str_detect(level, &#34;LB&#34;) ) %% distinct(family_id) --% group_by(family_id) %% filter(year ==min(year) &amp; dyn_tot ==1) %% filter(election_type %!in% c(&#34;AE&#34;, &#34;GE&#34;)) --% select(decade, prop) %% kable(caption = &#34;Individual to family conversion of all families across decades&#34;, digits = 2) --% group_by(family_id) %% arrange(year) %% filter(fam_size_tot =2 &amp;min(decade)) %% distinct(family_id, .keep_all = TRUE) %% group_by(decade) %% summarise(count = n())# %% kable() --% select(decade, prop) --% group_by(family_id) %% arrange(year) %% filter(fam_size_cum= 2 &amp;min(decade)) %% distinct(family_id, .</description>
+      <description>Table 1: Average life spanSuccessLife spanDeclining22Rising35Regression Results - Success of dynastiesDependent variable:Risingcaste_uc4.908(225.</description>
     </item>
     
     <item>
@@ -57,7 +57,7 @@
     </item>
     
     <item>
-      <title>Models cat 1</title>
+      <title>Models</title>
       <link>/post/models/</link>
       <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
       
@@ -66,29 +66,11 @@
     </item>
     
     <item>
-      <title>Models cat 2</title>
-      <link>/post/models-cat2/</link>
-      <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/models-cat2/</guid>
-      <description>AE AllAE GE allAE 2012 -17GE 2009:19AE-GE (2009:19)AE AllRegression Results - AE AllDependent variable:DynastUpward LinkageDownward Linkage(1)(2)(3)caste_uc0.</description>
-    </item>
-    
-    <item>
       <title>Linkage Analysis</title>
-      <link>/post/linkage-analysis/</link>
+      <link>/post/linkages/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/linkage-analysis/</guid>
-      <description>SummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditureType of work v/s projectsType of work v/s costcost categoriesRaphaelVote dispersionSummaryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE130TRUE201AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE40946486976030927099946TRUE532434531257898334705213CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
-    </item>
-    
-    <item>
-      <title>Linkage Analysis cat 2</title>
-      <link>/post/linkages-cat2/</link>
-      <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/linkages-cat2/</guid>
+      <guid>/post/linkages/</guid>
       <description>SummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditureType of work v/s projectsType of work v/s costcost categoriesRaphaelVote dispersionSummaryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE179TRUE274AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE37408611862547925184182TRUE490084571166379331261156CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
     </item>
     
@@ -98,7 +80,7 @@
       <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/district-levelo/</guid>
-      <description>Dynast scorecriminalityDas guptaAlexanderIyerDynast scoredistrict namedynasty scoreETAWAH0.24MAINPURI0.23MORADABAD0.21LALITPUR0.21MATHURA0.20ETAH0.17baharaich0.15LUCKNOW0.</description>
+      <description>census dataDynast scorecriminalityDas guptaAlexanderIyerdistrict_namedyn_propETAWAH0.24MAINPURI0.23MORADABAD0.21LALITPUR0.21MATHURA0.20ETAH0.19AZAMGARH0.18HARDOI0.16baharaich0.</description>
     </item>
     
     <item>
@@ -107,8 +89,7 @@
       <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/adr-survey/</guid>
-      <description>All IndiaImageUPy
-All IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s identityIssueComposite Score - non-dynastComposite Score - dynastImportance - non-dynastImportance - dynastPerformance - non-dynastPerformance- dynastjob_training4.183.942.272.241.671.</description>
+      <description>All IndiaUPAll IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s identityIssueComposite Score - non-dynastComposite Score - dynastImportance - non-dynastImportance - dynastPerformance - non-dynastPerformance- dynastjob_training4.183.942.272.241.671.59road4.</description>
     </item>
     
     <item>
@@ -121,12 +102,12 @@ All IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s
     </item>
     
     <item>
-      <title>General Elections 2019</title>
-      <link>/post/development-francesca/</link>
+      <title>General Elections: 2019</title>
+      <link>/post/ge-2019/</link>
       <pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/development-francesca/</guid>
-      <description>GE 2019 summaryRegressions% filter(year %!in% c(1974)) --% mutate(contest_type_1 =case_when(position ==1 &amp;dyn_cum ==0 ~1, --% group_by( election_type,year,constituency_no) %% mutate(sum_cont_type = sum(contest_type_1)) %% mutate(contest_type =ifelse(sum_cont_type ==3, &#34;non-fam v/s non-fam&#34;,ifelse(sum_cont_type ==5, &#34;fam v/s non-fam&#34;, ifelse(sum_cont_type ==6, &#34;non-fam v/s fam&#34;, ifelse(sum_cont_type ==8, &#34;fam v/s fam&#34;, &#34;NA&#34;))))) --% group_by( year,constituency_no) %% summarise(sum = sum(contest_type)) %%group_by(sum) %% summarise(n()) --% filter(election_type ==&#34;AE&#34;) --% filter(election_type ==&#34;GE&#34;) --% select(State_Name, Constituency_No, Position,Poll_No, Turncoat) %% rename(turncoat_true = Turncoat) --% filter(Vote_Share_Percentage 5) --% filter(Vote_Share_Percentage 2) --% filter(Vote_Share_Percentage 10) --% filter(Vote_Share_Percentage 1) --% replace_na(&#34;</description>
+      <guid>/post/ge-2019/</guid>
+      <description>GE 2019 summaryRegressionsGE 2019 summarydynastVote_ShareMargin_N_candenopTurnoutIncumbentRecontestContests035.5319.1915.532.5369.050.220.372.13141.1222.0016.852.4866.420.310.</description>
     </item>
     
     <item>
@@ -135,7 +116,7 @@ All IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s
       <pubDate>Fri, 26 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/election-finance/</guid>
-      <description>Election finance wrt family typeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection finance wrt caste groupFundingExpenditureElection finance wrt family typeFundingTable 1: Election Funding - AveragesPolitician’s identityTotal fundCandidatePartyDonationsFamily1056686296719330432424393Non-family1227143395432455376373990ExpenditureTable 2: Election Expenditure - AveragesPolitician’s identityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFamily105318161761518259106031145132763479319352457Non-family10371858745848287898196134612791487173883156Election finance wrt to criminality(#tab:merging with funding data)Summary of the criminality variableCriminalityCountFALSE397TRUE130FundingTable 3: Election Funding - AveragesPolitician’s criminalityTotal fundCandidatePartyDonationsFALSE1226784376309453325396432TRUE1063013355725325604370548ExpenditureTable 4: Election Expenditure - AveragesPolitician’s criminalityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFALSE10488398181349759193425138196812997530581210TRUE102285591699467110117707132381710598057862322Election finance wrt caste groupFundingTable 5: Election Funding - AveragesPolitician’s caste groupTotal fundCandidatePartyDonationsDalit996139349231295145350293Muslim803914200528190539416303Non-Yadav OBC1092046452750284226355070Others856452285643327787243022Upper Caste1438744369884656068404725Yadav1248178490100317078442000ExpenditureTable 6: Election Expenditure - AveragesPolitician’s caste groupTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingDalit102905851080512869868021388417817153044108251Muslim9465417934446343283341156452421789333628458Non-Yadav OBC101646667297500424928581172386669066005105955Others89547910260443416210186893750615915210149403Upper Caste1081575110791457338112200141122993158934971460Yadav114962152431624456113364145728790587731157272</description>
+      <description>Election finance wrt family typeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection finance wrt caste groupFundingExpenditureElection finance wrt family typeFundingTable 1: Election Funding - AveragesPolitician’s identityTotal fundCandidatePartyDonationsFamily1071313306222328550431637Non-family1225033393884457800370970ExpenditureTable 2: Election Expenditure - AveragesPolitician’s identityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFamily106173361338525770108097143620777609258952561Non-family10345918789048034097521134908787867164683501Election finance wrt to criminality(#tab:merging with funding data)Summary of the criminality variableCriminalityCountFALSE397TRUE130FundingTable 3: Election Funding - AveragesPolitician’s criminalityTotal fundCandidatePartyDonationsFALSE1226784376309453325396432TRUE1063013355725325604370548ExpenditureTable 4: Election Expenditure - AveragesPolitician’s criminalityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFALSE10488398181349759193425138196812997530581210TRUE102285591699467110117707132381710598057862322Election finance wrt caste groupFundingTable 5: Election Funding - AveragesPolitician’s caste groupTotal fundCandidatePartyDonationsDalit996139349231295145350293Muslim803914200528190539416303Non-Yadav OBC1092046452750284226355070Others856452285643327787243022Upper Caste1438744369884656068404725Yadav1248178490100317078442000ExpenditureTable 6: Election Expenditure - AveragesPolitician’s caste groupTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingDalit102905851080512869868021388417817153044108251Muslim9465417934446343283341156452421789333628458Non-Yadav OBC101646667297500424928581172386669066005105955Others89547910260443416210186893750615915210149403Upper Caste1081575110791457338112200141122993158934971460Yadav114962152431624456113364145728790587731157272</description>
     </item>
     
     <item>
@@ -169,7 +150,7 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/pmgsy-analysis/</guid>
-      <description>PMGSY roadsSummary statsConstituency typeExperience categoriesCasteConstituency typeExperience categoriesCastePWD roadssummary statsFamily typeExperiencecastePMGSY roadsSummary statsTable 1: PMGSY across yearsLoksabha TermNumber of projectsLength coverd (Kms)Total sanctioned amount (Lakhs)200412037539256034200924269261354112Constituency typeTable 2: PMGSY summary stats wrt constituency typeConstituency TypeAverage number of projectsAverage length per projectAverage length over allFamily34.</description>
+      <description>PMGSY roadsSummary statsConstituency typeExperience categoriesCasteContractorsConstituency typeExperience categoriesCastePWD roadssummary statsFamily typeExperiencecastePMGSY roadsSummary statsTable 1: PMGSY across yearsLoksabha TermNumber of projectsLength coverd (Kms)Total sanctioned amount (Lakhs)200412037539256034200924269261354112Constituency typeTable 2: PMGSY summary stats wrt constituency typeConstituency TypeAverage number of projectsAverage length per projectAverage length over allFamily33.</description>
     </item>
     
     <item>
@@ -178,7 +159,7 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/mplads-analysis/</guid>
-      <description>MPLADSFamil v/s Non-familyDaysNumber of ProjectsExpenditureExperience categoriesType of work v/s projectsType of work v/s costcost categoriesMPLADSFamil v/s Non-familyTable 1: MPLADS prjects and spendingType of constiuencyAverage number of contractsAvergae expenditure per projectNon-family340347082Family408318774Table 2: MPLADS prjects and spendingYearType of constiuencyAverage number of contractsAvergae expenditure per project2004Family3352866562004Non-family3433062032009Family4793501872009Non-family336405681The difference in the mean of both project count and the expenditure is statistically significant.</description>
+      <description>MPLADSFamil v/s Non-familyDaysNumber of ProjectsExpenditureExperience categoriesType of work v/s projectsType of work v/s costcost categoriesMPLADSFamil v/s Non-familyTable 1: MPLADS prjects and spendingType of constiuencyAverage number of contractsAvergae expenditure per projectNon-family321349773Family432317017Table 2: MPLADS prjects and spendingYearType of constiuencyAverage number of contractsAvergae expenditure per project2004Family3312907962004Non-family3453046602009Family5213400582009Non-family285420557The difference in the mean of both project count and the expenditure is statistically significant.</description>
     </item>
     
     <item>
@@ -187,16 +168,16 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
       <pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/adr-analysis/</guid>
-      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePolitical expereincePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimePolitical expereinceFamilycaste v/s crime% mutate(crime_ser_d = if_else(serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --% mutate(crime_non_ser_d = if_else(non_serious_crime == 0,0,1)) --% group_by(dyn_cum,fam_exp_cum_cat,crime_non_ser_d) %% summarise(count = n()) %% group_by(dyn_cum,fam_exp_cum_cat) %% mutate(sum= sum(count)) %% ungroup() %% mutate(prop= count/sum) %% --PerfromanceAll electionsTable 1: Average performance of MPs in the Parliament(trimmed mean)EntityDebates partcipatedProprtion of the sessionsattendedQuestions askedNon-family34.</description>
+      <description>ADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsAsset growth over timeAssets v/s casteCrimePolitical expereincePerfromanceADR AnalysisAssetsFamily v/s non-familyExperience v/s assetsexp v/s caste v/s assetsAsset growth over timeGETotal assetsAsset growthMovable assetsImmovable assetsAETotal assetsAsset GrowthTotal AssetsMovable assetsImmovable assetsAssets v/s casteCrimePolitical expereinceFamilycaste v/s crimePerfromanceAll electionsTable 1: Average performance of MPs in the Parliament(trimmed mean)EntityDebates partcipatedProprtion of the sessionsattendedQuestions askedNon-family35.</description>
     </item>
     
     <item>
-      <title>Master file Analyis - cat 2</title>
-      <link>/post/master-file-analysis-cat2/</link>
+      <title>Master file Analyis</title>
+      <link>/post/master-file-analysis/</link>
       <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/master-file-analysis-cat2/</guid>
-      <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsLevelsLife spanElections wonretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levels% --% --% --% --% --% --% --% --% --% --% --AE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019.</description>
+      <guid>/post/master-file-analysis/</guid>
+      <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsLevelsLife spanElections wonretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levelsAE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 300.</description>
     </item>
     
   </channel>

@@ -33,7 +33,8 @@
 <li><a href="#summary-stats">Summary stats</a></li>
 <li><a href="#constituency-type">Constituency type</a></li>
 <li><a href="#experience-categories">Experience categories</a></li>
-<li><a href="#caste">Caste</a><ul>
+<li><a href="#caste">Caste</a></li>
+<li><a href="#contractors">Contractors</a><ul>
 <li><a href="#constituency-type-1">Constituency type</a></li>
 <li><a href="#experience-categories-1">Experience categories</a></li>
 <li><a href="#caste-1">Caste</a></li>
@@ -132,13 +133,13 @@ Average length over all
 Family
 </td>
 <td style="text-align:right;">
-34.1
+33.2
 </td>
 <td style="text-align:right;">
-4.1
+4
 </td>
 <td style="text-align:right;">
-139.2
+134.1
 </td>
 </tr>
 <tr>
@@ -146,36 +147,20 @@ Family
 Non-family
 </td>
 <td style="text-align:right;">
-34.8
+33.3
 </td>
 <td style="text-align:right;">
-4.9
+5
 </td>
 <td style="text-align:right;">
-171.8
+166.7
 </td>
 </tr>
 </tbody>
 </table>
-<!-- I think the expenditure/sanction everything is given by the contractors based on per km rate. I find that  `sanctioned cost`/km, `expenditure till date`/km and `maintenance cost`/km almost as same when compared along the lines type of constituencies -->
-<!-- ## Sanctioned v/s completed -->
-<!-- Couldn't find any significant difference in the `sanctioned kms of road` and the `completed kms of road`  among families and non-families -->
-<!-- ```{r sanctioned v/s completed} -->
-<!-- # dyn_pmgsy %>% group_by(dyn_cum) %>% summarise(mean_san = mean(`road length (kms)`), mean_com = mean(`road length completed till date`)) -->
-<!-- ``` -->
 </div>
 <div id="experience-categories" class="section level2">
 <h2>Experience categories</h2>
-<!-- ```{r} -->
-<!-- # dyn_pmgsy  %>% group_by( fam_exp_cum_cat) %>% summarise(mean_proj = mean(ac_proj_no), mean_cost = mean(sanc_cost_rup ), mean_rd_len = mean(`road length (kms)`)) %>%  -->
-<!-- #   ggplot(aes(factor(fam_exp_cum_cat,levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")),mean_proj))+ -->
-<!-- #   geom_bar(stat= "identity")#+ -->
-<!-- #   #facet_grid(~dyn_cum) -->
-<!-- # ggplot(dyn_pmgsy, aes(factor(fam_exp_cum_cat,levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")),ac_proj_no ))+ -->
-<!-- # geom_boxplot()+ -->
-<!-- # facet_grid(~factor(dyn_cum)) -->
-<!-- ``` -->
-<!--  Did not see any trends when I tested experience categories  within and without type of constituency against the variables sucha as `sanctioned cost`, `expenditure to the data` and `number of projects`. I tried bar plot and box plot, but bimodal distribution emerges. I have been seeing the same in most of other data sets I've been working on. -->
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-3">Table 3: </span>PMGSY road stats wrt to experience categories
@@ -379,26 +364,9 @@ Others
 </tr>
 </tbody>
 </table>
-<!-- `mean cost` and `mean length` of the roads are similar among all the caste except for the Yadav caste group which has a higher `mean cost` and `mean length` of the road. Tried all important variables within and without the constituency type, but no trends or significant difference. -->
-<p>##Contractors</p>
-<!-- ```{r} -->
-<!-- cont_count <- dyn_pmgsy %>% group_by(`contractor name`) %>% summarise(count = n()) %>% arrange(-count) -->
-<!-- #barplot(cont_count$count) -->
-<!-- dyn_pmgsy %>% group_by(dyn_cum, `contractor name`) %>% summarise(count_cont =n()) %>% group_by(dyn_cum) %>% summarise(n()) -->
-<!-- dyn_pmgsy <- dyn_pmgsy %>% group_by(constituency_no) %>% mutate(ac_cont_no = n_distinct(`contractor name`)) -->
-<!-- dyn_pmgsy_cont <- dyn_pmgsy %>% group_by(dyn_cum) %>% summarise(mean_cont=mean(ac_cont_no)) -->
-<!-- Entity <- c("Non-family", "Family") -->
-<!--  cbind(Entity,dyn_pmgsy_cont) %>% select(-dyn_cum) %>%  kable(caption = "PMGSY average number of contracters wrt constituency type", col.names = c ("Type of constituency", "Average number of contractors"),digits = 0)%>% kable_styling(bootstrap_options = "striped") -->
-<!--  #summary(pmgsy) -->
-<!-- #t.test(data= dyn_pmgsy, ac_cont_no ~dyn_cum) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- dyn_pmgsy %>% group_by(dyn_cum) %>% summarise(count = n(),uniq =n_distinct(`contractor name`), prop = uniq/count) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- dyn_pmgsy <- dyn_pmgsy %>% group_by(`contractor name`) %>% mutate(cont_cost = sum(sanctionedcostnew)) -->
-<!-- dyn_pmgsy  %>% group_by(dyn_cum) %>% summarise(mean(cont_cost)) -->
-<!-- ``` -->
+</div>
+<div id="contractors" class="section level2">
+<h2>Contractors</h2>
 <div id="constituency-type-1" class="section level3">
 <h3>Constituency type</h3>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
@@ -424,10 +392,10 @@ AAvergae amount sanctioned to a unique contractor (Lakhs)
 Family
 </td>
 <td style="text-align:right;">
-18
+17
 </td>
 <td style="text-align:right;">
-509
+523
 </td>
 </tr>
 <tr>
@@ -435,10 +403,10 @@ Family
 Non-family
 </td>
 <td style="text-align:right;">
-15
+16
 </td>
 <td style="text-align:right;">
-625
+613
 </td>
 </tr>
 </tbody>
@@ -695,13 +663,13 @@ Length over all
 Family
 </td>
 <td style="text-align:right;">
-411.4
+403.9
 </td>
 <td style="text-align:right;">
 1.7
 </td>
 <td style="text-align:right;">
-700.7
+696.7
 </td>
 </tr>
 <tr>
@@ -709,30 +677,23 @@ Family
 Non-family
 </td>
 <td style="text-align:right;">
-396.7
+398.1
 </td>
 <td style="text-align:right;">
 1.9
 </td>
 <td style="text-align:right;">
-744.3
+746.2
 </td>
 </tr>
 </tbody>
 </table>
-<!-- ```{r} -->
-<!-- dyn_pwd %>% group_by( department,dyn_cum) %>% summarise(mean(`road length`)) -->
-<!-- ``` -->
 </div>
 <div id="experience" class="section level2">
 <h2>Experience</h2>
-<!-- ```{r} -->
-<!-- dyn_pwd %>% group_by(dyn_cum,fam_exp_cum_cat)  %>% summarise(mean(`road length`)) -->
-<!-- ``` -->
-<!-- ### caste -->
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-12">Table 9: </span>Average number of projects and length of the road wrt experience category
+<span id="tab:unnamed-chunk-10">Table 9: </span>Average number of projects and length of the road wrt experience category
 </caption>
 <thead>
 <tr>
@@ -807,7 +768,7 @@ Length over all
 </table>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-13">Table 10: </span>Average number of projects and length of the road wrt experience category
+<span id="tab:unnamed-chunk-11">Table 10: </span>Average number of projects and length of the road wrt experience category
 </caption>
 <thead>
 <tr>
@@ -831,13 +792,27 @@ Length over all
 Family
 </td>
 <td style="text-align:left;">
+[0,1)
+</td>
+<td style="text-align:right;">
+300.0
+</td>
+<td style="text-align:right;">
+753.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Family
+</td>
+<td style="text-align:left;">
 [1,6)
 </td>
 <td style="text-align:right;">
-497.8
+486.4
 </td>
 <td style="text-align:right;">
-777.9
+767.8
 </td>
 </tr>
 <tr>
@@ -862,10 +837,10 @@ Family
 [11,21)
 </td>
 <td style="text-align:right;">
-402.5
+387.7
 </td>
 <td style="text-align:right;">
-697.1
+685.8
 </td>
 </tr>
 <tr>
@@ -876,10 +851,10 @@ Family
 [21,Inf]
 </td>
 <td style="text-align:right;">
-396.9
+395.8
 </td>
 <td style="text-align:right;">
-688.3
+687.1
 </td>
 </tr>
 <tr>
@@ -890,10 +865,10 @@ Non-family
 [0,1)
 </td>
 <td style="text-align:right;">
-406.1
+406.6
 </td>
 <td style="text-align:right;">
-769.7
+769.8
 </td>
 </tr>
 <tr>
@@ -904,10 +879,10 @@ Non-family
 [1,6)
 </td>
 <td style="text-align:right;">
-374.2
+374.3
 </td>
 <td style="text-align:right;">
-683.0
+683.4
 </td>
 </tr>
 <tr>
@@ -932,10 +907,10 @@ Non-family
 [11,21)
 </td>
 <td style="text-align:right;">
-372.9
+379.9
 </td>
 <td style="text-align:right;">
-716.4
+725.5
 </td>
 </tr>
 <tr>
@@ -946,10 +921,10 @@ Non-family
 [21,Inf]
 </td>
 <td style="text-align:right;">
-369.4
+366.8
 </td>
 <td style="text-align:right;">
-590.8
+573.4
 </td>
 </tr>
 </tbody>
@@ -959,7 +934,7 @@ Non-family
 <h2>caste</h2>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-14">Table 11: </span>PWD road stats wrt to caste groups
+<span id="tab:unnamed-chunk-12">Table 11: </span>PWD road stats wrt to caste groups
 </caption>
 <thead>
 <tr>
@@ -1043,32 +1018,6 @@ Muslim
 </tr>
 </tbody>
 </table>
-<!-- ```{r} -->
-<!-- dyn_pwd %>% group_by(caste_groups) %>% summarise(proj =n()/n_distinct(constituency_no), len = sum(`road length`)/n_distinct(constituency_no)) %>%  -->
-<!--   ggplot(aes(reorder(caste_groups, len), len)) + -->
-<!--   geom_bar(stat= "identity", color = "#9DBEBB", fill ="#468189" , width = .6)+ -->
-<!--   theme_minimal()+ -->
-<!--   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"))+ -->
-<!--    labs(title = "Average road length wrt caste group",  x = "", y = "Length \n (km)") + -->
-<!--   theme( -->
-<!--         plot.background = element_blank(), -->
-<!--         plot.title = element_text(family = "serif",hjust = 0.5, size = 20),  -->
-<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, -->
-<!--                                      margin = margin(t = 0, r = 0, b = 20, l = 0)), -->
-<!--         text = element_text(color = "gray20",family = "serif"), -->
-<!--         axis.text.x = element_text(  -->
-<!--                                    hjust = .5, vjust = 0), -->
-<!--         legend.title = element_blank(), -->
-<!--         legend.text = element_text(size = 15), -->
-<!--         axis.text = element_text(face = "italic", size = 10), -->
-<!--         axis.title.x = element_blank(),   -->
-<!--         axis.title.y = element_text(vjust = 1, size = 15), -->
-<!--         axis.ticks = element_blank(), -->
-<!--         panel.grid.major = element_line(color = "gray40", size = .3), -->
-<!--         panel.grid.minor = element_blank(), -->
-<!--         panel.grid.major.x = element_blank() -->
-<!--   )  -->
-<!-- ``` -->
 </div>
 </div>
 

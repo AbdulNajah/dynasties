@@ -1,5 +1,5 @@
 ---
-title: "Linkage Analysis cat 2"
+title: "Linkage Analysis"
 author: ""
 date: "2020-07-08"
 output:
@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: inline
 ---
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
-# Do not edit this code block/chunk
+
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
@@ -491,63 +491,22 @@ dyn_mplads_fam %>% group_by(level_log_cum,cost_cat) %>% summarise(count = n()) %
 # Vote dispersion
 
 
-
-
-
-
-
-
 ```{r}
- rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
+rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
 
-# dim(rafael)
-# 
-# names(rafael)
-# 
-#unique(rafael$year)
-# 
-# unique(rafael$position)
-# 
+
 rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent) %>% filter(year != 2007)
-# 
-# # summary(rafael_up)
- 
- #dyn_mplads <- merge(dyn_ge_w,mplads, by = c("year", "constituency_no"))
-# 
-dyn_rafael <- merge(dyn, rafael_up, by = c("year", "constituency_no", "position"), allow.cartesian = TRUE)
 
+
+dyn_rafael <- merge(dyn, rafael_up, by = c("year", "constituency_no", "position"), allow.cartesian = TRUE)
 dyn_rafael_fam <- dyn_rafael %>% filter(dyn_cum_2 ==1)
 
-#dyn_rafael_fam<- dyn_rafael_fam %>% mutate(level_log_ae= ifelse(level_12 %in% c("AE", "GE"), FALSE, TRUE))
-
-#dyn_mplads_fam %>% group_by(year, level_log) %>% summarise(n_distinct(constituency_no))
-
-
+# 
 dyn_rafael_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency_no)) %>% kable(caption = "Summary stat of families in 2012 & 2017 AE wrt linkage", col.names = c("Linkage", "Count")) %>% kable_styling(bootstrap_options = "striped")
 
 
 ```
 
-```{r}
-
-
-# raphael_12 <- fread("D:/cpr/up-dynasties/dyn_other_data/upvidhansabha2012-rafael.csv", stringsAsFactors = FALSE)
-# 
-# raphael_17 <- fread("D:/cpr/up-dynasties/dyn_other_data/upvidhansabha2017-rafael.csv", stringsAsFactors = FALSE)
-# 
-# 
-# summary(raphael_12)
-# rafael_up_17 <- rafael_up %>% filter(year == 2012)
-# 
-# 
-# 
-# dyn_ae_12_17 <- dyn_ae %>% filter(year %in% c(2012,2017))
-# 
-# 
-# 
-# 
-# dyn_ae_12_17 %>% filter (year == 2017 &incumbent == TRUE) %>% group_by(dyn_cum_2) %>% summarise(mean(margin_percentage))
-```
 
 
 
@@ -571,10 +530,6 @@ dyn_rafael_fam %>% filter(position==1 & partypercent <100&  partypercent >10) %>
 ```
 
 
-<!-- ```{r} -->
-<!-- ggplot(dyn_rafael %>% filter(position==1 & partypercent <100) , aes(dyn_cum_2_text, partypercent))+ -->
-<!--   geom_boxplot() -->
-<!-- ``` -->
 
 ```{r}
 ggplot(dyn_rafael_fam %>% filter(position==1) , aes(partypercent, color =level_log_cum))+

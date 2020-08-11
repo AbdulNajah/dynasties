@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: inline
 ---
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
-# Do not edit this code block/chunk
+
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
@@ -23,12 +23,59 @@ library(gridExtra)
 library(stargazer)
 library(ggpubr)
 `%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
 ```
 
 
 ```{r configuring files}
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+dyn_post_02 <- dyn %>% filter(year>2001)
 ```
+
+
+
+```{r district level dyn proportion}
+
+dyn_ae_w <- dyn %>% filter(election_type == "AE" & position ==1)
+
+
+
+#dyn_ae %>% group_by(district_name) %>% summarise(n_distinct(year))
+
+dyn_ae_w  <- dyn_ae_w %>% group_by(dist_cen_11) %>% mutate(n_el_dist = n(), n_el_w_dyn =length(year[dyn_cum_2 ==1])) %>% ungroup()
+
+dyn_ae_w_uniq <- dyn_ae_w %>% distinct(dist_cen_21, .keep_all =TRUE)
+
+dyn_ae_w_uniq$dyn_prop <- dyn_ae_w_uniq$n_el_w_dyn/dyn_ae_w_uniq$n_el_dist
+
+dyn_ae_w_uniq %>% arrange(-dyn_prop) %>% select(district_name, dyn_prop) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped")
+
+```
+
+
+## census data
+
+```{r}
+
+cen_71 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/devup01-06-20.csv")
+
+cen_11 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/all_ac_census_merged.csv")
+
+cen_11_up <- cen_11 %>% filter(State_Name == "UTTAR PRADESH")
+
+
+
+
+
+```
+
+
+
+
+
+
 
 # Dynast score
 
@@ -61,48 +108,7 @@ dyn_ae_80_07 <- dyn_ae_07 %>% filter(election_nos ==8) %>% group_by(constituency
 ```
 
 
-```{r configuring files 32}
-# dyn_ae_80_07  <- dyn_ae_80_07  %>% group_by(district_name) %>% mutate(dist_el_n = n())  
-# dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by(district_name) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/dist_el_n) 
-# 
-# dyn_ae_80_07 %>% select(district_name, dyn_eln_prop) %>%distinct(district_name, .keep_all = TRUE)%>% arrange(-dyn_eln_prop) %>% kable(col.names = c("district name", "dynasty score"),digits = 2) %>% kable_styling(bootstrap_options = "striped")
-#
-```
 
-
-```{r}
-
-
-# dyn_ae_80_07  <- dyn_ae_80_07  %>% group_by(year) %>% mutate(year_el_n = n())  
-# dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by(year) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/year_el_n) 
-# 
-# dyn_ae_80_07 %>% select(year, dyn_eln_prop) %>%distinct(year, .keep_all = TRUE)%>% arrange(-dyn_eln_prop) %>% 
-#   ggplot(aes(factor(year), dyn_eln_prop, group = 1))+
-#   geom_point(color = "#9DBEBB")+
-#   geom_line(color = "#468189")+
-#   theme_minimal()+
-#   labs(title = "Dynasticism in districts  over years ", x = "Year ", y = "Proportion" )+
-#   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
-#         plot.background = element_blank(),
-#         plot.title = element_text(family = "serif",hjust = 0.5, size = 20),
-#         plot.subtitle = element_text(hjust = 0.5, size = 15,
-#                                      ),
-#         text = element_text(color = "gray20", family = "serif"),
-#         axis.text.x = element_text(
-#                                    hjust = .5, vjust = 0),
-#         legend.title = element_blank(),
-#         legend.text = element_text(size = 15),
-#         axis.text = element_text(face = "italic", size = 10),
-#         axis.title.x = element_text(vjust = -.5,hjust = .5, size = 14,
-#                                   margin = unit(c(3, 0, 0, 0), "mm")),
-#         axis.title.y = element_text(vjust = -.5,hjust = .5, size = 14,
-#                                   margin = unit(c(0, 3, 0, 0), "mm")),
-#         axis.ticks = element_blank(),
-#         )
-  
-
-
-```
 
 ```{r for all years/ all districts}
 
@@ -146,19 +152,7 @@ dyn_ae %>% select(year, dyn_eln_prop) %>%distinct(year, .keep_all = TRUE)%>% arr
           panel.grid = element_blank(),
           panel.grid.major.y = element_line(color = "gray"),
           )
-   # theme(panel.border = element_blank(),
-   #      panel.grid = element_blank(),
-   #      panel.grid.major.y = element_line(color = "gray"),
-   #      text = element_text(color = "gray20"),
-   #      axis.title.x = element_text(face="italic"),
-   #      axis.title.y = element_text(face="italic"),
-   #      legend.position = "top",
-   #      legend.direction = "horizontal",
-   #      legend.box = "horizontal",
-   #      legend.text = element_text(size = 12),
-   #      plot.caption = element_text(hjust=0),
-   #      plot.title = element_text(size = 16, face = "bold"))
-
+   
 
 ```
 
@@ -266,15 +260,6 @@ dyn_ae_adr <- merge(dyn_ae_12_17, adr_ae, by = c("constituency_no", "position", 
 
 dyn_ae_adr$serious_crime_log <- ifelse(dyn_ae_adr$serious_crime !=0, TRUE, FALSE)
 
-# dyn_ae_adr %>% group_by(serious_crime_log) %>% summarise(mean(dyn_eln_prop))
-# 
-# 
-# 
-# ggplot(dyn_ae_adr, aes(serious_crime_log, dyn_eln_prop))+
-#   geom_point()
-
-#dyn_ae_adr %>% select(serious_crime, dyn_eln_prop)
-
 
 ```
 
@@ -288,10 +273,6 @@ dyn_ae_adr$serious_crime_log <- ifelse(dyn_ae_adr$serious_crime !=0, TRUE, FALSE
 dyn_ae_80_07  <- dyn_ae_80_07  %>% group_by(district_name) %>% mutate(dist_el_n = n())
 dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by(district_name) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/dist_el_n)
 
-# dyn_ae_80_07 %>% select(district_name, dyn_eln_prop) %>%distinct(district_name, .keep_all = TRUE)%>% arrange(-dyn_eln_prop) %>% kable(col.names = c("district name", "dynasty score"),digits = 2) %>% kable_styling(bootstrap_options = "striped")
-#
-# 
-# dyn_ae_80_07 %>% filter(term_duration_tot>48 & position ==1 ) %>% select(year, constituency_name, constituency_no, term_duration_tot)
 # 
 dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by( constituency_name) %>% mutate(term_duration_dyn = sum(term_duration[dyn_cum ==1]), prop_dyn_term =term_duration_dyn /term_duration_tot ) 
 
@@ -299,9 +280,6 @@ dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by( constituency_name) %>% mutate(term_du
 
 dyn_dg <- merge(dyn_ae_80_07, dg, by.x = c("year", "constituency_no"), by.y = c("year_x", "AC_no")  )
 
-# dyn_dg %>% group_by(District_1961_x,dyn_cum) %>% summarise(dyn_el_n = n())  %>% group_by(District_1961_x) %>% mutate(dist_el_tot=sum(dyn_el_n ), prop = dyn_el_n/dist_el_tot) %>% filter(dyn_cum==1) %>% select(District_1961_x, prop) %>% ggplot(aes(prop))+
-#   geom_density()+
-#   theme_minimal()
 
 
 

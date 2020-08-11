@@ -1,0 +1,700 @@
+---
+title: "General Elections: 2019"
+author: ""
+date: "2020-06-27"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#ge-2019-summary">GE 2019 summary</a></li>
+<li><a href="#regressions">Regressions</a></li>
+</ul>
+</div>
+
+<div id="ge-2019-summary" class="section level1">
+<h1>GE 2019 summary</h1>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+dynast
+</th>
+<th style="text-align:right;">
+Vote_Share
+</th>
+<th style="text-align:right;">
+Margin_
+</th>
+<th style="text-align:right;">
+N_cand
+</th>
+<th style="text-align:right;">
+enop
+</th>
+<th style="text-align:right;">
+Turnout
+</th>
+<th style="text-align:right;">
+Incumbent
+</th>
+<th style="text-align:right;">
+Recontest
+</th>
+<th style="text-align:right;">
+Contests
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+35.53
+</td>
+<td style="text-align:right;">
+19.19
+</td>
+<td style="text-align:right;">
+15.53
+</td>
+<td style="text-align:right;">
+2.53
+</td>
+<td style="text-align:right;">
+69.05
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+<td style="text-align:right;">
+2.13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+41.12
+</td>
+<td style="text-align:right;">
+22.00
+</td>
+<td style="text-align:right;">
+16.85
+</td>
+<td style="text-align:right;">
+2.48
+</td>
+<td style="text-align:right;">
+66.42
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+<td style="text-align:right;">
+2.46
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+No_terms
+</th>
+<th style="text-align:right;">
+Turncoat
+</th>
+<th style="text-align:right;">
+Assets
+</th>
+<th style="text-align:right;">
+criminal_cases
+</th>
+<th style="text-align:right;">
+criminal_cases_no
+</th>
+<th style="text-align:right;">
+age
+</th>
+<th style="text-align:right;">
+bjp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.98
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+116085202
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+<td style="text-align:right;">
+2.04
+</td>
+<td style="text-align:right;">
+55.09
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.44
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+342617723
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+<td style="text-align:right;">
+1.50
+</td>
+<td style="text-align:right;">
+51.82
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+</tbody>
+</table>
+<!-- # Vote share linear model -->
+<!-- # Winner probit model -->
+<!-- # Turnout linear model -->
+</div>
+<div id="regressions" class="section level1">
+<h1>Regressions</h1>
+<table style="text-align:center">
+<caption>
+<strong>Regression Results</strong>
+</caption>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="3">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Vote share percentage
+</td>
+<td>
+Winner
+</td>
+<td>
+Turnout percentage
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>OLS</em>
+</td>
+<td>
+<em>probit</em>
+</td>
+<td>
+<em>OLS</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+<td>
+(3)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+incumbent
+</td>
+<td>
+3.844<sup>***</sup>
+</td>
+<td>
+-0.138
+</td>
+<td>
+-0.626
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.076)
+</td>
+<td>
+(0.118)
+</td>
+<td>
+(0.847)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+turncoat
+</td>
+<td>
+-4.214<sup>**</sup>
+</td>
+<td>
+-1.027<sup>***</sup>
+</td>
+<td>
+-0.835
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.986)
+</td>
+<td>
+(0.263)
+</td>
+<td>
+(1.569)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+casteUC+IC
+</td>
+<td>
+1.790<sup>**</sup>
+</td>
+<td>
+0.072
+</td>
+<td>
+0.265
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.774)
+</td>
+<td>
+(0.087)
+</td>
+<td>
+(0.684)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sexM
+</td>
+<td>
+0.577
+</td>
+<td>
+-0.099
+</td>
+<td>
+-1.045
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.120)
+</td>
+<td>
+(0.123)
+</td>
+<td>
+(0.882)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+terms
+</td>
+<td>
+3.428<sup>***</sup>
+</td>
+<td>
+0.594<sup>***</sup>
+</td>
+<td>
+0.219
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.339)
+</td>
+<td>
+(0.047)
+</td>
+<td>
+(0.267)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+dynast
+</td>
+<td>
+3.636<sup>***</sup>
+</td>
+<td>
+-0.154
+</td>
+<td>
+-1.698<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.043)
+</td>
+<td>
+(0.118)
+</td>
+<td>
+(0.821)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+assets
+</td>
+<td>
+0.000<sup>**</sup>
+</td>
+<td>
+0.000<sup>**</sup>
+</td>
+<td>
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.000)
+</td>
+<td>
+(0.000)
+</td>
+<td>
+(0.000)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+serious_case
+</td>
+<td>
+-1.160
+</td>
+<td>
+-0.238<sup>**</sup>
+</td>
+<td>
+0.121
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.933)
+</td>
+<td>
+(0.109)
+</td>
+<td>
+(0.737)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+educationHigher
+</td>
+<td>
+-0.604
+</td>
+<td>
+-0.071
+</td>
+<td>
+0.687
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.863)
+</td>
+<td>
+(0.098)
+</td>
+<td>
+(0.679)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age
+</td>
+<td>
+-0.027
+</td>
+<td>
+-0.022<sup>***</sup>
+</td>
+<td>
+-0.049<sup>*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.035)
+</td>
+<td>
+(0.004)
+</td>
+<td>
+(0.027)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+enop
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-0.054
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.695)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+reservationSC/ST
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+2.740<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.765)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+dynast:serious_case
+</td>
+<td>
+0.514
+</td>
+<td>
+0.408<sup>**</sup>
+</td>
+<td>
+-4.302<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.777)
+</td>
+<td>
+(0.200)
+</td>
+<td>
+(1.398)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+28.504<sup>***</sup>
+</td>
+<td>
+0.047
+</td>
+<td>
+71.732<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(2.194)
+</td>
+<td>
+(0.244)
+</td>
+<td>
+(2.529)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+1,348
+</td>
+<td>
+1,348
+</td>
+<td>
+1,348
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.363
+</td>
+<td>
+</td>
+<td>
+0.041
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.357
+</td>
+<td>
+</td>
+<td>
+0.031
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+</td>
+<td>
+1,207.633
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="3" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+</div>

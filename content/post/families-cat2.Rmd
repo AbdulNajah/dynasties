@@ -1,5 +1,5 @@
 ---
-title: "Families cat 2"
+title: "Families"
 author: ""
 date: "2020-07-21"
 output:
@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: inline
 ---
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
-# Do not edit this code block/chunk
+
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
 
 ##fig.width = 16/2, fig.height = 9/2
@@ -157,55 +157,7 @@ dyn_ae_ge_fam <- dyn_ae_ge %>% filter(dyn_tot_2 ==1 )
 ```
 
 
-```{r}
 
-# dyn_ae_ge_fam %>% filter(position ==1) %>%  group_by(family_id, decade) %>% summarise(count = n()) %>% spread(decade, count) 
-# dyn_ae_ge_fam <- dyn_ae_ge_fam %>% group_by(family_id) %>% mutate(max_decade = max(decade)[position==1])
-# 
-# data.frame(table(dyn_ae_ge_fam_uniq$max_decade)) %>% filter(Var1 != 2010) %>%  kable(caption = "Families decline by decade",digits = 2, col.names = c("Decade", "Count")) %>% kable_styling(bootstrap_options = "striped") 
-# 
-# prop.table(table(dyn_ae_ge_fam_uniq$max_year)) %>% kable(digits = 2)
-# 
-# dyn_ae_ge_fam_uniq <-  dyn_ae_ge_fam%>% distinct(family_id, .keep_all = TRUE) #%>%group_by(decade) %>% summarise(n())
-
-```
-
-<!-- ```{r} -->
-<!-- #dyn_ae_ge %>%  filter(dyn_tot ==1 &str_detect(level, "LB") ) %>% distinct(family_id) -->
-
-<!-- # dyn_ae_ge %>% group_by(family_id) %>% filter(year ==min(year) & dyn_tot ==1) %>% filter(election_type %!in% c("AE", "GE")) -->
-
-
-
-<!-- # fam_2 %>% select(decade, prop) %>% kable(caption = "Individual to family conversion of all families across decades", digits = 2) -->
-
-
-
-<!-- fam_1 <- dyn_ae_ge_fam %>% group_by(family_id) %>% arrange(year) %>%  filter(fam_size_tot >=2 &min(decade)) %>% distinct(family_id, .keep_all = TRUE) %>% group_by(decade) %>% summarise(count = n())# %>% kable() -->
-
-
-<!-- fam_1$sum <- sum(fam_1$count) -->
-
-<!-- fam_1$prop <- fam_1$count/fam_1$sum -->
-
-
-
-<!-- fam_1 <- fam_1 %>% select(decade, prop) -->
-
-<!-- fam_2 <-  dyn_ae_ge_fam %>% group_by(family_id) %>% arrange(year) %>%  filter(fam_size_cum>= 2 &min(decade)) %>% distinct(family_id, .keep_all = TRUE) %>% group_by(decade) %>% summarise(count = n()) -->
-
-<!-- fam_2$sum <- sum(fam_2$count) -->
-
-<!-- fam_2$prop <- fam_2$count/fam_2$sum -->
-
-<!-- fam_2 <- fam_2 %>% select( prop)  -->
-
-<!-- cbind(fam_1, fam_2) %>% kable(col.names = c("Decade", "Proporion of families started", "Proportion of families with second member"), digits = 2) %>% kable_styling(bootstrap_options = "striped") -->
-
-<!-- fam_1 %>% select(decade, prop) %>% kable(caption = "Proportion of families started in each decade ", digits = 2) -->
-
-
-<!-- ``` -->
 
 ```{r}
 fam_pre02 <-  dyn_ae_ge_fam %>% group_by(family_id) %>% filter(dyn_cum_2 ==1 & year<=2007) %>% distinct(family_id)

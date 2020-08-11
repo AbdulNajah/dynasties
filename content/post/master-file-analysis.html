@@ -1,5 +1,5 @@
 ---
-title: 'Master file Analyis - cat 2'
+title: 'Master file Analyis'
 author: |
   | Rahul Verma (Fellow, CPR)
   |
@@ -43,26 +43,6 @@ editor_options:
 
 <div id="analyis-at-different-levels" class="section level1">
 <h1>Analyis at different levels</h1>
-<!-- ```{r ae -ge cumulative experience} -->
-<!-- ###experience -->
-<!-- dyn_ae_ge <- dyn_ae_ge %>% -->
-<!--   group_by(family_id) %>% -->
-<!--   mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>% -->
-<!--   ungroup() -->
-<!-- # dyn_ae_ge_uniq %>% -->
-<!-- #   select(candidate_name, family_id, pat_name, fam_exp_tot) -->
-<!-- #   arrange(desc(fam_exp_tot)) %>% -->
-<!-- ##cumsum for the families -->
-<!-- year_group <- dyn_ae_ge %>% -->
-<!--   group_by(family_id, year) %>% -->
-<!--   summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>% -->
-<!--   mutate(cum_exp = cumsum(year_sum)) %>% -->
-<!--   mutate(fam_exp_cum = cum_exp - year_sum) %>% -->
-<!--   select(family_id,year,cum_exp, fam_exp_cum, year_sum) -->
-<!-- year_group <- year_group %>% -->
-<!--   select(family_id, year, fam_exp_cum) -->
-<!-- dyn_ae_ge <- merge(dyn_ae_ge, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE) -->
-<!-- ``` -->
 <div id="ae---ge" class="section level2">
 <h2>AE - GE</h2>
 <p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 300. It has to be noted that 93% of this winners are just patriarchs.</p>
@@ -598,15 +578,15 @@ GE
 </div>
 <div id="life-span" class="section level2">
 <h2>Life span</h2>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="elections-won" class="section level2">
 <h2>Elections won</h2>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="/post/master-file-analysis-cat2_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 <div id="retention" class="section level3">
 <h3>retention</h3>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
 </div>
 <div id="ae-ge-election-contest" class="section level3">
 <h3>AE GE election contest</h3>
@@ -1268,17 +1248,17 @@ NA
 </tr>
 </tbody>
 </table>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
 </div>
 <div id="land-distribution" class="section level3">
 <h3>Land distribution</h3>
 <div id="families" class="section level4">
 <h4>Families</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
 </div>
 <div id="political-experience" class="section level4">
 <h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
 </div>
 <div id="caste" class="section level4">
 <h4>Caste</h4>
@@ -1288,11 +1268,11 @@ NA
 <h3>Industries: Education</h3>
 <div id="families-1" class="section level4">
 <h4>Families</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
 </div>
 <div id="political-experience-1" class="section level4">
 <h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
 </div>
 <div id="caste-1" class="section level4">
 <h4>caste</h4>
@@ -1398,25 +1378,25 @@ rent-thick
 </tr>
 </tbody>
 </table>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div id="families-2" class="section level4">
 <h4>Families</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
 </div>
 <div id="political-experience-2" class="section level4">
 <h4>Political experience</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="672" /></p>
 </div>
 <div id="caste-2" class="section level3">
 <h3>Caste</h3>
 <div id="political-experience-3" class="section level4">
 <h4>Political experience</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="672" />
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="672" />
 <!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
 </div>
 <div id="family" class="section level4">
 <h4>Family</h4>
-<p><img src="/post/master-file-analysis-cat2_files/figure-html/ae%20ge%20families%20caste-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20families%20caste-1.png" width="672" /></p>
 </div>
 </div>
 <div id="experience" class="section level3">
@@ -1528,7 +1508,6 @@ Families
 </tr>
 </tbody>
 </table>
-<p>C</p>
 </div>
 </div>
 </div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<title>Master file Analyis cat 1 | Political families of Uttar Pradesh</title>
+<title>Master file Analyis | Political families of Uttar Pradesh</title>
 <meta charset="utf-8">
 <meta name="generator" content="Hugo 0.72.0" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,7 @@
 
 <article>
   <header>
-    <h1>Master file Analyis cat 1</h1>
+    <h1>Master file Analyis</h1>
     <time datetime="2020-06-10T00:00:00Z">June 10, 2020</time>
   </header>
   
@@ -33,6 +33,10 @@
 <li><a href="#ae---ge">AE - GE</a><ul>
 <li><a href="#assembly-elections">Assembly Elections</a></li>
 <li><a href="#general-elections">General Elections</a></li>
+</ul></li>
+<li><a href="#levels">Levels</a></li>
+<li><a href="#life-span">Life span</a></li>
+<li><a href="#elections-won">Elections won</a><ul>
 <li><a href="#retention">retention</a></li>
 <li><a href="#ae-ge-election-contest">AE GE election contest</a></li>
 <li><a href="#land-distribution">Land distribution</a></li>
@@ -49,30 +53,10 @@
 
 <div id="analyis-at-different-levels" class="section level1">
 <h1>Analyis at different levels</h1>
-<!-- ```{r ae -ge cumulative experience} -->
-<!-- ###experience -->
-<!-- dyn_ae_ge <- dyn_ae_ge %>% -->
-<!--   group_by(family_id) %>% -->
-<!--   mutate(fam_exp_tot = sum(term_duration[year< 2017], na.rm = TRUE)) %>% -->
-<!--   ungroup() -->
-<!-- # dyn_ae_ge_uniq %>% -->
-<!-- #   select(candidate_name, family_id, pat_name, fam_exp_tot) -->
-<!-- #   arrange(desc(fam_exp_tot)) %>% -->
-<!-- ##cumsum for the families -->
-<!-- year_group <- dyn_ae_ge %>% -->
-<!--   group_by(family_id, year) %>% -->
-<!--   summarise(year_sum=sum(term_duration[year < 2017], na.rm = TRUE)) %>% -->
-<!--   mutate(cum_exp = cumsum(year_sum)) %>% -->
-<!--   mutate(fam_exp_cum = cum_exp - year_sum) %>% -->
-<!--   select(family_id,year,cum_exp, fam_exp_cum, year_sum) -->
-<!-- year_group <- year_group %>% -->
-<!--   select(family_id, year, fam_exp_cum) -->
-<!-- dyn_ae_ge <- merge(dyn_ae_ge, year_group, by = c("family_id", "year"),all.x = TRUE, allow.cartesian = TRUE) -->
-<!-- ``` -->
 <div id="ae---ge" class="section level2">
 <h2>AE - GE</h2>
-<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 209. It has to be noted that 93% of this winners are just patriarchs.</p>
-<p>In this universe of families 1631 winners and runner-ups are part of some family and 903 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 300. It has to be noted that 93% of this winners are just patriarchs.</p>
+<p>In this universe of families 2118 winners and runner-ups are part of some family and 1262 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
 <div id="assembly-elections" class="section level3">
 <h3>Assembly Elections</h3>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
@@ -541,6 +525,75 @@ n_individuals
 </tbody>
 </table>
 </div>
+</div>
+<div id="levels" class="section level2">
+<h2>Levels</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 2: </span>Linkages of families(Category 2)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+level
+</th>
+<th style="text-align:right;">
+count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AE
+</td>
+<td style="text-align:right;">
+154
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE-AE
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AE-LB
+</td>
+<td style="text-align:right;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE-AE-LB
+</td>
+<td style="text-align:right;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="life-span" class="section level2">
+<h2>Life span</h2>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="elections-won" class="section level2">
+<h2>Elections won</h2>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 <div id="retention" class="section level3">
 <h3>retention</h3>
 <p><img src="/post/master-file-analysis_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
@@ -573,16 +626,16 @@ non-fam v/s non-fam
 1977
 </td>
 <td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-471
+9
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+465
 </td>
 </tr>
 <tr>
@@ -596,10 +649,10 @@ NA
 15
 </td>
 <td style="text-align:right;">
-7
+8
 </td>
 <td style="text-align:right;">
-460
+459
 </td>
 </tr>
 <tr>
@@ -607,10 +660,10 @@ NA
 1984
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 <td style="text-align:right;">
-6
+5
 </td>
 <td style="text-align:right;">
 1
@@ -630,10 +683,10 @@ NA
 11
 </td>
 <td style="text-align:right;">
-6
+13
 </td>
 <td style="text-align:right;">
-385
+378
 </td>
 </tr>
 <tr>
@@ -644,13 +697,13 @@ NA
 2
 </td>
 <td style="text-align:right;">
-26
+28
 </td>
 <td style="text-align:right;">
-14
+21
 </td>
 <td style="text-align:right;">
-440
+431
 </td>
 </tr>
 <tr>
@@ -661,13 +714,13 @@ NA
 1
 </td>
 <td style="text-align:right;">
-28
+29
 </td>
 <td style="text-align:right;">
-14
+23
 </td>
 <td style="text-align:right;">
-432
+422
 </td>
 </tr>
 <tr>
@@ -678,13 +731,13 @@ NA
 1
 </td>
 <td style="text-align:right;">
-24
+26
 </td>
 <td style="text-align:right;">
-6
+16
 </td>
 <td style="text-align:right;">
-369
+357
 </td>
 </tr>
 <tr>
@@ -692,16 +745,16 @@ NA
 1996
 </td>
 <td style="text-align:right;">
-5
+6
 </td>
 <td style="text-align:right;">
-47
+49
 </td>
 <td style="text-align:right;">
-16
+26
 </td>
 <td style="text-align:right;">
-413
+400
 </td>
 </tr>
 <tr>
@@ -709,7 +762,7 @@ NA
 1998
 </td>
 <td style="text-align:right;">
-4
+5
 </td>
 <td style="text-align:right;">
 8
@@ -718,7 +771,7 @@ NA
 9
 </td>
 <td style="text-align:right;">
-58
+57
 </td>
 </tr>
 <tr>
@@ -726,16 +779,16 @@ NA
 1999
 </td>
 <td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
 5
 </td>
 <td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-56
+53
 </td>
 </tr>
 <tr>
@@ -743,16 +796,16 @@ NA
 2002
 </td>
 <td style="text-align:right;">
-8
+14
 </td>
 <td style="text-align:right;">
-42
+41
 </td>
 <td style="text-align:right;">
-11
+26
 </td>
 <td style="text-align:right;">
-342
+322
 </td>
 </tr>
 <tr>
@@ -760,81 +813,13 @@ NA
 2004
 </td>
 <td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
 6
-</td>
-<td style="text-align:right;">
-49
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2007
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-52
-</td>
-<td style="text-align:right;">
-29
-</td>
-<td style="text-align:right;">
-317
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2009
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-43
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2012
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-70
 </td>
 <td style="text-align:right;">
 19
 </td>
 <td style="text-align:right;">
-307
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2014
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-12
+7
 </td>
 <td style="text-align:right;">
 47
@@ -842,19 +827,87 @@ NA
 </tr>
 <tr>
 <td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+293
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+46
+</td>
+<td style="text-align:right;">
+274
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+38
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
 2017
 </td>
 <td style="text-align:right;">
-8
+12
 </td>
 <td style="text-align:right;">
-61
+64
 </td>
 <td style="text-align:right;">
-37
+76
 </td>
 <td style="text-align:right;">
-297
+251
 </td>
 </tr>
 <tr>
@@ -865,13 +918,13 @@ NA
 3
 </td>
 <td style="text-align:right;">
-20
+23
 </td>
 <td style="text-align:right;">
-13
+16
 </td>
 <td style="text-align:right;">
-44
+38
 </td>
 </tr>
 </tbody>
@@ -902,16 +955,16 @@ non-fam v/s non-fam
 1977
 </td>
 <td style="text-align:right;">
-NA
+0.00
 </td>
 <td style="text-align:right;">
 0.02
 </td>
 <td style="text-align:right;">
-0.00
+0.01
 </td>
 <td style="text-align:right;">
-0.98
+0.96
 </td>
 </tr>
 <tr>
@@ -925,7 +978,7 @@ NA
 0.03
 </td>
 <td style="text-align:right;">
-0.01
+0.02
 </td>
 <td style="text-align:right;">
 0.95
@@ -936,10 +989,10 @@ NA
 1984
 </td>
 <td style="text-align:right;">
-NA
+0.01
 </td>
 <td style="text-align:right;">
-0.08
+0.06
 </td>
 <td style="text-align:right;">
 0.01
@@ -959,10 +1012,10 @@ NA
 0.03
 </td>
 <td style="text-align:right;">
-0.01
+0.03
 </td>
 <td style="text-align:right;">
-0.96
+0.94
 </td>
 </tr>
 <tr>
@@ -973,13 +1026,13 @@ NA
 0.00
 </td>
 <td style="text-align:right;">
-0.05
+0.06
 </td>
 <td style="text-align:right;">
-0.03
+0.04
 </td>
 <td style="text-align:right;">
-0.91
+0.89
 </td>
 </tr>
 <tr>
@@ -993,10 +1046,10 @@ NA
 0.06
 </td>
 <td style="text-align:right;">
-0.03
+0.05
 </td>
 <td style="text-align:right;">
-0.91
+0.89
 </td>
 </tr>
 <tr>
@@ -1010,10 +1063,10 @@ NA
 0.06
 </td>
 <td style="text-align:right;">
-0.01
+0.04
 </td>
 <td style="text-align:right;">
-0.92
+0.89
 </td>
 </tr>
 <tr>
@@ -1027,10 +1080,10 @@ NA
 0.10
 </td>
 <td style="text-align:right;">
-0.03
+0.05
 </td>
 <td style="text-align:right;">
-0.86
+0.83
 </td>
 </tr>
 <tr>
@@ -1038,7 +1091,7 @@ NA
 1998
 </td>
 <td style="text-align:right;">
-0.05
+0.06
 </td>
 <td style="text-align:right;">
 0.10
@@ -1047,7 +1100,7 @@ NA
 0.11
 </td>
 <td style="text-align:right;">
-0.73
+0.72
 </td>
 </tr>
 <tr>
@@ -1055,16 +1108,16 @@ NA
 1999
 </td>
 <td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
 0.06
 </td>
 <td style="text-align:right;">
-0.18
-</td>
-<td style="text-align:right;">
-0.05
-</td>
-<td style="text-align:right;">
-0.71
+0.67
 </td>
 </tr>
 <tr>
@@ -1072,16 +1125,16 @@ NA
 2002
 </td>
 <td style="text-align:right;">
-0.02
+0.03
 </td>
 <td style="text-align:right;">
 0.10
 </td>
 <td style="text-align:right;">
-0.03
+0.06
 </td>
 <td style="text-align:right;">
-0.85
+0.80
 </td>
 </tr>
 <tr>
@@ -1089,81 +1142,13 @@ NA
 2004
 </td>
 <td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
-0.27
-</td>
-<td style="text-align:right;">
 0.08
 </td>
 <td style="text-align:right;">
-0.62
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2007
+0.24
 </td>
 <td style="text-align:right;">
-0.01
-</td>
-<td style="text-align:right;">
-0.13
-</td>
-<td style="text-align:right;">
-0.07
-</td>
-<td style="text-align:right;">
-0.79
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2009
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
-0.31
-</td>
-<td style="text-align:right;">
-0.11
-</td>
-<td style="text-align:right;">
-0.54
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2012
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
-0.17
-</td>
-<td style="text-align:right;">
-0.05
-</td>
-<td style="text-align:right;">
-0.76
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2014
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
-0.22
-</td>
-<td style="text-align:right;">
-0.15
+0.09
 </td>
 <td style="text-align:right;">
 0.59
@@ -1171,19 +1156,87 @@ NA
 </tr>
 <tr>
 <td style="text-align:right;">
-2017
+2007
 </td>
 <td style="text-align:right;">
 0.02
 </td>
 <td style="text-align:right;">
+0.12
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+<td style="text-align:right;">
+0.12
+</td>
+<td style="text-align:right;">
+0.49
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
 0.15
 </td>
 <td style="text-align:right;">
-0.09
+0.11
 </td>
 <td style="text-align:right;">
-0.74
+0.68
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.62
 </td>
 </tr>
 <tr>
@@ -1194,13 +1247,13 @@ NA
 0.04
 </td>
 <td style="text-align:right;">
-0.25
+0.29
 </td>
 <td style="text-align:right;">
-0.16
+0.20
 </td>
 <td style="text-align:right;">
-0.55
+0.48
 </td>
 </tr>
 </tbody>
@@ -1243,7 +1296,7 @@ NA
 <h2>Industries</h2>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-3">Table 2: </span>Industry ownership
+<span id="tab:unnamed-chunk-7">Table 3: </span>Industry ownership
 </caption>
 <thead>
 <tr>
@@ -1261,7 +1314,7 @@ Average number of ownersip
 Family
 </td>
 <td style="text-align:right;">
-1.75
+1.65
 </td>
 </tr>
 <tr>
@@ -1269,7 +1322,7 @@ Family
 Non-family
 </td>
 <td style="text-align:right;">
-0.69
+0.67
 </td>
 </tr>
 </tbody>
@@ -1297,7 +1350,7 @@ Family
 non-rent-thick
 </td>
 <td style="text-align:right;">
-0.32
+0.39
 </td>
 </tr>
 <tr>
@@ -1308,7 +1361,7 @@ Family
 rent-thick
 </td>
 <td style="text-align:right;">
-0.68
+0.61
 </td>
 </tr>
 <tr>
@@ -1335,7 +1388,7 @@ rent-thick
 </tr>
 </tbody>
 </table>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div id="families-2" class="section level4">
 <h4>Families</h4>
 <p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
@@ -1424,10 +1477,10 @@ Families
 0
 </td>
 <td style="text-align:right;">
-2163
+2148
 </td>
 <td style="text-align:right;">
-1
+16
 </td>
 </tr>
 <tr>
@@ -1435,10 +1488,10 @@ Families
 1-5
 </td>
 <td style="text-align:right;">
-1539
+1520
 </td>
 <td style="text-align:right;">
-23
+42
 </td>
 </tr>
 <tr>
@@ -1446,10 +1499,10 @@ Families
 6-15
 </td>
 <td style="text-align:right;">
-852
+811
 </td>
 <td style="text-align:right;">
-80
+121
 </td>
 </tr>
 <tr>
@@ -1457,15 +1510,14 @@ Families
 16+
 </td>
 <td style="text-align:right;">
-139
+123
 </td>
 <td style="text-align:right;">
-105
+121
 </td>
 </tr>
 </tbody>
 </table>
-<p>C</p>
 </div>
 </div>
 </div>

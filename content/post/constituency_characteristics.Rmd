@@ -1,0 +1,131 @@
+---
+title: "Constituency characteristics"
+author: ""
+date: "2020-08-11"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+library(ggpubr)
+library(haven)
+library(MASS)
+`%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
+```
+
+
+# Asher
+
+```{r}
+asher <- read_dta("D:/cpr/up-dynasties/dyn_other_data/asher/elections_con_panel.dta")
+
+
+asher_up <- asher %>% filter(pc01_state_name == "Uttar Pradesh")
+
+
+```
+
+
+
+
+
+
+```{r asher data prep}
+
+
+asher_up_var <- asher_up %>% select(c(con_id_joint,period,pc91_vd_power_supl, el_con91, p_sch_r91, p_sch_u91, s_sch_u91,irr_share91,hosp_r91, hosp_u91, pc91u_td_p_road, pc91_vd_app_pr))
+con <- as.character(asher_up$con_id_joint)
+
+asher_up_var$constituency_no <- c(as.numeric(str_split(con,"-", simplify = TRUE)[,2]))
+
+
+asher_period_1 <- asher_up_var %>% filter(period==1)
+
+
+```
+
+
+
+```{r dyn data prep}
+dyn_ae_ge <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+
+dyn_dur <- dyn_ae_ge %>% filter(year<2003 & con_id_uniq!=  "" & position ==1)%>% group_by(con_id_uniq) %>% summarise(tot_duration = sum(term_duration), dyn_duration = sum(term_duration[dyn_cum_2==1]), dyn_prop = dyn_duration/tot_duration) %>% select(c(con_id_uniq,dyn_prop, dyn_duration))
+
+dyn_ae_ge <- merge(dyn_ae_ge,dyn_dur, by = "con_id_uniq", all.x = TRUE)
+
+dyn_term <- dyn_ae_ge %>% filter(year == 2002 & con_id_uniq!=  "" & position ==1) 
+
+dyn_asher <- merge(dyn_term, asher_period_1, by = "constituency_no")
+
+```
+
+
+```{r Asher model, results= "asis"}
+
+fit.1  <- glm(dyn_duration ~ pc91_vd_power_supl + el_con91+ p_sch_r91+ p_sch_u91 +s_sch_u91 +irr_share91 +hosp_r91 + hosp_u91 + pc91u_td_p_road + pc91_vd_app_pr + constituency_type,data = dyn_asher, family=poisson())
+
+#dsummary(fit.1)
+
+stargazer(fit.1,title="Regression Results - Dev Asher ",type = "html",
+align=TRUE, dep.var.labels= "Dynast rule", no.space=TRUE)
+
+```
+
+
+
+
+# Francesca
+
+```{r francesca data prep}
+fr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/francesca/UPdata.csv")
+
+fr <- fr %>% rename(constituency_no = AC_no_2001)
+
+dyn_fr <- merge(dyn_term, fr, by = "constituency_no")
+
+
+
+fr$non_sc_pop <- fr$tot_pop71_true-fr$SC_pop71_true
+
+fr$al_71 <- (fr$P_al71_nonSC * fr$non_sc_pop + fr$P_al71_SC * fr$SC_pop71_true)/fr$tot_pop71_true
+
+lit <- (fr$Plit-fr$Plit71)/fr$Plit71
+
+work <- (fr$P_W - fr$P_W71)/fr$P_W71
+
+agr_work <- (fr$P_al -fr$al_71)/fr$al_71
+```
+
+
+```{r francesca model, results= "asis"}
+fit.2 <- glm(data= dyn_fr, dyn_duration ~ lit + work+ agr_work + constituency_type  , family = poisson())
+
+#summary(fit.2)
+
+stargazer(fit.2,title="Regression Results - Dev Francesca ",type = "html",
+align=TRUE, dep.var.labels="Dynast rule", no.space=TRUE)
+
+
+
+
+```
+

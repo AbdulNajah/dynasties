@@ -1,14 +1,30 @@
----
-title: "General Elections 2019"
-author: ""
-date: "2020-06-27"
-output:
-  blogdown::html_page:
-    toc: true
-editor_options: 
-  chunk_output_type: inline
----
+<!DOCTYPE html>
+<html lang="en-us">
+<title>General Elections: 2019 | Political families of Uttar Pradesh</title>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.72.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/css/classes.css">
+<link rel="canonical" href="/post/ge-2019/">
+<link rel="alternate" type="application/rss+xml" href="" title="Political families of Uttar Pradesh">
 
+<body>
+
+<header class="icons">
+  
+    <a href="/">Political families of Uttar Pradesh</a>
+  
+  
+  
+</header>
+
+<article>
+  <header>
+    <h1>General Elections: 2019</h1>
+    <time datetime="2020-06-27T00:00:00Z">June 27, 2020</time>
+  </header>
+  
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 <div id="TOC">
@@ -18,62 +34,6 @@ editor_options:
 </ul>
 </div>
 
-<!-- ```{r file config} -->
-<!-- dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv") -->
-<!-- dyn <- dyn %>%  filter(year %!in% c(1974)) -->
-<!-- #summary(nrega) -->
-<!-- dyn$dyn_cum_text <- ifelse(dyn$dyn_cum ==0, "Non-family","Family") -->
-<!-- dyn$fam_rel_id_uniq <-  paste(dyn$family_id, dyn$rel_id_uniq,sep = "") -->
-<!-- dyn$fam_exp_cum_cat <- factor(dyn$fam_exp_cum_cat, levels=c("[0,1)","[1,6)","[6,11)","[11,21)","[21,Inf]")) -->
-<!-- ###four way elections -->
-<!-- dyn_test <- dyn %>% mutate(contest_type_1 =case_when(position ==1 &dyn_cum ==0 ~1, -->
-<!--                                                                                                                         position ==2 &dyn_cum ==0 ~2, -->
-<!--                                                                                                                         position ==1 &dyn_cum ==1 ~3, -->
-<!--                                                                                                                         position ==2 &dyn_cum ==1 ~5)) %>% group_by( election_type,year,constituency_no) %>% mutate(sum_cont_type = sum(contest_type_1)) %>% mutate(contest_type =ifelse(sum_cont_type ==3, "non-fam v/s non-fam",ifelse(sum_cont_type ==5, "fam v/s non-fam", ifelse(sum_cont_type ==6, "non-fam v/s fam", ifelse(sum_cont_type ==8, "fam v/s fam", "NA"))))) -->
-<!-- # dyn_test %>% group_by( year,constituency_no) %>% summarise(sum = sum(contest_type)) %>%group_by(sum) %>%  summarise(n()) -->
-<!-- #table(dyn_test$contest_type) -->
-<!-- dyn$contest_type <- dyn_test$contest_type -->
-<!-- dyn_ae <- dyn %>% filter(election_type =="AE") -->
-<!-- dyn_ge <- dyn %>% filter(election_type =="GE") -->
-<!-- ``` -->
-<!-- # Dasgupta -->
-<!-- ```{r} -->
-<!-- dasgupta <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dasguptatablepaper.csv") -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- tcpd <- read.csv("D:/cpr/up-dynasties/dyn_other_data/TCPD_2019_all_candidates_with_caste_and_political_family.csv") -->
-<!-- tcpd <- read.csv("") -->
-<!-- ge_all <- fread("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_2019_all.csv") -->
-<!-- ge_tc <- ge_all %>% select(State_Name, Constituency_No, Position,Poll_No, Turncoat) %>% rename(turncoat_true = Turncoat) -->
-<!-- tcpd <- merge(tcpd, ge_tc, by = c("State_Name", "Constituency_No", "Position", "Poll_No"), all.x = TRUE) -->
-<!-- tcpd_5 <- tcpd %>% filter(Vote_Share_Percentage >5) -->
-<!-- tcpd_2 <- tcpd %>% filter(Vote_Share_Percentage >2) -->
-<!-- tcpd_10 <- tcpd %>% filter(Vote_Share_Percentage >10) -->
-<!-- tcpd_1 <- tcpd %>% filter(Vote_Share_Percentage >1) -->
-<!-- tcpd_5 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_19_VS_corrected.csv") -->
-<!-- dynast  <- replace_na(tcpd_5$dynast,0) -->
-<!-- incumbent <- tcpd_5$Incumbent -->
-<!-- recontest <- tcpd_5$Recontest -->
-<!-- bjp <- ifelse(tcpd_5$Party == "BJP",1,0) -->
-<!-- sex <- tcpd_5$Sex -->
-<!-- turncoat <- ifelse(tcpd_5$turncoat_true == "TRUE", "TRUE", "FALSE") %>% replace_na("FALSE") -->
-<!-- serious_case <- tcpd_5$MyNeta_serious_criminal_cases -->
-<!-- education <- case_when(str_detect(tcpd_5$MyNeta_education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "Basic", -->
-<!--                        TRUE ~ "Higher") -->
-<!-- caste <- case_when(str_detect(tcpd_5$Caste_Rec, "(CHRISTIAN)|(SIKH)|(BUDDHIST)") ~"Other religious", -->
-<!--                    str_detect(tcpd_5$Caste_Rec, "(UC)|(IC)|(OBC)|(SC)|(ST)|(Muslim)") ~"XMain", -->
-<!--                    TRUE ~"Others") -->
-<!-- enop <- tcpd_5$ENOP -->
-<!-- vote_share_pc <- tcpd_5$Vote_Share_Percentage -->
-<!-- contest <- tcpd_5$Contested -->
-<!-- terms <- tcpd_5$No_Terms -->
-<!-- assets <- tcpd_5$MyNeta_assets -->
-<!-- winner <- ifelse(tcpd_5$Position ==1, 1,0) -->
-<!-- age <- tcpd_5$MyNeta_age -->
-<!-- #  -->
-<!-- # UC, IC, OBC, SC, ST, Muslim (all), Other Religious (all Sikh, all Christian, all Buddhist), Others -->
-<!-- #  -->
-<!-- ``` -->
 <div id="ge-2019-summary" class="section level1">
 <h1>GE 2019 summary</h1>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
@@ -753,26 +713,12 @@ Akaike Inf. Crit.
 </td>
 </tr>
 </table>
-<!-- ```{r} -->
-<!-- tcpd_5$dynast  <- replace_na(tcpd_5$dynast,0) -->
-<!-- tcpd_5$incumbent <- tcpd_5$Incumbent -->
-<!-- recontest <- tcpd_5$Recontest -->
-<!-- tcpd_5$bjp <- ifelse(tcpd_5$Party == "BJP",1,0) -->
-<!-- tcpd_5$sex <- tcpd_5$Sex -->
-<!-- tcpd_5$turncoat <- ifelse(tcpd_5$turncoat_true == "TRUE", "TRUE", "FALSE") %>% replace_na("FALSE") -->
-<!-- tcpd_5$serious_case <- tcpd_5$MyNeta_serious_criminal_cases -->
-<!-- tcpd_5$education <- case_when(str_detect(tcpd_5$MyNeta_education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "Basic", -->
-<!--                        TRUE ~ "Higher") -->
-<!-- tcpd_5$caste <- case_when(str_detect(tcpd_5$Caste_Rec, "(CHRISTIAN)|(SIKH)|(BUDDHIST)") ~"Other religious", -->
-<!--                    str_detect(tcpd_5$Caste_Rec, "(UC)|(IC)|(OBC)|(SC)|(ST)|(Muslim)") ~"XMain", -->
-<!--                    TRUE ~"Others") -->
-<!-- enop <- tcpd_5$ENOP -->
-<!-- tcpd_5$vote_share_pc <- tcpd_5$Vote_Share_Percentage -->
-<!-- contest <- tcpd_5$Contested -->
-<!-- tcpd_5$terms <- tcpd_5$No_Terms -->
-<!-- tcpd_5$assets <- tcpd_5$MyNeta_assets -->
-<!-- tcpd_5$winner <- ifelse(tcpd_5$Position ==1, 1,0) -->
-<!-- tcpd_5$age <- tcpd_5$MyNeta_age -->
-<!-- write.csv(tcpd_5, "D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_19_VS_5PC.csv") -->
-<!-- ``` -->
 </div>
+
+</article>
+
+
+
+</body>
+
+</html>
