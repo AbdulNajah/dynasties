@@ -36,21 +36,29 @@ dyn_post_02 <- dyn %>% filter(year>2001)
 
 
 
+
+
 ```{r district level dyn proportion}
 
 dyn_ae_w <- dyn %>% filter(election_type == "AE" & position ==1)
+
+dyn_ae_w$district_name <- tolower(dyn_ae_w$district_name )
+
+dyn_ae_w <- dyn_ae_w %>% group_by(district_name) %>% mutate(dyn_duration = sum(term_duration[dyn_cum_2 ==1]),duration_tot = sum(term_duration))
 
 
 
 #dyn_ae %>% group_by(district_name) %>% summarise(n_distinct(year))
 
-dyn_ae_w  <- dyn_ae_w %>% group_by(dist_cen_11) %>% mutate(n_el_dist = n(), n_el_w_dyn =length(year[dyn_cum_2 ==1])) %>% ungroup()
+# dyn_ae_w  <- dyn_ae_w %>% group_by(dist_cen_11) %>% mutate(n_el_dist = n(), n_el_w_dyn =length(year[dyn_cum_2 ==1])) %>% ungroup()
 
-dyn_ae_w_uniq <- dyn_ae_w %>% distinct(dist_cen_21, .keep_all =TRUE)
+dyn_ae_w_uniq <- dyn_ae_w %>% distinct(district_name, .keep_all =TRUE)
 
-dyn_ae_w_uniq$dyn_prop <- dyn_ae_w_uniq$n_el_w_dyn/dyn_ae_w_uniq$n_el_dist
+dyn_ae_w_uniq$dyn_prop <- dyn_ae_w_uniq$dyn_duration/dyn_ae_w_uniq$duration_tot
 
-dyn_ae_w_uniq %>% arrange(-dyn_prop) %>% select(district_name, dyn_prop) %>% kable(digits =2) %>% kable_styling(bootstrap_options = "striped")
+dyn_ae_w_uniq %>% arrange(-dyn_prop) %>% select(district_name, dyn_prop) %>% kable(title = "Year ruled by dynast (Proportion) ",digits =2) %>% kable_styling(bootstrap_options = "striped")
+
+
 
 ```
 
@@ -77,295 +85,158 @@ cen_11_up <- cen_11 %>% filter(State_Name == "UTTAR PRADESH")
 
 
 
-# Dynast score
+<!-- # Dynast score -->
 
 
 ```{r configuring files -2}
-dg <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dasguptatablepaper.csv")
-
-
-dyn_ae <- dyn %>% filter(election_type == "AE")
-
-dyn_ae_07 <- dyn_ae %>% filter(year >1979 & year < 2008 & con_id_uniq != "" & position ==1)
-
-
-
-
-
- dyn_ae_07 <- dyn_ae_07 %>% group_by(constituency_name) %>% mutate(election_nos = n_distinct(year))
- 
-dyn_ae_07  <-  dyn_ae_07 %>% group_by(district_name) %>% mutate (dist_el_no = sum(election_nos))
-
-
-
-
-#dyn_ae_07 %>% group_by(con_id_uniq) %>% summarise(n())
-
-#uniqueN(dyn_ae_07$constituency_name[])
 
 # 
-dyn_ae_80_07 <- dyn_ae_07 %>% filter(election_nos ==8) %>% group_by(constituency_name) %>% mutate(term_duration_tot = sum(term_duration))
-```
-
-
-
-
-```{r for all years/ all districts}
-
-
-dyn_ae  <- dyn_ae %>%  filter(district_name != "" & position == 1) %>% group_by(district_name) %>% mutate(dist_el_n = n())  
-dyn_ae <- dyn_ae %>%filter(district_name != "" ) %>%  group_by(district_name) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/dist_el_n) 
-
-dyn_ae %>% select(district_name, dyn_eln_prop) %>%distinct(district_name, .keep_all = TRUE)%>% arrange(-dyn_eln_prop) %>% kable(col.names = c("district name", "dynasty score"),digits = 2) %>% kable_styling(bootstrap_options = "striped")
-
-```
-
-
-```{r line chart for all districts}
-
-dyn_ae <- dyn_ae %>% filter(district_name != "" )  %>% group_by(year) %>% mutate(year_el_n = n())  
-dyn_ae <- dyn_ae %>% filter(district_name != "" )%>% group_by(year) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/year_el_n) 
-
-dyn_ae %>% select(year, dyn_eln_prop) %>%distinct(year, .keep_all = TRUE)%>% arrange(-dyn_eln_prop) %>% 
-  ggplot(aes(factor(year), dyn_eln_prop, group = 1))+
-  geom_point(color = "#468189")+
-  geom_line(color = "#9DBEBB")+
-  theme_minimal()+
-  labs(title = "Dynasticism over years ", x = "Year ", y = "Proportion" , subtitle = " Assembly elections")+
-    theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"),
-          plot.background = element_blank(),
-          plot.title = element_text(family = "serif",hjust = 0.5, size = 20),
-          plot.subtitle = element_text(hjust = 0.5, size = 15,
-                                       ),
-          text = element_text(color = "gray20", family = "serif"),
-          axis.text.x = element_text(
-                                     hjust = .5, vjust = 0),
-          legend.title = element_blank(),
-          legend.text = element_text(size = 15),
-          axis.text = element_text(face = "italic", size = 10),
-          axis.title.x = element_text(vjust = -.5,hjust = .5, size = 14,
-                                    margin = unit(c(3, 0, 0, 0), "mm")),
-          axis.title.y = element_text(vjust = -.5,hjust = .5, size = 14,
-                                    margin = unit(c(0, 3, 0, 0), "mm")),
-          axis.ticks = element_blank(),
-          panel.border = element_blank(),
-          panel.grid = element_blank(),
-          panel.grid.major.y = element_line(color = "gray"),
-          )
-   
-
-```
-
-# criminality
-
-
-```{r }
-
-
-dyn_ae <- dyn_ae %>% filter(district_name != "" )  %>% group_by(year, district_name) %>% mutate(dist_year_el_n = n())  
-dyn_ae <- dyn_ae %>% filter(district_name != "" )%>% group_by(year, district_name) %>% mutate(dist_dyn_el_n=sum(dyn_cum), dist_dyn_eln_prop = dyn_el_n/year_el_n) 
-
-dist_dyn_prop  <- dyn_ae %>% select(district_name, dist_dyn_eln_prop, year) %>% distinct(year, district_name, .keep_all = TRUE) 
-
-dist_dyn_prop$district_name <- tolower(dist_dyn_prop$district_name)
-dyn_ae_12_17 <- dyn_ae%>%filter(election_type== "AE" &position == 1 & year %in% c(2012,2017))
-
-up_crime <- read.csv("D:/cpr/up-dynasties/dyn_other_data/crime-district-level-uttarpradesh.csv")
-
-
-up_crime_dist <- up_crime %>% select(adunit, district_name,year, murder, dacoity, riots) %>% distinct(district_name, year, .keep_all = TRUE)
-
-
-dyn_crime <- merge(dist_dyn_prop, up_crime_dist, by = c("year", "district_name"))
-
-murder <- dacoity <- ggplot(dyn_crime, aes(murder, dist_dyn_eln_prop))+
-  geom_point()+
-  geom_smooth(method = "lm")+
-  theme_minimal()+
-   labs(y = "dynasty score")
-
-dacoity <- ggplot(dyn_crime, aes(dacoity, dist_dyn_eln_prop))+
-  geom_point()+
-  geom_smooth(method = "lm")+
-  scale_y_continuous(limits = c(0,.2))+
-  theme_minimal()+
-   labs(y = "dynasty score")
-
-riot <- ggplot(dyn_crime, aes(riots, dist_dyn_eln_prop))+
-  geom_point()+
-  geom_smooth(method = "lm")+
-  scale_y_continuous(limits = c(0,.2))+
-  theme_minimal()+
-  theme(axis.title.y = element_blank(), 
-        axis.text.y = element_blank())
-
-ggarrange(murder,  riot, dacoity)
-
-```
-
-```{r adr}
-
-adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
-
-names(adr)[1] <- "position"
-
-names(adr) <- tolower(names(adr))
-
-adr <- adr %>% select( -constituency_id,-state,-         assembly_no,-              
- month,-              poll_no,-           
- delimid,-            position,-          
-candidate,-          sex,-               
-party,-              votes,-             
- candidate_type,-     valid_votes,-       
- electors,-           constituency_name,- 
- constituency_type,-  sub_region,-        
- n_cand,-             turnout_percentage,-
- vote_share_percentage,-     deposit_lost,-      
-margin,-             margin_percentage,- 
-
-enop,-              
- pid,-                max_poll_no,-       
- last_poll,-          contested,-         
- last_party,-         last_constituency_name,-                     
-same_constituency,-  same_party,-        
- no_terms,-           turncoat,-          
-incumbent,-          recontest   )
-
-adr <- adr %>% filter(position_tcpd %in% c(1,2))
-
-adr <- adr %>% rename( position = position_tcpd)
-
-adr_ae <- adr %>% filter(year %in% c(2012,2017))
-
-#uniqueN(adr$position)
-
-
-
-# dim(adr)
+# dyn_ae_07 <- dyn_ae %>% filter(year >1979 & year < 2008 & con_id_uniq != "" & position ==1)
 # 
-# adr %>% glimpse()
 # 
-# unique(adr$year)
 # 
-# summary(adr)
-# names(adr)
-
-
-```
-
-```{r}
-
-dyn_ae_adr <- merge(dyn_ae_12_17, adr_ae, by = c("constituency_no", "position", "year"))
-
-
-dyn_ae_adr$serious_crime_log <- ifelse(dyn_ae_adr$serious_crime !=0, TRUE, FALSE)
-
-
-```
-
-
-
-
-
-```{r configuring files -21}
-
-
-dyn_ae_80_07  <- dyn_ae_80_07  %>% group_by(district_name) %>% mutate(dist_el_n = n())
-dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by(district_name) %>% mutate(dyn_el_n=sum(dyn_cum), dyn_eln_prop = dyn_el_n/dist_el_n)
-
 # 
-dyn_ae_80_07 <- dyn_ae_80_07 %>% group_by( constituency_name) %>% mutate(term_duration_dyn = sum(term_duration[dyn_cum ==1]), prop_dyn_term =term_duration_dyn /term_duration_tot ) 
-
-
-
-dyn_dg <- merge(dyn_ae_80_07, dg, by.x = c("year", "constituency_no"), by.y = c("year_x", "AC_no")  )
-
-
-
-
-
-
-```
-
-
-
-
-
-
-```{r}
-
-dyn_dg_dist <-  dyn_dg %>% group_by(District_1961_x) %>% mutate(dyn_eln_prop = mean(dyn_eln_prop )) %>% distinct(year, District_1961_x, .keep_all = TRUE)
-
-
-#summary(dg)
-
+# 
+#  dyn_ae_07 <- dyn_ae_07 %>% group_by(constituency_name) %>% mutate(election_nos = n_distinct(year))
+#  
+# dyn_ae_07  <-  dyn_ae_07 %>% group_by(district_name) %>% mutate (dist_el_no = sum(election_nos))
+# 
+# 
+# 
+# 
+# #dyn_ae_07 %>% group_by(con_id_uniq) %>% summarise(n())
+# 
+# #uniqueN(dyn_ae_07$constituency_name[])
+# 
+# # 
+# dyn_ae_80_07 <- dyn_ae_07 %>% filter(election_nos ==8) %>% group_by(constituency_name) %>% mutate(term_duration_tot = sum(term_duration))
 ```
 
 
 # Das gupta
 
+```{r results= "asis"}
+
+dg <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dasguptatablepaper.csv")
+
+
+dyn_ae <- dyn %>% filter(election_type == "AE")
+
+dist <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dist_eq.csv")
+
+dist$district_name <- tolower(dist$district_name)
+
+dyn_ae$district_name <- tolower(dyn_ae$district_name)
+
+# dist_dyn <- dyn_ae %>% distinct(district_name) %>% arrange(district_name)
+# 
+# View(dist_dyn)
+
+names(dist)[1] <- "dist_1961"
+
+dist$dist_1961<- tolower(dist$dist_1961)
+
+dyn_ae_dist <- merge(dyn_ae,dist, by = "district_name")
+
+## creating a variable which indicates the number of years ruled by a dynast
+
+dyn_ae_dist <- dyn_ae_dist  %>% group_by(dist_1961)%>% mutate(dyn_duration = sum(term_duration[position ==1 & dyn_cum_2 ==1]))
+
+dyn_ae_dist <- dyn_ae_dist %>% select(dist_1961, dyn_duration) %>% distinct(dist_1961, .keep_all = TRUE)
+
+#dyn_ae_dist$district_name <- tolower(dyn_ae_dist$district_name )
+
+dg$District_1961_x <- tolower(dg$District_1961_x)
+
+# dg$District_1961_x <- ifelse(dg$District_1961_x == "bahraich"," baharaich",dg$District_1961_x)
+# 
+# dg$District_1961_x <- ifelse(dg$District_1961_x == "ballia"," balia",dg$District_1961_x)
+# 
+# 
+# dg$District_1961_x <- ifelse(dg$District_1961_x == "bara banki"," barabanki",dg$District_1961_x)
+
+
+
+dyn_dg <- merge( dg,dyn_ae_dist, by.y ="dist_1961", by.x = "District_1961_x")
+
+
+
+dyn_dg <- dyn_dg %>% group_by( District_1961_x) %>% mutate(mean_prod = mean(productivity), mean_tractor = mean(tractor), mean_fertilizer = mean(fertilizer), mean_wage = mean(realwage),mean_rain = mean(standardized_rain), mean_yield = mean(realyield)) %>% ungroup()
+
+dyn_dg_dist <- dyn_dg %>% distinct(District_1961_x, .keep_all = TRUE)
+
+fit_dg <- glm(data = dyn_dg_dist, dyn_duration ~ mean_rain + mean_fertilizer + mean_prod + mean_wage + mean_tractor + mean_yield  , family = poisson())
+
+#summary(fit.1)
+stargazer(fit_dg, type = "html", titile = "Dasgupta", dep.var.labels = "Dynast rule", no.space = TRUE)
+
+
+```
+
+
 ```{r}
 
 
 
-productivity <- ggplot(dyn_dg_dist , aes(productivity , dyn_eln_prop  ))+
+productivity <- ggplot(dyn_dg_dist , aes(productivity , dyn_duration  ))+
   geom_point()+
   #ylim(.7,Inf)+
   geom_smooth(method = "lm")+
   theme_minimal()+
-  labs(y = "dynasty score")
+  labs(y = "Years ruled by dynast")
 
 
 
 
-tractor <- ggplot(dyn_dg_dist , aes(tractor , dyn_eln_prop  ))+
+tractor <- ggplot(dyn_dg_dist , aes(tractor , dyn_duration  ))+
   geom_point()+
   #ylim(.7,Inf)+
   geom_smooth(method = "lm")+
-  xlim(0,22)+
-  theme_minimal()+
-  theme(axis.title.y = element_blank(), 
-        axis.text.y = element_blank())
-
-
-
-rain <- ggplot(dyn_dg_dist , aes(standardized_rain, dyn_eln_prop  ))+
-  geom_point()+
-  #ylim(.7,Inf)+
-  geom_smooth(method = "lm")+
-  theme_minimal()+
-  labs(y = "dynasty score")
-
-
-
-
-yield <- ggplot(dyn_dg_dist , aes(realyield, dyn_eln_prop  ))+
-  geom_point()+
-  #ylim(.7,Inf)+
-  geom_smooth(method = "lm")+
+  #xlim(0,22)+
   theme_minimal()+
   theme(axis.title.y = element_blank(), 
         axis.text.y = element_blank())
 
 
 
-
-wage <- ggplot(dyn_dg_dist , aes(rural_pop, dyn_eln_prop  ))+
-  geom_point()+
-  #ylim(.7,Inf)+
-  geom_smooth(method = "lm")+
-  xlim(.75,1)+
-  theme_minimal()+
-  theme(axis.title.y = element_blank(), 
-        axis.text.y = element_blank())
-
-fertilizer <- ggplot(dyn_dg_dist , aes(fertilizer , dyn_eln_prop  ))+
+rain <- ggplot(dyn_dg_dist , aes(standardized_rain, dyn_duration ))+
   geom_point()+
   #ylim(.7,Inf)+
   geom_smooth(method = "lm")+
   theme_minimal()+
+  labs(y = "Years ruled by dynast")
+
+
+
+
+yield <- ggplot(dyn_dg_dist , aes(realyield, dyn_duration ))+
+  geom_point()+
+  xlim(min(dyn_dg_dist$realyield),2500)+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
   theme(axis.title.y = element_blank(), 
         axis.text.y = element_blank())
+
+
+
+
+wage <- ggplot(dyn_dg_dist , aes(realwage, dyn_duration  ))+
+  geom_point()+
+  #ylim(.7,Inf)+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
+  theme(axis.title.y = element_blank(), 
+        axis.text.y = element_blank())
+
+fertilizer <- ggplot(dyn_dg_dist , aes(fertilizer , dyn_duration  ))+
+  geom_point()+
+  xlim(0,30)+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
+  theme(axis.title.y = element_blank(), 
+        axis.text.y = element_blank())
+
+
 
 #plot_grid(productivity,fertilizer, tractor, rain, wage, yield)
 
@@ -374,42 +245,50 @@ ggarrange(productivity,tractor, fertilizer, rain, wage, yield)
 ```
 
 
-
 # Alexander
 
 
-```{r}
+```{r results= "asis"}
 alex <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/alexanderup.csv")
 
 #summary(alex)
 
+#glimpse(alex)
+
+alex$dist_91 <- tolower(alex$dist_91)
+
+alex_dist <- alex %>% group_by(dist_91) %>% mutate(mean_police = mean(TotalPolice), mean_tax = mean(taxpa)) %>% distinct(dist_91, .keep_all = TRUE)
+
+
+dyn_dg_alex <- merge(alex_dist, dyn_dg_dist, by.x = "dist_91", by.y = "District_1961_x")
+
+fit.2 <- glm(data = dyn_dg_alex , dyn_duration ~ mean_rain + mean_fertilizer + mean_prod + mean_wage + mean_tractor +  mean_yield + mean_police + mean_tax, family = poisson())
+
+stargazer(fit.2, type = "html", titile = "Dasgupta & Alexander", dep.var.labels = "Dynast rule", no.space = TRUE)
+
+
+# summary(fit.2)
+# 
+# ggplot(dyn_dg_alex, aes(mean_police, mean_tax))+
+#   geom_point()+
+#   geom_smooth()
+```
 
 
 
-dyn_dg_dist_names <- dyn_dg_dist %>% select(District_1961_x, dyn_eln_prop) %>% distinct(District_1961_x,.keep_all = TRUE)
 
-dyn_dg_dist_names$District_1961_x <- tolower(dyn_dg_dist_names$District_1961_x)
-
-alex$distname <- tolower(alex$distname)
-
-dyn_alex <- merge(dyn_dg_dist_names, alex, by.x = "District_1961_x", by.y = "distname", allow.cartesian = TRUE)
-
-#dyn_alex $taxpc_mean 
-
-dyn_alex <- dyn_alex %>% group_by(District_1961_x) %>% mutate(taxpa_mean = mean(taxpa), mean_police = mean(TotalPolice))
+```{r}
 
 
-dyn_alex_uniq <- dyn_alex %>% filter(year == 1984) %>% distinct(District_1961_x, .keep_all = TRUE)
 
-
-police <- ggplot(dyn_alex_uniq , aes( mean_police, dyn_eln_prop))+
+police <- ggplot(dyn_dg_alex , aes( mean_police, dyn_duration))+
   geom_point()+
   geom_smooth(method = "lm")+
   theme_minimal()+
   labs(y = "dynasty score")
 
 
-taxpa <- ggplot(dyn_alex_uniq , aes( taxpa_mean, dyn_eln_prop))+
+taxpa <- ggplot(dyn_dg_alex , aes( mean_tax, dyn_duration))+
   geom_point()+
   geom_smooth(method = "lm")+
   xlim(0.2,2)+
@@ -430,6 +309,8 @@ ggarrange(police,taxpa)
 ```{r}
 
 iyer <- read.csv("D:/cpr/up-dynasties/dyn_other_data/ias-officer-transferdataset.csv")
+
+
 
 iyer <- iyer %>% select(constituency_no, year,position ,dist1988,transdum)
 
@@ -456,6 +337,74 @@ ggplot(dyn_iyer , aes(factor(dyn_cum), transdum))+
   ) 
 
 
+
+```
+
+
+# criminality
+
+
+```{r }
+
+
+
+
+dyn_ae <- dyn_ae %>% filter(district_name != "" )  %>% group_by(year, district_name) %>% mutate(dyn_duration =sum(term_duration[dyn_cum_2==1]))  
+# dyn_ae <- dyn_ae %>% filter(district_name != "" )%>% group_by(year, district_name) %>% mutate(dist_dyn_el_n=sum(dyn_cum), dist_dyn_eln_prop = dyn_el_n/year_el_n) 
+
+
+dist_dyn_duration <- dyn_ae %>% select(district_name, dyn_duration, year) %>% distinct(year, district_name, .keep_all = TRUE) 
+
+dist_dyn_duration$district_name <- tolower(dist_dyn_duration$district_name)
+dyn_ae_12_17 <- dyn_ae%>%filter(election_type== "AE" &position == 1 & year %in% c(2012,2017))
+
+up_crime <- read.csv("D:/cpr/up-dynasties/dyn_other_data/crime-district-level-uttarpradesh.csv")
+
+#glimpse(up_crime)
+
+
+up_crime_dist <- up_crime %>% select(adunit, district_name,year, murder, dacoity, riots) %>% distinct(district_name, year, .keep_all = TRUE)
+
+dyn_ae <- dyn_ae %>% group_by(district_name, year) %>% mutate(n_dyn_dist = length(year[position ==1 & dyn_cum_2 ==1]))
+
+dyn_ae_crime <- dyn_ae %>% distinct(district_name, year,.keep_all = TRUE) %>% select(district_name, year, dyn_duration)
+
+dyn_crime <- merge( up_crime_dist,dyn_ae_crime, by = c("year", "district_name"))
+
+#dyn_crime$dynast <- ifelse(dyn_crime$n_dyn_dist==0,0,1)
+
+dyn_duration <- dyn_crime$dyn_duration
+
+fit.3 <- glm(dyn_duration~ dacoity + murder + riots + factor(year), data =  dyn_crime,family = poisson())
+
+#fit.3 <- glm(n_dyn_dist~ dacoity + murder + riots, data =  dyn_crime,family =poisson())
+
+#summary(fit.3)
+
+stargazer(fit.3, type = "html", dep.var.labels = "Dynast rule")
+
+murder <- ggplot(dyn_crime, aes(murder, dyn_duration))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  theme_minimal()+
+   labs(y = "Years ruled by dynast")
+
+dacoity <- ggplot(dyn_crime, aes(dacoity, dyn_duration))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  #scale_y_continuous(limits = c(0,.2))+
+  theme_minimal()+
+   labs(y = "Years ruled by dynast")
+
+riot <- ggplot(dyn_crime, aes(riots, dyn_duration))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  #scale_y_continuous(limits = c(0,.2))+
+  theme_minimal()+
+  theme(axis.title.y = element_blank(), 
+        axis.text.y = element_blank())
+
+ggarrange(murder,  riot, dacoity)
 
 ```
 

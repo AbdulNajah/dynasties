@@ -1,0 +1,242 @@
+---
+title: "General Elections: 2019"
+author: ""
+date: "2020-06-27"
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+
+##fig.width = 16/2, fig.height = 9/2
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+`%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
+```
+
+
+
+
+
+```{r}
+
+
+
+tcpd_5 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_19_VS_corrected.csv")
+
+
+dynast  <-tcpd_5$dynast
+
+incumbent <- tcpd_5$Incumbent
+
+recontest <- tcpd_5$Recontest
+
+bjp <- tcpd_5$bjp
+
+sex <- tcpd_5$Sex
+
+turncoat <- tcpd_5$turncoat
+
+serious.case <- tcpd_5$serious_case
+
+education <- tcpd_5$education
+
+caste <-  case_when(str_detect(tcpd_5$Caste_Rec, "(UC)|(IC)") ~"UC+IC",
+                   TRUE ~"Others")
+
+
+
+
+enop <- tcpd_5$ENOP
+
+vote.share.pc <- tcpd_5$Vote_Share_Percentage
+
+contest <- tcpd_5$Contested
+
+terms <- tcpd_5$No_Terms
+
+
+assets <- tcpd_5$MyNeta_assets
+
+winner <- tcpd_5$winner
+
+age <- tcpd_5$MyNeta_age
+
+
+reservation <- ifelse(tcpd_5$Constituency_Type == "GEN","GEN" ,"SC/ST")
+
+turnout <- tcpd_5$Turnout_Percentage
+
+state <- tcpd_5$State_Name
+
+
+
+```
+
+
+
+
+
+# GE 2019 summary
+
+```{r}
+
+table <- tcpd_5 %>% group_by(dynast) %>% summarise(Vote_Share = mean(Vote_Share_Percentage),
+                                          Margin_ = mean(Margin_Percentage),
+                                          N_cand = mean(N_Cand),
+                                          enop = mean(ENOP),
+                                          Turnout = mean(Turnout_Percentage),
+                                          Incumbent = mean(Incumbent),
+                                          Recontest = mean(Recontest),
+                                          Contests = mean(Contested),
+                                          No_terms = mean(No_Terms),
+                                          Turncoat = mean(turncoat),
+                                          Assets = mean(assets,na.rm =TRUE), 
+                                          criminal_cases = mean(MyNeta_serious_criminal_cases,na.rm =TRUE),
+                                          criminal_cases_no = mean(MyNeta_criminal_cases, na.rm =TRUE), 
+                                          age = mean(age, na.rm =TRUE),
+                                          bjp = mean(bjp))# %>% 
+  #kable(digits = 2) %>% kable_styling(bootstrap_options = "striped")
+
+
+kable(table[,1:9], digits = 2) %>%  kable_styling(bootstrap_options = "striped")
+kable(table[,10:16], digits = 2) %>%  kable_styling(bootstrap_options = "striped")
+
+
+# tcpd_5 %>% group_by(dynast,Sex) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dynast, Sex, prop) %>% filter(Sex == "F") %>% kable(digits = 2)
+
+```
+
+<!-- # Vote share linear model -->
+
+```{r linear}
+fit <- lm(vote.share.pc ~ bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious.case+ education+age+ dynast*serious.case )
+
+#summary(fit)
+
+#stargazer(fit, type = "html")
+
+
+
+```
+
+
+<!-- # Winner probit model -->
+
+```{r logistic, results = "asis"}
+
+
+
+fit.logit <- glm(winner ~bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious.case+ education+age+ dynast*serious.case ,family =  binomial(link = "probit"))
+
+
+#summary(fit.logit)
+
+
+
+```
+
+<!-- # Turnout linear model -->
+
+# Regressions
+
+
+```{r turnout, results = "asis"}
+
+fit.turnout <-  lm(turnout ~ bjp +  incumbent+  turncoat +caste+ sex + terms + dynast + assets  + serious.case+ education+age+enop +reservation+ dynast*serious.case)
+
+stargazer(fit, fit.turnout, fit.logit, align = TRUE, no.space = TRUE, type = "html")
+
+# fit.turnout$fitted.values
+# 
+# #summary(fit_turnout)
+# 
+# library(sjPlot)
+# sjt.lm(fit, fit.logit, fit.turnout)
+# stargazer(fit, fit.logit, fit.turnout,  omit= c("factor(state)Andhra_Pradesh",          
+# "factor(state)Arunachal_Pradesh",     
+# "factor(state)Assam",                
+# "factor(state)Bihar",                   
+# "factor(state)Chandigarh",            
+# "factor(state)Dadra_&_Nagar_Haveli", 
+# "factor(state)Daman_&_Diu" ,          
+# "factor(state)Delhi",               
+# "factor(state)Goa",                     
+# "factor(state)Gujarat",                 
+# "factor(state)Haryana",                
+# "factor(state)Himachal_Pradesh",         
+# "factor(state)Jammu_&_Kashmir",          
+# "factor(state)Jharkhand",               
+# "factor(state)Karnataka",               
+# "factor(state)Kerala",                 
+# "factor(state)Lakshadweep",              
+# "factor(state)Madhya_Pradesh",          
+# "factor(state)Maharashtra",             
+# "factor(state)Manipur",                  
+# "factor(state)Meghalaya",               
+# "factor(state)Mizoram",                 
+# "factor(state)Nagaland",                 
+# "factor(state)Odisha",                   
+# "factor(state)Puducherry",                
+# "factor(state)Punjab",                   
+# "factor(state)Rajasthan",               
+# "factor(state)Sikkim",                  
+# "factor(state)Tamil_Nadu",              
+# "factor(state)Telangana",               
+# "factor(state)Tripura",                
+# "factor(state)Uttar_Pradesh",         
+# "factor(state)Uttarakhand",            
+# "factor(state)West_Bengal"),type = "html")
+# # , title="Regression Results",type = "html",
+# # align=TRUE, dep.var.labels=c("Vote share percentage","Winner", "Turnout percentage"),
+# # omit.stat=c("LL","ser","f"), no.space=TRUE
+# c("factor(state)Andhra_Pradesh",          
+# "factor(state)Arunachal_Pradesh",     
+# "factor(state)Assam",                
+# "factor(state)Bihar",                   
+# "factor(state)Chandigarh",            
+# "factor(state)Dadra_&_Nagar_Haveli", 
+# "factor(state)Daman_&_Diu" ,          
+# "factor(state)Delhi",               
+# "factor(state)Goa",                     
+# "factor(state)Gujarat",                 
+# "factor(state)Haryana",                
+# "factor(state)Himachal_Pradesh",         
+# "factor(state)Jammu_&_Kashmir",          
+# "factor(state)Jharkhand",               
+# "factor(state)Karnataka",               
+# "factor(state)Kerala",                 
+# "factor(state)Lakshadweep",              
+# "factor(state)Madhya_Pradesh",          
+# "factor(state)Maharashtra",             
+# "factor(state)Manipur",                  
+# "factor(state)Meghalaya",               
+# "factor(state)Mizoram",                 
+# "factor(state)Nagaland",                 
+# "factor(state)Odisha",                   
+# "factor(state)Puducherry",                
+# "factor(state)Punjab",                   
+# "factor(state)Rajasthan",               
+# "factor(state)Sikkim",                  
+# "factor(state)Tamil_Nadu",              
+# "factor(state)Telangana",               
+# "factor(state)Tripura",                
+# "factor(state)Uttar_Pradesh",         
+# "factor(state)Uttarakhand",            
+# "factor(state)West_Bengal")
+
+```
+
+

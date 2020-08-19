@@ -195,9 +195,6 @@ bjp
 <div id="regressions" class="section level1">
 <h1>Regressions</h1>
 <table style="text-align:center">
-<caption>
-<strong>Regression Results</strong>
-</caption>
 <tr>
 <td colspan="4" style="border-bottom: 1px solid black">
 </td>
@@ -219,13 +216,13 @@ bjp
 <td style="text-align:left">
 </td>
 <td>
-Vote share percentage
+vote.share.pc
 </td>
 <td>
-Winner
+turnout
 </td>
 <td>
-Turnout percentage
+winner
 </td>
 </tr>
 <tr>
@@ -235,10 +232,10 @@ Turnout percentage
 <em>OLS</em>
 </td>
 <td>
-<em>probit</em>
+<em>OLS</em>
 </td>
 <td>
-<em>OLS</em>
+<em>probit</em>
 </td>
 </tr>
 <tr>
@@ -260,16 +257,43 @@ Turnout percentage
 </tr>
 <tr>
 <td style="text-align:left">
+bjp
+</td>
+<td>
+13.222<sup>***</sup>
+</td>
+<td>
+-1.049
+</td>
+<td>
+1.308<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.848)
+</td>
+<td>
+(0.677)
+</td>
+<td>
+(0.092)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
 incumbent
 </td>
 <td>
 3.844<sup>***</sup>
 </td>
 <td>
--0.138
+-0.626
 </td>
 <td>
--0.626
+-0.138
 </td>
 </tr>
 <tr>
@@ -279,10 +303,10 @@ incumbent
 (1.076)
 </td>
 <td>
-(0.118)
+(0.847)
 </td>
 <td>
-(0.847)
+(0.118)
 </td>
 </tr>
 <tr>
@@ -293,10 +317,10 @@ turncoat
 -4.214<sup>**</sup>
 </td>
 <td>
--1.027<sup>***</sup>
+-0.835
 </td>
 <td>
--0.835
+-1.027<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -306,10 +330,10 @@ turncoat
 (1.986)
 </td>
 <td>
-(0.263)
+(1.569)
 </td>
 <td>
-(1.569)
+(0.263)
 </td>
 </tr>
 <tr>
@@ -320,10 +344,10 @@ casteUC+IC
 1.790<sup>**</sup>
 </td>
 <td>
-0.072
+0.265
 </td>
 <td>
-0.265
+0.072
 </td>
 </tr>
 <tr>
@@ -333,10 +357,10 @@ casteUC+IC
 (0.774)
 </td>
 <td>
-(0.087)
+(0.684)
 </td>
 <td>
-(0.684)
+(0.087)
 </td>
 </tr>
 <tr>
@@ -347,10 +371,10 @@ sexM
 0.577
 </td>
 <td>
--0.099
+-1.045
 </td>
 <td>
--1.045
+-0.099
 </td>
 </tr>
 <tr>
@@ -360,10 +384,10 @@ sexM
 (1.120)
 </td>
 <td>
-(0.123)
+(0.882)
 </td>
 <td>
-(0.882)
+(0.123)
 </td>
 </tr>
 <tr>
@@ -374,10 +398,10 @@ terms
 3.428<sup>***</sup>
 </td>
 <td>
-0.594<sup>***</sup>
+0.219
 </td>
 <td>
-0.219
+0.594<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -387,10 +411,10 @@ terms
 (0.339)
 </td>
 <td>
-(0.047)
+(0.267)
 </td>
 <td>
-(0.267)
+(0.047)
 </td>
 </tr>
 <tr>
@@ -401,10 +425,10 @@ dynast
 3.636<sup>***</sup>
 </td>
 <td>
--0.154
+-1.698<sup>**</sup>
 </td>
 <td>
--1.698<sup>**</sup>
+-0.154
 </td>
 </tr>
 <tr>
@@ -414,10 +438,10 @@ dynast
 (1.043)
 </td>
 <td>
-(0.118)
+(0.821)
 </td>
 <td>
-(0.821)
+(0.118)
 </td>
 </tr>
 <tr>
@@ -428,11 +452,11 @@ assets
 0.000<sup>**</sup>
 </td>
 <td>
-0.000<sup>**</sup>
-</td>
-<td>
 0.000
 </td>
+<td>
+0.000<sup>**</sup>
+</td>
 </tr>
 <tr>
 <td style="text-align:left">
@@ -449,16 +473,16 @@ assets
 </tr>
 <tr>
 <td style="text-align:left">
-serious_case
+serious.case
 </td>
 <td>
 -1.160
 </td>
 <td>
--0.238<sup>**</sup>
+0.121
 </td>
 <td>
-0.121
+-0.238<sup>**</sup>
 </td>
 </tr>
 <tr>
@@ -468,10 +492,10 @@ serious_case
 (0.933)
 </td>
 <td>
-(0.109)
+(0.737)
 </td>
 <td>
-(0.737)
+(0.109)
 </td>
 </tr>
 <tr>
@@ -482,10 +506,10 @@ educationHigher
 -0.604
 </td>
 <td>
--0.071
+0.687
 </td>
 <td>
-0.687
+-0.071
 </td>
 </tr>
 <tr>
@@ -495,10 +519,10 @@ educationHigher
 (0.863)
 </td>
 <td>
-(0.098)
+(0.679)
 </td>
 <td>
-(0.679)
+(0.098)
 </td>
 </tr>
 <tr>
@@ -509,10 +533,10 @@ age
 -0.027
 </td>
 <td>
--0.022<sup>***</sup>
+-0.049<sup>*</sup>
 </td>
 <td>
--0.049<sup>*</sup>
+-0.022<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -522,10 +546,10 @@ age
 (0.035)
 </td>
 <td>
-(0.004)
+(0.027)
 </td>
 <td>
-(0.027)
+(0.004)
 </td>
 </tr>
 <tr>
@@ -535,9 +559,9 @@ enop
 <td>
 </td>
 <td>
+-0.054
 </td>
 <td>
--0.054
 </td>
 </tr>
 <tr>
@@ -546,9 +570,9 @@ enop
 <td>
 </td>
 <td>
+(0.695)
 </td>
 <td>
-(0.695)
 </td>
 </tr>
 <tr>
@@ -558,34 +582,34 @@ reservationSC/ST
 <td>
 </td>
 <td>
+2.740<sup>***</sup>
 </td>
 <td>
-2.740<sup>***</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
-</td>
-<td>
 </td>
 <td>
 </td>
 <td>
 (0.765)
 </td>
+<td>
+</td>
 </tr>
 <tr>
 <td style="text-align:left">
-dynast:serious_case
+dynast:serious.case
 </td>
 <td>
 0.514
 </td>
 <td>
-0.408<sup>**</sup>
+-4.302<sup>***</sup>
 </td>
 <td>
--4.302<sup>***</sup>
+0.408<sup>**</sup>
 </td>
 </tr>
 <tr>
@@ -595,10 +619,10 @@ dynast:serious_case
 (1.777)
 </td>
 <td>
-(0.200)
+(1.398)
 </td>
 <td>
-(1.398)
+(0.200)
 </td>
 </tr>
 <tr>
@@ -609,10 +633,10 @@ Constant
 28.504<sup>***</sup>
 </td>
 <td>
-0.047
+71.732<sup>***</sup>
 </td>
 <td>
-71.732<sup>***</sup>
+0.047
 </td>
 </tr>
 <tr>
@@ -622,10 +646,10 @@ Constant
 (2.194)
 </td>
 <td>
-(0.244)
+(2.529)
 </td>
 <td>
-(2.529)
+(0.244)
 </td>
 </tr>
 <tr>
@@ -654,9 +678,9 @@ R<sup>2</sup>
 0.363
 </td>
 <td>
+0.041
 </td>
 <td>
-0.041
 </td>
 </tr>
 <tr>
@@ -667,9 +691,21 @@ Adjusted R<sup>2</sup>
 0.357
 </td>
 <td>
+0.031
 </td>
 <td>
-0.031
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Log Likelihood
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-590.816
 </td>
 </tr>
 <tr>
@@ -679,7 +715,33 @@ Akaike Inf. Crit.
 <td>
 </td>
 <td>
+</td>
+<td>
 1,207.633
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+13.377 (df = 1335)
+</td>
+<td>
+10.523 (df = 1333)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+63.418<sup>***</sup> (df = 12; 1335)
+</td>
+<td>
+4.121<sup>***</sup> (df = 14; 1333)
 </td>
 <td>
 </td>

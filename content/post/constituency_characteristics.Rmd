@@ -40,6 +40,14 @@ asher <- read_dta("D:/cpr/up-dynasties/dyn_other_data/asher/elections_con_panel.
 
 
 asher_up <- asher %>% filter(pc01_state_name == "Uttar Pradesh")
+# 
+# names(asher_up)
+# 
+# View(asher_up)
+# 
+# unique(dyn_asher$constituency_name)
+# 
+# dyn_asher %>% distinct(constituency_name) %>% arrange(constituency_name) %>% kable()
 
 
 ```
@@ -60,7 +68,18 @@ asher_up_var$constituency_no <- c(as.numeric(str_split(con,"-", simplify = TRUE)
 
 asher_period_1 <- asher_up_var %>% filter(period==1)
 
+## importing francesca data to remove urban constituencies
 
+fr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/francesca/UPdata.csv")
+
+fr <- fr %>% select(Prural,AC_no_2001) %>% rename(constituency_no = AC_no_2001) %>% mutate(p_urban = 100- Prural)
+
+asher_period_1 <-  merge(asher_period_1,fr, by = "constituency_no") 
+
+asher_period_1 <- asher_period_1 %>% filter(p_urban<60)
+
+
+#hist(asher_period_1$p_urban)
 ```
 
 
@@ -81,14 +100,24 @@ dyn_asher <- merge(dyn_term, asher_period_1, by = "constituency_no")
 
 ```{r Asher model, results= "asis"}
 
-fit.1  <- glm(dyn_duration ~ pc91_vd_power_supl + el_con91+ p_sch_r91+ p_sch_u91 +s_sch_u91 +irr_share91 +hosp_r91 + hosp_u91 + pc91u_td_p_road + pc91_vd_app_pr + constituency_type,data = dyn_asher, family=poisson())
+fit_all  <- glm(dyn_duration ~ pc91_vd_power_supl + el_con91+ p_sch_r91+ p_sch_u91 +s_sch_u91 +irr_share91 +hosp_r91 + hosp_u91 + pc91u_td_p_road + pc91_vd_app_pr + constituency_type +p_urban,data = dyn_asher, family=poisson())
 
-#dsummary(fit.1)
 
-stargazer(fit.1,title="Regression Results - Dev Asher ",type = "html",
-align=TRUE, dep.var.labels= "Dynast rule", no.space=TRUE)
+fit_rural  <- glm(dyn_duration ~ pc91_vd_power_supl + p_sch_r91+ +irr_share91 +hosp_r91  + pc91_vd_app_pr + constituency_type +Prural,data = dyn_asher, family=poisson())
+
+fit_urban <- glm(dyn_duration ~  el_con91+ p_sch_u91 +s_sch_u91 +irr_share91+ hosp_u91 + pc91u_td_p_road + constituency_type+p_urban,data = dyn_asher, family=poisson())
+
+#summary(fit.1)
+
+stargazer(fit_all , fit_urban, fit_rural,title="Regression Results - Dev Asher ",type = "html",
+align=TRUE ,dep.var.labels= c ("Urban + Rural", "Urban", "Rural"), no.space=TRUE)
+
+
+  
 
 ```
+
+
 
 
 
@@ -125,7 +154,209 @@ stargazer(fit.2,title="Regression Results - Dev Francesca ",type = "html",
 align=TRUE, dep.var.labels="Dynast rule", no.space=TRUE)
 
 
+```
+
+
+
+
+# GE  2009 : 2019
+
+
+
+```{r data prep}
+
+ 
+#read the file shared by Talha
+
+ge_09_14_19 <- read.csv ("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_09_14_19_dyn.csv")
+
+names(ge_09_14_19)[1] <- "State_Name"
+
+ge_09_19 <- ge_09_14_19 %>% select(State_Name, Year,Constituency_No, Position, dyn)
+
+ge_09_19$dynast <- ifelse(ge_09_19$dyn==1,1,0)
+
+
+tcpd_all <- read.csv ("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_09_14_19_VS_5PC.csv")
+
+ge_09_19 <- merge(tcpd_all, ge_09_19, by = c("Year","State_Name", "Constituency_No", "Position") )
+
+
+## merging census data
+
+
+cen_11 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/Jensenius_2016.csv")
+
+cen_11$STATE_UT <- tolower(cen_11$STATE_UT)
+
+ge_09_19$State_Name <- tolower(ge_09_19$State_Name)
+
+
+ge_cen <- merge(ge_09_19, cen_11, by.x = c("State_Name", "Constituency_No"), by.y = c("STATE_UT", "PC_NO"))
+
+
+
+
+## bringing in adr data
+
+adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr/adr_tcpd_09_14_19.csv")
+
+#adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE)
+
+#names(adr)[1] <- "position"
+
+# 
+adr <- adr %>% select(2:10,55:61, State_Name, Year,Constituency_No, Position)
+# names(adr) <- tolower(names(adr))
+
+ge_cen$Age <- NULL
+
+ge_cen_adr <- merge(ge_cen,adr, by = c("State_Name","Year", "Constituency_No", "Position"))
+
+ge_cen_adr <- ge_cen_adr %>% filter(total_assets>0)
+
+```
+
+
+
+
+```{r models}
+
+
+##tcpd variables
+
+#names(ge_cen_adr) <- tolower(names(ge_cen_adr))
+
+dynast_candidate  <-ge_cen_adr$dynast
+
+incumbent <- ge_cen_adr$Incumbent
+
+recontest <- ge_cen_adr$Recontest
+
+bjp <- ifelse(ge_cen_adr$Party == "BJP",1,0)
+
+gender <- ifelse(ge_cen_adr$Sex == "F", "F", "M")
+
+turncoat <- ge_cen_adr$Turncoat
+
+serious_case <- ge_cen_adr$serious_case
+
+education <- ge_cen_adr$education
+
+# caste <-  case_when(str_detect(ge_cen_adr$Caste_Rec, "(UC)|(IC)") ~"UC+IC",
+#                    TRUE ~"Others")
+
+enop <- ge_cen_adr$ENOP
+
+vote_share_pc <- ge_cen_adr$Vote_Share_Percentage
+
+contest <- ge_cen_adr$Contested
+
+terms <- ge_cen_adr$No_Terms
+
+winner <- ifelse(ge_cen_adr$Position==1,1,0)
+
+reservation <- ifelse(ge_cen_adr$Constituency_Type == "GEN","GEN" ,"SC/ST")
+
+turnout <- ge_cen_adr$Turnout_Percentage
+
+ge_cen_adr <- ge_cen_adr %>% mutate(dynast_winner =case_when(Position ==1 & dynast ==1 ~1,
+                                                             TRUE ~0))
+dynast_winner  <- ge_cen_adr$dynast_winner
+
+
+state <- ge_cen_adr$State_Name
+
+year <- ge_cen_adr$Year
+
+electorate <- ge_cen_adr$Electors
+
+## ADR variables
+
+ge_cen_adr$total_assets <- as.numeric(ge_cen_adr$total_assets )
+  
+assets <- ge_cen_adr$total_assets
+
+age <- as.numeric(ge_cen_adr$Age)
+
+serious_crime <- ge_cen_adr$serious_crime
+
+serious_crime_log <- ifelse(ge_cen_adr$serious_crime==0,0,1)
+
+non_serious_crime <- ge_cen_adr$non_serious_crime
+
+non_serious_crime_log <-ifelse(ge_cen_adr$non_serious_crime==0,0,1)
+
+
+education <- case_when(str_detect(ge_cen_adr$education, " (Graduate)|(Graduate Professional)") ~ "UG", str_detect(ge_cen_adr$education,"(Doctorate)|(Post Graduate )") ~ "PG+", TRUE ~ "ASchool") 
+
+## Census variables
+
+literacy <- ge_cen_adr$TOT_LIT/ge_cen_adr$TOT_POP
+
+rural_pop <-  ge_cen_adr$R_TOT_POP/ge_cen_adr$TOT_POP
+
+urban_pop <-  1 -(ge_cen_adr$R_TOT_POP/ge_cen_adr$TOT_POP)
+
+agri_lab <- ge_cen_adr$TOT_AGLB/ge_cen_adr$TOT_POP
+
+cultivators <- ge_cen_adr$TOT_CULT/ge_cen_adr$TOT_POP
+
+marginal_work <- ge_cen_adr$TOT_MRW/ge_cen_adr$TOT_POP
+
+muslim_pop <- ge_cen_adr$Muslim_P/ge_cen_adr$TOT_POP
+
+sc_pop <- ge_cen_adr$TOT_SC/ge_cen_adr$TOT_POP
+
+st_pop <- ge_cen_adr$TOT_ST/ge_cen_adr$TOT_POP
+
+
+sc_st_pop <- (ge_cen_adr$TOT_ST+ge_cen_adr$TOT_SC)/ge_cen_adr$TOT_POP
+
+
+
+
+
+
+
+# 
+# cor <- data.frame(dynast_winner  , enop, literacy , sc_st_pop,cultivators , urban_pop , marginal_work , muslim_pop , agri_lab ,  age , log(assets) , serious_crime , non_serious_crime)
+# 
+# cor_p <- cor(cor,use = "complete.obs")
+# 
+# library('corrplot') 
+# corrplot(cor_p, method = "number",number.cex = .6) 
+
 
 
 ```
+
+
+
+```{r}
+
+
+dyn_winner <- glm(dynast_winner ~   turnout+enop+ reservation+ literacy +  urban_pop + muslim_pop +sc_st_pop + agri_lab + log(electorate) + factor(state) + factor(year)  ,family =  binomial(link = "probit"))
+
+
+
+#summary(dyn_winner)
+```
+
+
+```{r results = "asis"}
+
+
+
+dyn_cand <- glm(dynast_candidate ~   turnout+enop+ reservation+ literacy +  urban_pop + muslim_pop +sc_st_pop + agri_lab + log(electorate) + factor(state) + factor(year) ,family =  binomial(link = "probit"))
+
+stargazer(dyn_winner, dyn_cand, type = "html",align = TRUE, no.space = TRUE )
+
+#summary(dyn_cand)
+```
+
+
+
+
+
 
