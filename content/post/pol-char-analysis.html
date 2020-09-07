@@ -2,6 +2,9 @@
 title: "Political Characteristics Analysis"
 author: ""
 date: "2020-06-23"
+params:
+  orig_date: "Original Publish Date: 23 June, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
@@ -13,6 +16,7 @@ editor_options:
 
 <div id="TOC">
 <ul>
+<li><a href="#document-history">Document History</a></li>
 <li><a href="#summary">Summary</a></li>
 <li><a href="#margin-of-victory">Margin of Victory</a></li>
 <li><a href="#turnout">Turnout</a></li>
@@ -24,13 +28,22 @@ editor_options:
 <li><a href="#recontest">Recontest</a></li>
 <li><a href="#number-of-terms">Number of terms</a></li>
 <li><a href="#constituency-type">Constituency type</a></li>
+<li><a href="#raphael">Raphael</a></li>
 <li><a href="#vote-dispersion">Vote dispersion</a></li>
-<li><a href="#cabinet-ministers">Cabinet ministers</a></li>
 </ul>
 </div>
 
+<hr />
+<div id="document-history" class="section level3">
+<h3>Document History</h3>
+<p>Original Publish Date: 23 June, 2020</p>
+<p>Updated on: 07 September, 2020</p>
+<hr />
+<p>In this post we analyse the political characteristics of the family politicians using the TCPD elections data. We use elections data starting from 1974 to 2019. Throughout the entire post we are just using taking the plain mean of all the variables.</p>
+</div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
+<p>The break-up of the sample data can be sen here</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-1">Table 1: </span>Summary of the data
@@ -38,13 +51,13 @@ editor_options:
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Proportion
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -53,19 +66,8 @@ Proportion
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.09
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.91
@@ -75,19 +77,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.19
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.81
@@ -95,6 +86,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="margin-of-victory" class="section level2">
 <h2>Margin of Victory</h2>
@@ -105,13 +97,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Average MOV percentage
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -120,19 +112,8 @@ Average MOV percentage
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 10.9
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 11.4
@@ -142,19 +123,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 16.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 14.8
@@ -162,6 +132,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="turnout" class="section level2">
 <h2>Turnout</h2>
@@ -172,13 +143,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Average turnout percentage
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -187,48 +158,27 @@ Average turnout percentage
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 55.3
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
-</td>
 <td style="text-align:right;">
-51.0
+51
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 GE
-</td>
-<td style="text-align:left;">
-Family
 </td>
 <td style="text-align:right;">
 53.0
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
-</td>
 <td style="text-align:right;">
-52.0
+52
 </td>
 </tr>
 </tbody>
 </table>
+<hr />
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-5">Table 4: </span>Turnout percentage wrt contest type
@@ -236,13 +186,19 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-contest type
+election_type
 </th>
 <th style="text-align:right;">
-Average turnout percentage
+fam v/s fam
+</th>
+<th style="text-align:right;">
+fam v/s non-fam
+</th>
+<th style="text-align:right;">
+non-fam v/s fam
+</th>
+<th style="text-align:right;">
+non-fam v/s non-fam
 </th>
 </tr>
 </thead>
@@ -251,41 +207,14 @@ Average turnout percentage
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-fam v/s fam
-</td>
 <td style="text-align:right;">
 58.1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-fam v/s non-fam
 </td>
 <td style="text-align:right;">
 54.8
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-non-fam v/s fam
-</td>
 <td style="text-align:right;">
 55.9
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-non-fam v/s non-fam
 </td>
 <td style="text-align:right;">
 50.6
@@ -295,41 +224,14 @@ non-fam v/s non-fam
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-fam v/s fam
-</td>
 <td style="text-align:right;">
 54.0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-fam v/s non-fam
 </td>
 <td style="text-align:right;">
 52.7
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-non-fam v/s fam
-</td>
 <td style="text-align:right;">
 54.4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-non-fam v/s non-fam
 </td>
 <td style="text-align:right;">
 51.7
@@ -337,6 +239,7 @@ non-fam v/s non-fam
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="effective-number-of-parties" class="section level2">
 <h2>Effective number of parties</h2>
@@ -347,13 +250,13 @@ non-fam v/s non-fam
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Average enop
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -362,19 +265,8 @@ Average enop
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 3.6
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 3.7
@@ -384,19 +276,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 3.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 3.3
@@ -404,6 +285,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="number-of-candidates" class="section level2">
 <h2>Number of candidates</h2>
@@ -414,13 +296,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Average n_candidates
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -429,19 +311,8 @@ Average n_candidates
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 14.7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 14.3
@@ -451,19 +322,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 17.8
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 15.4
@@ -471,6 +331,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="turncoat" class="section level2">
 <h2>Turncoat</h2>
@@ -481,13 +342,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Turncoat proportion
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -496,19 +357,8 @@ Turncoat proportion
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.24
@@ -518,19 +368,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.12
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.19
@@ -538,6 +377,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="same-party" class="section level2">
 <h2>Same party</h2>
@@ -548,13 +388,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Retention proportion
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -563,19 +403,8 @@ Retention proportion
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.61
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.47
@@ -585,19 +414,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.79
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.63
@@ -609,6 +427,7 @@ Non-family
 <!-- ```{r} -->
 <!-- dyn %>% filter(position==1) %>% group_by(election_type,dyn_cum_2_text, party) %>% summarise(count = n()) %>% filter(count >10) -->
 <!-- ``` -->
+<hr />
 </div>
 <div id="incumbent" class="section level2">
 <h2>Incumbent</h2>
@@ -619,13 +438,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Proportion of incumbents
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -634,19 +453,8 @@ Proportion of incumbents
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.24
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.22
@@ -656,19 +464,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.48
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.26
@@ -676,6 +473,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="recontest" class="section level2">
 <h2>Recontest</h2>
@@ -686,13 +484,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Proportion of recontestants
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -701,19 +499,8 @@ Proportion of recontestants
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.45
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.44
@@ -723,19 +510,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 0.67
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 0.47
@@ -743,6 +519,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="number-of-terms" class="section level2">
 <h2>Number of terms</h2>
@@ -753,13 +530,13 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
-</th>
-<th style="text-align:left;">
-Politician’s Identity
+election_type
 </th>
 <th style="text-align:right;">
-Average numer of terms
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -768,19 +545,8 @@ Average numer of terms
 <td style="text-align:left;">
 AE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 1.7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 1.6
@@ -790,19 +556,8 @@ Non-family
 <td style="text-align:left;">
 GE
 </td>
-<td style="text-align:left;">
-Family
-</td>
 <td style="text-align:right;">
 2.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
 </td>
 <td style="text-align:right;">
 1.8
@@ -810,6 +565,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="constituency-type" class="section level2">
 <h2>Constituency type</h2>
@@ -820,16 +576,16 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Election Type
+election_type
 </th>
 <th style="text-align:left;">
-Politician’s Identity
-</th>
-<th style="text-align:left;">
-Constituency Type
+constituency_type
 </th>
 <th style="text-align:right;">
-Proportion
+Family
+</th>
+<th style="text-align:right;">
+Non-family
 </th>
 </tr>
 </thead>
@@ -839,21 +595,18 @@ Proportion
 AE
 </td>
 <td style="text-align:left;">
-Family
-</td>
-<td style="text-align:left;">
 GEN
 </td>
 <td style="text-align:right;">
 0.87
 </td>
+<td style="text-align:right;">
+0.77
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 AE
-</td>
-<td style="text-align:left;">
-Family
 </td>
 <td style="text-align:left;">
 SC
@@ -861,31 +614,6 @@ SC
 <td style="text-align:right;">
 0.13
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
-</td>
-<td style="text-align:left;">
-GEN
-</td>
-<td style="text-align:right;">
-0.77
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-AE
-</td>
-<td style="text-align:left;">
-Non-family
-</td>
-<td style="text-align:left;">
-SC
-</td>
 <td style="text-align:right;">
 0.23
 </td>
@@ -893,9 +621,6 @@ SC
 <tr>
 <td style="text-align:left;">
 GE
-</td>
-<td style="text-align:left;">
-Family
 </td>
 <td style="text-align:left;">
 GEN
@@ -903,31 +628,6 @@ GEN
 <td style="text-align:right;">
 0.90
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Family
-</td>
-<td style="text-align:left;">
-SC
-</td>
-<td style="text-align:right;">
-0.10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GE
-</td>
-<td style="text-align:left;">
-Non-family
-</td>
-<td style="text-align:left;">
-GEN
-</td>
 <td style="text-align:right;">
 0.77
 </td>
@@ -937,10 +637,10 @@ GEN
 GE
 </td>
 <td style="text-align:left;">
-Non-family
-</td>
-<td style="text-align:left;">
 SC
+</td>
+<td style="text-align:right;">
+0.10
 </td>
 <td style="text-align:right;">
 0.23
@@ -948,10 +648,14 @@ SC
 </tr>
 </tbody>
 </table>
-<p>#Raphael</p>
+<hr />
+</div>
+<div id="raphael" class="section level1">
+<h1>Raphael</h1>
 </div>
 <div id="vote-dispersion" class="section level1">
 <h1>Vote dispersion</h1>
+<p>Raphael’s booth level data is available for the last 3 UP assembly elections. We use the booth level voting data to see the spread of the vote share.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-15">Table 13: </span>Vote dispersion at booth level wrt Politicians identity
@@ -985,6 +689,7 @@ Non-family
 </tr>
 </tbody>
 </table>
+<hr />
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-16">Table 14: </span>Vote dispersion at booth level wrt Politicians identity
@@ -1018,252 +723,6 @@ Non-family
 </tr>
 </tbody>
 </table>
-<p><img src="/post/pol-char-analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-</div>
-<div id="cabinet-ministers" class="section level1">
-<h1>Cabinet ministers</h1>
-<table style="text-align:center">
-<caption>
-<strong>Regression Results</strong>
-</caption>
-<tr>
-<td colspan="4" style="border-bottom: 1px solid black">
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td colspan="3">
-<em>Dependent variable:</em>
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td colspan="3" style="border-bottom: 1px solid black">
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td colspan="3">
-Dynast - 1/0
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-(1)
-</td>
-<td>
-(2)
-</td>
-<td>
-(3)
-</td>
-</tr>
-<tr>
-<td colspan="4" style="border-bottom: 1px solid black">
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-N_minister
-</td>
-<td>
-0.392<sup>***</sup>
-</td>
-<td>
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-(0.087)
-</td>
-<td>
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-minister_duration
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-0.065<sup>***</sup>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-(0.022)
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-decadesPost-90
-</td>
-<td>
-0.200
-</td>
-<td>
-0.743<sup>***</sup>
-</td>
-<td>
-0.474<sup>***</sup>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-(0.156)
-</td>
-<td>
-(0.095)
-</td>
-<td>
-(0.133)
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-decadesPre-90
-</td>
-<td>
--0.112
-</td>
-<td>
-0.559<sup>***</sup>
-</td>
-<td>
-0.334<sup>**</sup>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-(0.196)
-</td>
-<td>
-(0.117)
-</td>
-<td>
-(0.142)
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-link
-</td>
-<td>
-1.022<sup>***</sup>
-</td>
-<td>
-1.052<sup>***</sup>
-</td>
-<td>
-1.033<sup>***</sup>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-(0.075)
-</td>
-<td>
-(0.074)
-</td>
-<td>
-(0.075)
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-Constant
-</td>
-<td>
--1.834<sup>***</sup>
-</td>
-<td>
--1.838<sup>***</sup>
-</td>
-<td>
--1.834<sup>***</sup>
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-</td>
-<td>
-(0.038)
-</td>
-<td>
-(0.038)
-</td>
-<td>
-(0.038)
-</td>
-</tr>
-<tr>
-<td colspan="4" style="border-bottom: 1px solid black">
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-Observations
-</td>
-<td>
-4,632
-</td>
-<td>
-4,632
-</td>
-<td>
-4,632
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-Akaike Inf. Crit.
-</td>
-<td>
-1,877.762
-</td>
-<td>
-1,896.562
-</td>
-<td>
-1,889.472
-</td>
-</tr>
-<tr>
-<td colspan="4" style="border-bottom: 1px solid black">
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-<em>Note:</em>
-</td>
-<td colspan="3" style="text-align:right">
-<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
-</td>
-</tr>
-</table>
+<hr />
+<p><img src="/post/pol-char-analysis_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
 </div>

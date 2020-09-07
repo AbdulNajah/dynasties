@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<title>MPLADS Analyis | Political families of Uttar Pradesh</title>
+<title>MPLADS Analysis | Political families of Uttar Pradesh</title>
 <meta charset="utf-8">
-<meta name="generator" content="Hugo 0.72.0" />
+<meta name="generator" content="Hugo 0.74.3" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/index.css">
 <link rel="stylesheet" href="/css/classes.css">
@@ -21,7 +21,7 @@
 
 <article>
   <header>
-    <h1>MPLADS Analyis</h1>
+    <h1>MPLADS Analysis</h1>
     <time datetime="2020-06-18T00:00:00Z">June 18, 2020</time>
   </header>
   
@@ -29,23 +29,37 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#mplads">MPLADS</a><ul>
-<li><a href="#famil-vs-non-family">Famil v/s Non-family</a></li>
+<li><a href="#document-history">Document History</a></li>
+<li><a href="#summary-stats">Summary stats</a><ul>
+<li><a href="#family-vs-non-family">Family v/s Non-family</a></li>
 <li><a href="#days">Days</a></li>
-<li><a href="#number-of-projects">Number of Projects</a></li>
+<li><a href="#projects">Projects</a></li>
 <li><a href="#expenditure">Expenditure</a></li>
-<li><a href="#experience-categories">Experience categories</a></li>
-<li><a href="#type-of-work-vs-projects">Type of work v/s projects</a></li>
-<li><a href="#type-of-work-vs-cost">Type of work v/s cost</a></li>
+<li><a href="#cost-per-project">Cost per project</a><ul>
 <li><a href="#cost-categories">cost categories</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="mplads" class="section level2">
-<h2>MPLADS</h2>
-<div id="famil-vs-non-family" class="section level3">
-<h3>Famil v/s Non-family</h3>
+<hr />
+<div id="document-history" class="section level3">
+<h3>Document History</h3>
+<p>Original Publish Date: 18 June, 2020</p>
+<p>Updated on: 07 September, 2020</p>
+<hr />
+<pre><code>## [1] &quot;LS/RS: 15th Lok Sabha&quot; &quot;LS/RS: 14th Lok Sabha&quot;</code></pre>
+</div>
+<div id="summary-stats" class="section level1">
+<h1>Summary stats</h1>
+<p>This mplads data is for the 14th and 15the Loksabha which commenced on 20004 and 2009 respectively. We matched it with Uttar Pradesh MPs for the same years.</p>
+<p>Observations: 33177, 1</p>
+<p>Years : 2009 and 2014 - 25 and 31 dynast MPs respectively.</p>
+<p>Main variables : Type of project and the cost incurred. Main categories of type of projects are Road, Electricity, Education, Construction, Water, Others, Sanitation</p>
+<hr />
+<div id="family-vs-non-family" class="section level3">
+<h3>Family v/s Non-family</h3>
+<p>This table shows the average number of projects and the cost for the family types. First table is forboth years and the second one is year by year break-up of the same.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-1">Table 1: </span>MPLADS prjects and spending
@@ -56,7 +70,7 @@
 Type of constiuency
 </th>
 <th style="text-align:right;">
-Average number of contracts
+Average number of projects
 </th>
 <th style="text-align:right;">
 Avergae expenditure per project
@@ -167,43 +181,46 @@ Non-family
 </tr>
 </tbody>
 </table>
-<p>The difference in the mean of both project count and the expenditure is statistically significant.</p>
+<!-- The difference in the mean of both project count and the expenditure is statistically significant. -->
+<hr />
 </div>
 <div id="days" class="section level3">
 <h3>Days</h3>
-<p>No significant difference. In both the cases of family v/s non family categories and experience categories</p>
+<p>When we looked at number of days that is required to finish a project was almost same for both the family types, on average they take 75 days to finish a project. When I looked at it by year, in 2004 dynasts took 12 days extra to finish the work compared to non-dynasts. Interestingly, in 2009 it reversed and dynasts took 12 day lesser than non-dynasts to finish the work</p>
+<hr />
 </div>
-<div id="number-of-projects" class="section level3">
-<h3>Number of Projects</h3>
-<p><img src="/post/mplads-analysis_files/figure-html/snumber%20of%20projects%20composition%20-%20families%20-%20non/families-1.png" width="672" /></p>
-<p><img src="/post/mplads-analysis_files/figure-html/2004%20&%202009%201-1.png" width="672" /></p>
+<div id="projects" class="section level3">
+<h3>Projects</h3>
+<p><strong>Question</strong> - Is there any difference in the project choices of family politicians?</p>
+<p>This table shows the composition of the category of the projects they choose work on.</p>
+<p><img src="/post/mplads-analysis_files/figure-html/snumber%20of%20projects%20composition%20-%20families%20-%20non/families-1.png" width="768" /></p>
+<p><img src="/post/mplads-analysis_files/figure-html/2004%20&%202009%201-1.png" width="768" /></p>
+<hr />
+<p>This chart shows the average number of projects of each categories according to the family type.</p>
+<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<hr />
 </div>
 <div id="expenditure" class="section level3">
 <h3>Expenditure</h3>
-<p><img src="/post/mplads-analysis_files/figure-html/spending%20composition-1.png" width="672" />
-<img src="/post/mplads-analysis_files/figure-html/2004&%202009%202-1.png" width="672" /></p>
+<p><strong>Question</strong> - Is there any difference in the spending patterns of family politicians?</p>
+<p><img src="/post/mplads-analysis_files/figure-html/spending%20composition-1.png" width="768" /></p>
+<p><img src="/post/mplads-analysis_files/figure-html/2004&%202009%202-1.png" width="768" /></p>
+<hr />
 </div>
-<div id="experience-categories" class="section level3">
-<h3>Experience categories</h3>
-<p>I could not find any trends when I explored the experience categories along with the variables such as number of projects, cost, type of work etc.</p>
-</div>
-<div id="type-of-work-vs-projects" class="section level3">
-<h3>Type of work v/s projects</h3>
-<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-</div>
-<div id="type-of-work-vs-cost" class="section level3">
-<h3>Type of work v/s cost</h3>
-<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><img src="/post/mplads-analysis_files/figure-html/2004%20&%202009%203-1.png" width="672" /></p>
-</div>
+<div id="cost-per-project" class="section level2">
+<h2>Cost per project</h2>
+<p><strong>Question</strong> : What’s the average cost of a project for each categories?</p>
+<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p><img src="/post/mplads-analysis_files/figure-html/2004%20&%202009%203-1.png" width="768" /></p>
 <div id="cost-categories" class="section level3">
 <h3>cost categories</h3>
+<p>We categorised the projects into three depnding upon the cost of the project:</p>
 <p>Categories:</p>
 <p>Low - 0-.2 mn</p>
 <p>Medium - 2.2 mn - 5 mn</p>
 <p>High - 5 mn+</p>
-<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="/post/mplads-analysis_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-7">Table 3: </span>Project cost categories wrt politician’s identity
@@ -211,10 +228,10 @@ Non-family
 <thead>
 <tr>
 <th style="text-align:left;">
-Politicians Identity
+Cost Categry
 </th>
 <th style="text-align:left;">
-Cost Categry
+Politicians Identity
 </th>
 <th style="text-align:right;">
 Proportion of projects
@@ -224,10 +241,10 @@ Proportion of projects
 <tbody>
 <tr>
 <td style="text-align:left;">
-Family
+Low
 </td>
 <td style="text-align:left;">
-Low
+Family
 </td>
 <td style="text-align:right;">
 0.50
@@ -235,32 +252,10 @@ Low
 </tr>
 <tr>
 <td style="text-align:left;">
-Family
+Low
 </td>
-<td style="text-align:left;">
-Medium
-</td>
-<td style="text-align:right;">
-0.29
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Family
-</td>
-<td style="text-align:left;">
-High
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-</tr>
-<tr>
 <td style="text-align:left;">
 Non-family
-</td>
-<td style="text-align:left;">
-Low
 </td>
 <td style="text-align:right;">
 0.40
@@ -268,10 +263,21 @@ Low
 </tr>
 <tr>
 <td style="text-align:left;">
-Non-family
+Medium
 </td>
 <td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Medium
+</td>
+<td style="text-align:left;">
+Non-family
 </td>
 <td style="text-align:right;">
 0.37
@@ -279,10 +285,21 @@ Medium
 </tr>
 <tr>
 <td style="text-align:left;">
-Non-family
+High
 </td>
 <td style="text-align:left;">
+Family
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 High
+</td>
+<td style="text-align:left;">
+Non-family
 </td>
 <td style="text-align:right;">
 0.23
@@ -290,6 +307,7 @@ High
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 

@@ -8,21 +8,22 @@ output:
 editor_options: 
   chunk_output_type: inline
 ---
-```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
-knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+<!-- ```{r set up, warning=FALSE, include=FALSE, message= FALSE} -->
 
-##fig.width = 16/2, fig.height = 9/2
+<!-- knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE) -->
 
-library(tidyverse)
-library(data.table)
-library(knitr)
-library(kableExtra)
-library(scales)
-library(gridExtra)
-library(stargazer)
-`%!in%` = Negate(`%in%`)
-```
+<!-- ##fig.width = 16/2, fig.height = 9/2 -->
+
+<!-- library(tidyverse) -->
+<!-- library(data.table) -->
+<!-- library(knitr) -->
+<!-- library(kableExtra) -->
+<!-- library(scales) -->
+<!-- library(gridExtra) -->
+<!-- library(stargazer) -->
+<!-- `%!in%` = Negate(`%in%`) -->
+<!-- ``` -->
 
 
 

@@ -38,6 +38,7 @@ dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 
 
+
 ```
 
 ```{r adr}

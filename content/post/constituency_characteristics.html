@@ -1,7 +1,7 @@
 ---
 title: "Constituency characteristics"
 author: ""
-date: "2020-08-11"
+date: "2020-06-24"
 output:
   blogdown::html_page:
     toc: true
@@ -18,8 +18,11 @@ editor_options:
 </ul>
 </div>
 
+<!-- real date - 2020-07-11 -->
 <div id="asher" class="section level1">
 <h1>Asher</h1>
+<p>Asher data provides us information at the assembly constituency level for the the Indian states. Here we are using it to asses the impact of dynast rule on certain constituency characteristics. In other ways this would also be an indicator of those places where you would see prolonged rule of dynast leaders.</p>
+<p>The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001. We limit our analysis to this period because the</p>
 <table style="text-align:center">
 <caption>
 <strong>Regression Results - Dev Asher</strong>
@@ -45,7 +48,7 @@ editor_options:
 <td style="text-align:left">
 </td>
 <td colspan="3">
-Urban + Rural
+Dynast rule
 </td>
 </tr>
 <tr>
@@ -352,9 +355,9 @@ p_urban
 0.011<sup>***</sup>
 </td>
 <td>
-0.011<sup>***</sup>
 </td>
 <td>
+0.009<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -364,9 +367,9 @@ p_urban
 (0.003)
 </td>
 <td>
-(0.003)
 </td>
 <td>
+(0.003)
 </td>
 </tr>
 <tr>
@@ -376,9 +379,9 @@ Prural
 <td>
 </td>
 <td>
+-0.011<sup>***</sup>
 </td>
 <td>
--0.009<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -387,9 +390,9 @@ Prural
 <td>
 </td>
 <td>
+(0.003)
 </td>
 <td>
-(0.003)
 </td>
 </tr>
 <tr>
@@ -400,10 +403,10 @@ Constant
 1.333<sup>***</sup>
 </td>
 <td>
-0.788<sup>***</sup>
+1.878<sup>***</sup>
 </td>
 <td>
-2.324<sup>***</sup>
+1.428<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -413,10 +416,10 @@ Constant
 (0.236)
 </td>
 <td>
-(0.069)
+(0.239)
 </td>
 <td>
-(0.411)
+(0.231)
 </td>
 </tr>
 <tr>
@@ -518,14 +521,14 @@ Dynast rule
 lit
 </td>
 <td>
--0.366<sup>***</sup>
+-0.508<sup>***</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.089)
+(0.094)
 </td>
 </tr>
 <tr>
@@ -533,14 +536,14 @@ lit
 work
 </td>
 <td>
--1.646<sup>***</sup>
+-0.821<sup>**</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.323)
+(0.361)
 </td>
 </tr>
 <tr>
@@ -548,14 +551,14 @@ work
 agr_work
 </td>
 <td>
-0.373<sup>**</sup>
+-0.403
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.179)
+(0.246)
 </td>
 </tr>
 <tr>
@@ -563,7 +566,7 @@ agr_work
 constituency_typeSC
 </td>
 <td>
--0.980<sup>***</sup>
+-0.959<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -575,17 +578,107 @@ constituency_typeSC
 </tr>
 <tr>
 <td style="text-align:left">
-Constant
+sub_region.yBUNDELKHAND
 </td>
 <td>
-1.604<sup>***</sup>
+-0.036
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(0.150)
+(0.211)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sub_region.yDOAB
+</td>
+<td>
+0.403<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.112)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sub_region.yEAST
+</td>
+<td>
+-0.138
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.152)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sub_region.yNORTH-EAST
+</td>
+<td>
+0.434<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.133)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sub_region.yROHILKHAND
+</td>
+<td>
+0.862<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.125)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sub_region.yWEST
+</td>
+<td>
+0.639<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.133)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+0.955<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.189)
 </td>
 </tr>
 <tr>
@@ -605,7 +698,7 @@ Observations
 Log Likelihood
 </td>
 <td>
--1,295.395
+-1,263.230
 </td>
 </tr>
 <tr>
@@ -613,7 +706,7 @@ Log Likelihood
 Akaike Inf. Crit.
 </td>
 <td>
-2,600.790
+2,548.461
 </td>
 </tr>
 <tr>

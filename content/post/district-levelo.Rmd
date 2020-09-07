@@ -2,17 +2,31 @@
 title: "District Level Analysis"
 author: ""
 date: "2020-07-06"
+params:
+  orig_date: "Original Publish Date: 06 July, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
 editor_options: 
   chunk_output_type: inline
 ---
+
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
-knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE,fig.width = 16/2, fig.height = 9/2)
 
-##fig.width = 16/2, fig.height = 9/2
+
 
 library(tidyverse)
 library(data.table)
@@ -35,18 +49,35 @@ dyn_post_02 <- dyn %>% filter(year>2001)
 ```
 
 
+## Distict level dynasticism
 
+We calculate the the dynasty scor eof district by calcuating the years ruled by dynast in a district from 1974 to  2017.
 
 
 ```{r district level dyn proportion}
 
 dyn_ae_w <- dyn %>% filter(election_type == "AE" & position ==1)
 
+ac_pc_match <- read.csv("D:/cpr/up-dynasties/dyn_other_data/ac_pc_metadata.csv")
+ac_pc_match <- ac_pc_match %>% select(Constituency_No, Sub_Region)
+
+names(ac_pc_match) <-  tolower(names(ac_pc_match))
+
+dyn_ae_w <- merge(dyn_ae_w, ac_pc_match, by = "constituency_no")
+
 dyn_ae_w$district_name <- tolower(dyn_ae_w$district_name )
 
 dyn_ae_w <- dyn_ae_w %>% group_by(district_name) %>% mutate(dyn_duration = sum(term_duration[dyn_cum_2 ==1]),duration_tot = sum(term_duration))
+# 
+# dyn_ae_w <- dyn_ae_w %>% group_by(sub_region.y) %>% mutate(dyn_duration_sub = sum(term_duration[dyn_cum_2 ==1]),duration_tot_sub = sum(term_duration))
 
-
+#  dyn_ae_w %>% ungroup()%>%   summarise(dyn_duration = sum(term_duration[dyn_cum_2 ==1]),duration_tot = sum(term_duration), prop = dyn_duration/duration_tot)
+# 
+# dyn_ae_w_sub_uniq <- dyn_ae_w %>% distinct(sub_region.y, .keep_all =TRUE)
+# 
+# dyn_ae_w_sub_uniq$dyn_prop_sub <-dyn_ae_w_sub_uniq $dyn_duration_sub/dyn_ae_w_sub_uniq $duration_tot_sub
+# 
+# dyn_ae_w_sub_uniq %>% select(sub_region.y, dyn_prop_sub) %>% mutate(prop = round(dyn_prop_sub,2)) %>% select(sub_region.y, prop)
 
 #dyn_ae %>% group_by(district_name) %>% summarise(n_distinct(year))
 
@@ -56,7 +87,10 @@ dyn_ae_w_uniq <- dyn_ae_w %>% distinct(district_name, .keep_all =TRUE)
 
 dyn_ae_w_uniq$dyn_prop <- dyn_ae_w_uniq$dyn_duration/dyn_ae_w_uniq$duration_tot
 
-dyn_ae_w_uniq %>% arrange(-dyn_prop) %>% select(district_name, dyn_prop) %>% kable(title = "Year ruled by dynast (Proportion) ",digits =2) %>% kable_styling(bootstrap_options = "striped")
+dyn_ae_w_uniq %>% arrange(-dyn_prop) %>% select(district_name, dyn_prop) %>% kable(title = "Years ruled by dynast (Proportion) ",digits =2) %>% kable_styling(bootstrap_options = "striped")
+
+
+
 
 
 
@@ -113,10 +147,18 @@ cen_11_up <- cen_11 %>% filter(State_Name == "UTTAR PRADESH")
 ```
 
 
+---
+
+
 # Das gupta
 
-```{r results= "asis"}
+**Question**: In what kind of places do dynasticism arise ?
 
+We use Aditya Das Gupta's agricultural data which is available from 1957 to 1985. The mean of the relevant variables are plotted against years ruled by dynast those respective districts in the following scatter plot.
+
+
+
+```{r}
 dg <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dasguptatablepaper.csv")
 
 
@@ -165,14 +207,7 @@ dyn_dg <- dyn_dg %>% group_by( District_1961_x) %>% mutate(mean_prod = mean(prod
 
 dyn_dg_dist <- dyn_dg %>% distinct(District_1961_x, .keep_all = TRUE)
 
-fit_dg <- glm(data = dyn_dg_dist, dyn_duration ~ mean_rain + mean_fertilizer + mean_prod + mean_wage + mean_tractor + mean_yield  , family = poisson())
-
-#summary(fit.1)
-stargazer(fit_dg, type = "html", titile = "Dasgupta", dep.var.labels = "Dynast rule", no.space = TRUE)
-
-
 ```
-
 
 ```{r}
 
@@ -244,11 +279,27 @@ fertilizer <- ggplot(dyn_dg_dist , aes(fertilizer , dyn_duration  ))+
 ggarrange(productivity,tractor, fertilizer, rain, wage, yield)
 ```
 
+We take the mean of all the available variables and regress it  against the number of years ruled by dynast in a district.
+
+```{r results= "asis"}
+fit_dg <- glm(data = dyn_dg_dist, dyn_duration ~ mean_rain + mean_fertilizer + mean_prod + mean_wage + mean_tractor + mean_yield  , family = poisson())
+
+#summary(fit.1)
+stargazer(fit_dg, type = "html", titile = "Dasgupta", dep.var.labels = "Dynast rule", no.space = TRUE)
+
+
+```
+
+---
+
+
 
 # Alexander
 
+Alexander Lee's state capacity data is available for the years 1964-1984. Just like we did in Dasgupta data, we take the mean of all the variables for our analysis and match it with the districts in our data. The two relevant variables are police and tax. The scatterplot shows those two variables relationship with the dynast rule - which is calculated as the sum of  years ruled by dynasts in that particular districts.
 
-```{r results= "asis"}
+
+```{r }
 alex <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/alexanderup.csv")
 
 #summary(alex)
@@ -261,21 +312,7 @@ alex_dist <- alex %>% group_by(dist_91) %>% mutate(mean_police = mean(TotalPolic
 
 
 dyn_dg_alex <- merge(alex_dist, dyn_dg_dist, by.x = "dist_91", by.y = "District_1961_x")
-
-fit.2 <- glm(data = dyn_dg_alex , dyn_duration ~ mean_rain + mean_fertilizer + mean_prod + mean_wage + mean_tractor +  mean_yield + mean_police + mean_tax, family = poisson())
-
-stargazer(fit.2, type = "html", titile = "Dasgupta & Alexander", dep.var.labels = "Dynast rule", no.space = TRUE)
-
-
-# summary(fit.2)
-# 
-# ggplot(dyn_dg_alex, aes(mean_police, mean_tax))+
-#   geom_point()+
-#   geom_smooth()
 ```
-
-
-
 
 ```{r}
 
@@ -304,51 +341,73 @@ ggarrange(police,taxpa)
 ```
 
 
-# Iyer
+Here we regress the variables from both Das gupta and Lee's data against the dynast rule.
 
-```{r}
+```{r results= "asis"}
+fit.2 <- glm(data = dyn_dg_alex , dyn_duration ~ mean_rain + mean_fertilizer + mean_prod + mean_wage + mean_tractor +  mean_yield + mean_police + mean_tax, family = poisson())
 
-iyer <- read.csv("D:/cpr/up-dynasties/dyn_other_data/ias-officer-transferdataset.csv")
-
-
-
-iyer <- iyer %>% select(constituency_no, year,position ,dist1988,transdum)
-
-dyn_iyer <- merge(iyer, dyn_ae, by = c("year", "constituency_no", "position"))
-
-iyer_dist <- dyn_iyer %>% group_by(dist1988) %>% summarise(dyn_prop = mean(dyn_cum),transfer_mean = mean(transdum))
+stargazer(fit.2, type = "html", titile = "Dasgupta & Alexander", dep.var.labels = "Dynast rule", no.space = TRUE)
 
 
-ggplot(dyn_iyer , aes(factor(dyn_cum), transdum))+
-  geom_boxplot()+
-  theme_minimal()+
-  scale_x_discrete(labels=(c("Non - Family", "Family")))+
-  labs(x = "") +
-  
-  theme(plot.background = element_blank(),
-        plot.title = element_text(family = "sans",hjust = 0.5, size = 20, 
-                                  margin= margin(0,0,20,0)), 
-        text = element_text(color = "gray20"),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 15),
-        axis.text = element_text(face = "italic", size = 15),
-        axis.title = element_text(vjust = -1, size = 16),        
-        axis.ticks = element_blank()
-  ) 
-
-
-
+# summary(fit.2)
+# 
+# ggplot(dyn_dg_alex, aes(mean_police, mean_tax))+
+#   geom_point()+
+#   geom_smooth()
 ```
 
 
+
+
+
+
+<!-- # Iyer -->
+
+<!-- Iyer data provides IAS transfer data for the years 1974-2015. We aggregated it at a 5 year term and matched it with the dynasty data. The box plot shows us the difference transfer rate in  -->
+
+<!-- ```{r} -->
+
+<!-- iyer <- read.csv("D:/cpr/up-dynasties/dyn_other_data/ias-officer-transferdataset.csv") -->
+
+
+
+<!-- iyer <- iyer %>% select(constituency_no, year,position ,dist1988,transdum) -->
+
+<!-- dyn_iyer <- merge(iyer, dyn_ae, by = c("year", "constituency_no", "position")) -->
+
+<!-- iyer_dist <- dyn_iyer %>% group_by(dist1988) %>% summarise(dyn_prop = mean(dyn_cum),transfer_mean = mean(transdum)) -->
+
+
+<!-- ggplot(dyn_iyer , aes(factor(dyn_cum), transdum))+ -->
+<!--   geom_boxplot()+ -->
+<!--   theme_minimal()+ -->
+<!--   scale_x_discrete(labels=(c("Non - Family", "Family")))+ -->
+<!--   labs(x = "") + -->
+
+<!--   theme(plot.background = element_blank(), -->
+<!--         plot.title = element_text(family = "sans",hjust = 0.5, size = 20,  -->
+<!--                                   margin= margin(0,0,20,0)),  -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         legend.text = element_text(size = 15), -->
+<!--         axis.text = element_text(face = "italic", size = 15), -->
+<!--         axis.title = element_text(vjust = -1, size = 16),         -->
+<!--         axis.ticks = element_blank() -->
+<!--   )  -->
+
+
+
+<!-- ``` -->
+
+
+---
+
 # criminality
 
-
-```{r }
-
+We use district level criminality data which is available since 1974 to to see how dynast rule and the criminal rates in a districts are correlated. First we run a scatter plot to see the direction and a poisson regression.
 
 
-
+```{r, results = "asis"}
 dyn_ae <- dyn_ae %>% filter(district_name != "" )  %>% group_by(year, district_name) %>% mutate(dyn_duration =sum(term_duration[dyn_cum_2==1]))  
 # dyn_ae <- dyn_ae %>% filter(district_name != "" )%>% group_by(year, district_name) %>% mutate(dist_dyn_el_n=sum(dyn_cum), dist_dyn_eln_prop = dyn_el_n/year_el_n) 
 
@@ -374,15 +433,12 @@ dyn_crime <- merge( up_crime_dist,dyn_ae_crime, by = c("year", "district_name"))
 #dyn_crime$dynast <- ifelse(dyn_crime$n_dyn_dist==0,0,1)
 
 dyn_duration <- dyn_crime$dyn_duration
+```
 
-fit.3 <- glm(dyn_duration~ dacoity + murder + riots + factor(year), data =  dyn_crime,family = poisson())
+---
 
-#fit.3 <- glm(n_dyn_dist~ dacoity + murder + riots, data =  dyn_crime,family =poisson())
 
-#summary(fit.3)
-
-stargazer(fit.3, type = "html", dep.var.labels = "Dynast rule")
-
+```{r}
 murder <- ggplot(dyn_crime, aes(murder, dyn_duration))+
   geom_point()+
   geom_smooth(method = "lm")+
@@ -406,6 +462,19 @@ riot <- ggplot(dyn_crime, aes(riots, dyn_duration))+
 
 ggarrange(murder,  riot, dacoity)
 
+```
+
+---
+
+
+```{r, results = "asis" }
+fit.3 <- glm(dyn_duration~ dacoity + murder + riots + factor(year), data =  dyn_crime,family = poisson())
+
+#fit.3 <- glm(n_dyn_dist~ dacoity + murder + riots, data =  dyn_crime,family =poisson())
+
+#summary(fit.3)
+
+stargazer(fit.3, type = "html", dep.var.labels = "Dynast rule")
 ```
 
 

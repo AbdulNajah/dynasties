@@ -2,6 +2,9 @@
 title: "ADR Survey Analysis"
 author: ""
 date: "2020-07-03"
+params:
+  orig_date: "Original Publish Date: 03 July, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
@@ -11,7 +14,7 @@ editor_options:
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
-##fig.width = 16/2, fig.height = 9/2
+
 
 library(tidyverse)
 library(data.table)
@@ -21,15 +24,34 @@ library(scales)
 library(gridExtra)
 library(stargazer)
 library(cowplot)
+library(ggalt)
+library(bbplot)
 `%!in%` = Negate(`%in%`)
-
-select <- dplyr::select
-#unloadNamespace("ggalt")
-#library(extrafont)
-#extrafont::font_import(paths = NULL, recursive = TRUE, prompt = TRUE,pattern = NULL)
+ 
 ```
 
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
+In this post we analyse the performance of dynast MPs in their constituency by using a pan India survey conducted by Daksh and ADR on governance issues for the year 2013-14. The survey was conducted across 535 constituencies and it witnessed participation of 2.5 lakh+ voters. 
+
+Apart from few questions survey was trying to measure two things. What are the constituents most pressing concerns and how well their representative perform in those areas. They are ranked from 1 to 3 where one means bad and three means good. Apart from that, they have also created a composite index of these two, which is rated out of 10.
+
+The data we accessed has around 480 unique constituencies and we have been able to match ~405 constituencies from the survey data to our dynasty data. For all India analysis we are using the 2009 GE file where we have collected information regarding the dynast status from secondary resources. However, for the UP analysis we are using our own primary data.
+
+---
+
 ```{r}
+
+
+## read the adr survey file
 adr_survey <- fread("D:/cpr/up-dynasties/dyn_other_data/adr-survey-data.csv")
 adr_survey$Constituency <- tolower(adr_survey$Constituency)
 
@@ -38,6 +60,8 @@ adr_up <- adr_survey %>% filter(`Actual State` == "UP")
 adr_survey$`Actual State` <- tolower(adr_survey$`Actual State`)
 adr_survey <- adr_survey %>% rename(state =`Actual State`, constituency = `Constituency` )
  
+
+## read the 2009 GE file
 
 dynast <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dynast_data_09.csv")
 dynast$Constituency <- tolower(dynast$Constituency)
@@ -48,7 +72,9 @@ dynast$state <- tolower(dynast$state )
 dynast$dynast <-  ifelse(dynast$dynasty_id>0,1,0)
 
 dynast_adr <- merge(adr_survey, dynast, by = c("state","constituency"))
-### UP
+
+
+## read the  UP dynast file
 #dynast_adr %>% n_distinct(`Actual Const`)
 con <- data.frame(str_split(adr_up$`Actual Const`, "-", simplify = TRUE))
 adr_up$constituency_no <- as.numeric(con$X1)
@@ -59,12 +85,24 @@ adr_up$constituency_no <- as.numeric(con$X1)
  
  dyn_adr_survey <- merge(dyn_ge_09, adr_up, by = "constituency_no", allow.cartesian = TRUE)
  
+
+
 ```
+
+
+
 
 # All India
 
 
-```{r}
+```{r creating tables}
+
+
+## creating the tables for All India
+
+### Composite score
+
+
 composite_score <- dynast_adr %>% group_by(dynast) %>% summarise(job_training = mean(`Training for jobs`, na.rm = TRUE), 
                                                     road =mean(`Better roads`, na.rm = TRUE) ,
                                                     water = mean(`Drinking water`, na.rm = TRUE),
@@ -83,12 +121,20 @@ composite_score <- dynast_adr %>% group_by(dynast) %>% summarise(job_training = 
                                                     reservation = mean(`Reservation for jobs and education`, na.rm = TRUE),
                                                     women_security = mean(`Security for women`, na.rm = TRUE),
                                                     strong_defence = mean(`Strong Defence/Military`, na.rm = TRUE),
-                                                    mp_trust = mean(`Trustworthiness of MP`, na.rm = TRUE)
+                                                    mp_trust = mean(`Trustworthiness of MP`, na.rm = TRUE))%>% 
                                                     
-                                              )%>%
-   melt(id = "dynast", measure = 2:20) %>% pivot_wider(names_from = "dynast", values_from = "value") 
+                                 
+  
+                        melt(id = "dynast", measure = 2:20) %>% pivot_wider(names_from = "dynast", values_from = "value") 
+
+
+
 names(composite_score)[2:3] <- c("Composite Score - non-dynast", "Composite Score - dynast")
 names(composite_score)[1] <- "Issue"
+
+
+### Importance table
+
 importance <- dynast_adr %>% group_by(dynast) %>% summarise(job_training = mean(`I: Training for jobs`, na.rm = TRUE), 
                                                     road =mean(`I: Better roads`, na.rm = TRUE) ,
                                                     water = mean(`I: Drinking water`, na.rm = TRUE),
@@ -107,12 +153,19 @@ importance <- dynast_adr %>% group_by(dynast) %>% summarise(job_training = mean(
                                                     reservation = mean(`I: Reservation for jobs and education`, na.rm = TRUE),
                                                     women_security = mean(`I: Security for women`, na.rm = TRUE),
                                                     strong_defence = mean(`I: Strong Defence/Military`, na.rm = TRUE),
-                                                    mp_trust = mean(`I: Trustworthiness of MP`, na.rm = TRUE)
-                                               )%>%
+                                                    mp_trust = mean(`I: Trustworthiness of MP`, na.rm = TRUE))%>%
+  
+                        
    melt(id = "dynast", measure = 2:20) %>% pivot_wider(names_from = "dynast", values_from = "value") 
 names(importance)[2:3] <- c("Importance - non-dynast", "Importance - dynast")
 importance1  <- importance
 importance <- importance %>% select(-variable)
+
+
+
+### performance table
+
+
 performance <- dynast_adr %>% group_by(dynast) %>% summarise(job_training = mean(`P: Training for jobs`, na.rm = TRUE), 
                                               road =mean(`P: Better roads`, na.rm = TRUE) ,
                                               water = mean(`P: Drinking water`, na.rm = TRUE),
@@ -137,17 +190,16 @@ performance <- dynast_adr %>% group_by(dynast) %>% summarise(job_training = mean
 names(performance)[2:3] <- c("Performance - non-dynast", "Performance- dynast")
 performance1 <- performance
 performance <- performance %>% select(-variable)
-cbind(composite_score, importance, performance) %>% kable(caption = "Issues - Score, Importance ,Perfromance - wrt politician's identity ",digits = 2) %>% kable_styling(bootstrap_options = "striped" )
+
+
+# cbind(composite_score, importance, performance) %>% kable(caption = "Issues - Score, Importance ,Perfromance - wrt politician's identity ",digits = 2) %>% kable_styling(bootstrap_options = "striped" )
 ```
 
+## Over all rating
 
-
-```{r fig.width = 16/2, fig.height = 9/2}
-library(ggalt)
-library(bbplot)
-
+```{r  compsosite chart,fig.width = 16/2, fig.height = 9/2}
 names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
-#comp_score <-
+# comp_score <-
   ggplot(composite_score, aes(y = reorder(Measure, Non_dynast),
                           x = Non_dynast,
                           xend = Dynast)) +  
@@ -168,10 +220,14 @@ names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
   #             save_filepath = "ADR_composite_score.png",
   #             width_pixels = 640,
   #             height_pixels = 450)
-  # 
-  
-  
-  names(importance1)   <- c("Measure", "Non_dynast", "Dynast")
+  #
+```
+
+
+## Important issues to the constituents
+
+```{r  importance chart, fig.width = 16/2, fig.height = 9/2}
+names(importance1)   <- c("Measure", "Non_dynast", "Dynast")
   
   ggplot(importance1, aes(y = reorder(Measure, Non_dynast),
                           x = Non_dynast,
@@ -184,7 +240,7 @@ names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
   theme_minimal_hgrid()+
   labs(title = "Pressing issues of the constituents - 2009:2014",
        subtitle = "Dynasts constiuencies v/s Non-dynasts constituencies",
-       x = "Rating (Out of 10)",
+       x = "Rating (Out of 3)",
        y = "",
        caption = "Source: ADR-Daksh Survey Report")+
   scale_x_continuous(limits = c(2,2.5), breaks = c(2, 2.25, 2.5))
@@ -194,8 +250,14 @@ names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
 #               save_filepath = "ADR_importance_score.png",
 #               width_pixels = 640,
 #               height_pixels = 450)
-#   
-    names(performance1)   <- c("Measure", "Non_dynast", "Dynast")
+#
+```
+
+
+## MP's performance
+
+```{r  performance chart, fig.width = 16/2, fig.height = 9/2}
+names(performance1)   <- c("Measure", "Non_dynast", "Dynast")
 #perf_score <- 
   ggplot(performance1, aes(y = reorder(Measure, Non_dynast),
                           x = Non_dynast,
@@ -208,7 +270,7 @@ names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
     theme_minimal_hgrid()+
   labs(title = "Performance of MPs - 2009:2014",
        subtitle = "Dynasts  v/s Non-dynasts  ",
-       x = "Rating (Out of 10)",
+       x = "Rating (Out of 3)",
        y = "",
        caption = "Source: ADR-Daksh Survey Report")+
   scale_x_continuous(limits = c(1.5,1.8), breaks = c(1.5,1.65, 1.8))
@@ -219,17 +281,142 @@ names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
   #             height_pixels = 450)
   
   
-  
  
+```
+
+
+---
+
+
+
+# Other questions
+
+## Why do you vote for a candidate?
+
+
+
+```{r fig.width = 16/2, fig.height = 9/2}
+
+imp <- rbind(dynast_adr  %>% group_by(dynast, `The Candidate`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% select(1:2,5:5) %>% mutate(`The Candidate` = ifelse(`The Candidate`=="","NR",`The Candidate`)) %>% pivot_wider(names_from = `The Candidate`, values_from = prop),
+
+
+
+
+dynast_adr  %>% group_by(dynast, `Candidate’s Party`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% select(1:2,5:5) %>% mutate(`Candidate’s Party` = ifelse(`Candidate’s Party`=="","NR",`Candidate’s Party`)) %>% pivot_wider(names_from = `Candidate’s Party`, values_from = prop) ,
+
+
+dynast_adr  %>% group_by(dynast, `Candidate’s caste/religion`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% select(1:2,5:5) %>% mutate(`Candidate’s caste/religion` = ifelse(`Candidate’s caste/religion`=="","NR",`Candidate’s caste/religion`)) %>% pivot_wider(names_from = `Candidate’s caste/religion`, values_from = prop),
+
+
+dynast_adr  %>% group_by(dynast, `The party’s PM Candidate`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% select(1:2,5:5) %>% mutate(`The party’s PM Candidate` = ifelse(`The party’s PM Candidate`=="","NR",`The party’s PM Candidate`)) %>% pivot_wider(names_from = `The party’s PM Candidate`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast, `Distribution of money / liquor / gifts`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% select(1:2,5:5) %>% mutate(`Distribution of money / liquor / gifts` = ifelse(`Distribution of money / liquor / gifts`=="","NR",`Distribution of money / liquor / gifts`)) %>% pivot_wider(names_from = `Distribution of money / liquor / gifts`, values_from = prop))
+
+
+question <- c("Candidate","Candidate","Party", "Party","Caste/Religion","Caste/Religion","PM candidate","PM candidate","Handouts","Handouts")
+
+
+# data.frame(question, imp) %>% kable(caption = "What's the reason you vote for a candidate?") %>% kable_styling(bootstrap_options = "striped")
+
+#imp_q <- 
+  imp_q <- data.frame(question, imp) %>% pivot_longer(!c("question","dynast"),names_to = "choice", values_to = "prop")
+  
+  imp_q$choice <- factor(imp_q$choice, levels = c("Very.Important","Important", "Not.Important","NR"))
+  
+  ggplot(imp_q, aes(factor(dynast),prop, fill = choice,label = round(prop,2)))+
+    geom_bar(position = "stack",stat= "identity")+
+    geom_text(size = 2, position = position_stack(vjust = .5))+
+    scale_x_discrete(labels = c( "Non-dynast","Dynast"))+
+    scale_fill_brewer(direction = "-1",palette = "Blues")+
+    labs(title = "Why do you vote for this candidate?", caption ="Source: ADR-Daksh Survey Report - 2014" )+
+    
+    theme_minimal()+
+    facet_grid(~question,scales="free",)+
+    theme(
+      axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1, size = 10),
+      strip.text.x = element_text(size = 11),
+      axis.title = element_blank(),
+      axis.text.y = element_blank(),
+      legend.title = element_blank(),
+      plot.margin = unit(c(.5,.5,.5,.5), "cm")
+      
+    )
+    
+
+
 ```
 
 
 
 
+---
+
+## Why do you vote for a criminal candidate?
+
+
+
+```{r}
+criminal_votes <- rbind(dynast_adr  %>% group_by(dynast, `Candidate is of similar caste or religion`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Candidate is of similar caste or religion` = ifelse(`Candidate is of similar caste or religion`=="","NR",`Candidate is of similar caste or religion`)) %>% pivot_wider(names_from = `Candidate is of similar caste or religion`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast, `Candidate is powerful`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Candidate is powerful` = ifelse(`Candidate is powerful`=="","NR",`Candidate is powerful`)) %>% pivot_wider(names_from = `Candidate is powerful`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast, `Candidate otherwise does good work`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Candidate otherwise does good work` = ifelse(`Candidate otherwise does good work`=="","NR",`Candidate otherwise does good work`)) %>% pivot_wider(names_from = `Candidate otherwise does good work`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast, `Cases against him are not serious`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Cases against him are not serious` = ifelse(`Cases against him are not serious`=="","NR",`Cases against him are not serious`)) %>% pivot_wider(names_from = `Cases against him are not serious`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast, `Candidate has spent generously in elections`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Candidate has spent generously in elections` = ifelse(`Candidate has spent generously in elections`=="","NR",`Candidate has spent generously in elections`)) %>% pivot_wider(names_from = `Candidate has spent generously in elections`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast, `Voters don’t know about the criminal record`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Voters don’t know about the criminal record` = ifelse(`Voters don’t know about the criminal record`=="","NR",`Voters don’t know about the criminal record`)) %>% pivot_wider(names_from = `Voters don’t know about the criminal record`, values_from = prop))
+
+question <- c("Candidate is of similar caste or religion","Candidate is of similar caste or religion","Candidate is powerful", "Candidate is powerful","Candidate otherwise does good work","Candidate otherwise does good work","Cases against him are not serious ","Cases against him are not serious ","Candidate has spent generously in elections","Candidate has spent generously in elections","Voters don’t know about the criminal record","Voters don’t know about the criminal record")
+
+data.frame(question, criminal_votes)%>% kable(caption = "Why do you vote for a criminal candidate?") %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+----
+
+
+## Miscellanious questions
+
+
+
+```{r}
+
+misc <- rbind(dynast_adr  %>% group_by(dynast,  `Did you hear of candidates distributing money/gifts/liquor in yo`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Did you hear of candidates distributing money/gifts/liquor in yo` = ifelse(`Did you hear of candidates distributing money/gifts/liquor in yo`=="","NR", `Did you hear of candidates distributing money/gifts/liquor in yo`)) %>% pivot_wider(names_from =  `Did you hear of candidates distributing money/gifts/liquor in yo`, values_from = prop) ,
+
+dynast_adr  %>% group_by(dynast,  `Do you know that the distribution of money/gifts/liquor for vote`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Do you know that the distribution of money/gifts/liquor for vote` = ifelse(`Do you know that the distribution of money/gifts/liquor for vote`=="","NR", `Do you know that the distribution of money/gifts/liquor for vote`)) %>% pivot_wider(names_from =  `Do you know that the distribution of money/gifts/liquor for vote`, values_from = prop),
+
+dynast_adr  %>% group_by(dynast,  `Do you know that you can get information on the criminal record`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Do you know that you can get information on the criminal record` = ifelse(`Do you know that you can get information on the criminal record`=="","NR", `Do you know that you can get information on the criminal record`)) %>% pivot_wider(names_from =  `Do you know that you can get information on the criminal record`, values_from = prop),
+
+
+dynast_adr  %>% group_by(dynast,  `Do you think people should vote for candidates with a criminal r`) %>% summarise(count = n()) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = round(count/sum,2)) %>% select(1:2,5:5) %>% mutate(`Do you think people should vote for candidates with a criminal r` = ifelse(`Do you think people should vote for candidates with a criminal r`=="","NR", `Do you think people should vote for candidates with a criminal r`)) %>% pivot_wider(names_from =  `Do you think people should vote for candidates with a criminal r`, values_from = prop))
+
+question <- c("Did you hear abut candidate distributing handouts?",
+              "Did you hear abut candidate distributing handouts?",
+
+"Did you kow that the distribution of handouts are illegal?",
+"Did you kow that the distribution of handouts are illegal?",
+
+"Do you know that you can get information on the criminal record of the candidates?",
+"Do you know that you can get information on the criminal record of the candidates?",
+
+"Do you think people should vote for a candidates with a criminal record?",
+"Do you think people should vote for a candidates with a criminal record?")
+
+data.frame(question, misc) %>%  kable(caption = "miscellaneous questions") %>% kable_styling(bootstrap_options = "striped")
+
+
+```
+
+
+----
+
+
 # UP
 
 ```{r}
-composite_score <- dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job_training = mean(`Training for jobs`, na.rm = TRUE), 
+composite_score <- dyn_adr_survey %>% group_by(dyn_cum_2) %>% summarise(job_training = mean(`Training for jobs`, na.rm = TRUE), 
                                                                  road =mean(`Better roads`, na.rm = TRUE) ,
                                                                  water = mean(`Drinking water`, na.rm = TRUE),
                                                                  public_transport = mean(`Better public transport`, na.rm = TRUE),
@@ -250,10 +437,12 @@ composite_score <- dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job_traini
                                                                  mp_trust = mean(`Trustworthiness of MP`, na.rm = TRUE)
                                                                  
 )%>%
-  melt(id = "dyn_cum", measure = 2:20) %>% pivot_wider(names_from = "dyn_cum", values_from = "value") 
+  melt(id = "dyn_cum_2", measure = 2:20) %>% pivot_wider(names_from = "dyn_cum_2", values_from = "value") 
 names(composite_score)[2:3] <- c("Composite Score - non-dynast", "Composite Score - dynast")
 names(composite_score)[1] <- "Issue"
-importance <- dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job_training = mean(`I: Training for jobs`, na.rm = TRUE), 
+
+
+importance <- dyn_adr_survey %>% group_by(dyn_cum_2) %>% summarise(job_training = mean(`I: Training for jobs`, na.rm = TRUE), 
                                                             road =mean(`I: Better roads`, na.rm = TRUE) ,
                                                             water = mean(`I: Drinking water`, na.rm = TRUE),
                                                             public_transport = mean(`I: Better public transport`, na.rm = TRUE),
@@ -273,10 +462,17 @@ importance <- dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job_training = 
                                                             strong_defence = mean(`I: Strong Defence/Military`, na.rm = TRUE),
                                                             mp_trust = mean(`I: Trustworthiness of MP`, na.rm = TRUE)
 )%>%
-  melt(id = "dyn_cum", measure = 2:20) %>% pivot_wider(names_from = "dyn_cum", values_from = "value") 
+  melt(id = "dyn_cum_2", measure = 2:20) %>% pivot_wider(names_from = "dyn_cum_2", values_from = "value") 
+
 names(importance)[2:3] <- c("Importance - non-dynast", "Importance - dynast")
+
+importance1 <- importance
+
 importance <- importance %>% select(-variable)
-performance <- dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job_training = mean(`P: Training for jobs`, na.rm = TRUE), 
+
+
+
+performance <- dyn_adr_survey %>% group_by(dyn_cum_2) %>% summarise(job_training = mean(`P: Training for jobs`, na.rm = TRUE), 
                                                              road =mean(`P: Better roads`, na.rm = TRUE) ,
                                                              water = mean(`P: Drinking water`, na.rm = TRUE),
                                                              public_transport = mean(`P: Better public transport`, na.rm = TRUE),
@@ -296,10 +492,105 @@ performance <- dyn_adr_survey %>% group_by(dyn_cum) %>% summarise(job_training =
                                                              strong_defence = mean(`P: Strong Defence/Military`, na.rm = TRUE),
                                                              mp_trust = mean(`P: Trustworthiness of MP`, na.rm = TRUE)
 )%>%
-  melt(id = "dyn_cum", measure = 2:20) %>% pivot_wider(names_from = "dyn_cum", values_from = "value") 
+  melt(id = "dyn_cum_2", measure = 2:20) %>% pivot_wider(names_from = "dyn_cum_2", values_from = "value") 
 names(performance)[2:3] <- c("Performance - non-dynast", "Performance- dynast")
+
+performance1 <- performance
 performance <- performance %>% select(-variable)
-cbind(composite_score, importance, performance) %>% kable(caption = "Issues - Score, Importance ,Perfromance - wrt politician's identity ",digits = 2) %>% kable_styling(bootstrap_options = "striped" )
+
+
+# cbind(composite_score, importance, performance) %>% kable(caption = "Issues - Score, Importance ,Perfromance - wrt politician's identity ",digits = 2) %>% kable_styling(bootstrap_options = "striped" )
+```
+
+## Over all rating
+
+```{r fig.width = 16/2, fig.height = 9/2}
+names(composite_score)  <- c("Measure", "Non_dynast", "Dynast")
+# comp_score <-
+  ggplot(composite_score, aes(y = reorder(Measure, Non_dynast),
+                          x = Non_dynast,
+                          xend = Dynast)) +  
+  geom_dumbbell(colour = "#dddddd",
+                size = 3,
+                colour_x = "#FAAB18",
+                colour_xend = "#1380A1") +
+  #bbc_style()+
+    theme_minimal_hgrid()+
+  labs(title = "MP's over all rating - 2009:2014",
+       subtitle = "Dynasts v/s Non-Dynasts \n (rated out 10)",
+       x = "Rating (Out of 3)",
+       y = "",
+       caption = "Source: ADR-Daksh Survey Report")+
+  scale_x_continuous(limits = c(3.5,5), breaks = c(3.5, 4,4.5, 5))
+  # finalise_plot(plot_name = comp_score,
+  #             source = "Source: ADR-Daksh Survey Report",
+  #             save_filepath = "ADR_composite_score.png",
+  #             width_pixels = 640,
+  #             height_pixels = 450)
+  #
 ```
 
 
+## Important issues to the constituents
+
+```{r fig.width = 16/2, fig.height = 9/2}
+names(importance1)   <- c("Measure", "Non_dynast", "Dynast")
+  
+  ggplot(importance1, aes(y = reorder(Measure, Non_dynast),
+                          x = Non_dynast,
+                          xend = Dynast)) +  
+  geom_dumbbell(colour = "#dddddd",
+                size = 3,
+                colour_x = "#FAAB18",
+                colour_xend = "#1380A1") +
+  #bbc_style()+
+  theme_minimal_hgrid()+
+  labs(title = "Pressing issues of the constituents - Uttar Pradesh :- 2009:2014",
+       subtitle = "Dynasts constiuencies v/s Non-dynasts constituencies",
+       x = "Rating (Out of 3)",
+       y = "",
+       caption = "Source: ADR-Daksh Survey Report")+
+  scale_x_continuous(limits = c(2,2.52), breaks = c(2,2.25,2.5))
+# 
+#   finalise_plot(plot_name = imp_score,
+#               source = "Source: ADR-Daksh Survey Report",
+#               save_filepath = "ADR_importance_score.png",
+#               width_pixels = 640,
+#               height_pixels = 450)
+```
+
+
+## MP's performance
+
+```{r fig.width = 16/2, fig.height = 9/2}
+  
+    names(performance1)   <- c("Measure", "Non_dynast", "Dynast")
+#perf_score <- 
+  ggplot(performance1, aes(y = reorder(Measure, Non_dynast),
+                          x = Non_dynast,
+                          xend = Dynast)) +  
+  geom_dumbbell(colour = "#dddddd",
+                size = 3,
+                colour_x = "#FAAB18",
+                colour_xend = "#1380A1") +
+  #bbc_style()+
+    theme_minimal_hgrid()+
+  labs(title = "Performance of MPs - 2009:2014",
+       subtitle = "Dynasts  v/s Non-dynasts  ",
+       x = "Rating (Out of 10)",
+       y = "",
+       caption = "Source: ADR-Daksh Survey Report")+
+  scale_x_continuous(limits = c(1,2), breaks = c(1,1.5,2))
+  # finalise_plot(plot_name = perf_score,
+  #             source = "Source: ADR-Daksh Survey Report",
+  #             save_filepath = "ADR_performance_score.png",
+  #             width_pixels = 640,
+  #             height_pixels = 450)
+  
+  
+  
+ 
+```
+
+
+<!-- This post was last updated on `r format(Sys.Date(), "%Y-%m-%d")`. -->

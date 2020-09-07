@@ -12,12 +12,14 @@
     
     
     <item>
-      <title>Constituency characteristics</title>
-      <link>/post/constituency_characteristics/</link>
+      <title>Families</title>
+      <link>/post/families-cat2/</link>
       <pubDate>Tue, 11 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/constituency_characteristics/</guid>
-      <description>AsherFrancescaGE 2009 : 2019AsherRegression Results - Dev AsherDependent variable:Urban + Rural(1)(2)(3)pc91_vd_power_supl-0.587***-0.654***(0.215)(0.</description>
+      <guid>/post/families-cat2/</guid>
+      <description>Document Historycaste compositionEducational institutionsDocument HistoryOriginal Publish Date: 21 July, 2020
+Updated on: 08 September, 2020
+In this post we further analyse the families. We categorised them into two - declining and rising. We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections.</description>
     </item>
     
     <item>
@@ -35,16 +37,7 @@
       <pubDate>Thu, 23 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/cand_quality/</guid>
-      <description>2012 &amp;amp; 2017AssetsCriminalityProfessionEducationGE 2019AssetsCriminalityGenderEducationProfesssion% filter(year ==2019) --% group_by(dyn_con) %% distinct(constituency_no, .keep_all = TRUE) %% summarise(count = n()) %% kable(caption = &#34;Summary&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;N&#34;)) --%group_by(constituency_no) %% mutate(n_cand = n()) --% group_by(dyn_con) %% summarise(mean(n_cand)) %% kable(caption = &#34;Average n of candidtes&#34;, col.names = c(&#34;Constituency Type&#34;, &#34;Mean n_cand&#34;),digits = 0) --% group_by(dyn_con) %% summarise(mean(total_assets), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %% kable(caption = &#34;</description>
-    </item>
-    
-    <item>
-      <title>Families</title>
-      <link>/post/families-cat2/</link>
-      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/families-cat2/</guid>
-      <description>Table 1: Average life spanSuccessLife spanDeclining22Rising35Regression Results - Success of dynastiesDependent variable:Risingcaste_uc4.908(225.</description>
+      <description>% select(2:10,55:61, State_Name, Year,Constituency_No, Position) --% filter(total_assets0) --% filter(state_name == &#34;Uttar_Pradesh&#34;) --% filter(election_type %in% c(&#34;AE&#34;, &#34;GE&#34;)) --% group_by(year,constituency_no) %% mutate(dyn_con= if_else(any(dyn_cum_2 ==1),1,0)) --% filter(year %in% c(2012,2017)) %% distinct(constituency_no,year, .keep_all = TRUE)%% select(year, constituency_name, constituency_no, dyn_con) %% arrange( constituency_no, year) --% select(year, constituency_no, dyn_con, dyn_cum_2)%% distinct(year, constituency_no, .keep_all = TRUE) --% filter(dyn_cum_2 ==0) --% dplyr::select( -c(constituency_id,state, assembly_no, --% rename( position = position_tcpd) --% filter (year %in% c(2012,2017)) --% group_by(dyn_con) %% filter(winner ==0) %% summarise(mean(total_assets, na.</description>
     </item>
     
     <item>
@@ -71,7 +64,9 @@
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/linkages/</guid>
-      <description>SummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditureType of work v/s projectsType of work v/s costcost categoriesRaphaelVote dispersionSummaryTable 1: Summary table of individuals from families with and without linkagesAE: 2012-2017, GE: 2009-2019LinkageCountFALSE179TRUE274AssetsTable 2: Average assets among families with and without linkagesLinkageTotal assetsMovable AssetsImmovable AssetsFALSE37408611862547925184182TRUE490084571166379331261156CrimeTable 3: Serious criminal cases among families with and without linkagesLinkageProportionFALSE0.</description>
+      <description>Document HistoryADRSummaryAssetsCrimeIndustryCasteMPLADSProject count and expenditurecost categoriesRaphaelVote dispersionDocument HistoryOriginal Publish Date: 23 June, 2020
+Updated on: 07 September, 2020
+In politics few of the players become successful in building a dynasty. Among those successful ones some of them expands their territory to multiple levels. In this post, we look at those families to see what enabled them for their expansion.</description>
     </item>
     
     <item>
@@ -80,7 +75,10 @@
       <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/district-levelo/</guid>
-      <description>census dataDas guptaAlexanderIyercriminalitydistrict_namedyn_propetawah0.30moradabad0.24mainpuri0.23azamgarh0.22etah0.21mathura0.21lalitpur0.20shahjahanpur0.18hardoi0.</description>
+      <description>Document HistoryDistict level dynasticismcensus dataDas guptaAlexandercriminalityDocument HistoryOriginal Publish Date: 06 July, 2020
+Updated on: 08 September, 2020
+Distict level dynasticismWe calculate the the dynasty scor eof district by calcuating the years ruled by dynast in a district from 1974 to 2017.
+district_namedyn_propetawah0.30moradabad0.</description>
     </item>
     
     <item>
@@ -89,7 +87,9 @@
       <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/adr-survey/</guid>
-      <description>All IndiaUPAll IndiaTable 1: Issues - Score, Importance ,Perfromance - wrt politician’s identityIssueComposite Score - non-dynastComposite Score - dynastImportance - non-dynastImportance - dynastPerformance - non-dynastPerformance- dynastjob_training4.183.942.272.241.671.59road4.</description>
+      <description>Document HistoryAll IndiaOver all ratingImportant issues to the constituentsMP’s performanceOther questionsWhy do you vote for a candidate?Why do you vote for a criminal candidate?Miscellanious questionsUPOver all ratingImportant issues to the constituentsMP’s performanceDocument HistoryOriginal Publish Date: 03 July, 2020
+Updated on: 03 September, 2020
+In this post we analyse the performance of dynast MPs in their constituency by using a pan India survey conducted by Daksh and ADR on governance issues for the year 2013-14.</description>
     </item>
     
     <item>
@@ -120,12 +120,24 @@
     </item>
     
     <item>
+      <title>Constituency characteristics</title>
+      <link>/post/constituency_characteristics/</link>
+      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/constituency_characteristics/</guid>
+      <description>AsherFrancescaGE 2009 : 2019AsherAsher data provides us information at the assembly constituency level for the the Indian states. Here we are using it to asses the impact of dynast rule on certain constituency characteristics. In other ways this would also be an indicator of those places where you would see prolonged rule of dynast leaders.
+The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001.</description>
+    </item>
+    
+    <item>
       <title>Political Characteristics Analysis</title>
       <link>/post/pol-char-analysis/</link>
       <pubDate>Tue, 23 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/pol-char-analysis/</guid>
-      <description>SummaryMargin of VictoryTurnoutEffective number of partiesNumber of candidatesTurncoatSame partyIncumbentRecontestNumber of termsConstituency typeVote dispersionCabinet ministersSummaryTable 1: Summary of the dataElection TypePolitician’s IdentityProportionAEFamily0.09AENon-family0.91GEFamily0.</description>
+      <description>Document HistorySummaryMargin of VictoryTurnoutEffective number of partiesNumber of candidatesTurncoatSame partyIncumbentRecontestNumber of termsConstituency typeRaphaelVote dispersionDocument HistoryOriginal Publish Date: 23 June, 2020
+Updated on: 07 September, 2020
+In this post we analyse the political characteristics of the family politicians using the TCPD elections data. We use elections data starting from 1974 to 2019.</description>
     </item>
     
     <item>
@@ -154,12 +166,14 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
     </item>
     
     <item>
-      <title>MPLADS Analyis</title>
+      <title>MPLADS Analysis</title>
       <link>/post/mplads-analysis/</link>
       <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/mplads-analysis/</guid>
-      <description>MPLADSFamil v/s Non-familyDaysNumber of ProjectsExpenditureExperience categoriesType of work v/s projectsType of work v/s costcost categoriesMPLADSFamil v/s Non-familyTable 1: MPLADS prjects and spendingType of constiuencyAverage number of contractsAvergae expenditure per projectNon-family321349773Family432317017Table 2: MPLADS prjects and spendingYearType of constiuencyAverage number of contractsAvergae expenditure per project2004Family3312907962004Non-family3453046602009Family5213400582009Non-family285420557The difference in the mean of both project count and the expenditure is statistically significant.</description>
+      <description>Document HistorySummary statsFamily v/s Non-familyDaysProjectsExpenditureCost per projectcost categoriesDocument HistoryOriginal Publish Date: 18 June, 2020
+Updated on: 07 September, 2020
+## [1] &amp;quot;LS/RS: 15th Lok Sabha&amp;quot; &amp;quot;LS/RS: 14th Lok Sabha&amp;quot;Summary statsThis mplads data is for the 14th and 15the Loksabha which commenced on 20004 and 2009 respectively. We matched it with Uttar Pradesh MPs for the same years.</description>
     </item>
     
     <item>
@@ -172,12 +186,12 @@ Deposits - sum of disbursements to laborers’ bank and post office accounts
     </item>
     
     <item>
-      <title>Master file Analyis</title>
+      <title>Master file Analysis</title>
       <link>/post/master-file-analysis/</link>
       <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/master-file-analysis/</guid>
-      <description>Analyis at different levelsAE - GEAssembly ElectionsGeneral ElectionsLevelsLife spanElections wonretentionAE GE election contestLand distributionIndustries: EducationIndustries : OthersIndustriesCasteExperienceAnalyis at different levelsAE - GEThis universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 300.</description>
+      <description>Document HistorySummary statisticsAE - GEAssembly ElectionsGeneral ElectionsLevelsDynast presence in the past electionsAE GE election contestElections wonElections contestedLife spanRetentionLand distributionFamiliesPolitical ExperienceEducational institutionsFamiliesPolitical ExperiencecasteIndustriesFamiliesrent thickPolitical experiencePolitical experienceFamilycasteDocument HistoryOriginal Publish Date: 10 June, 2020</description>
     </item>
     
   </channel>

@@ -1,7 +1,10 @@
 ---
 title: "Families"
 author: ""
-date: "2020-07-21"
+date: "2020-08-11"
+params:
+  orig_date: "Original Publish Date: 21 July, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
@@ -11,7 +14,26 @@ editor_options:
 
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
+<div id="TOC">
+<ul>
+<li><a href="#section"><!-- real date : 2020-07-2 --></a><ul>
+<li><a href="#document-history">Document History</a></li>
+</ul></li>
+<li><a href="#caste-composition">caste composition</a></li>
+<li><a href="#educational-institutions">Educational institutions</a></li>
+</ul>
+</div>
 
+<div id="section" class="section level2">
+<h2><!-- real date : 2020-07-2 --></h2>
+<div id="document-history" class="section level3">
+<h3>Document History</h3>
+<p>Original Publish Date: 21 July, 2020</p>
+<p>Updated on: 08 September, 2020</p>
+<hr />
+<p>In this post we further analyse the families. We categorised them into two - declining and rising. We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections. If they have one at least one election in these 5 elections we call them rising dynasties and rest of them as declining dynasties.</p>
+<hr />
+<p>The follwoing table shows the difference the longevity of these two groups</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-3">Table 1: </span>Average life span
@@ -46,7 +68,89 @@ Rising
 </tbody>
 </table>
 <!-- We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections. If they have one atleast one election in these 5 elections we call them rising dynasties and rest of them as declining dynasties. -->
-<p><img src="/post/families_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<hr />
+<p>This chart depicts how the life span of a family varies according to their caste.</p>
+<p><img src="/post/families-cat2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<hr />
+<hr />
+<p>Summary of the two categories -</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Success
+</th>
+<th style="text-align:right;">
+land
+</th>
+<th style="text-align:right;">
+industires
+</th>
+<th style="text-align:right;">
+N_minister
+</th>
+<th style="text-align:right;">
+Minister duration (months)
+</th>
+<th style="text-align:right;">
+school
+</th>
+<th style="text-align:right;">
+college
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Declining
+</td>
+<td style="text-align:right;">
+316.33
+</td>
+<td style="text-align:right;">
+1.57
+</td>
+<td style="text-align:right;">
+0.49
+</td>
+<td style="text-align:right;">
+12.51
+</td>
+<td style="text-align:right;">
+0.35
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rising
+</td>
+<td style="text-align:right;">
+400.00
+</td>
+<td style="text-align:right;">
+2.08
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:right;">
+27.54
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>Here we regress the successful category against a multitude of variables. Given that it is binary dependent variable we are using a probit model here.</p>
 <table style="text-align:center">
 <caption>
 <strong>Regression Results - Success of dynasties</strong>
@@ -285,83 +389,15 @@ Akaike Inf. Crit.
 </td>
 </tr>
 </table>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Success
-</th>
-<th style="text-align:right;">
-land
-</th>
-<th style="text-align:right;">
-industires
-</th>
-<th style="text-align:right;">
-N_minister
-</th>
-<th style="text-align:right;">
-Minister duration (months)
-</th>
-<th style="text-align:right;">
-school
-</th>
-<th style="text-align:right;">
-college
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Declining
-</td>
-<td style="text-align:right;">
-316.33
-</td>
-<td style="text-align:right;">
-1.57
-</td>
-<td style="text-align:right;">
-0.49
-</td>
-<td style="text-align:right;">
-12.51
-</td>
-<td style="text-align:right;">
-0.35
-</td>
-<td style="text-align:right;">
-0.26
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Rising
-</td>
-<td style="text-align:right;">
-400.00
-</td>
-<td style="text-align:right;">
-2.08
-</td>
-<td style="text-align:right;">
-0.73
-</td>
-<td style="text-align:right;">
-27.54
-</td>
-<td style="text-align:right;">
-0.43
-</td>
-<td style="text-align:right;">
-0.43
-</td>
-</tr>
-</tbody>
-</table>
-<p><img src="/post/families_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<p><img src="/post/families_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+<div id="caste-composition" class="section level2">
+<h2>caste composition</h2>
+<p><img src="/post/families-cat2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="educational-institutions" class="section level2">
+<h2>Educational institutions</h2>
+<p><img src="/post/families-cat2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <!-- ## Post_90 -->
 <!-- ```{r adr} -->
 <!-- adr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv", stringsAsFactors = FALSE) -->
@@ -531,3 +567,4 @@ Rising
 <!-- #  -->
 <!-- # df %>% filter(variable %in% c("id1", "id2", "id3")) %>% select(varibale, variable_1, variable_2) -->
 <!-- ```  -->
+</div>

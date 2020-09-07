@@ -2,17 +2,30 @@
 title: "Linkage Analysis"
 author: ""
 date: "2020-07-08"
+params:
+  orig_date: "Original Publish Date: 23 June, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
 editor_options: 
   chunk_output_type: inline
 ---
+
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
-knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE, fig.width = 16/2, fig.height = 9/2)
 
-##fig.width = 16/2, fig.height = 9/2
 
 library(tidyverse)
 library(data.table)
@@ -23,6 +36,11 @@ library(gridExtra)
 library(stargazer)
 `%!in%` = Negate(`%in%`)
 ```
+
+
+In politics few of the players become successful in building a dynasty. Among those successful ones some of them expands their territory to multiple levels. In this post, we look at those families to see what enabled them for their expansion. This analysis exclusively among families.
+
+We use TRUE/FALSE to represent a families linkage.
 
 
 ```{r read main file}
@@ -106,7 +124,19 @@ dyn_adr_ge <- dyn_adr %>% filter(election_type == "GE")
 dyn_adr_ae <- dyn_adr %>% filter(election_type == "AE")
 ```
 
+
+---
+
+
+
+# ADR
+
+In the first part, we are using ADR data which is available for the years 2012 and 2017 for AE and 2009,2014 and 2019 for GE.
+
 ## Summary
+
+This table shows us the number of families with linkage.
+
 
 ```{r}
 #dyn_adr <- dyn_adr %>% mutate(level_log_cum= ifelse(level_cum %in% c("AE", "GE"), FALSE, TRUE))
@@ -119,6 +149,7 @@ dyn_adr_fam <- dyn_adr %>% filter(dyn_cum_2== 1)
 dyn_adr_fam %>%  group_by(level_log_cum) %>%  summarise(n()) %>%  kable(caption = "Summary table of individuals from families with and without linkages \n AE: 2012-2017, GE: 2009-2019", col.names = c("Linkage", "Count"))  %>% kable_styling(bootstrap_options = "striped")
 ```
 
+---
 
 ## Assets
 
@@ -139,8 +170,11 @@ dyn_adr_fam %>%  group_by(level_log_cum) %>% summarise(mean(total_assets, trim =
 
 ```
 
+---
 
 ## Crime
+
+This table shows us the proportion of families in each category with one or more serious crimes.
 
 
 ```{r}
@@ -153,8 +187,11 @@ dyn_adr_fam %>% group_by(level_log_cum) %>% summarise(mean(serious_crime_log)) %
 
 ```
 
+---
 
 ## Industry
+
+In this section we calculate number of industries they own. According to our survey design Maximum number of industries that a family can have is 3 .
 
 ```{r}
 dyn_indus <- read.csv("D:/cpr/up-dynasties/ae_ge_indus.csv")
@@ -185,9 +222,14 @@ dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq %>% mutate(level_log= ifelse(level 
 dyn_indus_ae_ge_uniq$dyn_tot_2_text <- ifelse(dyn_indus_ae_ge_uniq$dyn_tot_2==1, "Family", "Non-family")
 
 dyn_indus_ae_ge_uniq %>%  group_by(level_log) %>% summarise(mean(indus_count)) %>% kable(caption = "Industry ownership among families with and without linkages", col.names = c("Politician's identity", "Average number of  ownersip"), digits = 1) %>% kable_styling(bootstrap_options = "striped")
+```
 
 
+---
 
+This table shows the break-up of the rent type among those industry owners
+
+```{r}
 dyn_indus_ae_ge_uniq <- dyn_indus_ae_ge_uniq  %>% mutate(indus_rt = case_when(indus_2 == 0 ~ "0", ind_2 %in% c(1,3,7,2,4,5)~ "rent-thick",
                                   TRUE~ "non-rent-thick"))
 
@@ -197,8 +239,11 @@ dyn_indus_ae_ge_uniq   %>% filter(indus_rt != "0") %>% group_by(level_log, indus
 ```
 
 
+---
 
 ## Caste
+
+This sections shows the composition of caste with regards linkage.
 
 
 
@@ -245,6 +290,8 @@ dyn_uniq_fam %>% group_by(level_log,caste_groups) %>% summarise(count= n()) %>% 
 
 
 ## MPLADS
+
+MPLADS data is available for the year 2004 & 2009. The following table summarises the families with and without linkage.
 
 
 
@@ -305,6 +352,9 @@ dyn_mplads_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency
 
 ```
 
+
+---
+
 ```{r}
  dyn_mplads_fam  %>% group_by(level_log_cum) %>% summarise(mean_contract = mean(ac_contr_n),mean_cost = mean(costnew))%>%  kable(caption = "MPLADS prjects and spending wrt linkage",col.names = c ("Type of constiuency", "Average number of contracts","Avergae expenditure per project"),digits = 0)%>% kable_styling(bootstrap_options = "striped")
 
@@ -317,6 +367,13 @@ dyn_mplads_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency
 
 
 ### Project count and expenditure
+
+This section  looks at the categorical distribution of type of MPLADS projects and spending among families with regards to their linkage.
+
+The following stacked chart depicts the composition of both number of projects and the expenditure with regards to linkage.
+
+
+
 
 ```{r spending composition}
 
@@ -348,8 +405,10 @@ dyn_mplads_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency
 
 ```
 
+---
 
-### Type of work v/s projects
+
+This bar chart depicts the average number of projects in each category withregards to linkage.
 
 ```{r}
 
@@ -386,10 +445,9 @@ dyn_mplads_fam %>% group_by(level_log_cum, category_work ) %>% summarise(mean_pr
 ```
 
 
+---
 
-
-
-### Type of work v/s cost
+This bar chart depicts the average cost incurred for each category of projects withregards to family linkage.
 
 
 ```{r}
@@ -467,6 +525,8 @@ ggplot(dyn_mplads_fam, aes(costnew, color = level_log_cum))+
 
 ### cost categories
 
+We categorised the project expenditure to three -
+
 
 Categories:
 
@@ -475,6 +535,8 @@ Low - 0-.2 mn
 Medium - 2.2 mn - 5 mn
 
 High - 5 mn+
+
+Here we are analysing how they differes withregards to families linkage status
 
 
 
@@ -487,15 +549,16 @@ dyn_mplads_fam %>% group_by(level_log_cum,cost_cat) %>% summarise(count = n()) %
 
 ## Raphael
 
+Raphael's booth level data is available for the last 3 UP assembly elections. We use the booth level voting data to see the spread of the vote share.
 
-# Vote dispersion
-
+The following table summarises the families with linkages for last 3 assembly elections in UP.
 
 ```{r}
 rafael <- fread("D:/cpr/up-dynasties/dyn_other_data/rafael-dataset.csv", stringsAsFactors = FALSE)
 
 
-rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent) %>% filter(year != 2007)
+rafael_up <- rafael %>% select(year, constituency_no, position, totalvotes, partynew, partypercent) 
+#%>% filter(year != 2007)
 
 
 dyn_rafael <- merge(dyn, rafael_up, by = c("year", "constituency_no", "position"), allow.cartesian = TRUE)
@@ -508,15 +571,9 @@ dyn_rafael_fam %>% group_by(level_log_cum) %>% summarise(n_distinct(constituency
 ```
 
 
+---
 
-
-
-
-
-
-
-
-
+# Vote dispersion
 
 
 ```{r}
@@ -524,12 +581,15 @@ dyn_rafael_fam %>% filter(position==1 & partypercent <100&  partypercent >10) %>
   kable(caption = "Vote dispersion at booth level wrt Politicians identity", col.names = c("Politician's Identity", "Variance"), digit = 0) %>% kable_styling(bootstrap_options = "striped")
 ```
 
+
+---
+
 ```{r}
 dyn_rafael_fam %>% filter(position==1 & partypercent <100&  partypercent >10) %>% group_by(constituency_no) %>% mutate(sd = sd(partypercent) ) %>% group_by(level_log_cum) %>% summarise(sd_mean = mean(sd)) %>% 
   kable(caption = "Vote dispersion at booth level wrt Politicians identity", col.names = c("Politician's Identity", "SD"), digit = 1) %>% kable_styling(bootstrap_options = "striped")
 ```
 
-
+---
 
 ```{r}
 ggplot(dyn_rafael_fam %>% filter(position==1) , aes(partypercent, color =level_log_cum))+

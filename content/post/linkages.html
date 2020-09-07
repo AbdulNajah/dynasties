@@ -2,6 +2,9 @@
 title: "Linkage Analysis"
 author: ""
 date: "2020-07-08"
+params:
+  orig_date: "Original Publish Date: 23 June, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
@@ -13,6 +16,8 @@ editor_options:
 
 <div id="TOC">
 <ul>
+<li><a href="#document-history">Document History</a></li>
+<li><a href="#adr">ADR</a><ul>
 <li><a href="#summary">Summary</a></li>
 <li><a href="#assets">Assets</a></li>
 <li><a href="#crime">Crime</a></li>
@@ -20,17 +25,30 @@ editor_options:
 <li><a href="#caste">Caste</a></li>
 <li><a href="#mplads">MPLADS</a><ul>
 <li><a href="#project-count-and-expenditure">Project count and expenditure</a></li>
-<li><a href="#type-of-work-vs-projects">Type of work v/s projects</a></li>
-<li><a href="#type-of-work-vs-cost">Type of work v/s cost</a></li>
 <li><a href="#cost-categories">cost categories</a></li>
 </ul></li>
 <li><a href="#raphael">Raphael</a></li>
+</ul></li>
 <li><a href="#vote-dispersion">Vote dispersion</a></li>
 </ul>
 </div>
 
+<hr />
+<div id="document-history" class="section level3">
+<h3>Document History</h3>
+<p>Original Publish Date: 23 June, 2020</p>
+<p>Updated on: 07 September, 2020</p>
+<hr />
+<p>In politics few of the players become successful in building a dynasty. Among those successful ones some of them expands their territory to multiple levels. In this post, we look at those families to see what enabled them for their expansion. This analysis exclusively among families.</p>
+<p>We use TRUE/FALSE to represent a families linkage.</p>
+<hr />
+</div>
+<div id="adr" class="section level1">
+<h1>ADR</h1>
+<p>In the first part, we are using ADR data which is available for the years 2012 and 2017 for AE and 2009,2014 and 2019 for GE.</p>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
+<p>This table shows us the number of families with linkage.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-1">Table 1: </span>Summary table of individuals from families with and without linkages
@@ -65,6 +83,7 @@ TRUE
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="assets" class="section level2">
 <h2>Assets</h2>
@@ -119,9 +138,11 @@ TRUE
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="crime" class="section level2">
 <h2>Crime</h2>
+<p>This table shows us the proportion of families in each category with one or more serious crimes.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-3">Table 3: </span>Serious criminal cases among families with and without linkages
@@ -155,9 +176,11 @@ TRUE
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="industry" class="section level2">
 <h2>Industry</h2>
+<p>In this section we calculate number of industries they own. According to our survey design Maximum number of industries that a family can have is 3 .</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-4">Table 4: </span>Industry ownership among families with and without linkages
@@ -191,6 +214,8 @@ TRUE
 </tr>
 </tbody>
 </table>
+<hr />
+<p>This table shows the break-up of the rent type among those industry owners</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -252,16 +277,19 @@ rent-thick
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="caste" class="section level2">
 <h2>Caste</h2>
-<p><img src="/post/linkages_files/figure-html/caste-1.png" width="672" /></p>
+<p>This sections shows the composition of caste with regards linkage.</p>
+<p><img src="/post/linkages_files/figure-html/caste-1.png" width="768" /></p>
 </div>
 <div id="mplads" class="section level2">
 <h2>MPLADS</h2>
+<p>MPLADS data is available for the year 2004 &amp; 2009. The following table summarises the families with and without linkage.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-5">Table 5: </span>Summary stat of families in 2004 &amp; 2009 GE wrt linkage
+<span id="tab:unnamed-chunk-6">Table 5: </span>Summary stat of families in 2004 &amp; 2009 GE wrt linkage
 </caption>
 <thead>
 <tr>
@@ -292,9 +320,10 @@ TRUE
 </tr>
 </tbody>
 </table>
+<hr />
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-6">Table 6: </span>MPLADS prjects and spending wrt linkage
+<span id="tab:unnamed-chunk-7">Table 6: </span>MPLADS prjects and spending wrt linkage
 </caption>
 <thead>
 <tr>
@@ -336,26 +365,28 @@ TRUE
 </table>
 <div id="project-count-and-expenditure" class="section level3">
 <h3>Project count and expenditure</h3>
-<p><img src="/post/linkages_files/figure-html/spending%20composition-1.png" width="672" /></p>
-</div>
-<div id="type-of-work-vs-projects" class="section level3">
-<h3>Type of work v/s projects</h3>
-<p><img src="/post/linkages_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-</div>
-<div id="type-of-work-vs-cost" class="section level3">
-<h3>Type of work v/s cost</h3>
-<p><img src="/post/linkages_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<p><img src="/post/linkages_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>This section looks at the categorical distribution of type of MPLADS projects and spending among families with regards to their linkage.</p>
+<p>The following stacked chart depicts the composition of both number of projects and the expenditure with regards to linkage.</p>
+<p><img src="/post/linkages_files/figure-html/spending%20composition-1.png" width="768" /></p>
+<hr />
+<p>This bar chart depicts the average number of projects in each category withregards to linkage.</p>
+<p><img src="/post/linkages_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<hr />
+<p>This bar chart depicts the average cost incurred for each category of projects withregards to family linkage.</p>
+<p><img src="/post/linkages_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+<p><img src="/post/linkages_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
 </div>
 <div id="cost-categories" class="section level3">
 <h3>cost categories</h3>
+<p>We categorised the project expenditure to three -</p>
 <p>Categories:</p>
 <p>Low - 0-.2 mn</p>
 <p>Medium - 2.2 mn - 5 mn</p>
 <p>High - 5 mn+</p>
+<p>Here we are analysing how they differes withregards to families linkage status</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-10">Table 7: </span>Project cost categories wrt politician’s identity
+<span id="tab:unnamed-chunk-11">Table 7: </span>Project cost categories wrt politician’s identity
 </caption>
 <thead>
 <tr>
@@ -443,12 +474,11 @@ High
 </div>
 <div id="raphael" class="section level2">
 <h2>Raphael</h2>
-</div>
-<div id="vote-dispersion" class="section level1">
-<h1>Vote dispersion</h1>
+<p>Raphael’s booth level data is available for the last 3 UP assembly elections. We use the booth level voting data to see the spread of the vote share.</p>
+<p>The following table summarises the families with linkages for last 3 assembly elections in UP.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-11">Table 8: </span>Summary stat of families in 2012 &amp; 2017 AE wrt linkage
+<span id="tab:unnamed-chunk-12">Table 8: </span>Summary stat of families in 2012 &amp; 2017 AE wrt linkage
 </caption>
 <thead>
 <tr>
@@ -474,14 +504,19 @@ FALSE
 TRUE
 </td>
 <td style="text-align:right;">
-100
+170
 </td>
 </tr>
 </tbody>
 </table>
+<hr />
+</div>
+</div>
+<div id="vote-dispersion" class="section level1">
+<h1>Vote dispersion</h1>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-12">Table 9: </span>Vote dispersion at booth level wrt Politicians identity
+<span id="tab:unnamed-chunk-13">Table 9: </span>Vote dispersion at booth level wrt Politicians identity
 </caption>
 <thead>
 <tr>
@@ -499,7 +534,7 @@ Variance
 FALSE
 </td>
 <td style="text-align:right;">
-374
+367
 </td>
 </tr>
 <tr>
@@ -507,14 +542,15 @@ FALSE
 TRUE
 </td>
 <td style="text-align:right;">
-307
+301
 </td>
 </tr>
 </tbody>
 </table>
+<hr />
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-13">Table 10: </span>Vote dispersion at booth level wrt Politicians identity
+<span id="tab:unnamed-chunk-14">Table 10: </span>Vote dispersion at booth level wrt Politicians identity
 </caption>
 <thead>
 <tr>
@@ -532,7 +568,7 @@ SD
 FALSE
 </td>
 <td style="text-align:right;">
-18.8
+18.7
 </td>
 </tr>
 <tr>
@@ -540,10 +576,11 @@ FALSE
 TRUE
 </td>
 <td style="text-align:right;">
-17.1
+17.0
 </td>
 </tr>
 </tbody>
 </table>
-<p><img src="/post/linkages_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<hr />
+<p><img src="/post/linkages_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
 </div>

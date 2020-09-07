@@ -1,7 +1,7 @@
 ---
 title: "Constituency characteristics"
 author: ""
-date: "2020-08-11"
+date: "2020-06-24"
 output:
   blogdown::html_page:
     toc: true
@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-
+<!-- real date - 2020-07-11 -->
 
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
@@ -33,7 +33,13 @@ select <- dplyr::select
 ```
 
 
+
+
 # Asher
+
+Asher data provides us information at the assembly constituency level for the the Indian states. Here we are using it to asses the impact of dynast rule on certain constituency characteristics. In other ways this would also be an indicator of those places where you would see prolonged rule of dynast leaders.
+
+The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001.  We limit our analysis to this period because the 
 
 ```{r}
 asher <- read_dta("D:/cpr/up-dynasties/dyn_other_data/asher/elections_con_panel.dta")
@@ -43,7 +49,7 @@ asher_up <- asher %>% filter(pc01_state_name == "Uttar Pradesh")
 # 
 # names(asher_up)
 # 
-# View(asher_up)
+ #View(asher_up)
 # 
 # unique(dyn_asher$constituency_name)
 # 
@@ -80,11 +86,16 @@ asher_period_1 <- asher_period_1 %>% filter(p_urban<60)
 
 
 #hist(asher_period_1$p_urban)
+
+# names(asher_up)
+# 
+# View(asher_up)
 ```
 
 
 
 ```{r dyn data prep}
+
 dyn_ae_ge <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
 
 dyn_dur <- dyn_ae_ge %>% filter(year<2003 & con_id_uniq!=  "" & position ==1)%>% group_by(con_id_uniq) %>% summarise(tot_duration = sum(term_duration), dyn_duration = sum(term_duration[dyn_cum_2==1]), dyn_prop = dyn_duration/tot_duration) %>% select(c(con_id_uniq,dyn_prop, dyn_duration))
@@ -103,14 +114,14 @@ dyn_asher <- merge(dyn_term, asher_period_1, by = "constituency_no")
 fit_all  <- glm(dyn_duration ~ pc91_vd_power_supl + el_con91+ p_sch_r91+ p_sch_u91 +s_sch_u91 +irr_share91 +hosp_r91 + hosp_u91 + pc91u_td_p_road + pc91_vd_app_pr + constituency_type +p_urban,data = dyn_asher, family=poisson())
 
 
-fit_rural  <- glm(dyn_duration ~ pc91_vd_power_supl + p_sch_r91+ +irr_share91 +hosp_r91  + pc91_vd_app_pr + constituency_type +Prural,data = dyn_asher, family=poisson())
+fit_rural  <- glm(dyn_duration ~ pc91_vd_power_supl + p_sch_r91+ +irr_share91 +hosp_r91  + pc91_vd_app_pr + constituency_type +p_urban,data = dyn_asher, family=poisson())
 
-fit_urban <- glm(dyn_duration ~  el_con91+ p_sch_u91 +s_sch_u91 +irr_share91+ hosp_u91 + pc91u_td_p_road + constituency_type+p_urban,data = dyn_asher, family=poisson())
+fit_urban <- glm(dyn_duration ~  el_con91+ p_sch_u91 +s_sch_u91 +irr_share91+ hosp_u91 + pc91u_td_p_road + constituency_type+Prural,data = dyn_asher, family=poisson())
 
 #summary(fit.1)
 
 stargazer(fit_all , fit_urban, fit_rural,title="Regression Results - Dev Asher ",type = "html",
-align=TRUE ,dep.var.labels= c ("Urban + Rural", "Urban", "Rural"), no.space=TRUE)
+align=TRUE ,dep.var.labels= c ("Dynast rule"), no.space=TRUE)
 
 
   
@@ -125,28 +136,38 @@ align=TRUE ,dep.var.labels= c ("Urban + Rural", "Urban", "Rural"), no.space=TRUE
 # Francesca
 
 ```{r francesca data prep}
+
+
+ac_pc_match <- read.csv("D:/cpr/up-dynasties/dyn_other_data/ac_pc_metadata.csv")
+
+ac_pc_match <- ac_pc_match %>% select(Constituency_No, Sub_Region)
+
+names(ac_pc_match) <-  tolower(names(ac_pc_match))
+
 fr <- read.csv("D:/cpr/up-dynasties/dyn_other_data/francesca/UPdata.csv")
 
 fr <- fr %>% rename(constituency_no = AC_no_2001)
 
 dyn_fr <- merge(dyn_term, fr, by = "constituency_no")
 
+dyn_fr <- merge(dyn_fr, ac_pc_match, by = "constituency_no")
 
 
-fr$non_sc_pop <- fr$tot_pop71_true-fr$SC_pop71_true
 
-fr$al_71 <- (fr$P_al71_nonSC * fr$non_sc_pop + fr$P_al71_SC * fr$SC_pop71_true)/fr$tot_pop71_true
+dyn_fr$non_sc_pop <- dyn_fr$tot_pop71_true-dyn_fr$SC_pop71_true
 
-lit <- (fr$Plit-fr$Plit71)/fr$Plit71
+dyn_fr$al_71 <- (dyn_fr$P_al71_nonSC * dyn_fr$non_sc_pop + dyn_fr$P_al71_SC * dyn_fr$SC_pop71_true)/dyn_fr$tot_pop71_true
 
-work <- (fr$P_W - fr$P_W71)/fr$P_W71
+lit <- (dyn_fr$Plit-dyn_fr$Plit71)/dyn_fr$Plit71
 
-agr_work <- (fr$P_al -fr$al_71)/fr$al_71
+work <- (dyn_fr$P_W - dyn_fr$P_W71)/dyn_fr$P_W71
+
+agr_work <- (dyn_fr$P_al -dyn_fr$al_71)/dyn_fr$al_71
 ```
 
 
 ```{r francesca model, results= "asis"}
-fit.2 <- glm(data= dyn_fr, dyn_duration ~ lit + work+ agr_work + constituency_type  , family = poisson())
+fit.2 <- glm(data= dyn_fr, dyn_duration ~ lit + work+ agr_work + constituency_type + sub_region.y  , family = poisson())
 
 #summary(fit.2)
 

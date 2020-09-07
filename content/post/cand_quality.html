@@ -9,513 +9,195 @@ editor_options:
   chunk_output_type: inline
 ---
 
-<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
-<div id="TOC">
-<ul>
-<li><a href="#section">2012 &amp; 2017</a><ul>
-<li><a href="#assets">Assets</a></li>
-<li><a href="#criminality">Criminality</a></li>
-<li><a href="#profession">Profession</a></li>
-<li><a href="#education">Education</a></li>
-</ul></li>
-<li><a href="#ge-2019">GE 2019</a><ul>
-<li><a href="#assets-1">Assets</a></li>
-<li><a href="#criminality-1">Criminality</a></li>
-<li><a href="#gender">Gender</a></li>
-<li><a href="#education-1">Education</a></li>
-<li><a href="#professsion">Professsion</a></li>
-</ul></li>
-</ul>
-</div>
 
-<!-- #2019 -->
-<!-- ## N_candidates -->
+<!-- ```{r set up, warning=FALSE, include=FALSE, message= FALSE} -->
+<!-- knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE) -->
+<!-- library(tidyverse) -->
+<!-- library(data.table) -->
+<!-- library(knitr) -->
+<!-- library(kableExtra) -->
+<!-- library(scales) -->
+<!-- library(gridExtra) -->
+<!-- library(stargazer) -->
+<!-- library(ggbump) -->
+<!-- library(here) -->
+<!-- `%!in%` = Negate(`%in%`) -->
+<!-- select <- dplyr::select -->
+<!-- ``` -->
+<!-- In this post, we are trying to assess nature of candidates in dynast constituency and how it differs from a non-dynast constituency. In the analysis we exclude of the winner since our intention is to asses how having important dynast candidate affect the general candidate characteristics in that particular constituency. In the GE section we limit our analysis -->
 <!-- ```{r} -->
-<!-- adr_dyn_19 <- adr_dyn %>% filter(year ==2019) -->
-<!-- adr_dyn_19 %>% group_by(dyn_con) %>% distinct(constituency_no, .keep_all = TRUE) %>%  summarise(count = n()) %>% kable(caption = "Summary", col.names = c("Constituency Type", "N")) -->
-<!-- adr_dyn_19 <- adr_dyn_19 %>%group_by(constituency_no) %>%  mutate(n_cand = n()) -->
-<!-- adr_dyn_19 %>% group_by(dyn_con) %>% summarise(mean(n_cand)) %>% kable(caption = "Average n of candidtes", col.names = c("Constituency Type", "Mean n_cand"),digits = 0) -->
+<!-- ge <- read.csv(here("data","tcpd_ge_09_14_19_dyn.csv")) -->
+<!-- #names(ge) -->
+<!-- names(ge)[1] <- "State_Name" -->
+<!-- names(ge) <- tolower(ge) -->
+<!-- ge$dynast <- ifelse(ge$dyn==1,1,0) -->
+<!-- adr_ge <- read.csv(here("data/adr","adr_tcpd_09_14_19.csv")) -->
+<!-- names(adr_ge) -->
+<!-- adr_ge<- adr_ge %>% select(2:10,55:61, State_Name, Year,Constituency_No, Position) -->
+<!-- names(adr) <- tolower(names(adr)) -->
+<!-- #ge_cen$Age <- NULL -->
+<!-- dyn_adr_ge <- merge(ge,ge_adr, by = c("State_Name","Year", "Constituency_No", "Position")) -->
+<!-- ge_cen_adr <- ge_cen_adr %>% filter(total_assets>0) -->
+<!-- ``` -->
+<!-- ```{r file config} -->
+<!-- ge_19 <- read.csv(here("data","TCPD_2019_all_candidates_with_caste_and_political_family.csv")) -->
+<!-- ge_19 <- read.csv(here("data","tcpd_ge_09_14_19_dyn.csv")) -->
+<!-- names(ge_19 ) <- tolower(names(ge_19)) -->
+<!-- ge_19 <- ge_19 %>% filter(state_name == "Uttar_Pradesh") -->
+<!-- dyn <- read.csv(here("data", "dyn_all.csv")) -->
+<!-- dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE")) -->
+<!-- ## checks if there was a dynast candidate in that constituency in a particular year -->
+<!-- dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum_2 ==1),1,0)) -->
+<!-- dyn_ae_con <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% distinct(constituency_no,year, .keep_all = TRUE)%>% select(year, constituency_name, constituency_no, dyn_con) %>% arrange( constituency_no, year) -->
+<!-- ## create a data frame which tells you if there was a dynast canidate in the top two positions. -->
+<!-- dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum_2)%>% distinct(year, constituency_no, .keep_all = TRUE) -->
+<!-- dyn_ge19 <- merge(ge_19, dyn_ae_ge_uniq_con , by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE) -->
+<!-- dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum_2 ==0) -->
+<!-- ``` -->
+<!-- ```{r adr} -->
+<!-- ## reading adr candidate level data scraped Jatin, includes information for all the candidates for the years 2009,2012,2014,2017,2019 -->
+<!-- adr <- read.csv(here("data", "adr_candidatelevel.csv")) -->
+<!-- names(adr)[1] <- "position" -->
+<!-- names(adr) <- tolower(names(adr)) -->
+<!-- adr <- adr %>% dplyr::select( -c(constituency_id,state,         assembly_no, -->
+<!--   month,              poll_no, -->
+<!--   delimid,            position, -->
+<!--   candidate,          sex, -->
+<!--   party,              votes, -->
+<!--   candidate_type,     valid_votes, -->
+<!--   electors,           constituency_name, -->
+<!--   constituency_type,  sub_region, -->
+<!--   n_cand,             turnout_percentage, -->
+<!--   vote_share_percentage,     deposit_lost, -->
+<!--   margin,             margin_percentage, -->
+<!--   enop, -->
+<!--   pid,                max_poll_no, -->
+<!--   last_poll,          contested, -->
+<!--   last_party,         last_constituency_name, -->
+<!--   same_constituency,  same_party, -->
+<!--   no_terms,           turncoat, -->
+<!--   incumbent,          recontest )  ) -->
+<!-- adr <- adr %>% rename( position = position_tcpd) -->
+<!-- ##merging the canidate information to the the data frame produced earlier to retrieve if there was dynst winner or runner-up. -->
+<!-- adr_dyn<- merge(adr,dyn_ae_ge_uniq_con, by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE) -->
+<!-- names(adr_dyn ) <- make.unique(names(adr_dyn )) -->
+<!-- adr_dyn$total_assets <- as.numeric(adr_dyn$total_assets) -->
+<!-- ``` -->
+<!-- # 2012 & 2017 -->
+<!-- ```{r ae level} -->
+<!-- adr_dyn_12_17 <- adr_dyn %>% filter (year %in% c(2012,2017)) -->
+<!-- names(adr_dyn_12_17) -->
 <!-- ``` -->
 <!-- ## Assets -->
+<!-- Constituency type : 1 - Dynast constituency, 2- Non-dynast constituency -->
 <!-- ```{r} -->
-<!-- adr_dyn_19 %>% group_by(dyn_con) %>% summarise(mean(total_assets), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %>% kable(caption = "Assets", col.names= c("Constituency Type", "Total assets", "Total movable assets", "Total immovable assets")) -->
+<!-- adr_dyn_12_17 %>% group_by(dyn_con) %>% filter(winner ==0) %>% summarise(mean(total_assets, na.rm =TRUE), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %>% kable(caption = "Assets", col.names= c("Constituency Type", "Total assets", "Total movable assets", "Total immovable assets")) %>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
 <!-- ## Criminality -->
 <!-- ```{r} -->
-<!-- adr_dyn_19 %>% group_by(dyn_con) %>% summarise(mean(serious_crime), mean(non_serious_crime)) %>% kable(caption = "Criminality", col.names= c("Constituency Type", "Serious crime", "Non-serious crime"), digits = 2) -->
+<!-- adr_dyn_12_17%>% group_by(dyn_con) %>% filter(winner ==0) %>% summarise(mean(serious_crime), mean(non_serious_crime)) %>% kable(caption = "Criminality", col.names= c("Constituency Type", "Serious crime", "Non-serious crime"), digits = 2)%>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
-<div id="section" class="section level1">
-<h1>2012 &amp; 2017</h1>
-<div id="assets" class="section level2">
-<h2>Assets</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-2">Table 1: </span>Assets
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency Type
-</th>
-<th style="text-align:right;">
-Total assets
-</th>
-<th style="text-align:right;">
-Total movable assets
-</th>
-<th style="text-align:right;">
-Total immovable assets
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-13141062
-</td>
-<td style="text-align:right;">
-3627850
-</td>
-<td style="text-align:right;">
-8930602
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-16221250
-</td>
-<td style="text-align:right;">
-3874586
-</td>
-<td style="text-align:right;">
-11936247
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="criminality" class="section level2">
-<h2>Criminality</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-3">Table 2: </span>Criminality
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency Type
-</th>
-<th style="text-align:right;">
-Serious crime
-</th>
-<th style="text-align:right;">
-Non-serious crime
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.32
-</td>
-<td style="text-align:right;">
-0.58
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.31
-</td>
-<td style="text-align:right;">
-0.51
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="profession" class="section level2">
-<h2>Profession</h2>
-<p><img src="/post/cand_quality_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="education" class="section level2">
-<h2>Education</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-5">Table 3: </span>Education
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency type
-</th>
-<th style="text-align:left;">
-Education
-</th>
-<th style="text-align:right;">
-Proportion
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-School
-</td>
-<td style="text-align:right;">
-0.43
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-School
-</td>
-<td style="text-align:right;">
-0.44
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-UG
-</td>
-<td style="text-align:right;">
-0.39
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-UG
-</td>
-<td style="text-align:right;">
-0.38
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-PG+
-</td>
-<td style="text-align:right;">
-0.19
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-PG+
-</td>
-<td style="text-align:right;">
-0.18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="ge-2019" class="section level1">
-<h1>GE 2019</h1>
-<!-- ## N_candidates -->
+<!-- ## Profession -->
+<!-- ```{r proession, fig.width = 16/2, fig.height = 9/2} -->
+<!-- adr_12_17 <- read.csv(here("data", "dyn_adr_12_17.csv")) -->
+<!-- adr_12_17 <- adr_12_17 %>% mutate(profession_new = ifelse(Profession %in% c("Medical Worker/Doctor","Engineer", "Government Job","Private Job", "Retired", "Journalist") , "Professional Job", -->
+<!--                                              ifelse(Profession %in% c("Social Worker", "Politician"), "Social Work", -->
+<!--                                                     ifelse(Profession %in% c("Dependent", "Driver", "Not Known", "Others", "Wage Labourer/Worker"), "Others", Profession)))) -->
+<!-- #table(adr_12_17$profession_new) -->
+<!-- adr_12_17 %>% group_by(dyn_con, profession_new) %>% filter(winner ==0) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, profession_new, prop) %>% -->
+<!--   ggplot(aes(factor(dyn_con), prop, fill= profession_new,label = round(prop,2)))+ -->
+<!--   geom_bar(position = "stack", stat = "identity")+ -->
+<!--    geom_text(size = 3, position = position_stack(vjust = 0.5))+ -->
+<!--     theme_minimal()+ -->
+<!--   scale_x_discrete(labels=(c( "Dynast Constituency", "Non - dynast Constituency")))+ -->
+<!--   labs(title = " Composition of candidate's professions \n wrt constituency type" ,subtitle = "AE 2012 & 2017",x = "", y = "Proportion", fill = "") + -->
+<!--   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"), -->
+<!--         plot.background = element_blank(), -->
+<!--         plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, family = "serif"), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         #legend.position = "bottom", -->
+<!--         legend.text = element_text(size = 12,family = "serif"), -->
+<!--         axis.text = element_text(face = "italic", size = 12), -->
+<!--         axis.text.y = element_blank(), -->
+<!--         axis.title.x = element_text(vjust = -1, size = 16), -->
+<!--         axis.title.y = element_blank(), -->
+<!--         axis.ticks.y = element_blank(), -->
+<!--         axis.line= element_line(color = "gray40", size = .5), -->
+<!--         axis.line.y = element_blank(), -->
+<!--         panel.grid.major = element_blank(), -->
+<!--         panel.grid.minor = element_blank() -->
+<!--   ) -->
+<!-- ``` -->
+<!-- ## Education -->
 <!-- ```{r} -->
-<!-- #adr_dyn_19 <- adr_dyn %>% filter(year ==2019) -->
-<!-- dyn_ge19 %>% group_by(dyn_con) %>% distinct(constituency_no, .keep_all = TRUE) %>%  summarise(count = n()) %>% kable(caption = "Summary", col.names = c("Constituency Type", "N")) -->
-<!-- dyn_ge19 <- dyn_ge19 %>%group_by(constituency_no) %>%  mutate(n_cand = n()) -->
-<!-- dyn_ge19 %>% group_by(dyn_con) %>% summarise(mean(n_cand)) %>% kable(caption = "Average n of candidtes", col.names = c("Constituency Type", "Mean n_cand"),digits = 0) -->
+<!--   adr_12_17$education_cl <- case_when(str_detect(adr_12_17$education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "School", str_detect(adr_12_17$education,"(Doctorate)|(Post)") ~ "PG+",str_detect(adr_12_17$education,"(Unknown)|(Not Given)") ~"NA" ,TRUE ~ "UG") -->
+<!-- #table(adr_12_17$education_cl) -->
+<!-- adr_12_17$education_cl <- factor(adr_12_17$education_cl,levels =c( "School", "UG", "PG+")) -->
+<!-- adr_12_17 %>% filter(education_cl != "NA"& winner ==0) %>%  group_by(dyn_con, education_cl) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% arrange(education_cl) %>% select(dyn_con, education_cl, prop) %>% kable(caption = "Education", col.names= c("Constituency type", "Education", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
-<div id="assets-1" class="section level2">
-<h2>Assets</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-7">Table 4: </span>Assets
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency Type
-</th>
-<th style="text-align:right;">
-Assets
-</th>
-<th style="text-align:right;">
-Total liabilities
-</th>
-<th style="text-align:right;">
-Net assets
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-53458467
-</td>
-<td style="text-align:right;">
-3615421
-</td>
-<td style="text-align:right;">
-49843046
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35129143
-</td>
-<td style="text-align:right;">
-6301236
-</td>
-<td style="text-align:right;">
-28827907
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="criminality-1" class="section level2">
-<h2>Criminality</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-8">Table 5: </span>Criminality
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency Type
-</th>
-<th style="text-align:right;">
-criminal cases - count
-</th>
-<th style="text-align:right;">
-Serious crime - logical
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.74
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1.20
-</td>
-<td style="text-align:right;">
-0.16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="gender" class="section level2">
-<h2>Gender</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-9">Table 6: </span>Gender
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency type
-</th>
-<th style="text-align:left;">
-Gender
-</th>
-<th style="text-align:right;">
-Proportion
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-Female
-</td>
-<td style="text-align:right;">
-0.11
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:right;">
-0.89
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Female
-</td>
-<td style="text-align:right;">
-0.12
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:right;">
-0.88
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="education-1" class="section level2">
-<h2>Education</h2>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-10">Table 7: </span>Education
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-Constituency type
-</th>
-<th style="text-align:left;">
-Education
-</th>
-<th style="text-align:right;">
-Proportion
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-School
-</td>
-<td style="text-align:right;">
-0.34
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-School
-</td>
-<td style="text-align:right;">
-0.40
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-UG
-</td>
-<td style="text-align:right;">
-0.42
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-UG
-</td>
-<td style="text-align:right;">
-0.39
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-PG+
-</td>
-<td style="text-align:right;">
-0.24
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-PG+
-</td>
-<td style="text-align:right;">
-0.20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="professsion" class="section level2">
-<h2>Professsion</h2>
-<p><img src="/post/cand_quality_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<!-- ## Involvement -->
+<!-- # GE 2019 -->
+<!-- ## Assets -->
 <!-- ```{r} -->
-<!-- inv <- read.csv("D:/cpr/up-dynasties/ae_ge_lb_who_is_who.csv" ) -->
-<!-- names(inv) -->
-<!-- summary(inv) -->
-<!-- inv%>% select(22:24) %>% summarise_all (funs(sum(is.na(.)))) -->
-<!-- inv%>%filter(election_type  == "AE")%>% group_by(year, org_inv) %>% summarise(count = n()) %>% spread(org_inv, count) %>% kable(caption = "Organisational Involvement") -->
-<!-- inv %>% filter(election_type  == "AE") %>%  group_by(association_inv, year) %>% summarise(count =n()) %>% spread(association_inv, count) %>% kable(caption = "Association") -->
-<!-- inv %>%filter(election_type  == "AE") %>%group_by(year,poitical_inv) %>% summarise(count = n()) %>% spread(poitical_inv, count) %>% kable(caption = "Political Involvement") -->
+<!-- dyn_ge19 %>% group_by(dyn_con) %>% summarise(mean(myneta_assets, na.rm = TRUE), mean(myneta_liabilities, na.rm =TRUE), mean(myneta_net_assets, na.rm =TRUE)) %>% kable(caption = "Assets", col.names= c("Constituency Type", "Assets", "Total liabilities", "Net assets"), digitis = 0)%>% kable_styling(bootstrap_options = "striped") -->
 <!-- ``` -->
-</div>
-</div>
+<!-- ## Criminality -->
+<!-- ```{r} -->
+<!-- dyn_ge19 %>% group_by(dyn_con) %>% summarise(mean(myneta_criminal_cases, na.rm =TRUE), mean(myneta_serious_criminal_cases, na.rm =TRUE)) %>% kable(caption = "Criminality", col.names= c("Constituency Type", "criminal cases - count", "Serious crime - logical"), digits = 2)%>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+<!-- ##  Gender -->
+<!-- ```{r} -->
+<!-- dyn_ge19 %>% filter(myneta_gender!= "") %>% group_by(dyn_con, myneta_gender) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, myneta_gender, prop) %>% kable(caption = "Gender", col.names= c("Constituency type", "Gender", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+<!-- ## Education -->
+<!-- ```{r} -->
+<!-- #table(dyn_ge19$myneta_education) -->
+<!--   dyn_ge19$education <- case_when(str_detect(dyn_ge19$myneta_education, "(Pass)| (Others) | (Literate) | (Illiterate)") ~ "School", str_detect(dyn_ge19$myneta_education,"(Doctorate)|(Post)") ~ "PG+", TRUE ~ "UG") -->
+<!-- dyn_ge19$education <- factor(dyn_ge19$education,levels =c( "School", "UG", "PG+")) -->
+<!-- dyn_ge19 %>% filter(myneta_education!= "") %>% group_by(dyn_con, education) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>%arrange(education) %>% select(dyn_con, education, prop) %>% kable(caption = "Education", col.names= c("Constituency type", "Education", "Proportion"), digits = 2)%>% kable_styling(bootstrap_options = "striped") -->
+<!-- ``` -->
+<!-- ## Professsion -->
+<!-- ```{r} -->
+<!-- profession <- data.frame(table(dyn_ge19$myneta_profession)) %>% arrange(-Freq) -->
+<!-- # write.csv(profession,"D:/cpr/up-dynasties/dyn_other_data/profession.csv" ) -->
+<!-- # table(dyn_ge19$profession) -->
+<!-- agri <- c("^Agriculture","Agriculture", "^Farmer", "Farming") -->
+<!-- retired <- c("Pension", "retire", "retired", "Pensioner") -->
+<!-- social <- c("^Social", "Social work", "Social Work") -->
+<!-- teaching <-   c("Teacher", "Teaching", "College", "School", "Lecturer", "Lecture", "Tution") -->
+<!--   dyn_ge19$profession <- case_when(str_detect(dyn_ge19$myneta_profession, paste(agri, collapse = "|")) ~ "Agriculture", -->
+<!--                                    str_detect(dyn_ge19$myneta_profession, "Advocate")~"Advocate", -->
+<!--                                    str_detect(dyn_ge19$myneta_profession, paste(teaching, collapse = "|"))~"Teaching", -->
+<!--                                    str_detect(dyn_ge19$myneta_profession, paste(social, collapse = "|"))~"Social Worker", -->
+<!--                                    str_detect(dyn_ge19$myneta_profession, paste(retired, collapse = "|"))~"Retired", -->
+<!--                                    str_detect(dyn_ge19$myneta_profession, "^Business")~"Business", -->
+<!--                                    str_detect(dyn_ge19$myneta_profession, "Doctor")~"Doctor", -->
+<!--                                    TRUE ~ "Others") -->
+<!--   dyn_ge19 %>% group_by(dyn_con, profession) %>% summarise(count = n()) %>% group_by(dyn_con) %>% mutate(sum = sum(count), prop = count/sum) %>% select(dyn_con, profession, prop) %>% -->
+<!--      ggplot(aes(factor(dyn_con), prop, fill= profession,label = round(prop,2)))+ -->
+<!--   geom_bar(position = "stack", stat = "identity")+ -->
+<!--    geom_text(size = 2, position = position_stack(vjust = 0.5))+ -->
+<!--     theme_minimal()+ -->
+<!--   scale_x_discrete(labels=(c( "Dynast Constituency", "Non - dynast Constituency")))+ -->
+<!--   labs(title = " Composition of candidate's professions \n wrt constituency type" ,subtitle = "AE 2012 & 2017",x = "", y = "Proportion", fill = "") + -->
+<!--   theme(plot.margin = unit(c(.5,.5,.5,.5), "cm"), -->
+<!--         plot.background = element_blank(), -->
+<!--         plot.title = element_text(hjust = 0.5, size = 18, family = "serif"), -->
+<!--         plot.subtitle = element_text(hjust = 0.5, size = 15, family = "serif"), -->
+<!--         text = element_text(color = "gray20"), -->
+<!--         legend.title = element_blank(), -->
+<!--         #legend.position = "bottom", -->
+<!--         legend.text = element_text(size = 12,family = "serif"), -->
+<!--         axis.text = element_text(face = "italic", size = 12), -->
+<!--         axis.text.y = element_blank(), -->
+<!--         axis.title.x = element_text(vjust = -1, size = 16), -->
+<!--         axis.title.y = element_blank(), -->
+<!--         axis.ticks.y = element_blank(), -->
+<!--         axis.line= element_line(color = "gray40", size = .5), -->
+<!--         axis.line.y = element_blank(), -->
+<!--         panel.grid.major = element_blank(), -->
+<!--         panel.grid.minor = element_blank() -->
+<!--   ) -->
+<!-- ``` -->

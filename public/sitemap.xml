@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/post/constituency_characteristics/</loc>
+    <loc>/post/families-cat2/</loc>
     <lastmod>2020-08-11T00:00:00+00:00</lastmod>
   </url>
   
@@ -25,11 +25,6 @@
   <url>
     <loc>/post/cand_quality/</loc>
     <lastmod>2020-07-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/families-cat2/</loc>
-    <lastmod>2020-07-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -70,6 +65,11 @@
   <url>
     <loc>/post/election-finance/</loc>
     <lastmod>2020-06-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/constituency_characteristics/</loc>
+    <lastmod>2020-06-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>

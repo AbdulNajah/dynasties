@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<title>Master file Analyis | Political families of Uttar Pradesh</title>
+<title>Master file Analysis | Political families of Uttar Pradesh</title>
 <meta charset="utf-8">
-<meta name="generator" content="Hugo 0.72.0" />
+<meta name="generator" content="Hugo 0.74.3" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/index.css">
 <link rel="stylesheet" href="/css/classes.css">
@@ -21,7 +21,7 @@
 
 <article>
   <header>
-    <h1>Master file Analyis</h1>
+    <h1>Master file Analysis</h1>
     <time datetime="2020-06-10T00:00:00Z">June 10, 2020</time>
   </header>
   
@@ -29,34 +29,65 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#analyis-at-different-levels">Analyis at different levels</a><ul>
+<li><a href="#document-history">Document History</a></li>
+<li><a href="#summary-statistics">Summary statistics</a><ul>
 <li><a href="#ae---ge">AE - GE</a><ul>
 <li><a href="#assembly-elections">Assembly Elections</a></li>
 <li><a href="#general-elections">General Elections</a></li>
 </ul></li>
 <li><a href="#levels">Levels</a></li>
-<li><a href="#life-span">Life span</a></li>
-<li><a href="#elections-won">Elections won</a><ul>
-<li><a href="#retention">retention</a></li>
+<li><a href="#dynast-presence-in-the-past-elections">Dynast presence in the past elections</a></li>
 <li><a href="#ae-ge-election-contest">AE GE election contest</a></li>
-<li><a href="#land-distribution">Land distribution</a></li>
-<li><a href="#industries-education">Industries: Education</a></li>
-<li><a href="#industries-others">Industries : Others</a></li>
+<li><a href="#elections-won">Elections won</a></li>
+<li><a href="#elections-contested">Elections contested</a></li>
+<li><a href="#life-span">Life span</a></li>
+<li><a href="#retention">Retention</a></li>
+</ul></li>
+<li><a href="#land-distribution">Land distribution</a><ul>
+<li><a href="#families">Families</a><ul>
+<li><a href="#political-experience">Political Experience</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#educational-institutions">Educational institutions</a><ul>
+<li><a href="#families-1">Families</a></li>
+<li><a href="#political-experience-1">Political Experience</a><ul>
+<li><a href="#caste">caste</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#industries">Industries</a><ul>
-<li><a href="#caste-2">Caste</a></li>
-<li><a href="#experience">Experience</a></li>
+<li><a href="#families-2">Families</a><ul>
+<li><a href="#rent-thick">rent thick</a></li>
 </ul></li>
+<li><a href="#political-experience-2">Political experience</a></li>
+</ul></li>
+<li><a href="#political-experience-3">Political experience</a><ul>
+<li><a href="#family">Family</a></li>
+<li><a href="#caste-1">caste</a></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="analyis-at-different-levels" class="section level1">
-<h1>Analyis at different levels</h1>
+<hr />
+<div id="document-history" class="section level3">
+<h3>Document History</h3>
+<p>Original Publish Date: 10 June, 2020</p>
+<p>Updated on: 07 September, 2020</p>
+<hr />
+<p>In this project we are using a novel dataset compiled by Rahul Verma. This dataset covers the candidates contested in the different levels of elections held from 1974 to 2019 in the state of Uttar Pradesh. This includes assembly, general and local body elections. This dataset connects the contestants to the political offices to their family members within that universe.</p>
+<p>We define dynast politicians as those who are preceded by family members who are currently active in politics or were active in the past. Family is defined as a set of individuals who are bound by proximate ties based on blood or marriage, and this definition includes father, mother, grand parents, siblings and in laws. Active in politics refers to holding an office in an elected body or being a candidate in elections. According to this definition, the head of family or the patriarch is considered to be a non-dynast in the year of entry. Precisely, because of the fact that he did not enjoy any advantage of having family members in politics at that point of time. But, ones a family member enter into the universe of politics, in later years patriarch will be considered as dynast along with the descendants.Additionally, both the first and second member should be entered to the system through assembly or general elections</p>
+<hr />
+</div>
+<div id="summary-statistics" class="section level1">
+<h1>Summary statistics</h1>
 <div id="ae---ge" class="section level2">
 <h2>AE - GE</h2>
-<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019. This contains 11550 observations and the number unique individuals is 5286 and the families is 300. It has to be noted that 93% of this winners are just patriarchs.</p>
-<p>In this universe of families 2118 winners and runner-ups are part of some family and 1262 winners and runner-ups out of this is just patriarchs while the rest is other family members.</p>
+<p>This universe includes winners and runner-ups in the general and assembly elections from the year 1977 to 2019.</p>
+<ul>
+<li>Total observations: 11550</li>
+<li>Number of unique individuals: 5286</li>
+<li>Number of unique families : 300</li>
+</ul>
+<p>The following section provides the year and election level wise break-up of the observations</p>
 <div id="assembly-elections" class="section level3">
 <h3>Assembly Elections</h3>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
@@ -169,6 +200,7 @@ Count
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="general-elections" class="section level3">
 <h3>General Elections</h3>
@@ -282,255 +314,15 @@ Count
 </tr>
 </tbody>
 </table>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-2">Table 1: </span>Break-up of unique individuals wrt to elections won
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-n_elections_won
-</th>
-<th style="text-align:right;">
-n_individuals
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-2089
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1886
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-665
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-329
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-173
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-74
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-35
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-15
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-12
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
-</table>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-2">Table 1: </span>Break-up of unique individuals wrt to elections contested
-</caption>
-<thead>
-<tr>
-<th style="text-align:right;">
-n_elections_contested
-</th>
-<th style="text-align:right;">
-n_individuals
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2764
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1061
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-558
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-333
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-255
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-127
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-78
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-54
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-30
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-10
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
-</table>
+<hr />
 </div>
 </div>
 <div id="levels" class="section level2">
 <h2>Levels</h2>
+<p>Families are spread at multiple office levels. While majority them are present only at the assembly election level, there are a quite a few of them which is spanned across multiple level of office. The following table summarises that -</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-3">Table 2: </span>Linkages of families(Category 2)
+<span id="tab:unnamed-chunk-2">Table 1: </span>Linkages of families(Category 2)
 </caption>
 <thead>
 <tr>
@@ -585,21 +377,27 @@ GE
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
-<div id="life-span" class="section level2">
-<h2>Life span</h2>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="dynast-presence-in-the-past-elections" class="section level2">
+<h2>Dynast presence in the past elections</h2>
+<p>This chart depicts the proportion of dynast among the winners of assembly election since 1974.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="768" /></p>
+<hr />
 </div>
-<div id="elections-won" class="section level2">
-<h2>Elections won</h2>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
-<div id="retention" class="section level3">
-<h3>retention</h3>
-<p><img src="/post/master-file-analysis_files/figure-html/retention%20chart%202-1.png" width="672" /></p>
-</div>
-<div id="ae-ge-election-contest" class="section level3">
-<h3>AE GE election contest</h3>
+<div id="ae-ge-election-contest" class="section level2">
+<h2>AE GE election contest</h2>
+<p>There could four types of election contests:</p>
+<ul>
+<li>Dynast wins against against a Dynast
+<ul>
+<li>Dynast wins against a Non-dynast</li>
+<li>Non-dynast wins against another Non-dynast</li>
+<li>Non-dynast wins against a dynast</li>
+</ul></li>
+</ul>
+<p>First table shows count of the contests and the second one shows the proportion of contests. First part represents the winner in both the tables headers.</p>
+<hr />
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1258,45 +1056,342 @@ NA
 </tr>
 </tbody>
 </table>
-<p><img src="/post/master-file-analysis_files/figure-html/dyn%20proportion%20over%20time-1.png" width="672" /></p>
+<hr />
 </div>
-<div id="land-distribution" class="section level3">
-<h3>Land distribution</h3>
-<div id="families" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae_ge%20families%20land-1.png" width="672" /></p>
-</div>
-<div id="political-experience" class="section level4">
-<h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="672" /></p>
-</div>
-<div id="caste" class="section level4">
-<h4>Caste</h4>
-</div>
-</div>
-<div id="industries-education" class="section level3">
-<h3>Industries: Education</h3>
-<div id="families-1" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20family-1.png" width="672" /></p>
-</div>
-<div id="political-experience-1" class="section level4">
-<h4>Political Experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="672" /></p>
-</div>
-<div id="caste-1" class="section level4">
-<h4>caste</h4>
-</div>
-</div>
-<div id="industries-others" class="section level3">
-<h3>Industries : Others</h3>
-</div>
-</div>
-<div id="industries" class="section level2">
-<h2>Industries</h2>
+<div id="elections-won" class="section level2">
+<h2>Elections won</h2>
+<p>This table shows the count of the unique individuals with regards to the number of elections they have <strong>won</strong></p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-7">Table 3: </span>Industry ownership
+<span id="tab:unnamed-chunk-3">Table 2: </span>Break-up of unique individuals wrt to elections won
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n_elections_won
+</th>
+<th style="text-align:right;">
+n_individuals
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2089
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1886
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+665
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+329
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+173
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+35
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>Density graph of the same:</p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<p>Density graph graph of the number of elections won by <strong>families</strong></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>This density graph represents the same</p>
+<hr />
+</div>
+<div id="elections-contested" class="section level2">
+<h2>Elections contested</h2>
+<p>This table shows the count of the unique individuals with regards to the number of elections they have <strong>contested</strong> .</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-6">Table 3: </span>Break-up of unique individuals wrt to elections contested
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n_elections_contested
+</th>
+<th style="text-align:right;">
+n_individuals
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2764
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1061
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+558
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+333
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+255
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+127
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+78
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+54
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is a density of graph of the number of elections contested by <strong>families</strong></p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="life-span" class="section level2">
+<h2>Life span</h2>
+<p>This section looks at the life span of families. Life span is calculated by computing the difference in entry year of the family with the. Life span is simply the longitudinal life of a family. This is calculated by simply computing the difference in the entry year of a family with the year in which the last member has contested. The following graph is a density chart of the the life span of the unique families in the dataset.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="retention" class="section level2">
+<h2>Retention</h2>
+<p>This chart depicts the retention of candidates after each election year.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/retention%20chart%202-1.png" width="768" /></p>
+</div>
+</div>
+<div id="land-distribution" class="section level1">
+<h1>Land distribution</h1>
+<p>The dataset contains a variable named land which records the land owned by the candidate/family. The information is recorded in <em>bhigas</em>.</p>
+<div id="families" class="section level2">
+<h2>Families</h2>
+<p>This boxplot shows the difference the land owned by family and a non-family entity.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae_ge%20families%20land-1.png" width="768" /></p>
+<hr />
+<div id="political-experience" class="section level3">
+<h3>Political Experience</h3>
+<p>This boxplot shows the difference in the land ownership according to a candidate’s political experience. Political experience is the sum of term duration of every election that they have won.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20political%20experience%20land-1.png" width="768" /></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="educational-institutions" class="section level1">
+<h1>Educational institutions</h1>
+<p>The data set has variable which record the candidate’s/ family’s ownership of school/college/both.</p>
+<div id="families-1" class="section level2">
+<h2>Families</h2>
+<p>This barplot depicts the difference in the ownership of educational institutions among family and non-family entities.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20family-1.png" width="768" /></p>
+</div>
+<div id="political-experience-1" class="section level2">
+<h2>Political Experience</h2>
+<p>This depicts the ownership of the educational institutions with regards to political experience of the unique individuals.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20education%20pol%20experience-1.png" width="768" /></p>
+<div id="caste" class="section level3">
+<h3>caste</h3>
+<p>Depicts the ownership of educational institutions with regards to the caste of the unique candidate.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="industries" class="section level1">
+<h1>Industries</h1>
+<p>The dataset records the information regarding the candidate’s family’s ownership of industries in 12 different categories. For the ease if analysis we clubbed them to 5 categories.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Current category</th>
+<th align="left">Old category</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Petrol Pump</td>
+<td align="left">Petrol Pump</td>
+</tr>
+</tbody>
+</table>
+<p>Others</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<div id="families-2" class="section level2">
+<h2>Families</h2>
+<p>Ownership of industries among families and non-families</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-11">Table 4: </span>Industry ownership
 </caption>
 <thead>
 <tr>
@@ -1327,6 +1422,10 @@ Non-family
 </tr>
 </tbody>
 </table>
+<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<div id="rent-thick" class="section level3">
+<h3>rent thick</h3>
+<p>Ownership of rent thick and non-rent thick industires with regards to the family type.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1388,29 +1487,23 @@ rent-thick
 </tr>
 </tbody>
 </table>
-<p><img src="/post/master-file-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div id="families-2" class="section level4">
-<h4>Families</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industires%20families-1.png" width="672" /></p>
-</div>
-<div id="political-experience-2" class="section level4">
-<h4>Political experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="672" /></p>
-</div>
-<div id="caste-2" class="section level3">
-<h3>Caste</h3>
-<div id="political-experience-3" class="section level4">
-<h4>Political experience</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="672" />
-<!-- [//]: # (one potential problem could be that, I am taking all the candidates, why not just families, then disect them?) --></p>
-</div>
-<div id="family" class="section level4">
-<h4>Family</h4>
-<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20families%20caste-1.png" width="672" /></p>
+<p>Ownership of industries among families and non-families with regards to the industry category.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industires%20families-1.png" width="768" /></p>
 </div>
 </div>
-<div id="experience" class="section level3">
-<h3>Experience</h3>
+<div id="political-experience-2" class="section level2">
+<h2>Political experience</h2>
+<p>Ownership of industries with regards to the candidate’s political experience</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20industries%20political%20experience-1.png" width="768" /></p>
+</div>
+</div>
+<div id="political-experience-3" class="section level1">
+<h1>Political experience</h1>
+<div id="family" class="section level2">
+<h2>Family</h2>
+<p>Political experience composition among families and non-families.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20families%20caste-1.png" width="768" /></p>
+<p>This tables shows the distribution of the unique individuals’ experience/</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1457,6 +1550,7 @@ Count
 </tr>
 </tbody>
 </table>
+<p>This table shows the distribution of the experience categories among the families and non-families.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1518,7 +1612,12 @@ Families
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
+<div id="caste-1" class="section level2">
+<h2>caste</h2>
+<p>This shows the caste composition of the candidates with regards to their experience.</p>
+<p><img src="/post/master-file-analysis_files/figure-html/ae%20ge%20pol%20exp%20caste-1.png" width="768" /></p>
 </div>
 </div>
 

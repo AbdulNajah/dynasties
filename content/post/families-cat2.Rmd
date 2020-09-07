@@ -1,13 +1,28 @@
 ---
 title: "Families"
 author: ""
-date: "2020-07-21"
+date: "2020-08-11"
+params:
+  orig_date: "Original Publish Date: 21 July, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
 editor_options: 
   chunk_output_type: inline
 ---
+
+<!-- real date : 2020-07-2 -->
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
 knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
@@ -27,6 +42,11 @@ library(ggbump)
 select <- dplyr::select
 ```
 
+In this post we further analyse the families. We categorised them into two - declining and rising. We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections. If they have one at least one election in these 5 elections we call them rising dynasties and rest of them as declining dynasties.
+
+---
+
+The follwoing table shows the difference the longevity of these two groups
 
 ```{r file config}
 dyn <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
@@ -215,6 +235,10 @@ dyn_ae_ge_fam_uniq %>% group_by(success_cat) %>% summarise(mean(life_span)) %>% 
   <!-- We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections. If they have one atleast one election in these 5 elections we call them rising dynasties and rest of them as declining dynasties. -->
 
 
+---
+
+This chart depicts how the life span of a family varies according to their caste.
+
 
 
 
@@ -299,16 +323,11 @@ ggplot(dyn_ae_ge_fam_uniq %>% filter(caste_groups!= "Others"),aes(x = reorder(as
 
 ```
 
+---
 
 
-```{r}
-
-
-```
 
 ```{r, results= "asis"}
-
-
 #library(nnet)
 
 #success <- dyn_ae_ge_fam_uniq$success_diff_cat
@@ -377,18 +396,13 @@ success <- ifelse(dyn_ae_ge_fam_uniq$success_cat=="Rising",1,0)
 success_rate <- dyn_ae_ge_fam_uniq$success_post02
 
 #success_rate <- dyn_ae_ge_fam_uniq$success_diff
+```
 
 
 
-  
 
-fit.1 <- glm(success ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage_down, family= binomial(link = "probit") )
 
-#summary(fit.1)
-# 
-stargazer(fit.1,title="Regression Results - Success of dynasties ",type = "html",
-align=TRUE, dep.var.labels=c("Rising"), no.space=TRUE)
-
+```{r, results= "asis"}
 # fit.1 <- lm(success_rate ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage )
 
 #summary(fit.1)
@@ -412,7 +426,12 @@ align=TRUE, dep.var.labels=c("Rising"), no.space=TRUE)
 # 
 # df %>% filter(variable %in% c("id1", "id2", "id3")) %>% select(varibale, variable_1, variable_2)
 
-``` 
+```
+
+---
+
+Summary of the two categories -
+
 
 ```{r}
 
@@ -431,6 +450,22 @@ dyn_ae_ge_fam_uniq %>% group_by(success_cat) %>% summarise(mean(land, na.rm = TR
 #dyn_ae_ge_fam_uniq %>% filter(success_diff_cat == "Stable") 
 ```
 
+---
+
+Here we regress the successful category against a multitude of variables. Given that it is binary dependent variable we are using a probit model here.
+
+
+```{r, results= "asis"}
+fit.1 <- glm(success ~  caste_uc+ caste_yadav+caste_non_yadav_obc + caste_dalit + caste_muslim +minister_duration +industry + school_college + land + linkage_down, family= binomial(link = "probit") )
+
+#summary(fit.1)
+# 
+stargazer(fit.1,title="Regression Results - Success of dynasties ",type = "html",
+align=TRUE, dep.var.labels=c("Rising"), no.space=TRUE)
+```
+
+
+## caste composition
 
 ```{r}
 # dyn_lb  <- dyn_lb %>% mutate(level_log = ifelse(level == "LB",FALSE,TRUE))
@@ -466,6 +501,11 @@ dyn_ae_ge_fam_uniq %>% filter(caste_groups!= "NA") %>% group_by(success_cat, cas
         panel.grid.minor = element_blank()
   ) 
 ```
+
+
+
+
+## Educational institutions
 
 
 ```{r}
