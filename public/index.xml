@@ -59,6 +59,18 @@ In this post we further analyse the families. We categorised them into two - dec
     </item>
     
     <item>
+      <title>Constituency characteristics</title>
+      <link>/post/constituency_characteristics/</link>
+      <pubDate>Sat, 11 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/constituency_characteristics/</guid>
+      <description>Document HistoryAsherFrancescaGE 2009 : 2019Document HistoryOriginal Publish Date: 11 July, 2020
+Updated on: 08 September, 2020
+In this post we try to find how and what the characteristics of constituencies are associated with the dynasticism. We use census data and s and Ashers development data to explore the same.
+AsherAsher data provides us information at the assembly constituency level for the the Indian states.</description>
+    </item>
+    
+    <item>
       <title>Linkage Analysis</title>
       <link>/post/linkages/</link>
       <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
@@ -117,16 +129,6 @@ In this post we analyse the performance of dynast MPs in their constituency by u
       
       <guid>/post/election-finance/</guid>
       <description>Election finance wrt family typeFundingExpenditureElection finance wrt to criminalityFundingExpenditureElection finance wrt caste groupFundingExpenditureElection finance wrt family typeFundingTable 1: Election Funding - AveragesPolitician’s identityTotal fundCandidatePartyDonationsFamily1071313306222328550431637Non-family1225033393884457800370970ExpenditureTable 2: Election Expenditure - AveragesPolitician’s identityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFamily106173361338525770108097143620777609258952561Non-family10345918789048034097521134908787867164683501Election finance wrt to criminality(#tab:merging with funding data)Summary of the criminality variableCriminalityCountFALSE397TRUE130FundingTable 3: Election Funding - AveragesPolitician’s criminalityTotal fundCandidatePartyDonationsFALSE1226784376309453325396432TRUE1063013355725325604370548ExpenditureTable 4: Election Expenditure - AveragesPolitician’s criminalityTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingFALSE10488398181349759193425138196812997530581210TRUE102285591699467110117707132381710598057862322Election finance wrt caste groupFundingTable 5: Election Funding - AveragesPolitician’s caste groupTotal fundCandidatePartyDonationsDalit996139349231295145350293Muslim803914200528190539416303Non-Yadav OBC1092046452750284226355070Others856452285643327787243022Upper Caste1438744369884656068404725Yadav1248178490100317078442000ExpenditureTable 6: Election Expenditure - AveragesPolitician’s caste groupTotal ExpenditureMediaVehiclesMaterialsMeetingsCampaignsMiscellaniousMissingDalit102905851080512869868021388417817153044108251Muslim9465417934446343283341156452421789333628458Non-Yadav OBC101646667297500424928581172386669066005105955Others89547910260443416210186893750615915210149403Upper Caste1081575110791457338112200141122993158934971460Yadav114962152431624456113364145728790587731157272</description>
-    </item>
-    
-    <item>
-      <title>Constituency characteristics</title>
-      <link>/post/constituency_characteristics/</link>
-      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/constituency_characteristics/</guid>
-      <description>AsherFrancescaGE 2009 : 2019AsherAsher data provides us information at the assembly constituency level for the the Indian states. Here we are using it to asses the impact of dynast rule on certain constituency characteristics. In other ways this would also be an indicator of those places where you would see prolonged rule of dynast leaders.
-The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001.</description>
     </item>
     
     <item>

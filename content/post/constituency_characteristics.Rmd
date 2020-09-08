@@ -1,13 +1,28 @@
 ---
 title: "Constituency characteristics"
 author: ""
-date: "2020-06-24"
+date: "2020-07-11"
+params:
+  orig_date: "Original Publish Date: 11 July, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
 editor_options: 
   chunk_output_type: inline
 ---
+
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
+In this post we try to find how and what the characteristics of constituencies are associated with the dynasticism. We use census data and s and Ashers development data to explore the same.
 
 <!-- real date - 2020-07-11 -->
 
@@ -34,12 +49,13 @@ select <- dplyr::select
 
 
 
-
 # Asher
 
-Asher data provides us information at the assembly constituency level for the the Indian states. Here we are using it to asses the impact of dynast rule on certain constituency characteristics. In other ways this would also be an indicator of those places where you would see prolonged rule of dynast leaders.
+Asher data provides us information at the assembly constituency level for the the Indian states. The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001.  We limit our analysis to this period because this data is from the populations census and economic census which were conducted in early 2000s. We use the 91 population census as a base given the lack of many variables in the 1971 popultaion census data provided by Francesca.
 
-The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001.  We limit our analysis to this period because the 
+All the models is a poisson regression regressions. In Asher's data set all the variables have a urban and rural counter parts. The first one, we have all urban and rural variables in one model. Second  and third ones are separate urabn and rural models respectively. 
+
+
 
 ```{r}
 asher <- read_dta("D:/cpr/up-dynasties/dyn_other_data/asher/elections_con_panel.dta")
@@ -130,10 +146,13 @@ align=TRUE ,dep.var.labels= c ("Dynast rule"), no.space=TRUE)
 
 
 
+---
 
 
 
 # Francesca
+
+We use Francesca's ac level census data to regress the change in the constituency characteristics against the years ruled by dynast within a 30 year period(1971-2001). In this poisson regression we used sub-regions as controls.
 
 ```{r francesca data prep}
 
@@ -167,17 +186,18 @@ agr_work <- (dyn_fr$P_al -dyn_fr$al_71)/dyn_fr$al_71
 
 
 ```{r francesca model, results= "asis"}
+
 fit.2 <- glm(data= dyn_fr, dyn_duration ~ lit + work+ agr_work + constituency_type + sub_region.y  , family = poisson())
 
 #summary(fit.2)
 
-stargazer(fit.2,title="Regression Results - Dev Francesca ",type = "html",
+stargazer(fit.2,keep = c( "lit","work", "agr_work", "constituency_type"),title="Regression Results - Dev Francesca ",type = "html",
 align=TRUE, dep.var.labels="Dynast rule", no.space=TRUE)
 
 
 ```
 
-
+---
 
 
 # GE  2009 : 2019
@@ -352,7 +372,7 @@ sc_st_pop <- (ge_cen_adr$TOT_ST+ge_cen_adr$TOT_SC)/ge_cen_adr$TOT_POP
 
 ```
 
-
+In this section we use the All India GE level dynast data to asses the characteristics of constituencies where dynasts win or contest. This is a probit regression with state  and year fixed effects.
 
 ```{r}
 
@@ -371,7 +391,7 @@ dyn_winner <- glm(dynast_winner ~   turnout+enop+ reservation+ literacy +  urban
 
 dyn_cand <- glm(dynast_candidate ~   turnout+enop+ reservation+ literacy +  urban_pop + muslim_pop +sc_st_pop + agri_lab + log(electorate) + factor(state) + factor(year) ,family =  binomial(link = "probit"))
 
-stargazer(dyn_winner, dyn_cand, type = "html",align = TRUE, no.space = TRUE )
+stargazer(dyn_winner, dyn_cand,keep = c("turnout","enop", "reservation", "literacy" ,  "urban_pop" , "muslim_pop" ,"sc_st_pop" , "agri_lab" , "log(electorate)"), type = "html",align = TRUE, no.space = TRUE )
 
 #summary(dyn_cand)
 ```
