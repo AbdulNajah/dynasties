@@ -1,7 +1,7 @@
 ---
 title: "Families"
 author: ""
-date: "2020-08-11"
+date: "2020-02-07"
 params:
   orig_date: "Original Publish Date: 21 July, 2020"
   update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
@@ -25,9 +25,8 @@ editor_options:
 
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
-knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE,fig.width = 16/2, fig.height = 9/2)
 
-##fig.width = 16/2, fig.height = 9/2
 
 library(tidyverse)
 library(data.table)

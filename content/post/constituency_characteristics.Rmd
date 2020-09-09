@@ -28,7 +28,7 @@ In this post we try to find how and what the characteristics of constituencies a
 
 ```{r set up, warning=FALSE, include=FALSE, message= FALSE}
 
-knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE, fig.width = 16/2, fig.height = 9/2)
 
 
 

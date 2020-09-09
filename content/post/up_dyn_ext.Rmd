@@ -1,0 +1,358 @@
+---
+title: "UP Dynasties extended"
+author: ""
+date: "2020-08-09"
+params:
+  orig_date: "Original Publish Date: 08 September, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE,fig.width = 16/2, fig.height = 9/2)
+
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+library(ggbump)
+`%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
+```
+
+We will be using the dynasties data for last few elections from UP in this post.
+
+# GE
+
+```{r reading ge file}
+
+
+ge_5pc <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_up_09_19_5pc.csv")
+
+#filter out by polls
+
+
+names(ge_5pc) <- tolower(names(ge_5pc))
+
+
+
+names(ge_5pc)[1] <- "state_name"
+
+ge_5pc <- ge_5pc %>% select(state_name, year,constituency_no,position, jati, caste_rec, dyn, source,background.dynasty, notes)
+
+## reading tcpd file
+
+tcpd_ge_all <- read.csv("D:/cpr/up-dynasties/dyn_other_data/TCPD_GE_all_2020-7-2.csv")
+
+names(tcpd_ge_all) <- tolower(names(tcpd_ge_all))
+
+# ge_5pc <- merge(ge_5pc, tcpd_ge_all, by = c("state_name", "year", "constituency_no", "position"))
+
+ge_5pc <- inner_join(ge_5pc, tcpd_ge_all, by = c("state_name", "year", "constituency_no", "position"))
+
+ge_5pc$dynast <- ifelse(ge_5pc$dyn ==1, "Dynast", "Non-Dynast")
+
+```
+
+## Basic summary of the data
+
+Type of election - General elections
+
+State - Uttar Pradesh
+
+Year - 2009:20019
+
+at 5% percentage vote share
+
+  - Number of observations - 787
+
+  - Average vote share percentage - `r round(mean(ge_5pc$vote_share_percentage))`%
+
+  - Distribution of the positions - 
+  
+```{r}
+round(prop.table(table(ge_5pc$position)),2)
+
+```
+  
+  
+  - Proportion of dynasts in the data - `r data.frame(round(prop.table(table(ge_5pc$dyn)),2))[2,2]`
+
+
+### Dynasts
+
+
+**Break-up of positions**
+
+
+```{r eda}
+ge_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(position) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(position  ~dynast) %>% kable(digits = 2)
+
+```
+
+---
+
+**Composition of positions within dynasts and no-dyansts**
+
+```{r}
+ge_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(dynast  ~position) %>% kable(digits = 2)
+```
+
+---
+
+
+**Vote Share**
+
+```{r}
+
+ge_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_percentage)) %>% kable(digits = 2)
+
+```
+
+---
+
+
+
+**Turncoats proportion wrt Politicians identity**
+
+```{r}
+
+ge_5pc%>%  group_by(dynast) %>% summarise(mean_turncoat = mean(turncoat)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+
+
+**Party retention wrt Politicians identity**
+
+```{r}
+
+ge_5pc%>%  group_by(dynast) %>% summarise(mean_same_party = mean(same_party, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+
+**Proportion of incumbents wrt Politicians identity**
+
+```{r}
+
+ge_5pc%>%  group_by(dynast) %>% summarise(mean_incumbent = mean(incumbent, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+
+
+```
+
+---
+
+**Proportion of recontestants wrt Politicians identity**
+
+
+```{r}
+
+ge_5pc%>%  group_by(dynast) %>% summarise(mean_recontest = mean(recontest, na.rm = TRUE)) %>% kable( digit = 2) 
+
+```
+
+
+---
+
+
+**Number of terms wrt Politicians identity**
+
+```{r}
+
+ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+**Constituency type wrt Politicians identity**
+
+
+```{r}
+
+ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+
+---
+
+# AE
+  
+  
+```{r reading ae file}
+
+ae_5pc <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ae_up_12_17_5pc.csv")
+
+names(ae_5pc) <- tolower(names(ae_5pc))
+
+ae_5pc <- ae_5pc %>% filter(poll_no ==0 )
+
+ae_5pc$dynast <- ifelse(ae_5pc$dyn ==1, "Dynast", "Non-Dynast")
+
+```
+
+---
+
+## Basic summary of the data
+
+Type of election - Assembly elections
+
+State - Uttar Pradesh
+
+at 5% percentage vote share
+
+  - Number of observations - 2960
+
+  - Average vote share percentage - `r round(mean(ae_5pc$vote_share_percentage),2)`
+
+  - Distribution of the positions -
+  
+```{r}
+
+round(prop.table(table(ae_5pc$position)),2)
+
+```
+
+
+- Proportion of dynasts - `r data.frame(round(prop.table(table(ae_5pc$dyn)),2))[2,2]`
+
+---
+
+### Dynasts
+
+
+**Break-up of positions**
+
+
+```{r }
+ae_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(position) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(position  ~dynast) %>% kable(digits = 2)
+
+```
+
+---
+
+**Composition of positions within dynasts and no-dyansts**
+
+```{r}
+ae_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(dynast  ~position) %>% kable(digits = 2)
+```
+
+---
+**Vote Share**
+
+```{r}
+
+ae_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_percentage)) %>% kable(digits = 2)
+
+
+```
+
+---
+
+**Turncoats proportion wrt Politicians identity**
+
+```{r}
+
+ae_5pc%>%  group_by(dynast) %>% summarise(mean_turncoat = mean(turncoat)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+
+
+**Party retention wrt Politicians identity**
+
+```{r}
+
+ae_5pc%>%  group_by(dynast) %>% summarise(mean_same_party = mean(same_party, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+
+**Proportion of incumbents wrt Politicians identity**
+
+```{r}
+
+ae_5pc%>%  group_by(dynast) %>% summarise(mean_incumbent = mean(incumbent, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+
+
+```
+
+---
+
+**Proportion of recontestants wrt Politicians identity**
+
+
+```{r}
+
+ae_5pc%>%  group_by(dynast) %>% summarise(mean_recontest = mean(recontest, na.rm = TRUE)) %>% kable( digit = 2) 
+
+```
+
+
+---
+
+
+**Number of terms wrt Politicians identity**
+
+```{r}
+
+ae_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+```
+
+---
+
+**Constituency type wrt Politicians identity**
+
+
+```{r}
+
+ae_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
+
+
+```
+
+
