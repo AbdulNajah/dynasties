@@ -53,7 +53,7 @@ select <- dplyr::select
 
 Asher data provides us information at the assembly constituency level for the the Indian states. The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001.  We limit our analysis to this period because this data is from the populations census and economic census which were conducted in early 2000s. We use the 91 population census as a base given the lack of many variables in the 1971 popultaion census data provided by Francesca.
 
-All the models is a poisson regression regressions. In Asher's data set all the variables have a urban and rural counter parts. The first one, we have all urban and rural variables in one model. Second  and third ones are separate urabn and rural models respectively. 
+All the models is a poisson regression regressions. In Asher's data set all the variables have a urban and rural counter parts. The first one, we have all urban and rural variables in one model. Second  and third ones are separate urban and rural models respectively. 
 
 
 
@@ -200,7 +200,7 @@ align=TRUE, dep.var.labels="Dynast rule", no.space=TRUE)
 ---
 
 
-# GE  2009 : 2019
+# ADR & Census
 
 
 
@@ -399,5 +399,68 @@ stargazer(dyn_winner, dyn_cand,keep = c("turnout","enop", "reservation", "litera
 
 
 
+-----
 
+## HIL Wealth index
+
+
+
+
+```{r}
+
+wil <- read.csv("D:/cpr/up-dynasties/dyn_other_data/pc_2011_census.csv")
+
+wil <- wil %>% rename(constituency_no = pc_code, state_name = st_name)
+
+wil_up <- wil %>% filter(state_name == "Uttar Pradesh")
+
+
+## dyn data - calculating the years ruled by dynast
+
+
+dyn_ge <-  dyn_ae_ge %>% filter (election_type == "GE" & year <2009 & position ==1 )
+
+dyn_ge_rule <- dyn_ge %>% group_by(constituency_name) %>% mutate(dyn_rule = sum(term_duration[dyn_cum_2==1])) %>% arrange(-year) %>% distinct(constituency_name, .keep_all = TRUE)
+
+
+dyn_ge_cen <- merge(dyn_ge_rule, wil_up, by = c("constituency_no"))
+
+names(dyn_ge_cen) <- tolower(names(dyn_ge_cen))
+
+
+
+```
+
+We regressed the wealth score which was calculated from the 20011 census against the number of years ruled by dynast in a constituency from 1977 to 2004.
+
+
+```{r, results = "asis"}
+
+
+
+
+wealthscore <- dyn_ge_cen$wealthscore
+
+urban_pop <- dyn_ge_cen$urban_pop/dyn_ge_cen$population
+
+literacy <- dyn_ge_cen$literate_population/dyn_ge_cen$population
+
+marginal_worker <- dyn_ge_cen$marginal_workers_total/dyn_ge_cen$population
+
+df <- cbind(wealthscore,urban_pop,literacy, marginal_worker)
+
+
+
+
+
+fit_wealth <- glm(data= dyn_ge_cen, dyn_rule ~ wealthscore + constituency_type , family = poisson() )
+
+#summary(fit)
+
+stargazer(fit_wealth,  type = "html",align = TRUE, no.space = TRUE)
+
+
+
+
+```
 

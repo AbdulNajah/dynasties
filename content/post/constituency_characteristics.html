@@ -18,7 +18,9 @@ editor_options:
 <li><a href="#document-history">Document History</a></li>
 <li><a href="#asher">Asher</a></li>
 <li><a href="#francesca">Francesca</a></li>
-<li><a href="#ge-2009-2019">GE 2009 : 2019</a></li>
+<li><a href="#adr-census">ADR &amp; Census</a><ul>
+<li><a href="#hil-wealth-index">HIL Wealth index</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -26,7 +28,7 @@ editor_options:
 <div id="document-history" class="section level3">
 <h3>Document History</h3>
 <p>Original Publish Date: 11 July, 2020</p>
-<p>Updated on: 09 September, 2020</p>
+<p>Updated on: 10 September, 2020</p>
 <hr />
 <p>In this post we try to find how and what the characteristics of constituencies are associated with the dynasticism. We use census data and s and Ashers development data to explore the same.</p>
 <!-- real date - 2020-07-11 -->
@@ -34,7 +36,7 @@ editor_options:
 <div id="asher" class="section level1">
 <h1>Asher</h1>
 <p>Asher data provides us information at the assembly constituency level for the the Indian states. The dependent variable corresponds to the number of years rules by a dynast ruler in a particular constituency in a 30 year period starting 1970 to 2001. We limit our analysis to this period because this data is from the populations census and economic census which were conducted in early 2000s. We use the 91 population census as a base given the lack of many variables in the 1971 popultaion census data provided by Francesca.</p>
-<p>All the models is a poisson regression regressions. In Asher’s data set all the variables have a urban and rural counter parts. The first one, we have all urban and rural variables in one model. Second and third ones are separate urabn and rural models respectively.</p>
+<p>All the models is a poisson regression regressions. In Asher’s data set all the variables have a urban and rural counter parts. The first one, we have all urban and rural variables in one model. Second and third ones are separate urban and rural models respectively.</p>
 <table style="text-align:center">
 <caption>
 <strong>Regression Results - Dev Asher</strong>
@@ -633,8 +635,8 @@ Akaike Inf. Crit.
 </table>
 <hr />
 </div>
-<div id="ge-2009-2019" class="section level1">
-<h1>GE 2009 : 2019</h1>
+<div id="adr-census" class="section level1">
+<h1>ADR &amp; Census</h1>
 <p>In this section we use the All India GE level dynast data to asses the characteristics of constituencies where dynasts win or contest. This is a probit regression with state and year fixed effects.</p>
 <table style="text-align:center">
 <tr>
@@ -896,4 +898,124 @@ Akaike Inf. Crit.
 </td>
 </tr>
 </table>
+<hr />
+<div id="hil-wealth-index" class="section level2">
+<h2>HIL Wealth index</h2>
+<p>We regressed the wealth score which was calculated from the 20011 census against the number of years ruled by dynast in a constituency from 1977 to 2004.</p>
+<table style="text-align:center">
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+dyn_rule
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+wealthscore
+</td>
+<td>
+0.047<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.006)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+constituency_typeSC
+</td>
+<td>
+-1.552<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.257)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+0.177
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.217)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+80
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Log Likelihood
+</td>
+<td>
+-331.710
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+669.420
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+</div>
 </div>

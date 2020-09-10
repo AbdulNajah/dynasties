@@ -47,7 +47,7 @@ We will be using the dynasties data for last few elections from UP in this post.
 ```{r reading ge file}
 
 
-ge_5pc <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_up_09_19_5pc.csv")
+ge_5pc <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ge_5pc_up_09_19.csv")
 
 #filter out by polls
 
@@ -56,7 +56,7 @@ names(ge_5pc) <- tolower(names(ge_5pc))
 
 
 
-names(ge_5pc)[1] <- "state_name"
+#names(ge_5pc)[1] <- "state_name"
 
 ge_5pc <- ge_5pc %>% select(state_name, year,constituency_no,position, jati, caste_rec, dyn, source,background.dynasty, notes)
 
@@ -73,6 +73,22 @@ ge_5pc <- inner_join(ge_5pc, tcpd_ge_all, by = c("state_name", "year", "constitu
 ge_5pc$dynast <- ifelse(ge_5pc$dyn ==1, "Dynast", "Non-Dynast")
 
 ```
+
+```{r merging the dynasty data with enumerator one}
+# 
+# dyn_ae_ge <- read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_ge.csv")
+# 
+# 
+# dyn_ae_dyn <- dyn_ae_ge %>% filter(year >2010 & election_type == "AE") %>% select(year, constituency_no, position, dyn_cum_2)
+# 
+# 
+# dyn_ae_5pc <- left_join(ae_5pc, dyn_ae_dyn, by = c("year", "constituency_no", "position"))
+# 
+# write.csv(dyn_ae_5pc, "D:/cpr/up-dynasties/dyn_other_data/dyn_ae_5pc_up_09_19.csv")
+
+
+```
+
 
 ## Basic summary of the data
 
@@ -102,17 +118,26 @@ round(prop.table(table(ge_5pc$position)),2)
 ### Dynasts
 
 
-**Break-up of positions**
+**Proportion of positions won by dynast candidates**
 
 
-```{r eda}
-ge_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(position) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(position  ~dynast) %>% kable(digits = 2)
+```{r}
+
+ge_5pc %>%  group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(,position) %>% mutate(sum= sum(count), prop = count/sum) %>% filter(dynast == "Dynast") %>%reshape2::dcast(position  ~ dynast) %>% kable(digits = 2)
 
 ```
 
 ---
 
-**Composition of positions within dynasts and no-dyansts**
+```{r eda}
+ge_5pc %>%  group_by(year,dynast, position) %>% summarise(count = n() ) %>% group_by(year,position) %>% mutate(sum= sum(count), prop = count/sum) %>% filter(dynast == "Dynast") %>%reshape2::dcast(position  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+
+```
+
+---
+
+**Composition of positions within dynasts and non-dyansts**
 
 ```{r}
 ge_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(dynast  ~position) %>% kable(digits = 2)
@@ -120,14 +145,30 @@ ge_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(d
 
 ---
 
+```{r}
+ge_5pc %>%  group_by(year,dynast, position) %>% summarise(count = n() ) %>% group_by(year,dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% filter(dynast == "Dynast") %>%reshape2::dcast(year  ~ position) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+
+```
+
+
+---
 
 **Vote Share**
 
 ```{r}
 
-ge_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_percentage)) %>% kable(digits = 2)
+ge_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_percentage)) %>% kable(digits = 0)
 
 ```
+
+---
+
+```{r}
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_vote_share = mean(vote_share_percentage))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 0)
+
+```
+
 
 ---
 
@@ -139,6 +180,14 @@ ge_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_perce
 
 ge_5pc%>%  group_by(dynast) %>% summarise(mean_turncoat = mean(turncoat)) %>% kable( digit = 2) 
 
+
+```
+
+
+---
+
+```{r}
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_turncoat = mean(turncoat))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
 
 ```
 
@@ -157,6 +206,12 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_same_party = mean(same_party, na.
 
 ---
 
+```{r}
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_turncoat =mean(same_party, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+```
+
+---
+
 
 **Proportion of incumbents wrt Politicians identity**
 
@@ -166,12 +221,20 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_incumbent = mean(incumbent, na.rm
 
 
 
-
 ```
 
 ---
 
-**Proportion of recontestants wrt Politicians identity**
+```{r}
+
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_incumbent = mean(incumbent, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+```
+
+
+---
+
+**Proportion of re-contestants wrt Politicians identity**
 
 
 ```{r}
@@ -180,6 +243,13 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_recontest = mean(recontest, na.rm
 
 ```
 
+
+---
+```{r}
+
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_recontest = mean(recontest, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+```
 
 ---
 
@@ -191,6 +261,12 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_recontest = mean(recontest, na.rm
 ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
 
 
+```
+
+---
+
+```{r}
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
 ```
 
 ---
@@ -207,6 +283,15 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm =
 
 ---
 
+```{r}
+
+ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+```
+
+
+
+
 
 ---
 
@@ -215,7 +300,7 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm =
   
 ```{r reading ae file}
 
-ae_5pc <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ae_up_12_17_5pc.csv")
+ae_5pc <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_ae_5pc_up_09_19.csv")
 
 names(ae_5pc) <- tolower(names(ae_5pc))
 
@@ -225,7 +310,7 @@ ae_5pc$dynast <- ifelse(ae_5pc$dyn ==1, "Dynast", "Non-Dynast")
 
 ```
 
----
+
 
 ## Basic summary of the data
 
@@ -255,33 +340,61 @@ round(prop.table(table(ae_5pc$position)),2)
 ### Dynasts
 
 
-**Break-up of positions**
+**Proportion of positions won by dynast candidates**
 
 
-```{r }
-ae_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(position) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(position  ~dynast) %>% kable(digits = 2)
+```{r}
+
+ae_5pc %>%  group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(,position) %>% mutate(sum= sum(count), prop = count/sum) %>% filter(dynast == "Dynast") %>%reshape2::dcast(position  ~ dynast) %>% kable(digits = 2)
 
 ```
 
 ---
 
-**Composition of positions within dynasts and no-dyansts**
+```{r }
+ae_5pc %>%  group_by(year,dynast, position) %>% summarise(count = n() ) %>% group_by(year,position) %>% mutate(sum= sum(count), prop = count/sum) %>% filter(dynast == "Dynast") %>%reshape2::dcast(position  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+
+```
+
+---
+
+**Composition of positions within dynasts and non-dyansts**
 
 ```{r}
 ae_5pc %>% group_by(dynast, position) %>% summarise(count = n() ) %>% group_by(dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% reshape2::dcast(dynast  ~position) %>% kable(digits = 2)
 ```
 
 ---
-**Vote Share**
 
 ```{r}
-
-ae_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_percentage)) %>% kable(digits = 2)
+ae_5pc %>%  group_by(year,dynast, position) %>% summarise(count = n() ) %>% group_by(year,dynast) %>% mutate(sum= sum(count), prop = count/sum) %>% filter(dynast == "Dynast") %>%reshape2::dcast(year  ~ position) %>% replace(is.na(.),0)%>% kable(digits = 2)
 
 
 ```
 
+
 ---
+
+**Vote Share**
+
+```{r}
+
+ae_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_percentage)) %>% kable(digits = 0)
+
+```
+
+---
+
+```{r}
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_vote_share = mean(vote_share_percentage))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 0)
+
+```
+
+
+---
+
+
 
 **Turncoats proportion wrt Politicians identity**
 
@@ -289,6 +402,14 @@ ae_5pc %>% group_by(dynast) %>%summarise(mean_vote_share = mean(vote_share_perce
 
 ae_5pc%>%  group_by(dynast) %>% summarise(mean_turncoat = mean(turncoat)) %>% kable( digit = 2) 
 
+
+```
+
+
+---
+
+```{r}
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_turncoat = mean(turncoat))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
 
 ```
 
@@ -307,6 +428,12 @@ ae_5pc%>%  group_by(dynast) %>% summarise(mean_same_party = mean(same_party, na.
 
 ---
 
+```{r}
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_turncoat =mean(same_party, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+```
+
+---
+
 
 **Proportion of incumbents wrt Politicians identity**
 
@@ -316,12 +443,20 @@ ae_5pc%>%  group_by(dynast) %>% summarise(mean_incumbent = mean(incumbent, na.rm
 
 
 
-
 ```
 
 ---
 
-**Proportion of recontestants wrt Politicians identity**
+```{r}
+
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_incumbent = mean(incumbent, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+```
+
+
+---
+
+**Proportion of re-contestants wrt Politicians identity**
 
 
 ```{r}
@@ -330,6 +465,13 @@ ae_5pc%>%  group_by(dynast) %>% summarise(mean_recontest = mean(recontest, na.rm
 
 ```
 
+
+---
+```{r}
+
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_recontest = mean(recontest, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+```
 
 ---
 
@@ -345,6 +487,12 @@ ae_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm =
 
 ---
 
+```{r}
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+```
+
+---
+
 **Constituency type wrt Politicians identity**
 
 
@@ -355,4 +503,16 @@ ae_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm =
 
 ```
 
+---
 
+```{r}
+
+ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
+
+```
+
+
+
+
+
+---
