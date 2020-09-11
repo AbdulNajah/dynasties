@@ -1,0 +1,104 @@
+---
+title: "Local bodies extended"
+author: ""
+date: "2020-11-09"
+params:
+  orig_date: "Original Publish Date: 11 September, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
+output:
+  blogdown::html_page:
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+---
+
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+---
+
+```{r set up, warning=FALSE, include=FALSE, message= FALSE}
+
+knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE,fig.width = 16/2, fig.height = 9/2)
+
+
+library(tidyverse)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(gridExtra)
+library(stargazer)
+library(ggbump)
+`%!in%` = Negate(`%in%`)
+
+select <- dplyr::select
+```
+
+In this post we will be looking at dynasticism at the local level. We will be using two different definitions. 1 - category 2 - Where we only consider if an individual/set of individuals have connections to the ae-ge level. 2 - category 4 - We consider them as a dynast as long as they have/ have had members at one of the levels.
+
+
+
+```{r}
+
+dyn_all <-  read.csv("D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv")
+
+dyn_lb <- dyn_all %>% filter(election_type %!in% c("AE", "GE") & year >2001)
+
+
+
+dyn_ulb <- dyn_lb %>% filter(election_type %in% c("NP", "NPP", "NN"))
+
+dyn_nn <- dyn_lb %>% filter(election_type == "NN")
+
+dyn_np <- dyn_lb %>% filter(election_type == "NP")
+
+dyn_npp <- dyn_lb %>% filter(election_type == "NPP")
+
+dyn_bp <- dyn_lb %>% filter(election_type == "BP")
+
+dyn_zp <- dyn_lb %>% filter(election_type == "ZP")
+
+dyn_rlb <- dyn_lb %>% filter(election_type %in% c("BP","ZP"))
+
+
+
+```
+
+
+
+**Category 4**
+
+level                 Proportion of dynasts
+----------------     ------------------
+All LB                  `r data.frame(round(prop.table(table(dyn_lb$dyn_cum_4)),2))[2,2]`
+ULB                     `r data.frame(round(prop.table(table(dyn_ulb$dyn_cum_4)),2))[2,2]`
+RLB                     `r data.frame(round(prop.table(table(dyn_rlb$dyn_cum_4)),2))[2,2]`
+NN                      `r data.frame(round(prop.table(table(dyn_nn$dyn_cum_4)),2))[2,2]`
+NP                      `r data.frame(round(prop.table(table(dyn_np$dyn_cum_4)),2))[2,2]`
+NPP                     `r data.frame(round(prop.table(table(dyn_npp$dyn_cum_4)),2))[2,2] `
+BP                      `r data.frame(round(prop.table(table(dyn_bp$dyn_cum_4)),2))[2,2]`
+ZP                      `r data.frame(round(prop.table(table(dyn_zp$dyn_cum_4)),2))[2,2]`
+
+
+```{r}
+
+## extending the second category to local body
+
+##dyn_all %>% group_by(family_id)
+
+
+
+
+
+
+
+```
+
+
+

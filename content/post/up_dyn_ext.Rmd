@@ -276,7 +276,7 @@ ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, 
 
 ```{r}
 
-ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
+ge_5pc%>%  group_by(dynast, constituency_type) %>% summarise(count  = n()) %>% group_by(dynast) %>% mutate(sum = sum(count), prop = count/sum) %>% reshape2::dcast(dynast ~ constituency_type) %>% kable(digits = 2)
 
 
 ```
@@ -284,8 +284,8 @@ ge_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm =
 ---
 
 ```{r}
+ge_5pc%>%  group_by(year,dynast, constituency_type) %>% summarise(count  = n()) %>% group_by(dynast,year) %>% mutate(sum = sum(count), prop = count/sum) %>% reshape2::dcast(year +dynast  ~ constituency_type) %>% kable(digits = 2)
 
-ge_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
 
 ```
 
@@ -498,7 +498,8 @@ ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, 
 
 ```{r}
 
-ae_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm = TRUE)) %>% kable( digit = 2) 
+
+ae_5pc%>%  group_by(dynast, constituency_type) %>% summarise(count  = n()) %>% group_by(dynast) %>% mutate(sum = sum(count), prop = count/sum) %>% reshape2::dcast(dynast ~ constituency_type) %>% kable(digits = 2)
 
 
 ```
@@ -506,12 +507,10 @@ ae_5pc%>%  group_by(dynast) %>% summarise(mean_no_terms = mean(no_terms, na.rm =
 ---
 
 ```{r}
+ae_5pc%>%  group_by(year,dynast, constituency_type) %>% summarise(count  = n()) %>% group_by(dynast,year) %>% mutate(sum = sum(count), prop = count/sum) %>% reshape2::dcast(year +dynast  ~ constituency_type) %>% kable(digits = 2)
 
-ae_5pc %>%  group_by(year,dynast) %>%  summarise(mean_no_terms = mean(no_terms, na.rm = TRUE))  %>%reshape2::dcast(dynast  ~ year) %>% replace(is.na(.),0)%>% kable(digits = 2)
 
 ```
-
-
 
 
 
