@@ -71,6 +71,37 @@ dyn_rlb <- dyn_lb %>% filter(election_type %in% c("BP","ZP"))
 ```
 
 
+```{r}
+
+dyn_ae_ge_rec <- dyn_all %>% filter(election_type %in% c("AE", "GE") & year >2006)
+
+dyn_ae_rec <- dyn_all %>% filter(election_type == "AE" & year >2006)
+
+dyn_ge_rec <- dyn_all %>% filter(election_type == "GE" & year >2006)
+
+```
+
+## Winners and runner-ups
+
+**Category 4**
+
+level   Proportion of dynasts
+------ --------------------
+AE-GE  `r data.frame(round(prop.table(table(dyn_ae_ge_rec$dyn_cum_4)),2))[2,2]`
+AE      `r data.frame(round(prop.table(table(dyn_ae_rec$dyn_cum_4)),2))[2,2]`
+GE      `r data.frame(round(prop.table(table(dyn_ge_rec$dyn_cum_4)),2))[2,2]`
+
+
+
+
+**Category 2**
+
+level   Proportion of dynasts
+------ --------------------
+AE-GE  `r data.frame(round(prop.table(table(dyn_ae_ge_rec$dyn_cum_2)),2))[2,2]`
+AE      `r data.frame(round(prop.table(table(dyn_ae_rec$dyn_cum_2)),2))[2,2]`
+GE      `r data.frame(round(prop.table(table(dyn_ge_rec$dyn_cum_2)),2))[2,2]`
+
 
 **Category 4**
 
@@ -84,6 +115,40 @@ NP                      `r data.frame(round(prop.table(table(dyn_np$dyn_cum_4)),
 NPP                     `r data.frame(round(prop.table(table(dyn_npp$dyn_cum_4)),2))[2,2] `
 BP                      `r data.frame(round(prop.table(table(dyn_bp$dyn_cum_4)),2))[2,2]`
 ZP                      `r data.frame(round(prop.table(table(dyn_zp$dyn_cum_4)),2))[2,2]`
+
+
+```{r}
+
+dyn_ae_ge_rec <- dyn_all %>% filter(election_type %in% c("AE", "GE") & year >2006 & position ==1)
+
+dyn_ae_rec <- dyn_all %>% filter(election_type == "AE" & year >2006 & position ==1)
+
+dyn_ge_rec <- dyn_all %>% filter(election_type == "GE" & year >2006 & position ==1)
+
+
+```
+
+## Winners
+
+**Category 4**
+
+level   Proportion of dynasts
+------ --------------------
+AE-GE  `r data.frame(round(prop.table(table(dyn_ae_ge_rec$dyn_cum_4)),2))[2,2]`
+AE      `r data.frame(round(prop.table(table(dyn_ae_rec$dyn_cum_4)),2))[2,2]`
+GE      `r data.frame(round(prop.table(table(dyn_ge_rec$dyn_cum_4)),2))[2,2]`
+
+
+
+
+**Category 2**
+
+level   Proportion of dynasts
+------ --------------------
+AE-GE  `r data.frame(round(prop.table(table(dyn_ae_ge_rec$dyn_cum_2)),2))[2,2]`
+AE      `r data.frame(round(prop.table(table(dyn_ae_rec$dyn_cum_2)),2))[2,2]`
+GE      `r data.frame(round(prop.table(table(dyn_ge_rec$dyn_cum_2)),2))[2,2]`
+
 
 
 ```{r}

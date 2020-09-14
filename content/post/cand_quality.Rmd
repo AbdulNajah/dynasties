@@ -2,6 +2,9 @@
 title: "Quality of candidates"
 author: ""
 date: "2020-07-23"
+params:
+  orig_date: "Original Publish Date: 23 July, 2020"
+  update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))
 output:
   blogdown::html_page:
     toc: true
@@ -9,10 +12,18 @@ editor_options:
   chunk_output_type: inline
 ---
 
+### Document History
+
+`r params$orig_date`
+
+`r params$update_date`
+
+<!-- --- -->
+
 
 <!-- ```{r set up, warning=FALSE, include=FALSE, message= FALSE} -->
 
-<!-- knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE) -->
+<!-- knitr::opts_chunk$set(cache = FALSE,echo = FALSE, message=FALSE, warning = FALSE, fig.width = 16/2, fig.height = 9/2) -->
 
 
 <!-- library(tidyverse) -->
@@ -23,7 +34,7 @@ editor_options:
 <!-- library(gridExtra) -->
 <!-- library(stargazer) -->
 <!-- library(ggbump) -->
-<!-- library(here) -->
+
 
 <!-- `%!in%` = Negate(`%in%`) -->
 
@@ -31,75 +42,44 @@ editor_options:
 <!-- ``` -->
 
 
-<!-- In this post, we are trying to assess nature of candidates in dynast constituency and how it differs from a non-dynast constituency. In the analysis we exclude of the winner since our intention is to asses how having important dynast candidate affect the general candidate characteristics in that particular constituency. In the GE section we limit our analysis -->
+<!-- In this post, we are trying to assess nature of candidates in dynast constituency and how it differs from a non-dynast constituency. In the analysis we exclude of the winner since our intention is to asses how having  important dynast candidate affect the general candidate characteristics in that particular constituency. In the GE section we limit our analysis -->
 
 
 
 <!-- ```{r} -->
 
-<!-- ge <- read.csv(here("data","tcpd_ge_09_14_19_dyn.csv")) -->
+<!-- ge <-fread("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_09_14_19_dyn.csv") -->
+
+
 
 <!-- #names(ge) -->
 
 
 <!-- names(ge)[1] <- "State_Name" -->
 
-<!-- names(ge) <- tolower(ge) -->
+<!-- #names(ge) <- tolower(ge) -->
 
 <!-- ge$dynast <- ifelse(ge$dyn==1,1,0) -->
 
-<!-- adr_ge <- read.csv(here("data/adr","adr_tcpd_09_14_19.csv")) -->
+<!-- adr_ge <- read.csv("D:/cpr/up-dynasties/dyn_other_data/adr/adr_tcpd_09_14_19.csv") -->
 
-<!-- names(adr_ge) -->
+<!-- #names(adr_ge) -->
 
 <!-- adr_ge<- adr_ge %>% select(2:10,55:61, State_Name, Year,Constituency_No, Position) -->
 
-<!-- names(adr) <- tolower(names(adr)) -->
+<!-- #names(adr_ge) <- tolower(names(adr_ge)) -->
 
 <!-- #ge_cen$Age <- NULL -->
 
-<!-- dyn_adr_ge <- merge(ge,ge_adr, by = c("State_Name","Year", "Constituency_No", "Position")) -->
+<!-- dyn_adr_ge <- merge(ge,adr_ge, by = c("State_Name","Year", "Constituency_No", "Position")) -->
 
-<!-- ge_cen_adr <- ge_cen_adr %>% filter(total_assets>0) -->
+<!-- #ge_cen_adr <- ge_cen_adr %>% filter(total_assets>0) -->
 
 
 <!-- ``` -->
 
 
 
-<!-- ```{r file config} -->
-
-
-
-<!-- ge_19 <- read.csv(here("data","TCPD_2019_all_candidates_with_caste_and_political_family.csv")) -->
-
-<!-- ge_19 <- read.csv(here("data","tcpd_ge_09_14_19_dyn.csv")) -->
-
-<!-- names(ge_19 ) <- tolower(names(ge_19)) -->
-
-
-<!-- ge_19 <- ge_19 %>% filter(state_name == "Uttar_Pradesh") -->
-
-<!-- dyn <- read.csv(here("data", "dyn_all.csv")) -->
-
-<!-- dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE")) -->
-
-<!-- ## checks if there was a dynast candidate in that constituency in a particular year -->
-
-<!-- dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum_2 ==1),1,0)) -->
-
-<!-- dyn_ae_con <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% distinct(constituency_no,year, .keep_all = TRUE)%>% select(year, constituency_name, constituency_no, dyn_con) %>% arrange( constituency_no, year) -->
-
-
-<!-- ## create a data frame which tells you if there was a dynast canidate in the top two positions. -->
-
-<!-- dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum_2)%>% distinct(year, constituency_no, .keep_all = TRUE) -->
-
-<!-- dyn_ge19 <- merge(ge_19, dyn_ae_ge_uniq_con , by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE) -->
-
-<!-- dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum_2 ==0) -->
-
-<!-- ``` -->
 
 
 
@@ -109,7 +89,7 @@ editor_options:
 <!-- ## reading adr candidate level data scraped Jatin, includes information for all the candidates for the years 2009,2012,2014,2017,2019 -->
 
 
-<!-- adr <- read.csv(here("data", "adr_candidatelevel.csv")) -->
+<!-- adr <- read.csv( "D:/cpr/up-dynasties/dyn_other_data/adr_candidatelevel.csv") -->
 
 <!-- names(adr)[1] <- "position" -->
 
@@ -162,7 +142,7 @@ editor_options:
 
 <!-- adr_dyn_12_17 <- adr_dyn %>% filter (year %in% c(2012,2017)) -->
 
-<!-- names(adr_dyn_12_17) -->
+<!-- #names(adr_dyn_12_17) -->
 
 <!-- ``` -->
 
@@ -198,7 +178,7 @@ editor_options:
 
 
 
-<!-- adr_12_17 <- read.csv(here("data", "dyn_adr_12_17.csv")) -->
+<!-- adr_12_17 <- read.csv( "D:/cpr/up-dynasties/dyn_other_data/dyn_adr_12_17.csv") -->
 
 <!-- adr_12_17 <- adr_12_17 %>% mutate(profession_new = ifelse(Profession %in% c("Medical Worker/Doctor","Engineer", "Government Job","Private Job", "Retired", "Journalist") , "Professional Job", -->
 <!--                                              ifelse(Profession %in% c("Social Worker", "Politician"), "Social Work", -->
@@ -254,6 +234,43 @@ editor_options:
 
 
 <!-- # GE 2019 -->
+
+
+<!-- ```{r file config} -->
+
+
+
+<!-- ge_19 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/TCPD_2019_all_candidates_with_caste_and_political_family.csv") -->
+
+<!-- ge_19 <- read.csv("D:/cpr/up-dynasties/dyn_other_data/tcpd_ge_09_14_19_dyn.csv") -->
+<!-- names(ge_19)[1] <- "State_Name" -->
+
+<!-- names(ge_19 ) <- tolower(names(ge_19)) -->
+
+
+
+<!-- ge_19 <- ge_19 %>% filter(state_name == "Uttar_Pradesh") -->
+
+<!-- dyn <- read.csv( "D:/cpr/up-dynasties/dyn_other_data/dyn_all.csv") -->
+
+<!-- dyn_ae_ge <- dyn %>% filter(election_type %in% c("AE", "GE")) -->
+
+<!-- ## checks if there was a dynast candidate in that constituency in a particular year -->
+
+<!-- dyn_ae_ge <- dyn_ae_ge  %>% group_by(year,constituency_no) %>% mutate(dyn_con= if_else(any(dyn_cum_2 ==1),1,0)) -->
+
+<!-- dyn_ae_con <- dyn_ae_ge %>% filter(year %in% c(2012,2017)) %>% distinct(constituency_no,year, .keep_all = TRUE)%>% select(year, constituency_name, constituency_no, dyn_con) %>% arrange( constituency_no, year) -->
+
+
+<!-- ## create a data frame which tells you if there was a dynast canidate in the top two positions. -->
+
+<!-- dyn_ae_ge_uniq_con <- dyn_ae_ge %>% select(year, constituency_no, dyn_con, dyn_cum_2)%>% distinct(year, constituency_no, .keep_all = TRUE) -->
+
+<!-- dyn_ge19 <- merge(ge_19, dyn_ae_ge_uniq_con , by = c("year", "constituency_no"), all.x = TRUE, allow.cartesian =TRUE) -->
+
+<!-- dyn_ge19  <- dyn_ge19 %>% filter(dyn_cum_2 ==0) -->
+
+<!-- ``` -->
 
 
 <!-- ## Assets -->

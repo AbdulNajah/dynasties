@@ -17,7 +17,7 @@
       <pubDate>Mon, 09 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/local_body_ext/</guid>
-      <description>Document HistoryDocument HistoryOriginal Publish Date: 11 September, 2020
+      <description>Document HistoryWinners and runner-upsWinnersDocument HistoryOriginal Publish Date: 11 September, 2020
 Updated on: 11 September, 2020
 In this post we will be looking at dynasticism at the local level. We will be using two different definitions. 1 - category 2 - Where we only consider if an individual/set of individuals have connections to the ae-ge level. 2 - category 4 - We consider them as a dynast as long as they have/ have had members at one of the levels.</description>
     </item>
@@ -41,7 +41,9 @@ State - Uttar Pradesh</description>
       <pubDate>Thu, 23 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/cand_quality/</guid>
-      <description>% select(2:10,55:61, State_Name, Year,Constituency_No, Position) --% filter(total_assets0) --% filter(state_name == &#34;Uttar_Pradesh&#34;) --% filter(election_type %in% c(&#34;AE&#34;, &#34;GE&#34;)) --% group_by(year,constituency_no) %% mutate(dyn_con= if_else(any(dyn_cum_2 ==1),1,0)) --% filter(year %in% c(2012,2017)) %% distinct(constituency_no,year, .keep_all = TRUE)%% select(year, constituency_name, constituency_no, dyn_con) %% arrange( constituency_no, year) --% select(year, constituency_no, dyn_con, dyn_cum_2)%% distinct(year, constituency_no, .keep_all = TRUE) --% filter(dyn_cum_2 ==0) --% dplyr::select( -c(constituency_id,state, assembly_no, --% rename( position = position_tcpd) --% filter (year %in% c(2012,2017)) --% group_by(dyn_con) %% filter(winner ==0) %% summarise(mean(total_assets, na.</description>
+      <description>Document HistoryDocument HistoryOriginal Publish Date: 23 July, 2020
+Updated on: 11 September, 2020
+% select(2:10,55:61, State_Name, Year,Constituency_No, Position) --% filter(total_assets0) --% dplyr::select( -c(constituency_id,state, assembly_no, --% rename( position = position_tcpd) --% filter (year %in% c(2012,2017)) --% group_by(dyn_con) %% filter(winner ==0) %% summarise(mean(total_assets, na.rm =TRUE), mean(total_movable_assets_totals), mean(total_immovable_assets_totals)) %% kable(caption = &#34;Assets&#34;, col.names= c(&#34;Constituency Type&#34;, &#34;Total assets&#34;, &#34;Total movable assets&#34;, &#34;Total immovable assets&#34;</description>
     </item>
     
     <item>
@@ -206,9 +208,19 @@ Updated on: 07 September, 2020
       <pubDate>Fri, 07 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/families-cat2/</guid>
-      <description>Document Historycaste compositionEducational institutionsDocument HistoryOriginal Publish Date: 21 July, 2020
-Updated on: 09 September, 2020
+      <description>Document Historycaste compositionEducational institutionsDocument HistoryOriginal Publish Date: 21 July, 2020
+Updated on: 11 September, 2020
 In this post we further analyse the families. We categorised them into two - declining and rising. We track down all the families started in 1970s till 2007. Then we assess their performance in the elections held after 2007. This includes 3 General elections and 2 Assembly elections.</description>
+    </item>
+    
+    <item>
+      <title>ihds</title>
+      <link>/post/ihds/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/ihds/</guid>
+      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
     </item>
     
   </channel>
