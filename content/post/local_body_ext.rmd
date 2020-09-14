@@ -1,7 +1,7 @@
 ---
 title: "Local bodies extended"
 author: ""
-date: "2020-11-09"
+date: ""
 params:
   orig_date: "Original Publish Date: 11 September, 2020"
   update_date: !r paste("Updated on:", format(Sys.time(), '%d %B, %Y'))

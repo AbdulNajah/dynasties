@@ -6,21 +6,10 @@
     <description>Recent content on Political families of Uttar Pradesh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 09 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Local bodies extended</title>
-      <link>/post/local_body_ext/</link>
-      <pubDate>Mon, 09 Nov 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/local_body_ext/</guid>
-      <description>Document HistoryWinners and runner-upsWinnersDocument HistoryOriginal Publish Date: 11 September, 2020
-Updated on: 11 September, 2020
-In this post we will be looking at dynasticism at the local level. We will be using two different definitions. 1 - category 2 - Where we only consider if an individual/set of individuals have connections to the ae-ge level. 2 - category 4 - We consider them as a dynast as long as they have/ have had members at one of the levels.</description>
-    </item>
     
     <item>
       <title>UP Dynasties extended</title>
@@ -221,6 +210,17 @@ In this post we further analyse the families. We categorised them into two - dec
       <guid>/post/ihds/</guid>
       <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
+    </item>
+    
+    <item>
+      <title>Local bodies extended</title>
+      <link>/post/local_body_ext/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/local_body_ext/</guid>
+      <description>Document HistoryWinners and runner-upsWinnersDocument HistoryOriginal Publish Date: 11 September, 2020
+Updated on: 14 September, 2020
+In this post we will be looking at dynasticism at the local level. We will be using two different definitions. 1 - category 2 - Where we only consider if an individual/set of individuals have connections to the ae-ge level. 2 - category 4 - We consider them as a dynast as long as they have/ have had members at one of the levels.</description>
     </item>
     
   </channel>
